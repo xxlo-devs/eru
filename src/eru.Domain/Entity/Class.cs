@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace eru.Domain.Entity
 {
@@ -11,9 +11,9 @@ namespace eru.Domain.Entity
 
         public Class(string name)
         {
-            Id = Guid.NewGuid().ToString();
             Name = name;
         }
+        [Key]
         public string Id { get; set; }
         public string Name { get; set; }
     }

@@ -8,7 +8,6 @@ namespace eru.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
-            services.AddTransient<XmlParsingModelsMapper>();
             services.AddTransient<ISubstitutionsPlanXmlParser, SubstitutionsPlanXmlParser>();
             return services;
         }
