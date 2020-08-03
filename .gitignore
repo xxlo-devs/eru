@@ -266,6 +266,3 @@ pub/
 
 #Ignore logs folder
 Logs
-
-#Site
-/site/
