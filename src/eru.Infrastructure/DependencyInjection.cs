@@ -24,6 +24,7 @@ namespace eru.Infrastructure
             services.AddScoped<IApplicationDbContext>(provider => provider.GetService<ApplicationDbContext>());
             
             services.AddTransient<ISubstitutionsPlanXmlParser, SubstitutionsPlanXmlParser>();
+            services.AddTransient<IStopwatch, Stopwatch.Stopwatch>();
             return services;
         }
     }

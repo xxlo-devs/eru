@@ -59,8 +59,7 @@ namespace eru.Application.Tests.Common.Behaviours
                 IsWorking = true
             };
 
-            Action a = () => behaviour.Handle(request, CancellationToken.None,
-                () => Task.FromResult(new SampleResponse {HasWorked = true})).GetAwaiter().GetResult();
+            Action a = () => behaviour.Handle(request, CancellationToken.None,null).GetAwaiter().GetResult();
 
             a.Should()
                 .Throw<ValidationException>()

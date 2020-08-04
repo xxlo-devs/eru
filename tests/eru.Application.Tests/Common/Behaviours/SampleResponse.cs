@@ -2,6 +2,12 @@
 {
     public class SampleResponse
     {
-        public bool HasWorked { get; set; }
+        public bool HasWorked
+        {
+            set
+            {
+                
+            }
+        }
     }
 }
