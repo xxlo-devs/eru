@@ -7,7 +7,7 @@ namespace eru.Application.Common.Behaviours
 {
     public class LoggingBehaviour<TRequest> : IRequestPreProcessor<TRequest>
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<TRequest> _logger;
 
         public LoggingBehaviour(ILogger<TRequest> logger)
         {
