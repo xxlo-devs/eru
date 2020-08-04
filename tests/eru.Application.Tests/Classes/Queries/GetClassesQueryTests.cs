@@ -7,7 +7,7 @@ using eru.Application.Common.Mappings;
 using FluentAssertions;
 using Xunit;
 
-namespace eru.Application.IntegrationTests.Classes.Queries
+namespace eru.Application.Tests.Classes.Queries
 {
     public class GetClassesQueryTests
     {

@@ -14,6 +14,7 @@ namespace eru.Application.Classes.Commands.RemoveClass
         {
             _context = context;
             RuleFor(x => x.Name)
+                .NotEmpty()
                 .MustAsync(Exist);
         }
 

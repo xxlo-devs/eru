@@ -13,6 +13,7 @@ namespace eru.Application.Classes.Commands.CreateClass
         {
             _context = context;
             RuleFor(x => x.Name)
+                .NotEmpty()
                 .MaximumLength(255)
                 .MustAsync(IsUnique);
         }

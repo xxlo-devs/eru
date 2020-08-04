@@ -3,7 +3,7 @@ using eru.Application.Common.Interfaces;
 using eru.Domain.Entity;
 using Microsoft.EntityFrameworkCore;
 
-namespace eru.Application.IntegrationTests
+namespace eru.Application.Tests
 {
     public sealed class FakeDbContext : DbContext, IApplicationDbContext
     {
@@ -16,7 +16,7 @@ namespace eru.Application.IntegrationTests
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder
-                .UseInMemoryDatabase($"eru.Application.IntegrationTests.{Guid.NewGuid().ToString()}");
+                .UseInMemoryDatabase($"eru.Application.Tests.{Guid.NewGuid().ToString()}");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
