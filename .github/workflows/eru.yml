@@ -1,11 +1,11 @@
-﻿name: eru CI/CD
+name: eru CI/CD
 
 on: [push, pull_request]
 
 jobs:
   build:
     strategy:
-      matrix: 
+      matrix:
         os: [macos-latest, windows-latest, ubuntu-latest]
     runs-on: ${{ matrix.os }}
     steps:
