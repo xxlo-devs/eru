@@ -39,17 +39,7 @@ namespace eru.Infrastructure
             var dbContextOptionsBuilder = new DbContextOptionsBuilder()
                 .UseSqlite(connectionString);
             using var dbContext = new DbContext(dbContextOptionsBuilder.Options);
-            try
-            {
-                dbContext.Database.EnsureCreated();
-                //Sqlite always will be here able to connect so there is no point in asserting that ;)
-                dbContext.Dispose();
-                services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(connectionString));
-            }
-            catch (Exception)
-            {
-                throw new DatabaseSettingsException();
-            }
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(connectionString));
         }
     }
 }

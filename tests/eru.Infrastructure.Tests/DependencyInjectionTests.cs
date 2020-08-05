@@ -58,25 +58,6 @@ namespace eru.Infrastructure.Tests
         }
 
         [Fact]
-        public Task ExceptionIsThrownUponInvalidSqliteConnectionString()
-        {
-            var configuration = new ConfigurationBuilder()
-                .AddInMemoryCollection(new []
-                {
-                    new KeyValuePair<string, string>("Database:Type", "sqlite"),
-                    new KeyValuePair<string, string>("Database:ConnectionString", "Server=myServerAddress;Database=myDataBase;Uid=myUsername;Pwd=myPassword;"), 
-                })
-                .Build();
-            Action serviceProviderCreation = () => new ServiceCollection()
-                .AddScoped<IConfiguration>(_ => configuration)
-                .AddInfrastructure(configuration)
-                .BuildServiceProvider();
-
-            serviceProviderCreation.Should().Throw<DatabaseSettingsException>();
-            return Task.CompletedTask;
-        }
-
-        [Fact]
         public async Task CanInMemoryDatabaseBeSelected()
         {
             var configuration = new ConfigurationBuilder()
