@@ -1,4 +1,5 @@
-﻿using eru.Application.Common.Interfaces;
+﻿using eru.Application.Common.Exceptions;
+using eru.Application.Common.Interfaces;
 using eru.Infrastructure.Persistence;
 using eru.Infrastructure.XmlParsing;
 using Microsoft.EntityFrameworkCore;
@@ -11,16 +12,18 @@ namespace eru.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            if (configuration.GetValue<bool>("UseInMemoryDatabase"))
+            switch (configuration.GetValue<string>("Database:Type").ToLower())
             {
-                services.AddDbContext<ApplicationDbContext>(options => options.UseInMemoryDatabase("eru"));
+                case "inmemory":
+                    services.AddDbContext<ApplicationDbContext>(options => options.UseInMemoryDatabase("eru"));
+                    break;
+                case "sqlite":
+                    services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(configuration.GetValue<string>("Database:ConnectionString")));
+                    break;
+                default:
+                    throw new DatabaseSettingsException();
             }
-            else
-            {
-                //TODO add option from configuration
-                services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite("Data Source=eru.db"));
-            }
-
+            
             services.AddScoped<IApplicationDbContext>(provider => provider.GetService<ApplicationDbContext>());
             
             services.AddTransient<ISubstitutionsPlanXmlParser, SubstitutionsPlanXmlParser>();
