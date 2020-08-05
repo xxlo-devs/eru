@@ -1,0 +1,25 @@
+﻿name: Code coverage
+
+on: [push]
+
+jobs: 
+  upload-coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1.5.0
+        with:
+          dotnet-version: 3.1
+      - name: Install dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+      - name: Test
+        run: dotnet test --no-restore --collect:"XPlat Code Coverage" -r TestResults
+      - name: Publish coverage report to codevoc.io
+        uses: codecov/codecov-action@v1.0.12
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: true
+          directory: TestResults
