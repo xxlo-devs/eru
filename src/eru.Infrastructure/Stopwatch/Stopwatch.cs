@@ -6,9 +6,9 @@ namespace eru.Infrastructure.Stopwatch
     {
         private readonly System.Diagnostics.Stopwatch _stopwatch;
 
-        public Stopwatch(System.Diagnostics.Stopwatch stopwatch)
+        public Stopwatch(System.Diagnostics.Stopwatch stopwatch = null)
         {
-            _stopwatch = stopwatch;
+            _stopwatch = stopwatch ?? new System.Diagnostics.Stopwatch();
         }
 
         public void Start()

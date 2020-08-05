@@ -1,4 +1,6 @@
-﻿using eru.Application.Common.Exceptions;
+﻿using System;
+using System.Data.Common;
+using eru.Application.Common.Exceptions;
 using eru.Application.Common.Interfaces;
 using eru.Infrastructure.Persistence;
 using eru.Infrastructure.XmlParsing;
@@ -12,13 +14,13 @@ namespace eru.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            switch (configuration.GetValue<string>("Database:Type").ToLower())
+            switch (configuration.GetValue<string>("Database:Type")?.ToLower() ?? "inmemory")
             {
                 case "inmemory":
                     services.AddDbContext<ApplicationDbContext>(options => options.UseInMemoryDatabase("eru"));
                     break;
                 case "sqlite":
-                    services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(configuration.GetValue<string>("Database:ConnectionString")));
+                    SetupSqliteDbContext(services, configuration);
                     break;
                 default:
                     throw new DatabaseSettingsException();
@@ -29,6 +31,26 @@ namespace eru.Infrastructure
             services.AddTransient<ISubstitutionsPlanXmlParser, SubstitutionsPlanXmlParser>();
             services.AddTransient<IStopwatch, Stopwatch.Stopwatch>();
             return services;
+        }
+
+        private static void SetupSqliteDbContext(IServiceCollection services, IConfiguration configuration)
+        {
+            var connectionString = configuration.GetValue<string>("Database:ConnectionString");
+            if(string.IsNullOrEmpty(connectionString)) throw new DatabaseSettingsException();
+            var dbContextOptionsBuilder = new DbContextOptionsBuilder()
+                .UseSqlite(connectionString);
+            using var dbContext = new DbContext(dbContextOptionsBuilder.Options);
+            try
+            {
+                dbContext.Database.EnsureCreated();
+                //Sqlite always will be here able to connect so there is no point in asserting that ;)
+                dbContext.Dispose();
+                services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(connectionString));
+            }
+            catch (Exception)
+            {
+                throw new DatabaseSettingsException();
+            }
         }
     }
 }
