@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data.Common;
 using eru.Application.Common.Exceptions;
 using eru.Application.Common.Interfaces;
 using eru.Infrastructure.Persistence;

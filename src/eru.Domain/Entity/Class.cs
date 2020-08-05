@@ -4,7 +4,7 @@
     {
         public Class()
         {
-            
+            //Required by EF
         }
 
         public Class(string name)

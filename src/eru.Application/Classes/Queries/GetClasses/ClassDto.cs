@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using eru.Application.Common.Mappings;
+﻿using eru.Application.Common.Mappings;
 using eru.Domain.Entity;
 
 namespace eru.Application.Classes.Queries.GetClasses
