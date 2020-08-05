@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Threading;
 using System.Threading.Tasks;
 using eru.Application.Common.Interfaces;
 using eru.Domain.Entity;
@@ -13,6 +14,7 @@ namespace eru.Infrastructure.Persistence
             
         }
         
+        [ExcludeFromCodeCoverage]
         public DbSet<Class> Classes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

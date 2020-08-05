@@ -1,4 +1,4 @@
-﻿namespace eru.Application.Tests.Common.Behaviours
+﻿namespace eru.Application.Tests
 {
     public class SampleRequest
     {
