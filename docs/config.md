@@ -18,7 +18,8 @@ Most common way to do it is via appsettings.json file available in src/eru.WebAp
   "Database": {
     "Type": "sqlite",
     "ConnectionString": "Data Source=eru.db"
-  }
+  },
+  "UploadKey" : "V3ryS3cureUpl0adK3y"
 }
 
 ```
