@@ -17,12 +17,8 @@ namespace eru.Infrastructure.XmlParsing
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         }
-
-        private static Encoding PolishEncoding => Encoding.GetEncoding(1250);
-
         public async Task<SubstitutionsPlan> Parse(Stream content)
         {
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             var xmlReader = XmlReader.Create(content, new XmlReaderSettings {Async = true, IgnoreWhitespace = true});
             var date = DateTime.Today;
             var substitutions = new List<Substitution>();
@@ -73,15 +69,15 @@ namespace eru.Infrastructure.XmlParsing
                                 "Subs node must contain teacher, subject, groups, note and room other than null and non empty valid classes list.");
                         substitutions.Add(new Substitution
                         {
-                            Teacher = FixEncoding(teacher, PolishEncoding),
+                            Teacher = teacher,
                             Lesson = lesson,
-                            Subject = FixEncoding(subject, PolishEncoding),
+                            Subject = subject,
                             Classes = classes.Select(x=>new Class(x)).ToArray(),
                             Cancelled = cancelled,
-                            Groups = FixEncoding(groups, PolishEncoding),
-                            Note = FixEncoding(note,PolishEncoding),
+                            Groups = groups,
+                            Note = note,
                             Room = room,
-                            Substituting = substituting != null ? FixEncoding(substituting, PolishEncoding) : null
+                            Substituting = substituting
                         });
                         break;
                     }
@@ -95,8 +91,5 @@ namespace eru.Infrastructure.XmlParsing
                 Substitutions = substitutions
             };
         }
-
-        private static string FixEncoding(string str, Encoding encoding) =>
-            Encoding.Default.GetString(encoding.GetBytes(str));
     }
 }
