@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Reflection;
 using eru.Application.Common.Exceptions;
 using eru.Application.Common.Interfaces;
 using eru.Infrastructure.Persistence;
@@ -44,6 +46,9 @@ namespace eru.Infrastructure
             
             services.AddTransient<IStopwatch, Stopwatch.Stopwatch>();
             services.AddTransient<IBackgroundJobClient, BackgroundJobClient>();
+            
+            LoadAllMessageServices(services);
+            
             return services;
         }
 
@@ -60,6 +65,18 @@ namespace eru.Infrastructure
                 .UseSqlite(connectionString);
             using var dbContext = new DbContext(dbContextOptionsBuilder.Options);
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(connectionString));
+        }
+
+        private static void LoadAllMessageServices(IServiceCollection services)
+        {
+            var messageServices = AppDomain.CurrentDomain
+                .GetAssemblies()
+                .SelectMany(x=>x.ExportedTypes)
+                .Where(x => typeof(IMessageService).IsAssignableFrom(x) && !x.IsInterface);
+            foreach (var messageService in messageServices)
+            {
+                services.AddTransient(typeof(IMessageService), messageService);
+            }
         }
     }
 }

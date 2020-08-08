@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using eru.Application.XmlSubstitutions.Commands.UploadXmlSubstitutions;
+using eru.Application.Substitutions.Commands.SendNotificationsAboutSubstitutions;
 using eru.WebApp.UploadXmlSubstitutions.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +19,7 @@ namespace eru.WebApp.UploadXmlSubstitutions.Controllers
         [HttpPost]
         public async Task<IActionResult> Upload(UploadModel uploadModel)
         {
-            await _mediator.Send(new UploadXmlSubstitutionsCommand
+            await _mediator.Send(new SendNotificationsAboutSubstitutionsCommand
             {
                 SubstitutionsPlan = uploadModel.XmlModel.ToSubstitutionsPlan(),
                 IpAddress = HttpContext.Connection.RemoteIpAddress.ToString(), 

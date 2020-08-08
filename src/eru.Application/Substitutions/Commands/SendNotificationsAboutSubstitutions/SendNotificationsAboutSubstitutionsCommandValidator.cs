@@ -1,16 +1,14 @@
-﻿using System.Data;
-using System.IO;
-using System.Linq;
+﻿using System.Linq;
 using eru.Domain.Entity;
 using FluentValidation;
 using Microsoft.Extensions.Configuration;
 
-namespace eru.Application.XmlSubstitutions.Commands.UploadXmlSubstitutions
+namespace eru.Application.Substitutions.Commands.SendNotificationsAboutSubstitutions
 {
-    public class UploadXmlSubstitutionsCommandValidator : AbstractValidator<UploadXmlSubstitutionsCommand>
+    public class SendNotificationsAboutSubstitutionsCommandValidator : AbstractValidator<SendNotificationsAboutSubstitutionsCommand>
     {
         private readonly IConfiguration _configuration;
-        public UploadXmlSubstitutionsCommandValidator(IConfiguration configuration)
+        public SendNotificationsAboutSubstitutionsCommandValidator(IConfiguration configuration)
         {
             _configuration = configuration;
             RuleFor(x => x.IpAddress)
