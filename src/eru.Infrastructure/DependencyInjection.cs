@@ -71,8 +71,10 @@ namespace eru.Infrastructure
         {
             var messageServices = AppDomain.CurrentDomain
                 .GetAssemblies()
+                .Where(x=>!x.IsDynamic)
                 .SelectMany(x=>x.ExportedTypes)
-                .Where(x => typeof(IMessageService).IsAssignableFrom(x) && !x.IsInterface);
+                .Where(x => typeof(IMessageService).IsAssignableFrom(x) && !x.IsInterface)
+                .ToArray();
             foreach (var messageService in messageServices)
             {
                 services.AddTransient(typeof(IMessageService), messageService);
