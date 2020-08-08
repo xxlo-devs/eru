@@ -2,7 +2,6 @@
 using eru.Application.Common.Exceptions;
 using eru.Application.Common.Interfaces;
 using eru.Infrastructure.Persistence;
-using eru.Infrastructure.XmlParsing;
 using Hangfire;
 using Hangfire.MemoryStorage;
 using Microsoft.AspNetCore.Builder;
@@ -43,7 +42,6 @@ namespace eru.Infrastructure
             
             services.AddScoped<IApplicationDbContext>(provider => provider.GetService<ApplicationDbContext>());
             
-            services.AddTransient<ISubstitutionsPlanXmlParser, SubstitutionsPlanXmlParser>();
             services.AddTransient<IStopwatch, Stopwatch.Stopwatch>();
             services.AddTransient<IBackgroundJobClient, BackgroundJobClient>();
             return services;

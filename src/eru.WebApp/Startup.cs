@@ -26,7 +26,9 @@ namespace eru.WebApp
         {
             services.AddApplication();
             services.AddInfrastructure(_configuration);
-            services.AddControllersWithViews();
+            services
+                .AddControllersWithViews()
+                .AddXmlSerializerFormatters();
         }
         
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -157,21 +157,5 @@ namespace eru.Infrastructure.Tests
             stopwatch.Should().NotBeNull();
             return Task.CompletedTask;
         }
-
-        [Fact]
-        public Task IsAnyISubstitutionsPlanXmlParserImplementationAvailable()
-        {
-            var configuration = new ConfigurationBuilder()
-                .AddInMemoryCollection()
-                .Build();
-            var serviceProvider = new ServiceCollection()
-                .AddScoped<IConfiguration>(_ => configuration)
-                .AddInfrastructure(configuration)
-                .BuildServiceProvider();
-
-            var xmlParser = serviceProvider.GetService<ISubstitutionsPlanXmlParser>();
-            xmlParser.Should().NotBeNull();
-            return Task.CompletedTask; 
-        }
     }
 }

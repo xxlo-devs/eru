@@ -1,4 +1,5 @@
-﻿using eru.Application.XmlSubstitutions.Commands.UploadXmlSubstitutions;
+﻿using System.Threading.Tasks;
+using eru.Application.XmlSubstitutions.Commands.UploadXmlSubstitutions;
 using eru.WebApp.UploadXmlSubstitutions.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -16,12 +17,11 @@ namespace eru.WebApp.UploadXmlSubstitutions.Controllers
         }
 
         [HttpPost]
-        public IActionResult Upload(UploadModel uploadModel)
+        public async Task<IActionResult> Upload(UploadModel uploadModel)
         {
-            _mediator.Send(new UploadXmlSubstitutionsCommand
+            await _mediator.Send(new UploadXmlSubstitutionsCommand
             {
-                FileName = uploadModel.File.FileName, 
-                FileStream = uploadModel.File.OpenReadStream(), 
+                SubstitutionsPlan = uploadModel.XmlModel.ToSubstitutionsPlan(),
                 IpAddress = HttpContext.Connection.RemoteIpAddress.ToString(), 
                 Key = uploadModel.ApiKey
             });

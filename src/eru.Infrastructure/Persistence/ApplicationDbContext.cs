@@ -22,7 +22,6 @@ namespace eru.Infrastructure.Persistence
             modelBuilder.Entity<Class>()
                 .Property(x => x.Name)
                 .HasMaxLength(255);
-            base.OnModelCreating(modelBuilder);
         }
     }
 }
