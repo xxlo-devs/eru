@@ -2,7 +2,6 @@
 
     <PropertyGroup>
         <TargetFramework>netcoreapp3.1</TargetFramework>
-
         <IsPackable>false</IsPackable>
     </PropertyGroup>
 
@@ -18,7 +17,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\eru.Application\eru.Application.csproj" />
+        <ProjectReference Include="..\..\src\eru.Application\eru.Application.csproj" />
     </ItemGroup>
 
 </Project>
