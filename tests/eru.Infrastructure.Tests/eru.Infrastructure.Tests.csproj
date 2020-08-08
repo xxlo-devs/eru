@@ -2,12 +2,10 @@
 
     <PropertyGroup>
         <TargetFramework>netcoreapp3.1</TargetFramework>
-
         <IsPackable>false</IsPackable>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="AutoMapper" Version="10.0.0" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
         <PackageReference Include="xunit" Version="2.4.0" />
         <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />
@@ -15,8 +13,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\eru.Domain\eru.Domain.csproj" />
-      <ProjectReference Include="..\..\src\eru.Infrastructure\eru.Infrastructure.csproj" />
+        <ProjectReference Include="..\..\src\eru.Domain\eru.Domain.csproj" />
+        <ProjectReference Include="..\..\src\eru.Infrastructure\eru.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

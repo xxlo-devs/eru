@@ -1,20 +1,17 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace eru.Domain.Entity
+﻿namespace eru.Domain.Entity
 {
     public class Class
     {
         public Class()
         {
-            
+            //Required by EF
         }
 
         public Class(string name)
         {
             Name = name;
         }
-        [Key]
-        public string Id { get; set; }
+        
         public string Name { get; set; }
     }
 }
