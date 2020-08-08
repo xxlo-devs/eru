@@ -42,6 +42,8 @@ namespace eru.WebApp
                 app.UseHsts();
             }
 
+            app.UseCors(x=>x.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+
             app.UseRouting();
 
             app.UseInfrastructure();
