@@ -1,0 +1,16 @@
+﻿@using Microsoft.AspNetCore.Localization
+@using Microsoft.AspNetCore.Mvc.Localization
+@{
+    Layout = null;
+    var culture = Context.Features.Get<IRequestCultureFeature>().RequestCulture.Culture.Name;
+}
+@inject IViewLocalizer Localizer
+<!DOCTYPE html>
+
+<html lang="@culture">
+<head>
+    <title>@Localizer["title"]</title>
+</head>
+<body>
+</body>
+</html>
