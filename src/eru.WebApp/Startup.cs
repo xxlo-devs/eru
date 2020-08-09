@@ -64,6 +64,7 @@ namespace eru.WebApp
             }
 
             app.UseCors(x=>x.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+            
             app.UseRequestLocalization(app.ApplicationServices
                 .GetRequiredService<IOptions<RequestLocalizationOptions>>().Value);
 
