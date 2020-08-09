@@ -18,4 +18,22 @@
   <data name="title" xml:space="preserve">
     <value>eru - Substitutions Upload</value>
   </data>
+  <data name="api-key" xml:space="preserve">
+    <value>Api Key</value>
+  </data>
+  <data name="choose-file" xml:space="preserve">
+    <value>Choose a file...</value>
+  </data>
+  <data name="file" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="submit" xml:space="preserve">
+    <value>Submit</value>
+  </data>
+  <data name="cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="upload-succeed" xml:space="preserve">
+    <value>Substitutions upload has succeeded!</value>
+  </data>
 </root>

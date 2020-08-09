@@ -18,4 +18,22 @@
   <data name="title" xml:space="preserve">
     <value>eru - Prześlij Zastępstwa</value>
   </data>
+  <data name="api-key" xml:space="preserve">
+    <value>Klucz API</value>
+  </data>
+  <data name="choose-file" xml:space="preserve">
+    <value>Wybierz plik...</value>
+  </data>
+  <data name="file" xml:space="preserve">
+    <value>Plik</value>
+  </data>
+  <data name="submit" xml:space="preserve">
+    <value>Prześlij</value>
+  </data>
+  <data name="cancel" xml:space="preserve">
+    <value>Anuluj</value>
+  </data>
+  <data name="upload-succeed" xml:space="preserve">
+    <value>Wysyłanie zastępstw powiodło się!</value>
+  </data>
 </root>

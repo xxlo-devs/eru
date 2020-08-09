@@ -62,12 +62,14 @@ namespace eru.WebApp
             {
                 app.UseHsts();
             }
-            
+
             app.UseCors(x=>x.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
             app.UseRequestLocalization(app.ApplicationServices
                 .GetRequiredService<IOptions<RequestLocalizationOptions>>().Value);
 
             app.UseRouting();
+            
+            app.UseStaticFiles();
 
             app.UseInfrastructure();
 
