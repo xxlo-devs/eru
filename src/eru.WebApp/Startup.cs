@@ -71,7 +71,7 @@ namespace eru.WebApp
             
             app.UseStaticFiles();
 
-            app.UseInfrastructure();
+            app.UseInfrastructure(_configuration);
 
             app.UseEndpoints(endpoints =>
             {

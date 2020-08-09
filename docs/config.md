@@ -19,7 +19,17 @@ Most common way to do it is via appsettings.json file available in src/eru.WebAp
     "Type": "sqlite",
     "ConnectionString": "Data Source=eru.db"
   },
-  "UploadKey" : "V3ryS3cureUpl0adK3y"
+  "UploadKey" : "V3ryS3cureUpl0adK3y",
+  "HangfireDashboardUsers" : [
+    {
+      "Username" : "admin",
+      "Password" : "admin"
+    },
+    {
+      "Username" : "moderator",
+      "Password" : "moderator"
+    }
+  ]
 }
 
 ```
@@ -32,3 +42,11 @@ More connectors will be available soon!
 | --- | ---|
 | InMemory | No connection string is required! |
 | Sqlite | Data Source=eru.db |
+
+## Upload Key
+
+Key that will have to be provided in order to upload new substitutions.
+
+## Hangfire Dashboard Users
+
+Accounts declarations of admins that will have access to hangfire panel (panel with all background tasks such as sending notifications).

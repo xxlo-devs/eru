@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Linq;
-using System.Reflection;
 using eru.Application.Common.Exceptions;
 using eru.Application.Common.Interfaces;
+using eru.Infrastructure.Hangfire;
 using eru.Infrastructure.Persistence;
 using Hangfire;
+using Hangfire.Dashboard;
+using Hangfire.Dashboard.BasicAuthorization;
 using Hangfire.MemoryStorage;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
@@ -52,9 +54,27 @@ namespace eru.Infrastructure
             return services;
         }
 
-        public static IApplicationBuilder UseInfrastructure(this IApplicationBuilder app)
+        public static IApplicationBuilder UseInfrastructure(this IApplicationBuilder app, IConfiguration configuration)
         {
-            return app.UseHangfireDashboard();
+            var users = configuration
+                .GetSection("HangfireDashboardUsers")
+                .GetChildren()
+                .Select(x=>x.Get<HangfireUser>())
+                .Select(x => new BasicAuthAuthorizationUser
+                {
+                    Login = x.Username,
+                    PasswordClear = x.Password
+                });
+            return app.UseHangfireDashboard("/jobs", new DashboardOptions
+            {
+                Authorization = new []{ new BasicAuthAuthorizationFilter(new BasicAuthAuthorizationFilterOptions
+                {
+                    LoginCaseSensitive = true,
+                    RequireSsl = false,
+                    SslRedirect = false,
+                    Users = users
+                }) }
+            });
         }
 
         private static void SetupSqliteDbContext(IServiceCollection services, IConfiguration configuration)
