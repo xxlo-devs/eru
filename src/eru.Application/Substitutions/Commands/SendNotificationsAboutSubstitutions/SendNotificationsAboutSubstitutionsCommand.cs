@@ -22,13 +22,11 @@ namespace eru.Application.Substitutions.Commands.SendNotificationsAboutSubstitut
     public class SendNotificationsAboutSubstitutionsCommandHandler : IRequestHandler<SendNotificationsAboutSubstitutionsCommand, Unit>
     {
         private readonly IBackgroundJobClient _client;
-        private readonly IMediator _mediator;
         private readonly IEnumerable<IMessageService> _messageServices;
 
-        public SendNotificationsAboutSubstitutionsCommandHandler(IBackgroundJobClient client, IMediator mediator, IEnumerable<IMessageService> messageServices)
+        public SendNotificationsAboutSubstitutionsCommandHandler(IBackgroundJobClient client, IEnumerable<IMessageService> messageServices)
         {
             _client = client;
-            _mediator = mediator;
             _messageServices = messageServices;
         }
 

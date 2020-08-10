@@ -5,7 +5,7 @@ using System.Xml.Serialization;
 using eru.Domain.Entity;
 using Microsoft.AspNetCore.Mvc;
 
-namespace eru.WebApp.UploadSubstitutions.Models
+namespace eru.WebApp.Areas.UploadSubstitutions.Models
 {
     public class UploadModel
     {

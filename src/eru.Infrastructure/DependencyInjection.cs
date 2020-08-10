@@ -5,7 +5,6 @@ using eru.Application.Common.Interfaces;
 using eru.Infrastructure.Hangfire;
 using eru.Infrastructure.Persistence;
 using Hangfire;
-using Hangfire.Dashboard;
 using Hangfire.Dashboard.BasicAuthorization;
 using Hangfire.MemoryStorage;
 using Microsoft.AspNetCore.Builder;

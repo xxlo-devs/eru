@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using eru.Application.Substitutions.Commands.SendNotificationsAboutSubstitutions;
-using eru.WebApp.UploadSubstitutions.Models;
+using eru.WebApp.Areas.UploadSubstitutions.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Localization;

@@ -30,7 +30,7 @@ namespace eru.Application.Substitutions.Commands.SendNotificationsAboutSubstitut
 
         private bool IsPlanValid(SubstitutionsPlan plan)
         {
-            return plan.Substitutions?.Any() == true;
+            return plan?.Substitutions?.Any() == true;
         }
     }
 }
