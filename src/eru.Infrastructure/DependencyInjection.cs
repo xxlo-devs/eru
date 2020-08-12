@@ -32,7 +32,7 @@ namespace eru.Infrastructure
                 default:
                     throw new DatabaseSettingsException();
             }
-
+          
             services.AddHangfire(conf =>
             {
                 conf
