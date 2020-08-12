@@ -1,4 +1,6 @@
-﻿namespace eru.Infrastructure.Hangfire
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace eru.Infrastructure.Hangfire
 {
     public class HangfireUser
     {

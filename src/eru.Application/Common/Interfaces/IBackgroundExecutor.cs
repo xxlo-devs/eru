@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 
 namespace eru.Application.Common.Interfaces
 {
-    public interface IBackgroundJobClient
+    public interface IBackgroundExecutor
     {
-        string Enqueue(Expression<Func<Task>> methodToCall);
+        public string Enqueue(Expression<Func<Task>> method);
     }
 }

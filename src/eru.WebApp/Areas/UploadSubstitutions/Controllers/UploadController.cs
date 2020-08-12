@@ -1,10 +1,9 @@
 ﻿using System.Threading.Tasks;
-using eru.Application.Substitutions.Commands.SendNotificationsAboutSubstitutions;
+using eru.Application.Substitutions.Commands;
 using eru.WebApp.Areas.UploadSubstitutions.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Localization;
-using Microsoft.Extensions.Localization;
 
 namespace eru.WebApp.Areas.UploadSubstitutions.Controllers
 {
@@ -30,7 +29,7 @@ namespace eru.WebApp.Areas.UploadSubstitutions.Controllers
         [HttpPost]
         public async Task<IActionResult> Upload(UploadModel uploadModel)
         {
-            await _mediator.Send(new SendNotificationsAboutSubstitutionsCommand
+            await _mediator.Send(new UploadSubstitutionsCommand
             {
                 SubstitutionsPlan = uploadModel.XmlModel.ToSubstitutionsPlan(),
                 IpAddress = HttpContext.Connection.RemoteIpAddress.ToString(), 
