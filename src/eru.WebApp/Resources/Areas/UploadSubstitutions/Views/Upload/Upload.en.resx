@@ -19,7 +19,7 @@
     <value>eru - Substitutions Upload</value>
   </data>
   <data name="api-key" xml:space="preserve">
-    <value>Api Key</value>
+    <value>API Key</value>
   </data>
   <data name="choose-file" xml:space="preserve">
     <value>Choose a file...</value>
