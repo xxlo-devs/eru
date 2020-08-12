@@ -6,6 +6,7 @@ using eru.Application.Common.Exceptions;
 using eru.Application.Common.Interfaces;
 using eru.Infrastructure.Persistence;
 using FluentAssertions;
+using Hangfire;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
@@ -25,7 +26,6 @@ namespace eru.Infrastructure.Tests
                 })
                 .Build();
             var serviceProvider = new ServiceCollection()
-                .AddScoped<IConfiguration>(_ => configuration)
                 .AddInfrastructure(configuration)
                 .BuildServiceProvider();
             
@@ -49,7 +49,6 @@ namespace eru.Infrastructure.Tests
                 })
                 .Build();
             Action serviceProviderCreation = () => new ServiceCollection()
-                .AddScoped<IConfiguration>(_ => configuration)
                 .AddInfrastructure(configuration)
                 .BuildServiceProvider();
 
@@ -67,7 +66,6 @@ namespace eru.Infrastructure.Tests
                 })
                 .Build();
             var serviceProvider = new ServiceCollection()
-                .AddScoped<IConfiguration>(_ => configuration)
                 .AddInfrastructure(configuration)
                 .BuildServiceProvider();
             
@@ -88,7 +86,6 @@ namespace eru.Infrastructure.Tests
                 .AddInMemoryCollection()
                 .Build();
             var serviceProvider = new ServiceCollection()
-                .AddScoped<IConfiguration>(_ => configuration)
                 .AddInfrastructure(configuration)
                 .BuildServiceProvider();
             
@@ -112,7 +109,6 @@ namespace eru.Infrastructure.Tests
                 })
                 .Build();
             Action serviceProviderCreation = () => new ServiceCollection()
-                .AddScoped<IConfiguration>(_ => configuration)
                 .AddInfrastructure(configuration)
                 .BuildServiceProvider();
 
@@ -127,7 +123,6 @@ namespace eru.Infrastructure.Tests
                 .AddInMemoryCollection()
                 .Build();
             var serviceProvider = new ServiceCollection()
-                .AddScoped<IConfiguration>(_ => configuration)
                 .AddInfrastructure(configuration)
                 .BuildServiceProvider();
 
@@ -149,7 +144,6 @@ namespace eru.Infrastructure.Tests
                 .AddInMemoryCollection()
                 .Build();
             var serviceProvider = new ServiceCollection()
-                .AddScoped<IConfiguration>(_ => configuration)
                 .AddInfrastructure(configuration)
                 .BuildServiceProvider();
 
@@ -159,19 +153,18 @@ namespace eru.Infrastructure.Tests
         }
 
         [Fact]
-        public Task IsAnyISubstitutionsPlanXmlParserImplementationAvailable()
+        public Task IsHangfireCorrectlyConfigured()
         {
             var configuration = new ConfigurationBuilder()
                 .AddInMemoryCollection()
                 .Build();
             var serviceProvider = new ServiceCollection()
-                .AddScoped<IConfiguration>(_ => configuration)
                 .AddInfrastructure(configuration)
                 .BuildServiceProvider();
 
-            var xmlParser = serviceProvider.GetService<ISubstitutionsPlanXmlParser>();
-            xmlParser.Should().NotBeNull();
-            return Task.CompletedTask; 
+            var hangfireConfigurations = serviceProvider.GetService<IGlobalConfiguration>();
+            hangfireConfigurations.Should().NotBeNull();
+            return Task.CompletedTask;
         }
     }
 }

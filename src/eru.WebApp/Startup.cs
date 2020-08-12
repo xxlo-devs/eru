@@ -1,36 +1,77 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Globalization;
+using eru.Application;
+using eru.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 
 namespace eru.WebApp
 {
     public class Startup
     {
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
-        public void ConfigureServices(IServiceCollection services)
+        private readonly IConfiguration _configuration;
+
+        public Startup(IConfiguration configuration)
         {
+            _configuration = configuration;
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddApplication();
+            services.AddInfrastructure(_configuration);
+            services.AddLocalization(options =>
+            {
+                options.ResourcesPath = "Resources";
+            });
+            services
+                .AddControllersWithViews()
+                .AddRazorRuntimeCompilation()
+                .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
+                .AddXmlSerializerFormatters();
+            services.Configure<RequestLocalizationOptions>(options =>
+            {
+                var cultures = new[]
+                {
+                    new CultureInfo("en"),
+                    new CultureInfo("pl"),
+                };
+                options.DefaultRequestCulture = new RequestCulture("en");
+                options.SupportedCultures = cultures;
+                options.SupportedUICultures = cultures;
+            });
+        }
+        
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseHsts();
+            }
+
+            app.UseCors(x=>x.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+            
+            app.UseRequestLocalization(app.ApplicationServices
+                .GetRequiredService<IOptions<RequestLocalizationOptions>>().Value);
 
             app.UseRouting();
+            
+            app.UseStaticFiles();
+
+            app.UseInfrastructure(_configuration);
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", async context => { await context.Response.WriteAsync("Hello World!"); });
+                endpoints.MapControllers();
             });
         }
     }

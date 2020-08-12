@@ -17,7 +17,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\eru.Application\eru.Application.csproj" />
+      <ProjectReference Include="..\..\src\eru.Application\eru.Application.csproj" />
     </ItemGroup>
 
 </Project>
