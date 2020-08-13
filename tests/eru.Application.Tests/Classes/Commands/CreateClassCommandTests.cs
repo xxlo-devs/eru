@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using eru.Application.Classes.Commands.CreateClass;
+using eru.Domain.Enums;
 using FluentAssertions;
 using FluentValidation.Results;
 using Xunit;
@@ -17,12 +18,13 @@ namespace eru.Application.Tests.Classes.Commands
             var handler = new CreateClassCommandHandler(context);
             var request = new CreateClassCommand
             {
-                Name = "informatyka"
+                Name = "III f",
+                Year = Year.Junior
             };
 
             await handler.Handle(request, CancellationToken.None);
 
-            context.Classes.Should().HaveCount(4).And.Contain(x => x.Name == "informatyka");
+            context.Classes.Should().HaveCount(4).And.Contain(x => x.Name == "III f" & x.Year == Year.Junior);
         }
 
         [Fact]
@@ -32,7 +34,8 @@ namespace eru.Application.Tests.Classes.Commands
             var validator = new CreateClassCommandValidator(context);
             var request = new CreateClassCommand
             {
-                Name = "informatyka"
+                Name = "III f",
+                Year = Year.Junior
             };
 
             var result = await validator.ValidateAsync(request);
@@ -48,7 +51,8 @@ namespace eru.Application.Tests.Classes.Commands
             var validator = new CreateClassCommandValidator(context);
             var request = new CreateClassCommand
             {
-                Name = new string(Enumerable.Repeat('a',300).ToArray())
+                Name = new string(Enumerable.Repeat('a',300).ToArray()), 
+                Year = Year.Freshman
             };
 
             var result = await validator.ValidateAsync(request);
@@ -62,7 +66,10 @@ namespace eru.Application.Tests.Classes.Commands
         {
             var context = new FakeDbContext();
             var validator = new CreateClassCommandValidator(context);
-            var request = new CreateClassCommand();
+            var request = new CreateClassCommand
+            {
+                Year = Year.Freshman
+            };
 
             var result = await validator.ValidateAsync(request);
 
@@ -77,13 +84,46 @@ namespace eru.Application.Tests.Classes.Commands
             var validator = new CreateClassCommandValidator(context);
             var request = new CreateClassCommand
             {
-                Name = "matematyka"
+                Name = "II b",
+                Year = Year.Sophomore
             };
 
             var result = await validator.ValidateAsync(request);
 
             result.IsValid.Should().BeFalse();
             result.Errors.Should().HaveCount(1).And.ContainSingle(x=>x.ErrorMessage == "The specified condition was not met for 'Name'.");
+        }
+
+        [Fact]
+        public async Task DoesValidatorPreventFromCreatingClassWithNoYear()
+        {
+            var context = new FakeDbContext();
+            var validator = new CreateClassCommandValidator(context);
+            var request = new CreateClassCommand
+            {
+                Name = "III d"
+            };
+
+            var result = await validator.ValidateAsync(request);
+
+            result.IsValid.Should().BeFalse();
+            result.Errors.Should().HaveCount(1).And.ContainSingle(x=>x.ErrorMessage == "'Year' must not be empty.");
+        }
+
+        [Fact]
+        public async Task DoesValidatorPreventFromCreatingClassWithInvalidYear()
+        {
+            var context = new FakeDbContext();
+            var validator = new CreateClassCommandValidator(context);
+            var request = new CreateClassCommand
+            {
+                Name = "III d",
+                Year = Year.NotSupplied
+            };
+
+            var result = await validator.ValidateAsync(request);
+
+            result.Errors.Should().HaveCount(1).And.ContainSingle(x=>x.ErrorMessage == "'Year' must not be empty.");
         }
     }
 }

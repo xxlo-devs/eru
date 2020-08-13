@@ -26,12 +26,10 @@ namespace eru.Application.Classes.Queries.GetClasses
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<ClassDto>> Handle(GetClassesQuery request, CancellationToken cancellationToken)
-        {
-            return await _context.Classes
+        public async Task<IEnumerable<ClassDto>> Handle(GetClassesQuery request, CancellationToken cancellationToken) 
+            => await _context.Classes
                 .OrderBy(x => x.Name)
                 .ProjectTo<ClassDto>(_mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
-        }
     }
 }

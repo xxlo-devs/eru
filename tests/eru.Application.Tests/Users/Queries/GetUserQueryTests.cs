@@ -24,7 +24,7 @@ namespace eru.Application.Tests.Users.Queries
             var expected = new User
             {
                 Id = "380AE765-803D-4174-A370-1038B7D53CD6", Platform = Platform.DebugMessageService,
-                Stage = Stage.Subscribed, Year = Year.Junior, Class = "III e"
+                Stage = Stage.Subscribed, Year = Year.Junior, Class = "III c"
             };
 
             var actual = await handler.Handle(request, CancellationToken.None);

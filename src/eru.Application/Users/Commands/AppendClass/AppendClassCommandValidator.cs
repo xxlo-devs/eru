@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace eru.Application.Users.Commands.AppendClass
 {
-    class AppendClassCommandValidator : AbstractValidator<AppendClassCommand>
+    public class AppendClassCommandValidator : AbstractValidator<AppendClassCommand>
     {
         private readonly IApplicationDbContext _dbContext;
 

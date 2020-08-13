@@ -24,7 +24,25 @@ namespace eru.Application.Tests.Users.Commands
 
             context.Users.Should().Contain(x =>
                 x.Id == "7124C49B-B04A-468F-A946-40025B19FF91" & x.Platform == Platform.DebugMessageService &
-                x.Year == Year.Sophomore & x.Class == "język Polski" & x.Stage == Stage.Subscribed);
+                x.Year == Year.Sophomore & x.Class == "II b" & x.Stage == Stage.Subscribed);
+
+        }
+
+        [Fact]
+        public async Task DoesValidatorAllowCorrectConfirmSubscribeCommand()
+        {
+
+        }
+
+        [Fact]
+        public async Task DoesValidatorPreventFromConfirmingNonExistingAccount()
+        {
+
+        }
+
+        [Fact]
+        public async Task DoesValidatorPreventFromConfirmingAccountOnInvalidStage()
+        {
 
         }
     }

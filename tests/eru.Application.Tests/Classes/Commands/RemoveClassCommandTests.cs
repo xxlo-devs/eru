@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using eru.Application.Classes.Commands.CreateClass;
 using eru.Application.Classes.Commands.RemoveClass;
 using eru.Domain.Entity;
+using eru.Domain.Enums;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
@@ -19,12 +20,12 @@ namespace eru.Application.Tests.Classes.Commands
             var handler = new RemoveClassCommandHandler(context);
             var request = new RemoveClassCommand()
             {
-                Name = "matematyka"
+                Name = "III c"
             };
 
             await handler.Handle(request, CancellationToken.None);
 
-            (await context.Classes.ToArrayAsync()).Should().HaveCount(2).And.NotContain(new Class("matematyka"));
+            (await context.Classes.ToArrayAsync()).Should().HaveCount(2).And.NotContain(new Class("III c", Year.Junior));
         }
         
         [Fact]
@@ -34,7 +35,7 @@ namespace eru.Application.Tests.Classes.Commands
             var validator = new RemoveClassValidator(context);
             var request = new RemoveClassCommand
             {
-                Name = "matematyka"
+                Name = "III c"
             };
 
             var result = await validator.ValidateAsync(request);
@@ -67,7 +68,7 @@ namespace eru.Application.Tests.Classes.Commands
             var validator = new RemoveClassValidator(context);
             var request = new RemoveClassCommand
             {
-                Name = "informatyka"
+                Name = "II a"
             };
 
             var result = await validator.ValidateAsync(request);

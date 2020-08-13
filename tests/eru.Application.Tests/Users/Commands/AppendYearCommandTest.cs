@@ -27,7 +27,30 @@ namespace eru.Application.Tests.Users.Commands
 
             context.Users.Should().Contain(x =>
                 x.Id == "98DFFEBA-BEB4-4D76-8C89-78857D7B7A2F" & x.Platform == Platform.DebugMessageService & x.Year ==
-                    Year.Sophomore & x.Class == String.Empty & x.Stage == Stage.GatheredYear);
+                Year.Sophomore & x.Class == String.Empty & x.Stage == Stage.GatheredYear);
+        }
+
+        [Fact]
+        public async Task DoesValidatorAllowsCorrectAppendYearCommand()
+        {
+
+        }
+
+        [Fact]
+        public async Task DoesValidatorPreventFromAppendingYearToNonExistingUser()
+        {
+
+        }
+
+        [Fact]
+        public async Task DoesValidatorPreventFromAppendingYearOnInvalidStage()
+        {
+
+        }
+
+        [Fact]
+        public async Task DoesValidatorPreventFromAppendingInvalidYear()
+        {
 
         }
     }

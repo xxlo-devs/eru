@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using eru.Application.Classes.Queries.GetClasses;
 using eru.Application.Common.Mappings;
+using eru.Domain.Enums;
 using FluentAssertions;
 using Xunit;
 
@@ -23,9 +24,9 @@ namespace eru.Application.Tests.Classes.Queries
             var request = new GetClassesQuery();
             var expectedClasses = new List<ClassDto>()
             {
-                new ClassDto {Name = "język Angielski"},
-                new ClassDto {Name = "język Polski"},
-                new ClassDto {Name = "matematyka"}
+                new ClassDto {Name = "I a", Year = Year.Freshman},
+                new ClassDto {Name = "II b", Year = Year.Sophomore},
+                new ClassDto {Name = "III c", Year = Year.Junior}
             };
 
             var result = await handler.Handle(request, CancellationToken.None);

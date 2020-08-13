@@ -26,6 +26,17 @@ namespace eru.Application.Tests.Users.Commands
             context.Users.Should().Contain(x =>
                 x.Id == "380AE765-803D-4174-A370-1038B7D53CD6" & x.Platform == Platform.DebugMessageService &
                 x.Year == Year.NotSupplied & x.Class == String.Empty & x.Stage == Stage.Cancelled);
+        }
+
+        [Fact]
+        public async Task DoesValidatorAllowCorrectCancelSubscriptionCommand()
+        {
+
+        }
+
+        [Fact]
+        public async Task DoesValidatorPreventFromUnsubscribingNonExistingUser()
+        {
 
         }
     }
