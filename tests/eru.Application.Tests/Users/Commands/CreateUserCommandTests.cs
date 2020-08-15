@@ -39,7 +39,7 @@ namespace eru.Application.Tests.Users.Commands
             var validator = new CreateUserCommandValidator(context);
             var request = new CreateUserCommand
             {
-                Id = "98DFFEBA-BEB4-4D76-8C89-78857D7B7A2F",
+                Id = "380AE765-803D-4174-A370-1038B7D53CD6",
                 Platform = Platform.DebugMessageService
             };
 

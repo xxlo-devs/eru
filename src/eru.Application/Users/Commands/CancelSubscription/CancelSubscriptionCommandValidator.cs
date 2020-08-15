@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace eru.Application.Users.Commands.CancelSubscription
 {
-    class CancelSubscriptionCommandValidator : AbstractValidator<CancelSubscriptionCommand>
+    public class CancelSubscriptionCommandValidator : AbstractValidator<CancelSubscriptionCommand>
     {
         private readonly IApplicationDbContext _dbContext;
 
@@ -40,8 +40,15 @@ namespace eru.Application.Users.Commands.CancelSubscription
                 .Where(x => x.Id == command.UserId & x.Platform == command.Platform)
                 .FirstOrDefaultAsync();
 
-            if (user.Stage == Stage.Subscribed) return true;
-            else return false;
+            if (user != null)
+            {
+                if (user.Stage != Stage.Cancelled) return true;
+                else return false;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

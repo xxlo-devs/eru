@@ -31,19 +31,52 @@ namespace eru.Application.Tests.Users.Commands
         [Fact]
         public async Task DoesValidatorAllowCorrectConfirmSubscribeCommand()
         {
+            var context = new FakeDbContext();
+            var validator = new ConfirmSubscriptionCommandValidator(context);
+            var request = new ConfirmSubscriptionCommand
+            {
+                UserId = "7124C49B-B04A-468F-A946-40025B19FF91",
+                Platform = Platform.DebugMessageService
+            };
 
+            var result = await validator.ValidateAsync(request, CancellationToken.None);
+
+            result.IsValid.Should().BeTrue();
+            result.Errors.Should().HaveCount(0);
         }
 
         [Fact]
         public async Task DoesValidatorPreventFromConfirmingNonExistingAccount()
         {
+            var context = new FakeDbContext();
+            var validator = new ConfirmSubscriptionCommandValidator(context);
+            var request = new ConfirmSubscriptionCommand
+            {
+                UserId = "E888C90C-00DA-41CF-837D-8F037DA03F11",
+                Platform = Platform.DebugMessageService
+            };
 
+            var result = await validator.ValidateAsync(request, CancellationToken.None);
+
+            result.IsValid.Should().BeFalse();
+            result.Errors.Should().Contain(x => x.ErrorMessage == "The specified condition was not met for ''.");
         }
 
         [Fact]
         public async Task DoesValidatorPreventFromConfirmingAccountOnInvalidStage()
         {
+            var context = new FakeDbContext();
+            var validator = new ConfirmSubscriptionCommandValidator(context);
+            var request = new ConfirmSubscriptionCommand
+            {
+                UserId = "380AE765-803D-4174-A370-1038B7D53CD6",
+                Platform = Platform.DebugMessageService
+            };
 
+            var result = await validator.ValidateAsync(request, CancellationToken.None);
+
+            result.IsValid.Should().BeFalse();
+            result.Errors.Should().Contain(x => x.ErrorMessage == "The specified condition was not met for ''.");
         }
     }
 }

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace eru.Application.Users.Commands.ConfirmSubscription
 {
-    class ConfirmSubscriptionCommandValidator : AbstractValidator<ConfirmSubscriptionCommand>
+    public class ConfirmSubscriptionCommandValidator : AbstractValidator<ConfirmSubscriptionCommand>
     {
         private readonly IApplicationDbContext _dbContext;
 
@@ -40,9 +40,15 @@ namespace eru.Application.Users.Commands.ConfirmSubscription
             var user = await _dbContext.Users
                 .Where(x => x.Id == command.UserId & x.Platform == command.Platform)
                 .FirstOrDefaultAsync();
-
-            if (user.Stage == Stage.GatheredClass) return true;
-            else return false;
+            if (user != null)
+            {
+                if (user.Stage == Stage.GatheredClass) return true;
+                else return false;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }
