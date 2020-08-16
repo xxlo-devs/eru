@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using eru.Application.Users.Commands.CancelSubscription;
 using eru.Domain.Enums;
 using FluentAssertions;
+using Microsoft.Extensions.Configuration;
 using Xunit;
 
 namespace eru.Application.Tests.Users.Commands
@@ -14,7 +16,13 @@ namespace eru.Application.Tests.Users.Commands
         public async Task ShouldCancelSubscriptionCorrectly()
         {
             var context = new FakeDbContext();
-            var handler = new CancelSubscriptionCommandHandler(context);
+            var config = new ConfigurationBuilder()
+                .AddInMemoryCollection(new[]
+                {
+                    new KeyValuePair<string, string>("DefaultLanguage", "pl"),
+                }).Build();
+
+            var handler = new CancelSubscriptionCommandHandler(context, config);
             var request = new CancelSubscriptionCommand
             {
                 UserId = "380AE765-803D-4174-A370-1038B7D53CD6",

@@ -16,7 +16,7 @@ namespace eru.Application.Tests.Users.Commands
             var handler = new AppendClassCommandHandler(context);
             var request = new AppendClassCommand
             {
-                UserId = "98DFFEBA-BEB4-4D76-8C89-78857D7B7A2F",
+                UserId = "01906EAE-3E0B-4905-9ADE-4FA2104C6459",
                 Platform = "DebugMessageService",
                 Class = "I a"
             };
@@ -24,7 +24,7 @@ namespace eru.Application.Tests.Users.Commands
             await handler.Handle(request, CancellationToken.None);
 
             context.Users.Should().Contain(x =>
-                x.Id == "98DFFEBA-BEB4-4D76-8C89-78857D7B7A2F" & x.Platform == "DebugMessageService" & x.Class == "I a" & x.Stage == Stage.GatheredClass);
+                x.Id == "01906EAE-3E0B-4905-9ADE-4FA2104C6459" & x.Platform == "DebugMessageService" & x.Class == "I a" & x.Stage == Stage.GatheredClass);
         }
 
         [Fact]
@@ -34,7 +34,7 @@ namespace eru.Application.Tests.Users.Commands
             var validator = new AppendClassCommandValidator(context);
             var request = new AppendClassCommand
             {
-                UserId = "98DFFEBA-BEB4-4D76-8C89-78857D7B7A2F",
+                UserId = "01906EAE-3E0B-4905-9ADE-4FA2104C6459",
                 Platform = "DebugMessageService",
                 Class = "I a"
             };
@@ -50,7 +50,7 @@ namespace eru.Application.Tests.Users.Commands
             var validator = new AppendClassCommandValidator(context);
             var request = new AppendClassCommand
             {
-                UserId = "98DFFEBA-BEB4-4D76-8C89-78857D7B7A2F",
+                UserId = "01906EAE-3E0B-4905-9ADE-4FA2104C6459",
                 Platform = "DebugMessageService",
                 Class = "Vz"
             };

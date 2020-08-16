@@ -26,7 +26,8 @@ namespace eru.Application.Tests.Users.Queries
                 Id = "380AE765-803D-4174-A370-1038B7D53CD6", 
                 Platform = "DebugMessageService",
                 Stage = Stage.Subscribed,
-                Class = "III c"
+                Class = "III c",
+                PrefferedLanguage = "pl"
             };
 
             var actual = await handler.Handle(request, CancellationToken.None);

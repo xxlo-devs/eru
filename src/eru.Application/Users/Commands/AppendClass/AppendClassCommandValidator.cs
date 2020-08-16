@@ -39,7 +39,7 @@ namespace eru.Application.Users.Commands.AppendClass
             var user = await _dbContext.Users.FindAsync(command.UserId, command.Platform);
 
             if (user != null)
-                if (user.Stage == Stage.Created || user.Stage == Stage.Cancelled) return true;
+                if (user.Stage == Stage.GatheredLanguage) return true;
 
             return false;
         }
