@@ -15,7 +15,7 @@ namespace eru.Application.Users.Commands.AppendClass
     {
         public string UserId { get; set; }
         public string Class { get; set; }
-        public Platform Platform { get; set; }
+        public string Platform { get; set; }
     }
 
     public class AppendClassCommandHandler : IRequestHandler<AppendClassCommand, Unit>

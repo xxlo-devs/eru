@@ -3,7 +3,6 @@
     public enum Stage
     {
         Created,
-        GatheredYear,
         GatheredClass,
         Subscribed,
         Cancelled

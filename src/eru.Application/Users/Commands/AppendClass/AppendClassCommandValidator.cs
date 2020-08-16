@@ -22,12 +22,10 @@ namespace eru.Application.Users.Commands.AppendClass
 
             RuleFor(x => x)
                 .MustAsync(DoesUserExist)
-                .MustAsync(IsOnRightStage)
-                .MustAsync(DoesYearMatchClass);
+                .MustAsync(IsOnRightStage);
 
             RuleFor(x => x.Class)
                 .MustAsync(DoesClassExist);
-
         }
 
         private async Task<bool> DoesUserExist(AppendClassCommand command, CancellationToken cancellationToken)
@@ -37,7 +35,7 @@ namespace eru.Application.Users.Commands.AppendClass
                 .FirstOrDefaultAsync();
 
             if (user != null) return true;
-            else return false; 
+            else return false;
         }
 
         private async Task<bool> IsOnRightStage(AppendClassCommand command, CancellationToken cancellationToken)
@@ -48,7 +46,7 @@ namespace eru.Application.Users.Commands.AppendClass
 
             if (user != null)
             {
-                if (user.Stage == Stage.GatheredYear) return true;
+                if (user.Stage == Stage.Created || user.Stage == Stage.Cancelled) return true;
                 else return false;
             }
             else
@@ -59,35 +57,10 @@ namespace eru.Application.Users.Commands.AppendClass
 
         private async Task<bool> DoesClassExist(string @class, CancellationToken cancellationToken)
         {
-             var obj = await _dbContext.Classes.FindAsync(@class);
+            var obj = await _dbContext.Classes.FindAsync(@class);
 
-             if (obj != null) return true;
-             else return false;
-        }
-
-        private async Task<bool> DoesYearMatchClass(AppendClassCommand command, CancellationToken cancellationToken)
-        {
-            var user = await _dbContext.Users
-                .Where(x => x.Id == command.UserId & x.Platform == command.Platform)
-                .FirstOrDefaultAsync();
-
-            if (user != null)
-            {
-                var cclass = await _dbContext.Classes.FindAsync(command.Class);
-                if (cclass != null)
-                {
-                    if (user.Year == cclass.Year) return true;
-                    else return false;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                return false;
-            }
+            if (obj != null) return true;
+            else return false;
         }
     }
 }

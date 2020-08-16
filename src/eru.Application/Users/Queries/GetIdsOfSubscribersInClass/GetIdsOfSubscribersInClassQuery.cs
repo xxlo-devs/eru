@@ -18,7 +18,7 @@ namespace eru.Application.Users.Queries.GetIdsOfSubscribersInClass
     public class GetIdsOfSubscribersInClassQuery : IRequest<IEnumerable<string>>
     {
         public string Class { get; set; }
-        public Platform Platform { get; set; }
+        public string Platform { get; set; }
     }
 
     public class GetIdsOfSubscribersInClassQueryHandler : IRequestHandler<GetIdsOfSubscribersInClassQuery, IEnumerable<string>>

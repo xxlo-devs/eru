@@ -25,7 +25,7 @@ namespace eru.Application.Tests.Classes.Commands
 
             await handler.Handle(request, CancellationToken.None);
 
-            (await context.Classes.ToArrayAsync()).Should().HaveCount(2).And.NotContain(new Class("III c", Year.Junior));
+            (await context.Classes.ToArrayAsync()).Should().HaveCount(2).And.NotContain(new Class("III c"));
         }
         
         [Fact]

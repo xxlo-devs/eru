@@ -13,7 +13,7 @@ namespace eru.Application.Users.Queries.GetIdsOfAllSubscribersInPlatform
 {
     public class GetIdsOfAllSubscribersInPlatformQuery : IRequest<IEnumerable<string>>
     {
-        public Platform Platform { get; set; }
+        public string Platform { get; set; }
     }
 
     public class GetIdsOfAllSubscribersInPlatformQueryHandler : IRequestHandler<GetIdsOfAllSubscribersInPlatformQuery, IEnumerable<string>>

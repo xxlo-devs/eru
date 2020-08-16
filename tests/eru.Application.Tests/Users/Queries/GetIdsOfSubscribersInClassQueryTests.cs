@@ -17,7 +17,7 @@ namespace eru.Application.Tests.Users.Queries
             var handler = new GetIdsOfSubscribersInClassQueryHandler(context);
             var request = new GetIdsOfSubscribersInClassQuery
             {
-                Platform = Platform.DebugMessageService,
+                Platform = "DebugMessageService",
                 Class = "III c"
             };
 

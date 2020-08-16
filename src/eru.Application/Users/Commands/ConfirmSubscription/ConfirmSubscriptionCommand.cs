@@ -14,7 +14,7 @@ namespace eru.Application.Users.Commands.ConfirmSubscription
     public class ConfirmSubscriptionCommand : IRequest
     {
         public string UserId { get; set; }
-        public Platform Platform { get; set; }
+        public string Platform { get; set; }
     }
 
     public class ConfirmSubscriptionCommandHandler : IRequestHandler<ConfirmSubscriptionCommand, Unit>

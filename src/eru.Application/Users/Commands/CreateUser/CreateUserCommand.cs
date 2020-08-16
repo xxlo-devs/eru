@@ -13,7 +13,7 @@ namespace eru.Application.Users.Commands.CreateUser
     public class CreateUserCommand : IRequest
     {
         public string Id { get; set; }
-        public Platform Platform { get; set; }
+        public string Platform { get; set; }
     }
 
     public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Unit>
@@ -32,8 +32,7 @@ namespace eru.Application.Users.Commands.CreateUser
                 Id = command.Id,
                 Class = string.Empty,
                 Platform = command.Platform,
-                Stage = Stage.Created,
-                Year = 0
+                Stage = Stage.Created
             };
 
             await _dbContext.Users.AddAsync(user);

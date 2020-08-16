@@ -15,7 +15,7 @@ namespace eru.Application.Users.Queries.GetUser
     public class GetUserQuery : IRequest<User>
     {
         public string UserId { get; set; }
-        public Platform Platform { get; set; }
+        public string Platform { get; set; }
     }
 
     public class GetUserQueryHandler : IRequestHandler<GetUserQuery, User>

@@ -14,7 +14,7 @@ namespace eru.Application.Users.Commands.CancelSubscription
     public class CancelSubscriptionCommand : IRequest
     {
         public string UserId { get; set; }
-        public Platform Platform { get; set; }
+        public string Platform { get; set; }
     }
 
     public class CancelSubscriptionCommandHandler : IRequestHandler<CancelSubscriptionCommand, Unit>
@@ -32,7 +32,6 @@ namespace eru.Application.Users.Commands.CancelSubscription
                 .Where(x => x.Id == command.UserId & x.Platform == command.Platform)
                 .FirstOrDefaultAsync();
 
-            user.Year = 0;
             user.Class = string.Empty;
             user.Stage = Stage.Cancelled;
 

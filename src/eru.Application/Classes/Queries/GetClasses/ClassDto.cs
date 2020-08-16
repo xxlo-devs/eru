@@ -7,6 +7,5 @@ namespace eru.Application.Classes.Queries.GetClasses
     public class ClassDto : IMapFrom<Class>
     {
         public string Name { get; set; }
-        public Year Year { get; set; }
     }
 }

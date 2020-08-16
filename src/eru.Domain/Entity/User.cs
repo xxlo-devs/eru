@@ -7,10 +7,10 @@ namespace eru.Domain.Entity
 {
     public class User
     {
-        public string Id { get; set; }
-        public Year Year { get; set; }
+        public string Id { get; set; } 
+        public string Platform { get; set; }
+
         public string Class { get; set; }
-        public Platform Platform { get; set; }
         public Stage Stage { get; set; }
     }
 }

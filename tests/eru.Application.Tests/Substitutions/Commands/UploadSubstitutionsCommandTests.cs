@@ -1,17 +1,16 @@
-﻿using System;
+﻿using eru.Application.Common.Interfaces;
+using eru.Application.Substitutions.Commands;
+using eru.Domain.Entity;
+using FluentAssertions;
+using MediatR;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Primitives;
+using Moq;
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper.Configuration;
-using Castle.DynamicProxy;
-using eru.Application.Common.Interfaces;
-using eru.Application.Substitutions.Commands;
-using eru.Application.Substitutions.Notifications;
-using eru.Domain.Entity;
-using FluentAssertions;
-using MediatR;
-using Moq;
 using Xunit;
 
 namespace eru.Application.Tests.Substitutions.Commands
@@ -98,13 +97,13 @@ namespace eru.Application.Tests.Substitutions.Commands
         [Fact]
         public async Task DoesValidatorAllowValidRequest()
         {
-            var config = new FakeConfiguration();
+            var config = new ConfigurationBuilder().AddInMemoryCollection(new[] { new KeyValuePair<string, string>("UploadKey", "sample-key") }).Build();
             var validator = new UploadSubstitutionsCommandValidator(config);
 
             var request = new UploadSubstitutionsCommand
             {
                 IpAddress = "198.51.100.1",
-                Key = "D6FFE16E-BF9D-4172-9869-F7EC182172A7",
+                Key = "sample-key",
                 SubstitutionsPlan = new SubstitutionsPlan
                 {
                     Date = DateTime.UtcNow.Date,
@@ -134,13 +133,13 @@ namespace eru.Application.Tests.Substitutions.Commands
         [Fact]
         public async Task DoesValidatorPreventUploadWithInvalidIPAddress()
         {
-            var config = new FakeConfiguration();
+            var config = new ConfigurationBuilder().AddInMemoryCollection(new[] { new KeyValuePair<string, string>("UploadKey", "sample-key") }).Build();
             var validator = new UploadSubstitutionsCommandValidator(config);
 
             var request = new UploadSubstitutionsCommand
             {
                 IpAddress = "198-51-100-1",
-                Key = "D6FFE16E-BF9D-4172-9869-F7EC182172A7",
+                Key = "sample-key",
                 SubstitutionsPlan = new SubstitutionsPlan
                 {
                     Date = DateTime.UtcNow.Date,
@@ -170,13 +169,13 @@ namespace eru.Application.Tests.Substitutions.Commands
         [Fact]
         public async Task DoesValidatorPreventUploadWithInvalidKey()
         {
-            var config = new FakeConfiguration();
+            var config = new ConfigurationBuilder().AddInMemoryCollection(new[] { new KeyValuePair<string, string>("UploadKey", "sample-key") }).Build();
             var validator = new UploadSubstitutionsCommandValidator(config);
 
             var request = new UploadSubstitutionsCommand
             {
                 IpAddress = "198.51.100.1",
-                Key = "CF502808-4BAC-4D62-86DF-04BF0E040953",
+                Key = "invalid-key",
                 SubstitutionsPlan = new SubstitutionsPlan
                 {
                     Date = DateTime.UtcNow.Date,
@@ -206,13 +205,13 @@ namespace eru.Application.Tests.Substitutions.Commands
         [Fact]
         public async Task DoesValidatorPreventUploadOfInvalidSubstitutionsPlan()
         {
-            var config = new FakeConfiguration();
+            var config = new ConfigurationBuilder().AddInMemoryCollection(new[] { new KeyValuePair<string, string>("UploadKey", "sample-key") }).Build();
             var validator = new UploadSubstitutionsCommandValidator(config);
 
             var request = new UploadSubstitutionsCommand
             {
                 IpAddress = "198.51.100.1",
-                Key = "D6FFE16E-BF9D-4172-9869-F7EC182172A7",
+                Key = "sample-key",
                 SubstitutionsPlan = new SubstitutionsPlan
                 {
                     Date = DateTime.UtcNow.Date,

@@ -18,9 +18,6 @@ namespace eru.Application.Classes.Commands.CreateClass
                 .NotEmpty()
                 .MaximumLength(255)
                 .MustAsync(IsUnique);
-
-            RuleFor(x => x.Year)
-                .NotEmpty();
         }
 
         private async Task<bool> IsUnique(string name, CancellationToken cancellationToken) 

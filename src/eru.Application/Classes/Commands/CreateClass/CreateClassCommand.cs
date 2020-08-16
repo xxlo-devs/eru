@@ -10,7 +10,6 @@ namespace eru.Application.Classes.Commands.CreateClass
     public class CreateClassCommand : IRequest
     {
         public string Name { get; set; }
-        public Year Year { get; set; }
     }
     
     public class CreateClassCommandHandler : IRequestHandler<CreateClassCommand, Unit>
@@ -24,7 +23,7 @@ namespace eru.Application.Classes.Commands.CreateClass
 
         public async Task<Unit> Handle(CreateClassCommand request, CancellationToken cancellationToken)
         {
-            await _context.Classes.AddAsync(new Class(request.Name, request.Year), cancellationToken);
+            await _context.Classes.AddAsync(new Class(request.Name), cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
             return Unit.Value;
         }

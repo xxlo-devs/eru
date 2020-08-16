@@ -22,14 +22,13 @@ namespace eru.Application.Tests.Users.Commands
             var request = new CreateUserCommand
             {
                 Id = "90A17474-1410-4E00-9480-DDE01656F45B",
-                Platform = Platform.DebugMessageService
+                Platform = "DebugMessageService"
             };
 
             await handler.Handle(request, CancellationToken.None);
 
-            context.Users.Should().HaveCount(6).And.Contain(x =>
-                x.Id == "90A17474-1410-4E00-9480-DDE01656F45B" & x.Platform == Platform.DebugMessageService &
-                    x.Year == 0 & x.Class.IsNullOrEmpty() & x.Stage == Stage.Created);
+            context.Users.Should().HaveCount(5).And.Contain(x =>
+                x.Id == "90A17474-1410-4E00-9480-DDE01656F45B" & x.Platform == "DebugMessageService" & x.Class.IsNullOrEmpty() & x.Stage == Stage.Created);
         }
 
         [Fact]
@@ -40,7 +39,7 @@ namespace eru.Application.Tests.Users.Commands
             var request = new CreateUserCommand
             {
                 Id = "380AE765-803D-4174-A370-1038B7D53CD6",
-                Platform = Platform.DebugMessageService
+                Platform = "DebugMessageService"
             };
 
             var result = await validator.ValidateAsync(request);

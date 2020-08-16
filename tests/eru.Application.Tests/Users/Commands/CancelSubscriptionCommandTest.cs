@@ -18,14 +18,13 @@ namespace eru.Application.Tests.Users.Commands
             var request = new CancelSubscriptionCommand
             {
                 UserId = "380AE765-803D-4174-A370-1038B7D53CD6",
-                Platform = Platform.DebugMessageService
+                Platform = "DebugMessageService"
             };
 
             await handler.Handle(request, CancellationToken.None);
 
             context.Users.Should().Contain(x =>
-                x.Id == "380AE765-803D-4174-A370-1038B7D53CD6" & x.Platform == Platform.DebugMessageService &
-                x.Year == Year.NotSupplied & x.Class == String.Empty & x.Stage == Stage.Cancelled);
+                x.Id == "380AE765-803D-4174-A370-1038B7D53CD6" & x.Platform == "DebugMessageService" & x.Class == String.Empty & x.Stage == Stage.Cancelled);
         }
 
         [Fact]
@@ -36,7 +35,7 @@ namespace eru.Application.Tests.Users.Commands
             var request = new CancelSubscriptionCommand
             {
                 UserId = "380AE765-803D-4174-A370-1038B7D53CD6",
-                Platform = Platform.DebugMessageService
+                Platform = "DebugMessageService"
             };
 
             var result = await validator.ValidateAsync(request, CancellationToken.None);
@@ -53,7 +52,7 @@ namespace eru.Application.Tests.Users.Commands
             var request = new CancelSubscriptionCommand
             {
                 UserId = "38C12C16-2A68-4F56-B434-62A382DB4DA0",
-                Platform = Platform.DebugMessageService
+                Platform = "DebugMessageService"
             };
 
             var result = await validator.ValidateAsync(request, CancellationToken.None);
@@ -70,7 +69,7 @@ namespace eru.Application.Tests.Users.Commands
             var request = new CancelSubscriptionCommand
             {
                 UserId = "FCDEE5DA-F755-45F9-B8BB-D7C7C303F70B",
-                Platform = Platform.DebugMessageService
+                Platform = "DebugMessageService"
             };
 
             var result = await validator.ValidateAsync(request, CancellationToken.None);

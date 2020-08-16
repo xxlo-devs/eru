@@ -17,14 +17,13 @@ namespace eru.Application.Tests.Users.Commands
             var request = new ConfirmSubscriptionCommand
             {
                 UserId = "7124C49B-B04A-468F-A946-40025B19FF91",
-                Platform = Platform.DebugMessageService
+                Platform = "DebugMessageService"
             };
 
             await handler.Handle(request, CancellationToken.None);
 
             context.Users.Should().Contain(x =>
-                x.Id == "7124C49B-B04A-468F-A946-40025B19FF91" & x.Platform == Platform.DebugMessageService &
-                x.Year == Year.Sophomore & x.Class == "II b" & x.Stage == Stage.Subscribed);
+                x.Id == "7124C49B-B04A-468F-A946-40025B19FF91" & x.Platform == "DebugMessageService" & x.Class == "II b" & x.Stage == Stage.Subscribed);
 
         }
 
@@ -36,7 +35,7 @@ namespace eru.Application.Tests.Users.Commands
             var request = new ConfirmSubscriptionCommand
             {
                 UserId = "7124C49B-B04A-468F-A946-40025B19FF91",
-                Platform = Platform.DebugMessageService
+                Platform = "DebugMessageService"
             };
 
             var result = await validator.ValidateAsync(request, CancellationToken.None);
@@ -53,7 +52,7 @@ namespace eru.Application.Tests.Users.Commands
             var request = new ConfirmSubscriptionCommand
             {
                 UserId = "E888C90C-00DA-41CF-837D-8F037DA03F11",
-                Platform = Platform.DebugMessageService
+                Platform = "DebugMessageService"
             };
 
             var result = await validator.ValidateAsync(request, CancellationToken.None);
@@ -70,7 +69,7 @@ namespace eru.Application.Tests.Users.Commands
             var request = new ConfirmSubscriptionCommand
             {
                 UserId = "380AE765-803D-4174-A370-1038B7D53CD6",
-                Platform = Platform.DebugMessageService
+                Platform = "DebugMessageService"
             };
 
             var result = await validator.ValidateAsync(request, CancellationToken.None);

@@ -24,9 +24,9 @@ namespace eru.Application.Tests.Classes.Queries
             var request = new GetClassesQuery();
             var expectedClasses = new List<ClassDto>()
             {
-                new ClassDto {Name = "I a", Year = Year.Freshman},
-                new ClassDto {Name = "II b", Year = Year.Sophomore},
-                new ClassDto {Name = "III c", Year = Year.Junior}
+                new ClassDto {Name = "I a"},
+                new ClassDto {Name = "II b"},
+                new ClassDto {Name = "III c"}
             };
 
             var result = await handler.Handle(request, CancellationToken.None);

@@ -18,13 +18,15 @@ namespace eru.Application.Tests.Users.Queries
             var request = new GetUserQuery
             {
                 UserId = "380AE765-803D-4174-A370-1038B7D53CD6",
-                Platform = Platform.DebugMessageService
+                Platform = "DebugMessageService"
             };
 
             var expected = new User
             {
-                Id = "380AE765-803D-4174-A370-1038B7D53CD6", Platform = Platform.DebugMessageService,
-                Stage = Stage.Subscribed, Year = Year.Junior, Class = "III c"
+                Id = "380AE765-803D-4174-A370-1038B7D53CD6", 
+                Platform = "DebugMessageService",
+                Stage = Stage.Subscribed,
+                Class = "III c"
             };
 
             var actual = await handler.Handle(request, CancellationToken.None);
