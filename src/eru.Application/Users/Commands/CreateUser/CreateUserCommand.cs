@@ -30,8 +30,8 @@ namespace eru.Application.Users.Commands.CreateUser
             var user = new User
             {
                 Id = command.Id,
-                Class = string.Empty,
                 Platform = command.Platform,
+                Class = string.Empty,
                 Stage = Stage.Created
             };
 

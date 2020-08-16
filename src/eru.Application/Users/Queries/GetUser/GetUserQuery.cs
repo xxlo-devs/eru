@@ -27,8 +27,7 @@ namespace eru.Application.Users.Queries.GetUser
             _dbContext = dbContext;
         }
 
-        public async Task<User> Handle(GetUserQuery request, CancellationToken cancellationToken) => await _dbContext.Users
-            .Where(x => x.Id == request.UserId & x.Platform == request.Platform)
-            .FirstOrDefaultAsync();
+        public async Task<User> Handle(GetUserQuery request, CancellationToken cancellationToken)
+            => await _dbContext.Users.FindAsync(request.UserId, request.Platform);
     }
 }

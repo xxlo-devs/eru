@@ -27,7 +27,6 @@ namespace eru.Infrastructure.Persistence
                 .HasMaxLength(255);
             modelBuilder.Entity<User>()
                 .HasKey(k => new {k.Id, k.Platform});
-
         }
     }
 }

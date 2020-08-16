@@ -9,7 +9,6 @@ namespace eru.Domain.Entity
     {
         public string Id { get; set; } 
         public string Platform { get; set; }
-
         public string Class { get; set; }
         public Stage Stage { get; set; }
     }

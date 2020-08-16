@@ -22,12 +22,7 @@ namespace eru.Application.Users.Commands.CreateUser
                 .MustAsync(IsIdUnique);
         }
 
-        private async Task<bool> IsIdUnique(CreateUserCommand command, CancellationToken cancellationToken)
-        {
-            var user = _dbContext.Users.FindAsync(command.Id, command.Platform);
-
-            if (user == null) return true;
-            else return false;
-        }
+        private async Task<bool> IsIdUnique(CreateUserCommand command, CancellationToken cancellationToken) => 
+            await _dbContext.Users.FindAsync(command.Id, command.Platform) != null ? false : true;
     }
 }

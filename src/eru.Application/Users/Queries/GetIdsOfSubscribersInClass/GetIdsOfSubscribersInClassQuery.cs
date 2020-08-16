@@ -30,8 +30,7 @@ namespace eru.Application.Users.Queries.GetIdsOfSubscribersInClass
             _dbContext = dbContext;
         }
 
-        public async Task<IEnumerable<string>> Handle(GetIdsOfSubscribersInClassQuery request, CancellationToken cancellationToken) =>
-            (from x in _dbContext.Users where x.Platform == request.Platform & x.Class == request.Class select x.Id).AsEnumerable();
-
+        public async Task<IEnumerable<string>> Handle(GetIdsOfSubscribersInClassQuery request, CancellationToken cancellationToken)
+            => _dbContext.Users.Where(x => x.Platform == request.Platform & x.Class == request.Class).Select(x => x.Id).AsEnumerable();
     }
 }

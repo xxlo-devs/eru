@@ -22,7 +22,7 @@ namespace eru.Application.Tests.Substitutions.Commands
         {
             var request = new UploadSubstitutionsCommand
             {
-                IpAddress = "8.8.8.8",
+                IpAddress = "198.51.100.1",
                 Key = "sample-key",
                 SubstitutionsPlan = new SubstitutionsPlan
                 {
@@ -54,7 +54,7 @@ namespace eru.Application.Tests.Substitutions.Commands
         {
             var request = new UploadSubstitutionsCommand
             {
-                IpAddress = "8.8.8.8",
+                IpAddress = "198.51.100.1",
                 Key = "sample-key",
                 SubstitutionsPlan = new SubstitutionsPlan
                 {

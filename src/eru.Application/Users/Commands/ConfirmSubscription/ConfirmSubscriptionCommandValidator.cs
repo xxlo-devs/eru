@@ -25,30 +25,17 @@ namespace eru.Application.Users.Commands.ConfirmSubscription
                 .MustAsync(IsOnRightStage);
         }
 
-        private async Task<bool> DoesUserExist(ConfirmSubscriptionCommand command, CancellationToken cancellationToken)
-        {
-            var user = await _dbContext.Users
-                .Where(x => x.Id == command.UserId & x.Platform == command.Platform)
-                .FirstOrDefaultAsync();
-
-            if (user != null) return true;
-            else return false;
-        }
+        private async Task<bool> DoesUserExist(ConfirmSubscriptionCommand command, CancellationToken cancellationToken) => 
+            await _dbContext.Users.FindAsync(command.UserId, command.Platform) != null ? true : false;
 
         private async Task<bool> IsOnRightStage(ConfirmSubscriptionCommand command, CancellationToken cancellationToken)
         {
-            var user = await _dbContext.Users
-                .Where(x => x.Id == command.UserId & x.Platform == command.Platform)
-                .FirstOrDefaultAsync();
+            var user = await _dbContext.Users.FindAsync(command.UserId, command.Platform);
+
             if (user != null)
-            {
                 if (user.Stage == Stage.GatheredClass) return true;
-                else return false;
-            }
-            else
-            {
-                return false;
-            }
+
+            return false;
         }
     }
 }

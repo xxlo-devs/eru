@@ -28,39 +28,20 @@ namespace eru.Application.Users.Commands.AppendClass
                 .MustAsync(DoesClassExist);
         }
 
-        private async Task<bool> DoesUserExist(AppendClassCommand command, CancellationToken cancellationToken)
-        {
-            var user = await _dbContext.Users
-                .Where(x => x.Id == command.UserId & x.Platform == command.Platform)
-                .FirstOrDefaultAsync();
+        private async Task<bool> DoesUserExist(AppendClassCommand command, CancellationToken cancellationToken) =>
+            await _dbContext.Users.FindAsync(command.UserId, command.Platform) != null ? true : false;
 
-            if (user != null) return true;
-            else return false;
-        }
+        private async Task<bool> DoesClassExist(string @class, CancellationToken cancellationToken) => 
+            await _dbContext.Classes.FindAsync(@class) != null ? true : false;
 
         private async Task<bool> IsOnRightStage(AppendClassCommand command, CancellationToken cancellationToken)
         {
-            var user = await _dbContext.Users
-                .Where(x => x.Id == command.UserId & x.Platform == command.Platform)
-                .FirstOrDefaultAsync();
+            var user = await _dbContext.Users.FindAsync(command.UserId, command.Platform);
 
             if (user != null)
-            {
                 if (user.Stage == Stage.Created || user.Stage == Stage.Cancelled) return true;
-                else return false;
-            }
-            else
-            {
-                return false;
-            }
-        }
 
-        private async Task<bool> DoesClassExist(string @class, CancellationToken cancellationToken)
-        {
-            var obj = await _dbContext.Classes.FindAsync(@class);
-
-            if (obj != null) return true;
-            else return false;
+            return false;
         }
     }
 }

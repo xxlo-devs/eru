@@ -28,9 +28,7 @@ namespace eru.Application.Users.Commands.CancelSubscription
 
         public async Task<Unit> Handle(CancelSubscriptionCommand command, CancellationToken cancellationToken)
         {
-            var user = await _dbContext.Users
-                .Where(x => x.Id == command.UserId & x.Platform == command.Platform)
-                .FirstOrDefaultAsync();
+            var user = await _dbContext.Users.FindAsync(command.UserId, command.Platform);
 
             user.Class = string.Empty;
             user.Stage = Stage.Cancelled;

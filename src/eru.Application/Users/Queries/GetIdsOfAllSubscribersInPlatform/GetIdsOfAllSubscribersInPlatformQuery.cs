@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using eru.Application.Common.Interfaces;
 using eru.Domain.Enums;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace eru.Application.Users.Queries.GetIdsOfAllSubscribersInPlatform
 {
@@ -25,7 +26,7 @@ namespace eru.Application.Users.Queries.GetIdsOfAllSubscribersInPlatform
             _dbContext = dbContext;
         }
 
-        public async Task<IEnumerable<string>> Handle(GetIdsOfAllSubscribersInPlatformQuery request, CancellationToken cancellationToken) => 
-            (from x in _dbContext.Users where x.Platform == request.Platform select x.Id).AsEnumerable();
+        public async Task<IEnumerable<string>> Handle(GetIdsOfAllSubscribersInPlatformQuery request, CancellationToken cancellationToken)
+            => _dbContext.Users.Where(x => x.Platform == request.Platform).Select(x => x.Id).AsEnumerable();
     }
 }

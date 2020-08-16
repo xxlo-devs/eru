@@ -29,9 +29,7 @@ namespace eru.Application.Users.Commands.AppendClass
 
         public async Task<Unit> Handle(AppendClassCommand command, CancellationToken cancellationToken)
         {
-            var user = await _dbContext.Users
-                .Where(x => x.Id == command.UserId & x.Platform == command.Platform)
-                .FirstOrDefaultAsync();
+            var user = await _dbContext.Users.FindAsync(command.UserId, command.Platform);
 
             user.Class = command.Class;
             user.Stage = Stage.GatheredClass;
