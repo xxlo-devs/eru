@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using eru.Application.Classes.Queries.GetClasses;
 using eru.Application.Common.Mappings;
-using eru.Domain.Enums;
 using FluentAssertions;
 using Xunit;
 

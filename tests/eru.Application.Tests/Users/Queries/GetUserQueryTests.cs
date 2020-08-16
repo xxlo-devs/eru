@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using eru.Application.Users.Queries.GetUser;
 using eru.Domain.Entity;
-using eru.Domain.Enums;
 using FluentAssertions;
 using Xunit;
 
@@ -17,16 +16,16 @@ namespace eru.Application.Tests.Users.Queries
             var handler = new GetUserQueryHandler(context);
             var request = new GetUserQuery
             {
-                UserId = "380AE765-803D-4174-A370-1038B7D53CD6",
+                UserId = "sample-user",
                 Platform = "DebugMessageService"
             };
 
             var expected = new User
             {
-                Id = "380AE765-803D-4174-A370-1038B7D53CD6", 
+                Id = "sample-user", 
                 Platform = "DebugMessageService",
-                Stage = Stage.Subscribed,
-                Class = "III c"
+                Class = "II b",
+                PreferredLanguage = "pl"
             };
 
             var actual = await handler.Handle(request, CancellationToken.None);

@@ -1,6 +1,5 @@
 ﻿using eru.Application.Common.Mappings;
 using eru.Domain.Entity;
-using eru.Domain.Enums;
 
 namespace eru.Application.Classes.Queries.GetClasses
 {

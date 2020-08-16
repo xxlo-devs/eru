@@ -12,10 +12,8 @@ namespace eru.Infrastructure.Persistence
             
         }
         
-        [ExcludeFromCodeCoverage]
         public DbSet<Class> Classes { get; set; }
 
-        [ExcludeFromCodeCoverage]
         public DbSet<User> Users { get; set; } 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -25,8 +23,21 @@ namespace eru.Infrastructure.Persistence
             modelBuilder.Entity<Class>()
                 .Property(x => x.Name)
                 .HasMaxLength(255);
+
             modelBuilder.Entity<User>()
                 .HasKey(k => new {k.Id, k.Platform});
+            modelBuilder.Entity<User>()
+                .Property(x => x.Id)
+                .HasMaxLength(255);
+            modelBuilder.Entity<User>()
+                .Property(x => x.Platform)
+                .HasMaxLength(255);
+            modelBuilder.Entity<User>()
+                .Property(x => x.Class)
+                .HasMaxLength(255);
+            modelBuilder.Entity<User>()
+                .Property(x => x.PreferredLanguage)
+                .HasMaxLength(255);
         }
     }
 }

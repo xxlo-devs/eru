@@ -1,6 +1,4 @@
-﻿using eru.Domain.Enums;
-
-namespace eru.Domain.Entity
+﻿namespace eru.Domain.Entity
 {
     public class Class
     {

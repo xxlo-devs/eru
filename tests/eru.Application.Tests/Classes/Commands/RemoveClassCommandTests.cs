@@ -1,10 +1,7 @@
-﻿using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
-using eru.Application.Classes.Commands.CreateClass;
 using eru.Application.Classes.Commands.RemoveClass;
 using eru.Domain.Entity;
-using eru.Domain.Enums;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Xunit;

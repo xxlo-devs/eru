@@ -1,17 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net.Sockets;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using eru.Application.Common.Interfaces;
-using eru.Domain.Entity;
-using eru.Domain.Enums;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace eru.Application.Users.Queries.GetIdsOfSubscribersInClass
 {

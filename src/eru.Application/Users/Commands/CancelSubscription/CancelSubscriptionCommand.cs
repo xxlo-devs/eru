@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using eru.Application.Common.Interfaces;
-using eru.Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace eru.Application.Users.Commands.CancelSubscription
 {
@@ -30,10 +30,7 @@ namespace eru.Application.Users.Commands.CancelSubscription
         {
             var user = await _dbContext.Users.FindAsync(command.UserId, command.Platform);
 
-            user.Class = string.Empty;
-            user.Stage = Stage.Cancelled;
-
-            _dbContext.Users.Update(user);
+            _dbContext.Users.Remove(user);
             await _dbContext.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;

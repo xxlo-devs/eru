@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using eru.Application.Users.Commands.CancelSubscription;
-using eru.Domain.Enums;
 using FluentAssertions;
+using Microsoft.Extensions.Configuration;
 using Xunit;
 
 namespace eru.Application.Tests.Users.Commands
@@ -14,17 +15,17 @@ namespace eru.Application.Tests.Users.Commands
         public async Task ShouldCancelSubscriptionCorrectly()
         {
             var context = new FakeDbContext();
+
             var handler = new CancelSubscriptionCommandHandler(context);
             var request = new CancelSubscriptionCommand
             {
-                UserId = "380AE765-803D-4174-A370-1038B7D53CD6",
+                UserId = "sample-user",
                 Platform = "DebugMessageService"
             };
 
             await handler.Handle(request, CancellationToken.None);
 
-            context.Users.Should().Contain(x =>
-                x.Id == "380AE765-803D-4174-A370-1038B7D53CD6" & x.Platform == "DebugMessageService" & x.Class == String.Empty & x.Stage == Stage.Cancelled);
+            context.Users.Should().NotContain(x => x.Id == "sample-user" & x.Platform == "DebugMessageService");
         }
 
         [Fact]
@@ -34,7 +35,7 @@ namespace eru.Application.Tests.Users.Commands
             var validator = new CancelSubscriptionCommandValidator(context);
             var request = new CancelSubscriptionCommand
             {
-                UserId = "380AE765-803D-4174-A370-1038B7D53CD6",
+                UserId = "sample-user",
                 Platform = "DebugMessageService"
             };
 
@@ -51,24 +52,7 @@ namespace eru.Application.Tests.Users.Commands
             var validator = new CancelSubscriptionCommandValidator(context);
             var request = new CancelSubscriptionCommand
             {
-                UserId = "38C12C16-2A68-4F56-B434-62A382DB4DA0",
-                Platform = "DebugMessageService"
-            };
-
-            var result = await validator.ValidateAsync(request, CancellationToken.None);
-
-            result.IsValid.Should().BeFalse();
-            result.Errors.Should().HaveCount(2).And.Contain(x => x.ErrorMessage == "The specified condition was not met for ''.");
-        }
-
-        [Fact]
-        public async Task DoesValidatorPreventsFromUnsubscribingAlreadyUnsubscribedUser()
-        {
-            var context = new FakeDbContext();
-            var validator = new CancelSubscriptionCommandValidator(context);
-            var request = new CancelSubscriptionCommand
-            {
-                UserId = "FCDEE5DA-F755-45F9-B8BB-D7C7C303F70B",
+                UserId = "non-existing-user",
                 Platform = "DebugMessageService"
             };
 

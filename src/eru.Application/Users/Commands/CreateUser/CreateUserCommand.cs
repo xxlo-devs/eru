@@ -5,8 +5,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using eru.Application.Common.Interfaces;
 using eru.Domain.Entity;
-using eru.Domain.Enums;
 using MediatR;
+using Microsoft.Extensions.Configuration;
 
 namespace eru.Application.Users.Commands.CreateUser
 {
@@ -14,6 +14,8 @@ namespace eru.Application.Users.Commands.CreateUser
     {
         public string Id { get; set; }
         public string Platform { get; set; }
+        public string PreferredLanguage { get; set; }
+        public string Class { get; set; }
     }
 
     public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Unit>
@@ -31,8 +33,8 @@ namespace eru.Application.Users.Commands.CreateUser
             {
                 Id = command.Id,
                 Platform = command.Platform,
-                Class = string.Empty,
-                Stage = Stage.Created
+                Class = command.Class,
+                PreferredLanguage = command.PreferredLanguage
             };
 
             await _dbContext.Users.AddAsync(user);

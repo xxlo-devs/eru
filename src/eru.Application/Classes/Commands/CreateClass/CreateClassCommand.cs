@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using eru.Application.Common.Interfaces;
 using eru.Domain.Entity;
-using eru.Domain.Enums;
 using MediatR;
 
 namespace eru.Application.Classes.Commands.CreateClass
