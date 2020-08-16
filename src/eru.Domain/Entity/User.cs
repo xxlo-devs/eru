@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using eru.Domain.Enums;
 
 namespace eru.Domain.Entity
 {
@@ -11,6 +10,5 @@ namespace eru.Domain.Entity
         public string Platform { get; set; }
         public string PreferredLanguage { get; set; }
         public string Class { get; set; }
-        public Stage Stage { get; set; }
     }
 }

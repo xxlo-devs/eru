@@ -1,8 +1,6 @@
-﻿using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using eru.Application.Users.Queries.GetIdsOfSubscribersInClass;
-using eru.Domain.Enums;
 using FluentAssertions;
 using Xunit;
 
@@ -18,11 +16,11 @@ namespace eru.Application.Tests.Users.Queries
             var request = new GetIdsOfSubscribersInClassQuery
             {
                 Platform = "DebugMessageService",
-                Class = "III c"
+                Class = "II b"
             };
 
             var response = await handler.Handle(request, CancellationToken.None);
-            response.Should().HaveCount(1).And.Contain(x => x.Contains("380AE765-803D-4174-A370-1038B7D53CD6"));
+            response.Should().HaveCount(1).And.Contain(x => x.Contains("sample-user"));
         }
     }
 }

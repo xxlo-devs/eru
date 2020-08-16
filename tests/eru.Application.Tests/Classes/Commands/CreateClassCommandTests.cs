@@ -2,9 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using eru.Application.Classes.Commands.CreateClass;
-using eru.Domain.Enums;
 using FluentAssertions;
-using FluentValidation.Results;
 using Xunit;
 
 namespace eru.Application.Tests.Classes.Commands

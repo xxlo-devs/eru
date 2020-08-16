@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using eru.Application.Common.Interfaces;
-using eru.Domain.Enums;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,21 +19,19 @@ namespace eru.Application.Users.Commands.CancelSubscription
             _dbContext = dbContext;
 
             RuleFor(x => x)
-                .MustAsync(DoesUserExist)
-                .MustAsync(IsOnRightStage);
+                .NotEmpty()
+                .MustAsync(DoesUserExist);
+
+            RuleFor(x => x.UserId)
+                .NotEmpty()
+                .MaximumLength(255);
+
+            RuleFor(x => x.Platform)
+                .NotEmpty()
+                .MaximumLength(255);
         }
 
         private async Task<bool> DoesUserExist(CancelSubscriptionCommand command, CancellationToken cancellationToken) => 
             await _dbContext.Users.FindAsync(command.UserId, command.Platform) != null ? true : false;
-        
-        public async Task<bool> IsOnRightStage(CancelSubscriptionCommand command, CancellationToken cancellationToken)
-        {
-            var user = await _dbContext.Users.FindAsync(command.UserId, command.Platform);
-
-            if (user != null)
-                if (user?.Stage != Stage.Cancelled) return true;
-
-            return false;
-        }
     }
 }

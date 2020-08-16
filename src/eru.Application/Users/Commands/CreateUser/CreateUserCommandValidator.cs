@@ -19,10 +19,31 @@ namespace eru.Application.Users.Commands.CreateUser
             _dbContext = dbContext;
 
             RuleFor(x => x)
+                .NotEmpty()
                 .MustAsync(IsIdUnique);
+
+            RuleFor(x => x.Id)
+                .NotEmpty()
+                .MaximumLength(255);
+
+            RuleFor(x => x.Platform)
+                .NotEmpty()
+                .MaximumLength(255);
+
+            RuleFor(x => x.Class)
+                .NotEmpty()
+                .MaximumLength(255)
+                .MustAsync(DoesClassExist);
+
+            RuleFor(x => x.PreferredLanguage)
+                .NotEmpty()
+                .MaximumLength(255);
         }
 
         private async Task<bool> IsIdUnique(CreateUserCommand command, CancellationToken cancellationToken) => 
             await _dbContext.Users.FindAsync(command.Id, command.Platform) != null ? false : true;
+
+        private async Task<bool> DoesClassExist(string className, CancellationToken cancellationToken) =>
+            await _dbContext.Classes.FindAsync(className) != null ? true : false;
     }
 }

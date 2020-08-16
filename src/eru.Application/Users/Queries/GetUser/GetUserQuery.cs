@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using eru.Application.Common.Interfaces;
 using eru.Domain.Entity;
-using eru.Domain.Enums;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace eru.Application.Users.Queries.GetUser
 {
