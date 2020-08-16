@@ -35,7 +35,7 @@ namespace eru.Application.Users.Commands.CreateUser
                 Id = command.Id,
                 Platform = command.Platform,
                 Class = string.Empty,
-                PrefferedLanguage = _configuration.GetValue<string>("DefaultLanguage"),
+                PreferredLanguage = _configuration.GetValue<string>("DefaultLanguage"),
                 Stage = Stage.Created
             };
 

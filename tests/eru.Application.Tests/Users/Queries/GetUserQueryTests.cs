@@ -27,7 +27,7 @@ namespace eru.Application.Tests.Users.Queries
                 Platform = "DebugMessageService",
                 Stage = Stage.Subscribed,
                 Class = "III c",
-                PrefferedLanguage = "pl"
+                PreferredLanguage = "pl"
             };
 
             var actual = await handler.Handle(request, CancellationToken.None);

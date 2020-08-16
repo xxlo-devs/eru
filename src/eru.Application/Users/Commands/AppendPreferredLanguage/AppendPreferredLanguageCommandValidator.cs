@@ -7,13 +7,13 @@ using eru.Application.Common.Interfaces;
 using eru.Domain.Enums;
 using FluentValidation;
 
-namespace eru.Application.Users.Commands.AppendPrefferedLanguage
+namespace eru.Application.Users.Commands.AppendPreferredLanguage
 {
-    public class AppendPrefferedLanguageCommandValidator : AbstractValidator<AppendPrefferedLanguageCommand>
+    public class AppendPreferredLanguageCommandValidator : AbstractValidator<AppendPreferredLanguageCommand>
     {
         private readonly IApplicationDbContext _dbContext;
 
-        public AppendPrefferedLanguageCommandValidator(IApplicationDbContext dbContext)
+        public AppendPreferredLanguageCommandValidator(IApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
 
@@ -22,11 +22,11 @@ namespace eru.Application.Users.Commands.AppendPrefferedLanguage
                 .MustAsync(IsOnRightStage);
         }
 
-        private async Task<bool> DoesUserExist(AppendPrefferedLanguageCommand command,
+        private async Task<bool> DoesUserExist(AppendPreferredLanguageCommand command,
             CancellationToken cancellationToken)
             => await _dbContext.Users.FindAsync(command.UserId, command.Platform) != null ? true : false;
 
-        private async Task<bool> IsOnRightStage(AppendPrefferedLanguageCommand command, CancellationToken cancellationToken)
+        private async Task<bool> IsOnRightStage(AppendPreferredLanguageCommand command, CancellationToken cancellationToken)
         {
             var user = await _dbContext.Users.FindAsync(command.UserId, command.Platform);
 

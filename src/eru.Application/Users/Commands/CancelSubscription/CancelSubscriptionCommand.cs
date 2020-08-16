@@ -34,7 +34,7 @@ namespace eru.Application.Users.Commands.CancelSubscription
             var user = await _dbContext.Users.FindAsync(command.UserId, command.Platform);
 
             user.Class = string.Empty;
-            user.PrefferedLanguage = _configuration.GetValue<string>("DefaultLanguage");
+            user.PreferredLanguage = _configuration.GetValue<string>("DefaultLanguage");
             user.Stage = Stage.Cancelled;
 
             _dbContext.Users.Update(user);
