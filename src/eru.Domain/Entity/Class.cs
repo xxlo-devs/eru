@@ -14,12 +14,10 @@
         
         public string Name { get; set; }
 
-        #nullable enable
-        public override bool Equals(object? obj)
+        public override bool Equals(object obj)
         {
             return obj is Class @class && @class.Name == Name;
         }
-        #nullable restore
 
         public override int GetHashCode()
         {

@@ -38,15 +38,6 @@ namespace eru.Application.Substitutions.Commands
         }
 
         private bool IsIPAddressValid(string address)
-        {
-            try
-            {
-                return IPAddress.Parse(address) != null ? true : false;
-            }
-            catch
-            {
-                return false;
-            }
-        }
+            => IPAddress.TryParse(address, out IPAddress ip);
     }
 }

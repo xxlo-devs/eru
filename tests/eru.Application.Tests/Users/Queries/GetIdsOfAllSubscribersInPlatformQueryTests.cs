@@ -19,9 +19,11 @@ namespace eru.Application.Tests.Users.Queries
                 Platform = "DebugMessageService"
             };
 
-            var expected = new List<string>
+            var expected = new[]
             {
-                new string("sample-user")
+                "sample-user",
+                "sample-user-2",
+                "sample-user-3"
             };
 
             var actual = await handler.Handle(request, CancellationToken.None);

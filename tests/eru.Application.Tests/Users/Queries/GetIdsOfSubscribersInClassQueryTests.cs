@@ -19,8 +19,14 @@ namespace eru.Application.Tests.Users.Queries
                 Class = "II b"
             };
 
-            var response = await handler.Handle(request, CancellationToken.None);
-            response.Should().HaveCount(1).And.Contain(x => x.Contains("sample-user"));
+            var expected = new[]
+            {
+                "sample-user", "sample-user-3"
+            };
+
+            var actual = await handler.Handle(request, CancellationToken.None);
+
+            actual.Should().BeEquivalentTo(expected);
         }
     }
 }

@@ -80,7 +80,7 @@ namespace eru.Application.Tests.Users.Commands
             var validator = new CreateUserCommandValidator(context);
             var request = new CreateUserCommand
             {
-                Id = "sample-user-2",
+                Id = "new-user",
                 Platform = "DebugMessageService",
                 Class = "Vz",
                 PreferredLanguage = "en-US"
@@ -93,22 +93,22 @@ namespace eru.Application.Tests.Users.Commands
         }
 
         [Fact]
-        public async Task DoesValidatorPreventFromCreatingAccountWithoutLanguage()
+        public async Task DoesValidatorPreventFromCreatingAccountWithInvalidLanguage()
         {
             var context = new FakeDbContext();
             var validator = new CreateUserCommandValidator(context);
             var request = new CreateUserCommand
             {
-                Id = "sample-user-2",
+                Id = "new-user",
                 Platform = "DebugMessageService",
                 Class = "II b",
-                PreferredLanguage = ""
+                PreferredLanguage = "nonexistinglanguage"
             };
 
             var result = await validator.ValidateAsync(request);
 
             result.IsValid.Should().BeFalse();
-            result.Errors.Should().HaveCount(1).And.ContainSingle(x => x.ErrorMessage == "'Preferred Language' must not be empty.");
+            result.Errors.Should().HaveCount(1).And.ContainSingle(x => x.ErrorMessage == "The specified condition was not met for 'Preferred Language'.");
         }
     }
 }

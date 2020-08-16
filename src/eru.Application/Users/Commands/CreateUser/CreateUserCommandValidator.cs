@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -20,7 +21,7 @@ namespace eru.Application.Users.Commands.CreateUser
 
             RuleFor(x => x)
                 .NotEmpty()
-                .MustAsync(IsIdUnique);
+                .MustAsync(IsUserUnique);
 
             RuleFor(x => x.Id)
                 .NotEmpty()
@@ -37,13 +38,28 @@ namespace eru.Application.Users.Commands.CreateUser
 
             RuleFor(x => x.PreferredLanguage)
                 .NotEmpty()
-                .MaximumLength(255);
+                .MaximumLength(255)
+                .MustAsync(DoesLanguageExist);
         }
 
-        private async Task<bool> IsIdUnique(CreateUserCommand command, CancellationToken cancellationToken) => 
+        private async Task<bool> IsUserUnique(CreateUserCommand command, CancellationToken cancellationToken) => 
             await _dbContext.Users.FindAsync(command.Id, command.Platform) != null ? false : true;
 
         private async Task<bool> DoesClassExist(string className, CancellationToken cancellationToken) =>
             await _dbContext.Classes.FindAsync(className) != null ? true : false;
+
+        private async Task<bool> DoesLanguageExist(string lang, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var cultureInfo = new CultureInfo(lang);
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }

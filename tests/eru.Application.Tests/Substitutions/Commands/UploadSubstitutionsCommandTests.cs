@@ -163,7 +163,7 @@ namespace eru.Application.Tests.Substitutions.Commands
             var result = await validator.ValidateAsync(request, CancellationToken.None);
 
             result.IsValid.Should().BeFalse();
-            result.Errors.Should().HaveCount(1);
+            result.Errors.Should().HaveCount(1).And.ContainSingle(c => c.ErrorMessage == "The specified condition was not met for 'Ip Address'.");
         }
 
         [Fact]
@@ -199,7 +199,7 @@ namespace eru.Application.Tests.Substitutions.Commands
             var result = await validator.ValidateAsync(request, CancellationToken.None);
 
             result.IsValid.Should().BeFalse();
-            result.Errors.Should().HaveCount(1);
+            result.Errors.Should().HaveCount(1).And.ContainSingle(c => c.ErrorMessage == "The specified condition was not met for 'Key'.");
         }
 
         [Fact]
@@ -222,7 +222,7 @@ namespace eru.Application.Tests.Substitutions.Commands
             var result = await validator.ValidateAsync(request, CancellationToken.None);
 
             result.IsValid.Should().BeFalse();
-            result.Errors.Should().HaveCount(1);
+            result.Errors.Should().HaveCount(1).And.ContainSingle(c => c.ErrorMessage == "The specified condition was not met for 'Substitutions Plan'.");
         }
 
     }
