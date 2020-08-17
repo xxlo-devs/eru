@@ -6,7 +6,8 @@ namespace eru.Application.Tests
 {
     public static class MockData
     {
-        public static string CorrectIpAddress { get; } = "198.51.100.1";
-        public static string CorrectUploadKey { get; } = "sample-key";
+        public const string CorrectIpAddress = "198.51.100.1";
+        public const string CorrectUploadKey = "sample-key";
+        public static DateTime CorrectDate { get; } = new DateTime(2010, 1, 1);
     }
 }

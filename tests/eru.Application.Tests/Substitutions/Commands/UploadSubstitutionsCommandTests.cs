@@ -26,7 +26,7 @@ namespace eru.Application.Tests.Substitutions.Commands
                 Key = MockData.CorrectUploadKey,
                 SubstitutionsPlan = new SubstitutionsPlan
                 {
-                    Date = DateTime.UtcNow.Date,
+                    Date = MockData.CorrectDate,
                     Substitutions = new []
                     {
                         new Substitution
@@ -58,7 +58,7 @@ namespace eru.Application.Tests.Substitutions.Commands
                 Key = "sample-key",
                 SubstitutionsPlan = new SubstitutionsPlan
                 {
-                    Date = DateTime.UtcNow.Date,
+                    Date = MockData.CorrectDate,
                     Substitutions = new []
                     {
                         new Substitution
@@ -106,7 +106,7 @@ namespace eru.Application.Tests.Substitutions.Commands
                 Key = MockData.CorrectUploadKey,
                 SubstitutionsPlan = new SubstitutionsPlan
                 {
-                    Date = DateTime.UtcNow.Date,
+                    Date = MockData.CorrectDate,
                     Substitutions = new List<Substitution>
                     {
                         new Substitution
@@ -142,7 +142,7 @@ namespace eru.Application.Tests.Substitutions.Commands
                 Key = MockData.CorrectUploadKey,
                 SubstitutionsPlan = new SubstitutionsPlan
                 {
-                    Date = DateTime.UtcNow.Date,
+                    Date = MockData.CorrectDate,
                     Substitutions = new List<Substitution>
                     {
                         new Substitution
@@ -178,7 +178,7 @@ namespace eru.Application.Tests.Substitutions.Commands
                 Key = "invalid-key",
                 SubstitutionsPlan = new SubstitutionsPlan
                 {
-                    Date = DateTime.UtcNow.Date,
+                    Date = MockData.CorrectDate,
                     Substitutions = new List<Substitution>
                     {
                         new Substitution
@@ -214,7 +214,7 @@ namespace eru.Application.Tests.Substitutions.Commands
                 Key = MockData.CorrectUploadKey,
                 SubstitutionsPlan = new SubstitutionsPlan
                 {
-                    Date = DateTime.UtcNow.Date,
+                    Date = MockData.CorrectDate,
                     Substitutions = new List<Substitution>()
                 }
             };
