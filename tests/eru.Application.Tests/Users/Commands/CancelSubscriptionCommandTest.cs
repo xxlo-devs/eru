@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using eru.Application.Users.Commands.CancelSubscription;
 using FluentAssertions;
+using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Xunit;
 
@@ -11,6 +12,10 @@ namespace eru.Application.Tests.Users.Commands
 {
     public class CancelSubscriptionCommandTest
     {
+        public CancelSubscriptionCommandTest()
+        {
+            ValidatorOptions.Global.LanguageManager.Enabled = false;
+        }
         [Fact]
         public async Task ShouldCancelSubscriptionCorrectly()
         {

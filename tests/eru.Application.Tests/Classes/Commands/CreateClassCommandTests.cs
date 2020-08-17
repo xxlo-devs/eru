@@ -3,12 +3,17 @@ using System.Threading;
 using System.Threading.Tasks;
 using eru.Application.Classes.Commands.CreateClass;
 using FluentAssertions;
+using FluentValidation;
 using Xunit;
 
 namespace eru.Application.Tests.Classes.Commands
 {
     public class CreateClassCommandTests
     {
+        public CreateClassCommandTests()
+        {
+            ValidatorOptions.Global.LanguageManager.Enabled = false;
+        }
         [Fact]
         public async Task ShouldCreateClassCorrectly()
         {

@@ -15,6 +15,7 @@ namespace eru.Application
             
             services.AddAutoMapper(assembly);
             services.AddValidatorsFromAssembly(assembly);
+            ValidatorOptions.Global.LanguageManager.Enabled = false;
             services.AddMediatR(assembly);
             
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(PerformanceBehaviour<,>));

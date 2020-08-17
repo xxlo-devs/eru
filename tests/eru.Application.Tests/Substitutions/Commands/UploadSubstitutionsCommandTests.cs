@@ -11,12 +11,18 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
+using FluentValidation;
 using Xunit;
 
 namespace eru.Application.Tests.Substitutions.Commands
 {
     public class UploadSubstitutionsCommandTests
     {
+        public UploadSubstitutionsCommandTests()
+        {
+            ValidatorOptions.Global.LanguageManager.Enabled = false;
+        }
+        
         [Fact]
         public void IsToStringOnRequestWorkingCorrectly()
         {
@@ -64,7 +70,7 @@ namespace eru.Application.Tests.Substitutions.Commands
                         new Substitution
                         {
                             Cancelled = false,
-                            Classes = new []{new Class("IB1"), new Class("IIIc") },
+                            Classes = new []{new Class("I a"), new Class("III c") },
                             Groups = "Cała klasa",
                             Lesson = 3,
                             Room = "204",
@@ -75,7 +81,7 @@ namespace eru.Application.Tests.Substitutions.Commands
                         new Substitution
                         {
                             Cancelled = true,
-                            Classes = new []{new Class("IB1"), new Class("IIC") },
+                            Classes = new []{new Class("I a"), new Class("II b") },
                             Groups = "Cała klasa",
                             Lesson = 2,
                             Room = "304",
@@ -85,20 +91,22 @@ namespace eru.Application.Tests.Substitutions.Commands
                     }
                 }
             };
-            var mediator = new Mock<IMediator>();
+            var fakeDbContext = new FakeDbContext();
             var backgroundExecutor = new Mock<IBackgroundExecutor>();
-            var handler = new UploadSubstitutionsCommandHandler(mediator.Object, backgroundExecutor.Object);
+            var sampleClient = new Mock<IPlatformClient>();
+            sampleClient.Setup(x => x.PlatformId).Returns("DebugMessageService");
+            var handler = new UploadSubstitutionsCommandHandler(fakeDbContext, backgroundExecutor.Object, new []{sampleClient.Object});
 
             await handler.Handle(request, CancellationToken.None);
             
-            backgroundExecutor.Verify(x=>x.Enqueue(It.IsAny<Expression<Func<Task>>>()), Times.Exactly(2));
+            backgroundExecutor.Verify(x=>x.Enqueue(It.IsAny<Expression<Func<Task>>>()), Times.Exactly(3));
         }
 
         [Fact]
         public async Task DoesValidatorAllowValidRequest()
         {
             var config = new ConfigurationBuilder().AddInMemoryCollection(new[] { new KeyValuePair<string, string>("UploadKey", "sample-key") }).Build();
-            var validator = new UploadSubstitutionsCommandValidator(config);
+            var validator = new UploadSubstitutionsCommandValidator(config, new FakeDbContext());
 
             var request = new UploadSubstitutionsCommand
             {
@@ -112,7 +120,7 @@ namespace eru.Application.Tests.Substitutions.Commands
                         new Substitution
                         {
                             Cancelled = false,
-                            Classes = new[] {new Class("Ia"), new Class("IIIc")},
+                            Classes = new[] {new Class("I a"), new Class("III c")},
                             Groups = "Cała klasa",
                             Lesson = 3,
                             Room = "204",
@@ -134,7 +142,7 @@ namespace eru.Application.Tests.Substitutions.Commands
         public async Task DoesValidatorPreventUploadWithInvalidIPAddress()
         {
             var config = new ConfigurationBuilder().AddInMemoryCollection(new[] { new KeyValuePair<string, string>("UploadKey", "sample-key") }).Build();
-            var validator = new UploadSubstitutionsCommandValidator(config);
+            var validator = new UploadSubstitutionsCommandValidator(config, new FakeDbContext());
 
             var request = new UploadSubstitutionsCommand
             {
@@ -170,7 +178,7 @@ namespace eru.Application.Tests.Substitutions.Commands
         public async Task DoesValidatorPreventUploadWithInvalidKey()
         {
             var config = new ConfigurationBuilder().AddInMemoryCollection(new[] { new KeyValuePair<string, string>("UploadKey", "sample-key") }).Build();
-            var validator = new UploadSubstitutionsCommandValidator(config);
+            var validator = new UploadSubstitutionsCommandValidator(config, new FakeDbContext());
 
             var request = new UploadSubstitutionsCommand
             {
@@ -184,7 +192,7 @@ namespace eru.Application.Tests.Substitutions.Commands
                         new Substitution
                         {
                             Cancelled = false,
-                            Classes = new[] {new Class("Ia"), new Class("IIIc")},
+                            Classes = new[] {new Class("I a"), new Class("III c")},
                             Groups = "Cała klasa",
                             Lesson = 3,
                             Room = "204",
@@ -206,7 +214,7 @@ namespace eru.Application.Tests.Substitutions.Commands
         public async Task DoesValidatorPreventUploadOfInvalidSubstitutionsPlan()
         {
             var config = new ConfigurationBuilder().AddInMemoryCollection(new[] { new KeyValuePair<string, string>("UploadKey", "sample-key") }).Build();
-            var validator = new UploadSubstitutionsCommandValidator(config);
+            var validator = new UploadSubstitutionsCommandValidator(config, new FakeDbContext());
 
             var request = new UploadSubstitutionsCommand
             {
