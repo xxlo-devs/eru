@@ -20,17 +20,17 @@ namespace eru.Infrastructure.Persistence
         {
             modelBuilder.Entity<Class>(x =>
             {
-                x.HasKey(x => x.Name);
-                x.Property(x => x.Name).HasMaxLength(255);
+                x.HasKey(y => y.Name);
+                x.Property(y => y.Name).HasMaxLength(255);
             });
 
             modelBuilder.Entity<User>(x =>
             {
-                x.HasKey(k => new {k.Id, k.Platform});
-                x.Property(x => x.Id).HasMaxLength(255);
-                x.Property(x => x.Platform).HasMaxLength(255);
-                x.Property(x => x.Class).HasMaxLength(255);
-                x.Property(x => x.PreferredLanguage).HasMaxLength(255);
+                x.HasKey(y => new {y.Id, y.Platform});
+                x.Property(y => y.Id).HasMaxLength(255);
+                x.Property(y => y.Platform).HasMaxLength(255);
+                x.Property(y => y.Class).HasMaxLength(255);
+                x.Property(y => y.PreferredLanguage).HasMaxLength(255);
             });
         }
     }

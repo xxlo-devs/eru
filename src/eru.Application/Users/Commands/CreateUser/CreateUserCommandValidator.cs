@@ -39,7 +39,7 @@ namespace eru.Application.Users.Commands.CreateUser
             RuleFor(x => x.PreferredLanguage)
                 .NotEmpty()
                 .MaximumLength(255)
-                .MustAsync(DoesLanguageExist);
+                .Must(DoesLanguageExist);
         }
 
         private async Task<bool> IsUserUnique(CreateUserCommand command, CancellationToken cancellationToken) => 
@@ -48,7 +48,7 @@ namespace eru.Application.Users.Commands.CreateUser
         private async Task<bool> DoesClassExist(string className, CancellationToken cancellationToken) =>
             await _dbContext.Classes.FindAsync(className) != null ? true : false;
 
-        private async Task<bool> DoesLanguageExist(string lang, CancellationToken cancellationToken)
+        private bool DoesLanguageExist(string lang)
         {
             try
             {

@@ -22,7 +22,7 @@ namespace eru.Application.Users.Queries.GetIdsOfSubscribersInClass
             _dbContext = dbContext;
         }
 
-        public async Task<IEnumerable<string>> Handle(GetIdsOfSubscribersInClassQuery request, CancellationToken cancellationToken)
-            => _dbContext.Users.Where(x => x.Platform == request.Platform & x.Class == request.Class).Select(x => x.Id).AsEnumerable();
+        public Task<IEnumerable<string>> Handle(GetIdsOfSubscribersInClassQuery request, CancellationToken cancellationToken)
+            => Task.FromResult(_dbContext.Users.Where(x => x.Platform == request.Platform & x.Class == request.Class).Select(x => x.Id).AsEnumerable());
     }
 }

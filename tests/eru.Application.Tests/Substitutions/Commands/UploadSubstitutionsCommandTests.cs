@@ -18,15 +18,15 @@ namespace eru.Application.Tests.Substitutions.Commands
     public class UploadSubstitutionsCommandTests
     {
         [Fact]
-        public async Task IsToStringOnRequestWorkingCorrectly()
+        public void IsToStringOnRequestWorkingCorrectly()
         {
             var request = new UploadSubstitutionsCommand
             {
-                IpAddress = "198.51.100.1",
-                Key = "sample-key",
+                IpAddress = MockData.CorrectIpAddress,
+                Key = MockData.CorrectUploadKey,
                 SubstitutionsPlan = new SubstitutionsPlan
                 {
-                    Date = new DateTime(2010, 1,1),
+                    Date = DateTime.UtcNow.Date,
                     Substitutions = new []
                     {
                         new Substitution
@@ -58,7 +58,7 @@ namespace eru.Application.Tests.Substitutions.Commands
                 Key = "sample-key",
                 SubstitutionsPlan = new SubstitutionsPlan
                 {
-                    Date = new DateTime(2010, 1,1),
+                    Date = DateTime.UtcNow.Date,
                     Substitutions = new []
                     {
                         new Substitution
@@ -102,8 +102,8 @@ namespace eru.Application.Tests.Substitutions.Commands
 
             var request = new UploadSubstitutionsCommand
             {
-                IpAddress = "198.51.100.1",
-                Key = "sample-key",
+                IpAddress = MockData.CorrectIpAddress,
+                Key = MockData.CorrectUploadKey,
                 SubstitutionsPlan = new SubstitutionsPlan
                 {
                     Date = DateTime.UtcNow.Date,
@@ -139,7 +139,7 @@ namespace eru.Application.Tests.Substitutions.Commands
             var request = new UploadSubstitutionsCommand
             {
                 IpAddress = "198-51-100-1",
-                Key = "sample-key",
+                Key = MockData.CorrectUploadKey,
                 SubstitutionsPlan = new SubstitutionsPlan
                 {
                     Date = DateTime.UtcNow.Date,
@@ -174,7 +174,7 @@ namespace eru.Application.Tests.Substitutions.Commands
 
             var request = new UploadSubstitutionsCommand
             {
-                IpAddress = "198.51.100.1",
+                IpAddress = MockData.CorrectIpAddress,
                 Key = "invalid-key",
                 SubstitutionsPlan = new SubstitutionsPlan
                 {
@@ -210,8 +210,8 @@ namespace eru.Application.Tests.Substitutions.Commands
 
             var request = new UploadSubstitutionsCommand
             {
-                IpAddress = "198.51.100.1",
-                Key = "sample-key",
+                IpAddress = MockData.CorrectIpAddress,
+                Key = MockData.CorrectUploadKey,
                 SubstitutionsPlan = new SubstitutionsPlan
                 {
                     Date = DateTime.UtcNow.Date,
