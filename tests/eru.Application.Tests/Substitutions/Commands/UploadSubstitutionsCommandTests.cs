@@ -1,15 +1,16 @@
-﻿using System;
+﻿using eru.Application.Common.Interfaces;
+using eru.Application.Substitutions.Commands;
+using eru.Domain.Entity;
+using FluentAssertions;
+using MediatR;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Primitives;
+using Moq;
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-using eru.Application.Common.Interfaces;
-using eru.Application.Substitutions.Commands;
-using eru.Application.Substitutions.Notifications;
-using eru.Domain.Entity;
-using FluentAssertions;
-using MediatR;
-using Moq;
 using Xunit;
 
 namespace eru.Application.Tests.Substitutions.Commands
@@ -17,15 +18,15 @@ namespace eru.Application.Tests.Substitutions.Commands
     public class UploadSubstitutionsCommandTests
     {
         [Fact]
-        public async Task IsToStringOnRequestWorkingCorrectly()
+        public void IsToStringOnRequestWorkingCorrectly()
         {
             var request = new UploadSubstitutionsCommand
             {
-                IpAddress = "8.8.8.8",
-                Key = "sample-key",
+                IpAddress = MockData.CorrectIpAddress,
+                Key = MockData.CorrectUploadKey,
                 SubstitutionsPlan = new SubstitutionsPlan
                 {
-                    Date = new DateTime(2010, 1,1),
+                    Date = MockData.CorrectDate,
                     Substitutions = new []
                     {
                         new Substitution
@@ -53,11 +54,11 @@ namespace eru.Application.Tests.Substitutions.Commands
         {
             var request = new UploadSubstitutionsCommand
             {
-                IpAddress = "8.8.8.8",
+                IpAddress = "198.51.100.1",
                 Key = "sample-key",
                 SubstitutionsPlan = new SubstitutionsPlan
                 {
-                    Date = new DateTime(2010, 1,1),
+                    Date = MockData.CorrectDate,
                     Substitutions = new []
                     {
                         new Substitution
@@ -92,5 +93,137 @@ namespace eru.Application.Tests.Substitutions.Commands
             
             backgroundExecutor.Verify(x=>x.Enqueue(It.IsAny<Expression<Func<Task>>>()), Times.Exactly(2));
         }
+
+        [Fact]
+        public async Task DoesValidatorAllowValidRequest()
+        {
+            var config = new ConfigurationBuilder().AddInMemoryCollection(new[] { new KeyValuePair<string, string>("UploadKey", "sample-key") }).Build();
+            var validator = new UploadSubstitutionsCommandValidator(config);
+
+            var request = new UploadSubstitutionsCommand
+            {
+                IpAddress = MockData.CorrectIpAddress,
+                Key = MockData.CorrectUploadKey,
+                SubstitutionsPlan = new SubstitutionsPlan
+                {
+                    Date = MockData.CorrectDate,
+                    Substitutions = new List<Substitution>
+                    {
+                        new Substitution
+                        {
+                            Cancelled = false,
+                            Classes = new[] {new Class("Ia"), new Class("IIIc")},
+                            Groups = "Cała klasa",
+                            Lesson = 3,
+                            Room = "204",
+                            Subject = "j. Polski",
+                            Substituting = "sample teacher 1",
+                            Teacher = "sample teacher 2"
+                        }
+                    }
+                }
+            };
+
+            var result = await validator.ValidateAsync(request, CancellationToken.None);
+
+            result.IsValid.Should().BeTrue();
+            result.Errors.Should().HaveCount(0);
+        }
+
+        [Fact]
+        public async Task DoesValidatorPreventUploadWithInvalidIPAddress()
+        {
+            var config = new ConfigurationBuilder().AddInMemoryCollection(new[] { new KeyValuePair<string, string>("UploadKey", "sample-key") }).Build();
+            var validator = new UploadSubstitutionsCommandValidator(config);
+
+            var request = new UploadSubstitutionsCommand
+            {
+                IpAddress = "198-51-100-1",
+                Key = MockData.CorrectUploadKey,
+                SubstitutionsPlan = new SubstitutionsPlan
+                {
+                    Date = MockData.CorrectDate,
+                    Substitutions = new List<Substitution>
+                    {
+                        new Substitution
+                        {
+                            Cancelled = false,
+                            Classes = new[] {new Class("I a"), new Class("III c")},
+                            Groups = "Cała klasa",
+                            Lesson = 3,
+                            Room = "204",
+                            Subject = "j. Polski",
+                            Substituting = "sample teacher 1",
+                            Teacher = "sample teacher 2"
+                        }
+                    }
+                }
+            };
+
+            var result = await validator.ValidateAsync(request, CancellationToken.None);
+
+            result.IsValid.Should().BeFalse();
+            result.Errors.Should().HaveCount(1).And.ContainSingle(c => c.ErrorMessage == "The specified condition was not met for 'Ip Address'.");
+        }
+
+        [Fact]
+        public async Task DoesValidatorPreventUploadWithInvalidKey()
+        {
+            var config = new ConfigurationBuilder().AddInMemoryCollection(new[] { new KeyValuePair<string, string>("UploadKey", "sample-key") }).Build();
+            var validator = new UploadSubstitutionsCommandValidator(config);
+
+            var request = new UploadSubstitutionsCommand
+            {
+                IpAddress = MockData.CorrectIpAddress,
+                Key = "invalid-key",
+                SubstitutionsPlan = new SubstitutionsPlan
+                {
+                    Date = MockData.CorrectDate,
+                    Substitutions = new List<Substitution>
+                    {
+                        new Substitution
+                        {
+                            Cancelled = false,
+                            Classes = new[] {new Class("Ia"), new Class("IIIc")},
+                            Groups = "Cała klasa",
+                            Lesson = 3,
+                            Room = "204",
+                            Subject = "j. Polski",
+                            Substituting = "sample teacher 1",
+                            Teacher = "sample teacher 2"
+                        }
+                    }
+                }
+            };
+
+            var result = await validator.ValidateAsync(request, CancellationToken.None);
+
+            result.IsValid.Should().BeFalse();
+            result.Errors.Should().HaveCount(1).And.ContainSingle(c => c.ErrorMessage == "The specified condition was not met for 'Key'.");
+        }
+
+        [Fact]
+        public async Task DoesValidatorPreventUploadOfInvalidSubstitutionsPlan()
+        {
+            var config = new ConfigurationBuilder().AddInMemoryCollection(new[] { new KeyValuePair<string, string>("UploadKey", "sample-key") }).Build();
+            var validator = new UploadSubstitutionsCommandValidator(config);
+
+            var request = new UploadSubstitutionsCommand
+            {
+                IpAddress = MockData.CorrectIpAddress,
+                Key = MockData.CorrectUploadKey,
+                SubstitutionsPlan = new SubstitutionsPlan
+                {
+                    Date = MockData.CorrectDate,
+                    Substitutions = new List<Substitution>()
+                }
+            };
+
+            var result = await validator.ValidateAsync(request, CancellationToken.None);
+
+            result.IsValid.Should().BeFalse();
+            result.Errors.Should().HaveCount(1).And.ContainSingle(c => c.ErrorMessage == "The specified condition was not met for 'Substitutions Plan'.");
+        }
+
     }
 }

@@ -10,6 +10,7 @@ namespace eru.Application.Substitutions.Notifications
         {
             Substitution = substitution;
         }
+
         public Substitution Substitution { get; set; }
     }
 }

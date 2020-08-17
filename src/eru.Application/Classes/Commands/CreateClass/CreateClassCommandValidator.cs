@@ -12,15 +12,14 @@ namespace eru.Application.Classes.Commands.CreateClass
         public CreateClassCommandValidator(IApplicationDbContext context)
         {
             _context = context;
+
             RuleFor(x => x.Name)
                 .NotEmpty()
                 .MaximumLength(255)
                 .MustAsync(IsUnique);
         }
 
-        private async Task<bool> IsUnique(string name, CancellationToken cancellationToken)
-        {
-            return !await _context.Classes.AnyAsync(x => x.Name == name, cancellationToken);
-        }
+        private async Task<bool> IsUnique(string name, CancellationToken cancellationToken) 
+            => !await _context.Classes.AnyAsync(x => x.Name == name, cancellationToken);
     }
 }

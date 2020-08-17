@@ -17,9 +17,7 @@ namespace eru.Application.Classes.Commands.RemoveClass
                 .MustAsync(Exist);
         }
 
-        private async Task<bool> Exist(string name, CancellationToken cancellationToken)
-        {
-            return await _context.Classes.AnyAsync(x => x.Name == name, cancellationToken: cancellationToken);
-        }
+        private async Task<bool> Exist(string name, CancellationToken cancellationToken) 
+            => await _context.Classes.AnyAsync(x => x.Name == name, cancellationToken: cancellationToken);
     }
 }

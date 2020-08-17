@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using eru.Application.Classes.Commands.CreateClass;
 using FluentAssertions;
-using FluentValidation.Results;
 using Xunit;
 
 namespace eru.Application.Tests.Classes.Commands
@@ -17,12 +16,12 @@ namespace eru.Application.Tests.Classes.Commands
             var handler = new CreateClassCommandHandler(context);
             var request = new CreateClassCommand
             {
-                Name = "informatyka"
+                Name = "III f"
             };
 
             await handler.Handle(request, CancellationToken.None);
 
-            context.Classes.Should().HaveCount(4).And.Contain(x => x.Name == "informatyka");
+            context.Classes.Should().HaveCount(4).And.Contain(x => x.Name == "III f");
         }
 
         [Fact]
@@ -32,7 +31,7 @@ namespace eru.Application.Tests.Classes.Commands
             var validator = new CreateClassCommandValidator(context);
             var request = new CreateClassCommand
             {
-                Name = "informatyka"
+                Name = "III f"
             };
 
             var result = await validator.ValidateAsync(request);
@@ -63,7 +62,7 @@ namespace eru.Application.Tests.Classes.Commands
             var context = new FakeDbContext();
             var validator = new CreateClassCommandValidator(context);
             var request = new CreateClassCommand();
-
+            
             var result = await validator.ValidateAsync(request);
 
             result.IsValid.Should().BeFalse();
@@ -77,7 +76,7 @@ namespace eru.Application.Tests.Classes.Commands
             var validator = new CreateClassCommandValidator(context);
             var request = new CreateClassCommand
             {
-                Name = "matematyka"
+                Name = "II b"
             };
 
             var result = await validator.ValidateAsync(request);
@@ -85,5 +84,6 @@ namespace eru.Application.Tests.Classes.Commands
             result.IsValid.Should().BeFalse();
             result.Errors.Should().HaveCount(1).And.ContainSingle(x=>x.ErrorMessage == "The specified condition was not met for 'Name'.");
         }
+
     }
 }
