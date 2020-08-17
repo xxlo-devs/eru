@@ -10,10 +10,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Areas" />
-    </ItemGroup>
-
-    <ItemGroup>
       <Content Update="Areas\UploadSubstitutions\Views\Upload\Upload.cshtml">
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
@@ -61,6 +57,14 @@
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>Upload.en.Designer.cs</LastGenOutput>
       </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Areas\AdminDashboard\Views\AdminDashboard\Dashboard.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Dashboard.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Areas\AdminDashboard\Views\AdminDashboard\Dashboard.pl.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Dashboard.pl.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
     </ItemGroup>
 
     <ItemGroup>
@@ -80,6 +84,20 @@
         <AutoGen>True</AutoGen>
         <DependentUpon>Upload.en.resx</DependentUpon>
       </Compile>
+      <Compile Update="Resources\Areas\AdminDashboard\Views\AdminDashboard\Dashboard.pl.Designer.cs">
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Dashboard.pl.resx</DependentUpon>
+        <DesignTime>True</DesignTime>
+      </Compile>
+      <Compile Update="Resources\Areas\AdminDashboard\Views\AdminDashboard\Dashboard.en.Designer.cs">
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Dashboard.en.resx</DependentUpon>
+        <DesignTime>True</DesignTime>
+      </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Views\Shared\Footer.cshtml" />
     </ItemGroup>
 
 </Project>

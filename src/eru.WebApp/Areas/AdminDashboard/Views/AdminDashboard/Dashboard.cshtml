@@ -1,0 +1,153 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.AspNetCore.Localization
+@using Microsoft.AspNetCore.Mvc.Localization
+@{
+    Layout = null;
+    var culture = Context.Features.Get<IRequestCultureFeature>().RequestCulture.Culture.Name;
+}
+@inject IViewLocalizer Localizer
+<!DOCTYPE html>
+
+<html lang="@culture">
+<head>
+    <title>@Localizer["title"]</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<div id="wrapper">
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item has-text-weight-bold" href="/admin">ERU</a>
+    
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbar">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+    
+        <div id="navbar" class="navbar-menu">
+            <div class="navbar-start">
+                <a class="navbar-item" href="/jobs">
+                    Hangfire
+                </a>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="tile is-ancestor">
+        <div class="tile is-4 is-vertical">
+            <div class="tile is-child box">
+                <p class="title has-text-centered">Stats</p>
+                <table class="table center-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Current Status</td>
+                        <td>Operational 🟢</td>
+                    </tr>
+                    <tr>
+                        <td>Uptime</td>
+                        <td>20d 19h 30min 10s</td>
+                    </tr>
+                    <tr>
+                        <td>Subscribers</td>
+                        <td>120</td>
+                    </tr>
+                    <tr>
+                        <td>Last Uploaded Substitutions</td>
+                        <td>20.06 @@ 15.08.2020</td>
+                    </tr>
+                    <tr>
+                        <td>Database Size</td>
+                        <td>5 GB / 30 GB</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="tile is-child box">
+                <p class="title">Users</p>
+            </div>
+        </div>
+        <div class="tile is-4 is-vertical">
+            <div class="tile is-child box">
+                <p class="title">Health Checks</p>
+            </div>
+        </div>
+        <div class="tile is-4 is-vertical">
+            <div class="tile is-child box">
+                <p class="title">Activities</p>
+            </div>
+        </div>
+    </div>
+</div>
+<footer class="footer">
+    <div class="content has-text-centered">
+        <p>
+            <a href="https://github.com/xxlo-devs/eru">
+                <strong>eru</strong>
+            </a> by <a href="https://github.com/xxlo-devs">xxlo-devs</a>
+            (<a href="https://github.com/KanarekLife">KanarekLife (Stanisław Nieradko)</a> and <a href="https://github.com/bazik33">Bazik33</a>) in 2020.
+        </p>
+        <p>
+            Released under <a href="https://github.com/xxlo-devs/eru/blob/master/LICENSE">MIT License</a>. We ❤️ Open-Source.
+        </p>
+        <p>
+            <a href="?culture=pl"><img width="40px" src="pictures/flags/polish_flag.svg" alt="Język Polski"/></a>
+            <a href="?culture=en"><img width="40px" src="pictures/flags/uk_flag.svg" alt="English"/></a>
+        </p>
+    </div>
+</footer>
+<style type="text/css" media="screen">
+    body {
+        display: flex;
+        min-height: 100vh;
+        flex-direction: column;
+    }
+     
+    #wrapper {
+        flex: 1;
+    }
+    
+    .center-table {
+          margin-left: auto;
+          margin-right: auto;
+    }
+</style>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+  // Get all "navbar-burger" elements
+  const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+
+  // Check if there are any navbar burgers
+  if ($navbarBurgers.length > 0) {
+
+    // Add a click event on each of them
+    $navbarBurgers.forEach( el => {
+      el.addEventListener('click', () => {
+
+        // Get the target from the "data-target" attribute
+        const target = el.dataset.target;
+        const $target = document.getElementById(target);
+
+        // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+        el.classList.toggle('is-active');
+        $target.classList.toggle('is-active');
+
+      });
+    });
+  }
+
+});
+</script>
+</body>
+</html>
