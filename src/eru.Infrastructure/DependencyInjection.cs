@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
+﻿using System.Linq;
 using System.Reflection;
 using eru.Application.Common.Exceptions;
 using eru.Application.Common.Interfaces;
@@ -40,6 +38,7 @@ namespace eru.Infrastructure
                     .UseColouredConsoleLogProvider()
                     .UseSimpleAssemblyNameTypeSerializer()
                     .UseRecommendedSerializerSettings()
+                    .UseSerilogLogProvider()
                     .UseMemoryStorage();
             });
             services.AddHangfireServer();
@@ -51,7 +50,7 @@ namespace eru.Infrastructure
             services.AddMediatR(Assembly.GetExecutingAssembly());
             return services;
         }
-        
+
         public static IApplicationBuilder UseInfrastructure(this IApplicationBuilder app, IConfiguration configuration)
         {
             var users = configuration
