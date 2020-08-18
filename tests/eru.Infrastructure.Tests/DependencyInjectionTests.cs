@@ -9,6 +9,7 @@ using FluentAssertions;
 using Hangfire;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 using Xunit;
 
 namespace eru.Infrastructure.Tests
@@ -158,7 +159,9 @@ namespace eru.Infrastructure.Tests
             var configuration = new ConfigurationBuilder()
                 .AddInMemoryCollection()
                 .Build();
+            var serilog = new LoggerConfiguration().CreateLogger();
             var serviceProvider = new ServiceCollection()
+                .AddSingleton(serilog)
                 .AddInfrastructure(configuration)
                 .BuildServiceProvider();
 
