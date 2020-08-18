@@ -71,7 +71,8 @@ namespace eru.Infrastructure
                     RequireSsl = false,
                     SslRedirect = false,
                     Users = users
-                }) }
+                }) },
+                AppPath = "/admin"
             });
         }
 
