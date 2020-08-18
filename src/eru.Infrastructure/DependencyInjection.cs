@@ -46,7 +46,7 @@ namespace eru.Infrastructure
             services.AddScoped<IApplicationDbContext>(provider => provider.GetService<ApplicationDbContext>());
             
             services.AddTransient<IStopwatch, Stopwatch.Stopwatch>();
-            services.AddTransient<IBackgroundExecutor, HangfireExecutror>();
+            services.AddTransient<IHangfireWrapper, HangfireWrapper>();
             services.AddMediatR(Assembly.GetExecutingAssembly());
             return services;
         }
