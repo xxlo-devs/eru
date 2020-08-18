@@ -5,6 +5,7 @@
 @{
     Layout = null;
     var culture = Context.Features.Get<IRequestCultureFeature>().RequestCulture.Culture.Name;
+    //TODO Write how to setup SEQ in docs
     var seqServer = Configuration.GetSection("Serilog:WriteTo")?.GetChildren()?.Skip(2).FirstOrDefault()?.GetSection("Args:serverUrl")?.Value;
 }
 @inject IViewLocalizer Localizer
@@ -48,88 +49,60 @@
     </nav>
     <div class="tile is-ancestor">
         <div class="tile is-4 is-vertical">
+            <div class="tile is-child box has-text-centered">
+                <div class="field">
+                    <label for="auto-refresh" class="has-text-weight-bold">Auto Refresh</label>
+                    <input id="auto-refresh" type="checkbox" name="auto-refresh-status" class="switch"/>
+                </div>
+            </div>
             <div class="tile is-child box">
                 <p class="title has-text-centered">Stats</p>
                 <table class="table center-table is-striped">
                     <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Value</th>
-                        </tr>
+                    <tr>
+                        <th>Name</th>
+                        <th>Value</th>
+                    </tr>
                     </thead>
                     <tbody>
                     <tr>
                         <td>Uptime</td>
-                        <td>20d 19h 30min 10s</td>
+                        <td id="uptime">Loading...</td>
                     </tr>
                     <tr>
                         <td>Subscribers</td>
-                        <td>72</td>
-                    </tr>
-                    <tr>
-                        <td>Last Uploaded Substitutions</td>
-                        <td>20:06 @@ 15.08.2020</td>
-                    </tr>
-                    <tr>
-                        <td>Current Database Status</td>
-                        <td>Operational 🟢</td>
-                    </tr>
-                    <tr>
-                        <td>Database Size</td>
-                        <td>5 GB / 30 GB</td>
+                        <td id="subscribers">Loading...</td>
                     </tr>
                     </tbody>
                 </table>
             </div>
             <div class="tile is-child box">
                 <p class="title has-text-centered">Classes</p>
-                <table class="table center-table is-striped">
+                <table class="table center-table is-striped" id="classes-table">
                     <thead>
                     <tr>
                         <th>Class Name</th>
                         <th>Subscribers</th>
-                        <th>Last Notification Time</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>Ib1</td>
-                        <td>10</td>
-                        <td>20:07 @@ 15.08.2020</td>
-                    </tr>
-                    <tr>
-                        <td>III c</td>
-                        <td>15</td>
-                        <td>15:04 @@ 14.08.2020</td>
-                    </tr>
-                    <tr>
-                        <td>II b</td>
-                        <td>30</td>
-                        <td>10:24 @@ 02.07.2020</td>
-                    </tr>
-                    <tr>
-                        <td>Ic2</td>
-                        <td>17</td>
-                        <td>09:07 @@ 13.08.2020</td>
-                    </tr>
+                    
                     </tbody>
                 </table>
                 <div class="has-text-centered">
-                    <button class="button">Add class</button>
-                    <button class="button">Remove class</button>
-                    <button class="button">Export classes</button>
-                    <button class="button">Import classes</button>
+                    <button class="button" onclick="createClass()">Add class</button>
+                    <button class="button" onclick="removeClass()">Remove class</button>
                 </div>
             </div>
         </div>
         <div class="tile is-4 is-vertical">
             <div class="tile is-child box">
-                <p class="title">Health Checks</p>
+                <p class="title has-text-centered">Health Checks</p>
             </div>
         </div>
         <div class="tile is-4 is-vertical">
             <div class="tile is-child box">
-                <p class="title">Activities</p>
+                <p class="title has-text-centered">Activities</p>
             </div>
         </div>
     </div>
@@ -191,8 +164,67 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   }
-
 });
+document.querySelector('#auto-refresh').addEventListener('change', function () {
+    localStorage.setItem('auto-refresh', this.checked);
+});
+document.querySelector('#auto-refresh').checked = localStorage.getItem('auto-refresh') === 'true';
+async function refreshData(force = false) {
+    if (localStorage.getItem('auto-refresh') === 'true' || force) {
+            document.querySelector('#classes-table').replaceChild(document.createElement('tbody'), document.querySelector('#classes-table>tbody'));
+            document.querySelector('#uptime').textContent = 'Loading...';
+            document.querySelector('#subscribers').textContent = 'Loading...';
+            await fetch('admin/status')
+                .then(res => {
+                    if (res.ok) {
+                        res.json().then(json => {
+                            document.querySelector('#uptime').textContent = `${json.uptime.days} Days ${json.uptime.hours} Hours ${json.uptime.minutes} Minutes ${json.uptime.seconds} Seconds`;
+                            document.querySelector('#subscribers').textContent = json.subscribers;
+                            const classesTable = document.querySelector('#classes-table>tbody');
+                            for (const property in json.classes) {
+                                const name = property;
+                                const subscribers = json.classes[property];
+                                const row = classesTable.insertRow(0);
+                                row.insertCell(0).textContent = name;
+                                row.insertCell(1).textContent = subscribers;
+                            }
+                        })
+                    }else {
+                        console.error(`Couldn't load data from server. ${res.statusText} ${res.status}`);
+                    }
+                })
+    }
+}
+setInterval(refreshData, 5000);
+refreshData(true);
+async function createClass() {
+    const name = prompt('Enter class name: ');
+    if (name) {
+        await fetch(`/admin/class?name=${name}`, {
+            method: 'POST'
+        }).then(res => {
+            if (res.ok) {
+                refreshData(true);
+            }else {
+                alert(`Couldn't create new class with given name!`);
+            }
+        });
+    }
+}
+async function removeClass() {
+    const name = prompt('Enter class name: ');
+    if (name) {
+        await fetch(`/admin/class?name=${name}`, {
+            method: 'DELETE'
+        }).then(res => {
+            if (res.ok) {
+                refreshData(true);
+            }else {
+                alert(`Couldn't remove class with given name!`);
+            }
+        });
+    }
+}
 </script>
 </body>
 </html>
