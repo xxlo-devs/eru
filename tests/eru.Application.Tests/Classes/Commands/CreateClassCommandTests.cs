@@ -58,7 +58,7 @@ namespace eru.Application.Tests.Classes.Commands
             var result = await validator.ValidateAsync(request);
 
             result.IsValid.Should().BeFalse();
-            result.Errors.Should().HaveCount(1).And.ContainSingle(x=>x.ErrorMessage == "The length of 'Name' must be 255 characters or fewer. You entered 300 characters.");
+            result.Errors.Should().HaveCount(1).And.ContainSingle(x=>x.ErrorCode == "MaximumLengthValidator");
         }
 
         [Fact]
@@ -71,7 +71,7 @@ namespace eru.Application.Tests.Classes.Commands
             var result = await validator.ValidateAsync(request);
 
             result.IsValid.Should().BeFalse();
-            result.Errors.Should().HaveCount(1).And.ContainSingle(x=>x.ErrorMessage == "'Name' must not be empty.");
+            result.Errors.Should().HaveCount(1).And.ContainSingle(x=>x.ErrorCode == "NotEmptyValidator");
         }
 
         [Fact]
@@ -87,7 +87,7 @@ namespace eru.Application.Tests.Classes.Commands
             var result = await validator.ValidateAsync(request);
 
             result.IsValid.Should().BeFalse();
-            result.Errors.Should().HaveCount(1).And.ContainSingle(x=>x.ErrorMessage == "The specified condition was not met for 'Name'.");
+            result.Errors.Should().HaveCount(1).And.ContainSingle(x=>x.ErrorMessage == "Name must be unique." && x.ErrorCode == "AsyncPredicateValidator");
         }
 
     }

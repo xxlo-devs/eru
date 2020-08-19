@@ -18,20 +18,20 @@ namespace eru.Application.Substitutions.Commands
             _context = context;
 
             RuleFor(x => x.IpAddress)
-                .NotEmpty()
-                .Must(IsIpAddressValid);
+                .NotEmpty().WithMessage("IpAddress cannot be empty.")
+                .Must(IsIpAddressValid).WithMessage("IpAddress must be a valid ip address.");
                 
             RuleFor(x => x.Key)
-                .NotEmpty()
-                .Must(IsKeyValid);
+                .NotEmpty().WithMessage("Key cannot be empty.")
+                .Must(IsKeyValid).WithMessage("Key must be a correct key from configuration.");
 
             RuleFor(x => x.SubstitutionsPlan)
-                .NotEmpty()
-                .Must(IsPlanValid)
+                .NotEmpty().WithMessage("SubstitutionsPlan cannot be empty.")
+                .Must(IsPlanValid).WithMessage("SubstitutionsPlan must have at least one substitution.")
                 .DependentRules(() =>
                 {
                     RuleFor(x => x.SubstitutionsPlan)
-                        .Must(AreAllClassesCorrect);
+                        .Must(AreAllClassesCorrect).WithMessage("All classes mentioned in SubstitutionsPlan must be present in database.");
                 });
         }
 

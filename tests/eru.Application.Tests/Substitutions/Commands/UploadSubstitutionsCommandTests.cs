@@ -171,7 +171,7 @@ namespace eru.Application.Tests.Substitutions.Commands
             var result = await validator.ValidateAsync(request, CancellationToken.None);
 
             result.IsValid.Should().BeFalse();
-            result.Errors.Should().HaveCount(1).And.ContainSingle(c => c.ErrorMessage == "The specified condition was not met for 'Ip Address'.");
+            result.Errors.Should().HaveCount(1).And.ContainSingle(x=>x.ErrorCode == "PredicateValidator" && x.ErrorMessage == "IpAddress must be a valid ip address.");
         }
 
         [Fact]
@@ -207,7 +207,7 @@ namespace eru.Application.Tests.Substitutions.Commands
             var result = await validator.ValidateAsync(request, CancellationToken.None);
 
             result.IsValid.Should().BeFalse();
-            result.Errors.Should().HaveCount(1).And.ContainSingle(c => c.ErrorMessage == "The specified condition was not met for 'Key'.");
+            result.Errors.Should().HaveCount(1).And.ContainSingle(x=>x.ErrorCode == "PredicateValidator" && x.ErrorMessage == "Key must be a correct key from configuration.");
         }
 
         [Fact]
@@ -230,7 +230,7 @@ namespace eru.Application.Tests.Substitutions.Commands
             var result = await validator.ValidateAsync(request, CancellationToken.None);
 
             result.IsValid.Should().BeFalse();
-            result.Errors.Should().HaveCount(1).And.ContainSingle(c => c.ErrorMessage == "The specified condition was not met for 'Substitutions Plan'.");
+            result.Errors.Should().HaveCount(1).And.ContainSingle(x=>x.ErrorCode == "PredicateValidator" && x.ErrorMessage == "SubstitutionsPlan must have at least one substitution.");
         }
 
     }
