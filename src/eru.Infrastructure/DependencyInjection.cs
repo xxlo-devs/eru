@@ -47,7 +47,8 @@ namespace eru.Infrastructure
             
             services.AddTransient<IStopwatch, Stopwatch.Stopwatch>();
             services.AddTransient<IHangfireWrapper, HangfireWrapper>();
-            services.AddMediatR(Assembly.GetExecutingAssembly());
+            services.AddHealthChecks()
+                .AddDbContextCheck<ApplicationDbContext>();
             return services;
         }
 
