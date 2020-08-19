@@ -10,6 +10,7 @@ using eru.Application.Users.Queries.GetSubscribersCount;
 using eru.WebApp.Areas.AdminDashboard.Model;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace eru.WebApp.Areas.AdminDashboard.Controllers
 {

@@ -48,11 +48,11 @@
         </div>
     </nav>
     <div class="tile is-ancestor">
-        <div class="tile is-4 is-vertical">
+        <div class="tile is-vertical">
             <div class="tile is-child box has-text-centered">
                 <div class="field">
                     <label for="auto-refresh" class="has-text-weight-bold">Auto Refresh</label>
-                    <input id="auto-refresh" type="checkbox" name="auto-refresh-status" class="switch"/>
+                    <input id="auto-refresh" type="checkbox" name="auto-refresh-status" class="switch" onchange="localStorage.setItem('auto-refresh', this.checked)"/>
                 </div>
             </div>
             <div class="tile is-child box">
@@ -95,14 +95,9 @@
                 </div>
             </div>
         </div>
-        <div class="tile is-4 is-vertical">
+        <div class="tile is-vertical">
             <div class="tile is-child box">
                 <p class="title has-text-centered">Health Checks</p>
-            </div>
-        </div>
-        <div class="tile is-4 is-vertical">
-            <div class="tile is-child box">
-                <p class="title has-text-centered">Activities</p>
             </div>
         </div>
     </div>
@@ -165,28 +160,25 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
-document.querySelector('#auto-refresh').addEventListener('change', function () {
-    localStorage.setItem('auto-refresh', this.checked);
-});
 document.querySelector('#auto-refresh').checked = localStorage.getItem('auto-refresh') === 'true';
 async function refreshData(force = false) {
     if (localStorage.getItem('auto-refresh') === 'true' || force) {
-            document.querySelector('#classes-table').replaceChild(document.createElement('tbody'), document.querySelector('#classes-table>tbody'));
-            document.querySelector('#uptime').textContent = 'Loading...';
-            document.querySelector('#subscribers').textContent = 'Loading...';
             await fetch('admin/status')
                 .then(res => {
                     if (res.ok) {
                         res.json().then(json => {
-                            document.querySelector('#uptime').textContent = `${json.uptime.days} Days ${json.uptime.hours} Hours ${json.uptime.minutes} Minutes ${json.uptime.seconds} Seconds`;
+                            const {days, hours, minutes, seconds } = json.uptime;
+                            document.querySelector('#uptime').textContent = `${days} Days ${hours} Hours ${minutes} Minutes ${seconds} Seconds`;
                             document.querySelector('#subscribers').textContent = json.subscribers;
                             const classesTable = document.querySelector('#classes-table>tbody');
                             for (const property in json.classes) {
                                 const name = property;
                                 const subscribers = json.classes[property];
-                                const row = classesTable.insertRow(0);
-                                row.insertCell(0).textContent = name;
-                                row.insertCell(1).textContent = subscribers;
+                                if (Array.prototype.slice.call(classesTable.children).filter(x=>x.innerText.startsWith(name)).length === 0) {
+                                    const row = classesTable.insertRow(0);
+                                    row.insertCell(0).textContent = name;
+                                    row.insertCell(1).textContent = subscribers;
+                                }
                             }
                         })
                     }else {
@@ -195,7 +187,7 @@ async function refreshData(force = false) {
                 })
     }
 }
-setInterval(refreshData, 5000);
+setInterval(refreshData, 1000);
 refreshData(true);
 async function createClass() {
     const name = prompt('Enter class name: ');
