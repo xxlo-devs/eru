@@ -156,7 +156,15 @@ function submit() {
                    cancel();
                }else {
                    cancel();
-                   response.text().then(text => addNotification(text, ['is-danger']));
+                   response.json().then(json => {
+                       let errors = [];
+                       for (const property in json.errors) {
+                           if (json.errors.hasOwnProperty(property)) {
+                               errors = errors.concat(json.errors[property]);
+                           }
+                       }
+                       addNotification(`${json.title} (${errors.join(' ')})`, ['is-danger'])
+                   });
                }
             });
         }

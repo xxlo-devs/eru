@@ -1,6 +1,7 @@
 using System.Globalization;
 using eru.Application;
 using eru.Infrastructure;
+using eru.WebApp.Filters;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Localization;
@@ -30,7 +31,10 @@ namespace eru.WebApp
                 options.ResourcesPath = "Resources";
             });
             services
-                .AddControllersWithViews()
+                .AddControllersWithViews(options =>
+                {
+                    options.Filters.Add(new ApiExceptionFilterAttribute());
+                })
                 .AddRazorRuntimeCompilation()
                 .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
                 .AddXmlSerializerFormatters();
