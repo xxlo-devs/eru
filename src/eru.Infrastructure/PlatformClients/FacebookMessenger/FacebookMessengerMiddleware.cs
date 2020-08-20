@@ -13,12 +13,12 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger
 {
     public class FacebookMessengerMiddleware : IMiddleware
     {
-        private readonly FacebookMessengerPlatformClient _platformClient;
+        private readonly FacebookMessengerMessageHub _messageHub;
         private readonly IConfiguration _configuration;
 
-        public FacebookMessengerMiddleware(FacebookMessengerPlatformClient platformClient, IConfiguration configuration)
+        public FacebookMessengerMiddleware(FacebookMessengerMessageHub messageHub, IConfiguration configuration)
         {
-            _platformClient = platformClient;
+            _messageHub = messageHub;
             _configuration = configuration;
         }
 
@@ -77,7 +77,7 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger
                 {
                     foreach (var x in webhook.Entry)
                     {
-                        await _platformClient.HandleIncomingMessage(x.Messaging.FirstOrDefault());
+                        await _messageHub.HandleIncomingMessage(x.Messaging.FirstOrDefault());
                     }
 
                     context.Response.StatusCode = (int) HttpStatusCode.OK;

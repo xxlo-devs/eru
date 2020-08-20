@@ -118,4 +118,19 @@
   <data name="substitution" xml:space="preserve">
     <value>Nauczyciel {1} na lekcji {2} (przedmiot: {3}) będzie zastępowany przez nauczyciela {4} w sali {5}. Uwagi szkoły: {6}.</value>
   </data>
+  <data name="subscribe-button" xml:space="preserve">
+    <value>Subskrybuj</value>
+  </data>
+  <data name="cancel-button" xml:space="preserve">
+    <value>Anuluj</value>
+  </data>
+  <data name="congratulations" xml:space="preserve">
+    <value>Gratulacje! Twoja subskrypcja została dodana pomyślnie do naszego systemu :)</value>
+  </data>
+  <data name="next" xml:space="preserve">
+    <value>-&gt;</value>
+  </data>
+  <data name="previous" xml:space="preserve">
+    <value>&lt;-</value>
+  </data>
 </root>

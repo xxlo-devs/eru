@@ -118,4 +118,19 @@
   <data name="substitution" xml:space="preserve">
     <value>Teacher {1} on {2} lesson (course: {3}) will be substituted by teacher {4} in {5} room. School notes: {6}.</value>
   </data>
+  <data name="subscribe-button" xml:space="preserve">
+    <value>Subscribe</value>
+  </data>
+  <data name="cancel-button" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="congratulations" xml:space="preserve">
+    <value>Congratulations! You've successfully subscribed to eru Messenger notifications :)</value>
+  </data>
+  <data name="next" xml:space="preserve">
+    <value>-&gt;</value>
+  </data>
+  <data name="previous" xml:space="preserve">
+    <value>&lt;-</value>
+  </data>
 </root>

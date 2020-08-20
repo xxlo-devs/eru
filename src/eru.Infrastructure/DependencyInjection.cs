@@ -102,8 +102,8 @@ namespace eru.Infrastructure
                 options.UseInMemoryDatabase("eru-FacebookMessengerRegistrationDatabase");
             });
 
-            services.AddTransient<FacebookMessengerPlatformClient>(); 
             services.AddTransient<IPlatformClient, FacebookMessengerPlatformClient>();
+            services.AddTransient<FacebookMessengerMessageHub>();
             services.AddTransient<FacebookMessengerMiddleware>();
         }
 
