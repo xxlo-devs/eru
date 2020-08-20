@@ -7,6 +7,7 @@ using eru.Application.Common.Interfaces;
 using eru.Infrastructure.Hangfire;
 using eru.Infrastructure.Persistence;
 using eru.Infrastructure.PlatformClients.FacebookMessenger;
+using eru.Infrastructure.PlatformClients.FacebookMessenger.RegistrationDbContext;
 using Hangfire;
 using Hangfire.Dashboard.BasicAuthorization;
 using Hangfire.MemoryStorage;
@@ -96,6 +97,11 @@ namespace eru.Infrastructure
 
         private static void AddFacebookMessengerPlatformClient(IServiceCollection services, IConfiguration configuration)
         {
+            services.AddDbContext<FacebookMessengerRegistrationDbContext>(options =>
+            {
+                options.UseInMemoryDatabase("eru-FacebookMessengerRegistrationDatabase");
+            });
+
             services.AddTransient<FacebookMessengerPlatformClient>(); 
             services.AddTransient<IPlatformClient, FacebookMessengerPlatformClient>();
             services.AddTransient<FacebookMessengerMiddleware>();
