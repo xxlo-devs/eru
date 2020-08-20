@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
+﻿using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using eru.Application.Common.Interfaces;
 using FluentValidation;
-using Microsoft.EntityFrameworkCore;
 
 namespace eru.Application.Users.Commands.CreateUser
 {
@@ -20,39 +15,38 @@ namespace eru.Application.Users.Commands.CreateUser
             _dbContext = dbContext;
 
             RuleFor(x => x)
-                .NotEmpty()
-                .MustAsync(IsUserUnique);
+                .MustAsync(IsUserUnique).WithMessage("Mentioned user must not exist.");
 
             RuleFor(x => x.Id)
-                .NotEmpty()
-                .MaximumLength(255);
+                .NotEmpty().WithMessage("Id cannot be empty.")
+                .MaximumLength(255).WithMessage("Id must have length up to 255 characters.");
 
             RuleFor(x => x.Platform)
-                .NotEmpty()
-                .MaximumLength(255);
+                .NotEmpty().WithMessage("Platform cannot be empty.")
+                .MaximumLength(255).WithMessage("Platform must have length up to 255 characters.");
 
             RuleFor(x => x.Class)
-                .NotEmpty()
-                .MaximumLength(255)
-                .MustAsync(DoesClassExist);
+                .NotEmpty().WithMessage("Class cannot be empty.")
+                .MaximumLength(255).WithMessage("Class must have length up to 255 characters.")
+                .MustAsync(DoesClassExist).WithMessage("Mentioned class must already exist.");
 
             RuleFor(x => x.PreferredLanguage)
-                .NotEmpty()
-                .MaximumLength(255)
-                .Must(DoesLanguageExist);
+                .NotEmpty().WithMessage("PreferredLanguage cannot be empty.")
+                .MaximumLength(255).WithMessage("PreferredLanguage must have length up to 255 characters")
+                .Must(DoesLanguageExist).WithMessage("PreferredLanguage must be a valid iso language code.");
         }
 
         private async Task<bool> IsUserUnique(CreateUserCommand command, CancellationToken cancellationToken) => 
-            await _dbContext.Users.FindAsync(command.Id, command.Platform) != null ? false : true;
+            await _dbContext.Users.FindAsync(command.Id, command.Platform) == null;
 
         private async Task<bool> DoesClassExist(string className, CancellationToken cancellationToken) =>
-            await _dbContext.Classes.FindAsync(className) != null ? true : false;
+            await _dbContext.Classes.FindAsync(className) != null;
 
         private bool DoesLanguageExist(string lang)
         {
             try
             {
-                var cultureInfo = new CultureInfo(lang);
+                _ = new CultureInfo(lang);
             }
             catch
             {

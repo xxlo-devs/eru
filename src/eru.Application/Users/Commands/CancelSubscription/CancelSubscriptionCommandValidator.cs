@@ -19,19 +19,18 @@ namespace eru.Application.Users.Commands.CancelSubscription
             _dbContext = dbContext;
 
             RuleFor(x => x)
-                .NotEmpty()
-                .MustAsync(DoesUserExist);
+                .MustAsync(DoesUserExist).WithMessage("Mentioned user must already exist.");
 
             RuleFor(x => x.UserId)
-                .NotEmpty()
-                .MaximumLength(255);
+                .NotEmpty().WithMessage("UserId cannot be empty.")
+                .MaximumLength(255).WithMessage("UserId must have length up to 255 characters.");
 
             RuleFor(x => x.Platform)
-                .NotEmpty()
-                .MaximumLength(255);
+                .NotEmpty().WithMessage("Platform cannot be empty.")
+                .MaximumLength(255).WithMessage("Platform must have length up to 255 characters.");
         }
 
         private async Task<bool> DoesUserExist(CancelSubscriptionCommand command, CancellationToken cancellationToken) => 
-            await _dbContext.Users.FindAsync(command.UserId, command.Platform) != null ? true : false;
+            await _dbContext.Users.FindAsync(command.UserId, command.Platform) != null;
     }
 }

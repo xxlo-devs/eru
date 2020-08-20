@@ -53,9 +53,9 @@ namespace eru.Application.Tests.Classes.Commands
             result.IsValid.Should().BeFalse();
             result.Errors.Should().HaveCount(2)
                 .And
-                .Contain(x=>x.ErrorMessage == "'Name' must not be empty.")
+                .Contain(x=>x.ErrorCode == "NotEmptyValidator")
                 .And
-                .Contain(x=>x.ErrorMessage == "The specified condition was not met for 'Name'.");
+                .Contain(x=>x.ErrorCode == "AsyncPredicateValidator" && x.ErrorMessage == "Mentioned class must already exist.");
         }
 
         [Fact]
@@ -71,7 +71,7 @@ namespace eru.Application.Tests.Classes.Commands
             var result = await validator.ValidateAsync(request);
 
             result.IsValid.Should().BeFalse();
-            result.Errors.Should().HaveCount(1).And.ContainSingle(x=>x.ErrorMessage == "The specified condition was not met for 'Name'.");
+            result.Errors.Should().HaveCount(1).And.ContainSingle(x=>x.ErrorCode == "AsyncPredicateValidator" && x.ErrorMessage == "Mentioned class must already exist.");
         }
     }
 }

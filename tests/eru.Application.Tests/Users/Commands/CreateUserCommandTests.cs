@@ -70,7 +70,7 @@ namespace eru.Application.Tests.Users.Commands
             var result = await validator.ValidateAsync(request);
 
             result.IsValid.Should().BeFalse();
-            result.Errors.Should().HaveCount(1).And.ContainSingle(x => x.ErrorMessage == "The specified condition was not met for ''.");
+            result.Errors.Should().HaveCount(1).And.ContainSingle(x => x.ErrorCode == "AsyncPredicateValidator" && x.ErrorMessage == "Mentioned user must not exist.");
         }
 
         [Fact]
@@ -89,7 +89,7 @@ namespace eru.Application.Tests.Users.Commands
             var result = await validator.ValidateAsync(request);
 
             result.IsValid.Should().BeFalse();
-            result.Errors.Should().HaveCount(1).And.ContainSingle(x => x.ErrorMessage == "The specified condition was not met for 'Class'.");
+            result.Errors.Should().HaveCount(1).And.ContainSingle(x => x.ErrorCode == "AsyncPredicateValidator" && x.ErrorMessage == "Mentioned class must already exist.");
         }
 
         [Fact]
@@ -108,7 +108,7 @@ namespace eru.Application.Tests.Users.Commands
             var result = await validator.ValidateAsync(request);
 
             result.IsValid.Should().BeFalse();
-            result.Errors.Should().HaveCount(1).And.ContainSingle(x => x.ErrorMessage == "The specified condition was not met for 'Preferred Language'.");
+            result.Errors.Should().HaveCount(1).And.ContainSingle(x => x.ErrorCode == "PredicateValidator" && x.ErrorMessage == "PreferredLanguage must be a valid iso language code.");
         }
     }
 }

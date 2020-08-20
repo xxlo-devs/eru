@@ -14,9 +14,9 @@ namespace eru.Application.Classes.Commands.CreateClass
             _context = context;
 
             RuleFor(x => x.Name)
-                .NotEmpty()
-                .MaximumLength(255)
-                .MustAsync(IsUnique);
+                .NotEmpty().WithMessage("Name cannot be empty.")
+                .MaximumLength(255).WithMessage("Name must have length up to 255 characters.")
+                .MustAsync(IsUnique).WithMessage("Name must be unique.");
         }
 
         private async Task<bool> IsUnique(string name, CancellationToken cancellationToken) 
