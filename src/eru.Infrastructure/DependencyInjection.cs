@@ -6,6 +6,7 @@ using eru.Application.Common.Exceptions;
 using eru.Application.Common.Interfaces;
 using eru.Infrastructure.Hangfire;
 using eru.Infrastructure.Persistence;
+using eru.Infrastructure.PlatformClients.FacebookMessenger;
 using Hangfire;
 using Hangfire.Dashboard.BasicAuthorization;
 using Hangfire.MemoryStorage;
@@ -49,6 +50,9 @@ namespace eru.Infrastructure
             services.AddTransient<IStopwatch, Stopwatch.Stopwatch>();
             services.AddTransient<IBackgroundExecutor, HangfireExecutror>();
             services.AddMediatR(Assembly.GetExecutingAssembly());
+
+            AddFacebookMessengerPlatformClient(services, configuration);
+
             return services;
         }
         
@@ -63,7 +67,8 @@ namespace eru.Infrastructure
                     Login = x.Username,
                     PasswordClear = x.Password
                 });
-            return app.UseHangfireDashboard("/jobs", new DashboardOptions
+            
+            app.UseHangfireDashboard("/jobs", new DashboardOptions
             {
                 Authorization = new []{ new BasicAuthAuthorizationFilter(new BasicAuthAuthorizationFilterOptions
                 {
@@ -73,6 +78,10 @@ namespace eru.Infrastructure
                     Users = users
                 }) }
             });
+
+            UseFacebookMessengerPlatformClient(app, configuration);
+
+            return app;
         }
 
         private static void SetupSqliteDbContext(IServiceCollection services, IConfiguration configuration)
@@ -83,6 +92,19 @@ namespace eru.Infrastructure
                 .UseSqlite(connectionString);
             using var dbContext = new DbContext(dbContextOptionsBuilder.Options);
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(connectionString));
+        }
+
+        private static void AddFacebookMessengerPlatformClient(IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddTransient<FacebookMessengerPlatformClient>(); 
+            services.AddTransient<IPlatformClient, FacebookMessengerPlatformClient>();
+            services.AddTransient<FacebookMessengerMiddleware>();
+        }
+
+        private static void UseFacebookMessengerPlatformClient(IApplicationBuilder app, IConfiguration configuration)
+        {
+            var url = configuration["PlatformClients:FacebookMessenger:WebhookUrl"];
+            app.Map(url, x => x.UseMiddleware<FacebookMessengerMiddleware>());
         }
     }
 }
