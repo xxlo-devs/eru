@@ -97,13 +97,34 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="greeting" xml:space="preserve">
+    <value>Hello! Eru is a substitution information system that enables you to get personalized notifications about all substitutions directly from school. If you want to try it, choose your language by clicking on a correct flag below. If you don't want to use this bot, just click Cancel at any time.</value>
+  </data>
+  <data name="class-selection" xml:space="preserve">
+    <value>Great! Now you need to select your class, by clicking on a button below. If you don't see your class, use the "arrow" buttons to scroll the list.</value>
+  </data>
+  <data name="confirmation" xml:space="preserve">
+    <value>Now we have all the required informations to create your subscription. If you want to get a message about all substiututions concerning you as soon as the school publish that information, click the Subscribe button. If you want to delete (or modify) your data, click Cancel. </value>
+  </data>
+  <data name="unsupported-command" xml:space="preserve">
+    <value>This is not a supported command. If you want to delete this bot, just click Cancel. If you want to continue, follow the given instructions. </value>
+  </data>
+  <data name="subscription-cancelled" xml:space="preserve">
+    <value>We are sorry to see you go. Your subscription (and your data) has been deleted. If you will ever want to subscribe again, write anything to start the process. </value>
+  </data>
+  <data name="subscribe-button" xml:space="preserve">
+    <value>Subscribe</value>
+  </data>
   <data name="cancel-button" xml:space="preserve">
     <value>Cancel</value>
   </data>
-  <data name="substitution" xml:space="preserve">
-    <value>Teacher {1} on {2} lesson (course: {3}) will be substituted by teacher {4} in {5} room. School notes: {6}.</value>
+  <data name="congratulations" xml:space="preserve">
+    <value>Congratulations! You've successfully subscribed to eru Messenger notifications :)</value>
   </data>
-  <data name="new-substitutions" xml:space="preserve">
-    <value>Here are substitutions for the next day!</value>
+  <data name="next" xml:space="preserve">
+    <value>-&gt;</value>
+  </data>
+  <data name="previous" xml:space="preserve">
+    <value>&lt;-</value>
   </data>
 </root>

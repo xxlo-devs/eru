@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
+using eru.Infrastructure.PlatformClients.FacebookMessenger.Models.Webhook.Messages;
 
 namespace eru.Infrastructure.PlatformClients.FacebookMessenger.Models.Webhook
 {
@@ -12,6 +13,6 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.Models.Webhook
         public ulong Time { get; set; }
 
         [JsonPropertyName("messaging")]
-        public IEnumerable<Messaging.Messaging> Messaging { get; set; }
+        public IEnumerable<Messaging> Messaging { get; set; }
     }
 }

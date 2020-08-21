@@ -1,0 +1,44 @@
+﻿using eru.Infrastructure.PlatformClients.FacebookMessenger.Models.SendAPI.Properties;
+using System.Text.Json.Serialization;
+using eru.Infrastructure.PlatformClients.FacebookMessenger.Models.SendAPI.Static;
+
+namespace eru.Infrastructure.PlatformClients.FacebookMessenger.Models.SendAPI
+{
+    public class SendRequest
+    {
+        public SendRequest(string uid, Message message)
+        {
+            Type = MessagingTypes.Response;
+            Recipient = new Recipient(uid);
+            Message = message;
+        }
+
+        public SendRequest(string uid, Message message, string tag)
+        {
+            Type = MessagingTypes.MessageTag;
+            Tag = tag;
+            Recipient = new Recipient(uid);
+            Message = message;
+        }
+
+        public SendRequest(string type, string tag, string uid, Message message)
+        {
+            Type = type;
+            Tag = tag;
+            Recipient = new Recipient(uid);
+            Message = message;
+        }
+
+        [JsonPropertyName("messaging_type")]
+        public string Type { get; set; }
+
+        [JsonPropertyName("tag")]
+        public string Tag { get; set; }
+
+        [JsonPropertyName("recipient")]
+        public Recipient Recipient { get; set; }
+
+        [JsonPropertyName("message")]
+        public Message Message { get; set; }
+    }
+}

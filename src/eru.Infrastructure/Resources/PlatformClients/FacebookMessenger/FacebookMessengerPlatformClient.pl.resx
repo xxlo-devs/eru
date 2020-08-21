@@ -97,40 +97,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="greeting" xml:space="preserve">
-    <value>Cześć! Eru to automatyczny system informujący o zastępstwach, który pozwala ci otrzymywać spersonalizowane powiadomienia o zastępstwach w twojej szkole. Jeżeli chcesz go wypróbować, wybierz język klikając na przycisk z odpowiednią flagą poniżej. Jeżeli będziesz chciał na jakimkolwiek etapie przerwać korzystanie z bota, kliknij przycisk Anuluj.</value>
-  </data>
-  <data name="class-selection" xml:space="preserve">
-    <value>Świetnie! Teraz musisz wybrać swoją klasę, używając przycisków poniżej. Jeżeli nie widzisz swojej klasy, użyj "strzałek" by przewinąć listę.</value>
-  </data>
-  <data name="confirmation" xml:space="preserve">
-    <value>Teraz mamy wszystkie niezbędne informacje by zapisać twoją subskrypcję. Jeżeli chcesz otrzymywać wiadomość o wszystkich zastępstwach które Cię dotyczą, kliknij Subskrybuj. Jeżeli chcesz usunąć (lub zmodyfikować) dane które wprowadziłeś, kliknij Anuluj. </value>
-  </data>
-  <data name="unsupported-command" xml:space="preserve">
-    <value>Wprowadziłeś nieobsługiwaną komendę. Jeżeli chcesz usunąć bota, po prostu kliknij Anuluj. Jeżeli chcesz założyć subskrypcję, podążaj za wysłanymi instrukcjami. </value>
-  </data>
-  <data name="subscription-cancelled" xml:space="preserve">
-    <value>Przykro nam, że odchodzisz. Twoja subskrypcja (i twoje dane) zostały usunięte. Jeżeli kiedykolwiek będziesz chciał zasubskrybować ponownie, napisz cokolwiek by zacząć proces rejestracji. </value>
-  </data>
-  <data name="new-substitutions" xml:space="preserve">
-    <value>Oto zastępstwa na nadchodzący dzień!</value>
+  <data name="cancel-button" xml:space="preserve">
+    <value>Anuluj</value>
   </data>
   <data name="substitution" xml:space="preserve">
     <value>Nauczyciel {1} na lekcji {2} (przedmiot: {3}) będzie zastępowany przez nauczyciela {4} w sali {5}. Uwagi szkoły: {6}.</value>
   </data>
-  <data name="subscribe-button" xml:space="preserve">
-    <value>Subskrybuj</value>
-  </data>
-  <data name="cancel-button" xml:space="preserve">
-    <value>Anuluj</value>
-  </data>
-  <data name="congratulations" xml:space="preserve">
-    <value>Gratulacje! Twoja subskrypcja została dodana pomyślnie do naszego systemu :)</value>
-  </data>
-  <data name="next" xml:space="preserve">
-    <value>-&gt;</value>
-  </data>
-  <data name="previous" xml:space="preserve">
-    <value>&lt;-</value>
+  <data name="new-substitutions" xml:space="preserve">
+    <value>Oto zastępstwa na nadchodzący dzień!</value>
   </data>
 </root>

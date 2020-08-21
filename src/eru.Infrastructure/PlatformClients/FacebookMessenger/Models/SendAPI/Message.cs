@@ -5,6 +5,17 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.Models.SendAPI
 {
     public class Message
     {
+        public Message(string text)
+        {
+            Text = text;
+        }
+
+        public Message(string text, IEnumerable<QuickReply> replies)
+        {
+            Text = text;
+            QuickReplies = replies;
+        }
+
         [JsonPropertyName("text")]
         public string Text { get; set; }
 

@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace eru.Infrastructure.PlatformClients.FacebookMessenger.Models.Webhook.Messaging.Properties
+namespace eru.Infrastructure.PlatformClients.FacebookMessenger.Models.Webhook.Messages.Properties
 {
     public class Sender
     {

@@ -36,7 +36,7 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger
             throw new NotImplementedException();
         }
 
-        private async Task Send(Request req)
+        private async Task Send(SendRequest req)
         {
             throw new NotImplementedException();
         }

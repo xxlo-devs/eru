@@ -8,14 +8,13 @@ using eru.Application.Users.Commands.CancelSubscription;
 using eru.Application.Users.Commands.CreateUser;
 using eru.Application.Users.Queries.GetUser;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.Models.SendAPI;
-using eru.Infrastructure.PlatformClients.FacebookMessenger.Models.SendAPI.Properties;
-using eru.Infrastructure.PlatformClients.FacebookMessenger.Models.SendAPI.Static;
-using eru.Infrastructure.PlatformClients.FacebookMessenger.Models.Webhook.Messaging;
+using eru.Infrastructure.PlatformClients.FacebookMessenger.Models.Webhook.Messages;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.RegistrationDbContext;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Localization;
-using Message = eru.Infrastructure.PlatformClients.FacebookMessenger.Models.Webhook.Messaging.Message;
+using Message = eru.Infrastructure.PlatformClients.FacebookMessenger.Models.SendAPI.Message;
+using QuickReply = eru.Infrastructure.PlatformClients.FacebookMessenger.Models.SendAPI.QuickReply;
 
 namespace eru.Infrastructure.PlatformClients.FacebookMessenger
 {
@@ -63,24 +62,11 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger
                 await CancelSubscription(message.Sender.Id);
             }
 
-            var response = new Request
+            var replies = new QuickReply[]
             {
-                Type = MessagingTypes.Response,
-                Recipient = new Recipient(user.Id),
-                Message = new Models.SendAPI.Message
-                {
-                    Text = _localizer["unsupported-command"],
-                    QuickReplies = new Models.SendAPI.QuickReply[]
-                    {
-                        new Models.SendAPI.QuickReply
-                        {
-                            ContentType = QuickReplyContentTypes.Text,
-                            Title = _localizer["cancel-button"],
-                            Payload = ReplyPayloads.CancelPayload
-                        }
-                    }
-                }
+                new QuickReply(_localizer["cancel-button"], ReplyPayloads.CancelPayload), 
             };
+            var response = new SendRequest(user.Id, new Message(_localizer["unsupported-command"], replies));
 
             await Send(response);
         }
@@ -120,41 +106,19 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger
             await _localDbContext.AddAsync(user);
             await _localDbContext.SaveChangesAsync();
 
-            var reply = new Request
+            var replies = new QuickReply[]
             {
-                Type = MessagingTypes.Response,
-                Recipient = new Recipient(user.Id),
-                Message = new Models.SendAPI.Message
-                {
-                    Text = _localizer["greeting"],
-                    QuickReplies = new Models.SendAPI.QuickReply[]
-                    {
-                        new Models.SendAPI.QuickReply
-                        {
-                            ContentType = QuickReplyContentTypes.Text,
-                            Title = _localizer["cancel-button"],
-                            Payload = ReplyPayloads.CancelPayload
-                        },
-                        new Models.SendAPI.QuickReply
-                        {
-                            ContentType = QuickReplyContentTypes.Text,
-                            Title = "English",
-                            Payload = ReplyPayloads.LanguagePayload("en")
-                        },
-                        new Models.SendAPI.QuickReply
-                        {
-                            ContentType = QuickReplyContentTypes.Text,
-                            Title = "Polski",
-                            Payload = ReplyPayloads.LanguagePayload("pl")
-                        }
-                    }
-                }
+                new QuickReply(_localizer["cancel-button"], ReplyPayloads.CancelPayload),
+                new QuickReply("English", ReplyPayloads.LanguagePayload("en")),
+                new QuickReply("Polski", ReplyPayloads.LanguagePayload("pl")), 
             };
+
+            var reply = new SendRequest(user.Id, new Message(_localizer["greeting"], replies));
 
             await Send(reply);
         }
 
-        private async Task ConfirmSubscription(string uid, Message msg)
+        private async Task ConfirmSubscription(string uid, Models.Webhook.Messages.Message msg)
         {
             if (msg.QuickReply.Payload == ReplyPayloads.SubscribePayload)
             {
@@ -169,15 +133,12 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger
 
                 await _mediator.Send(command);
 
-                var reply = new Request
+                var replies = new QuickReply[]
                 {
-                    Type = MessagingTypes.Response,
-                    Recipient = new Recipient(uid),
-                    Message = new Models.SendAPI.Message
-                    {
-                        Text = _localizer["congratulations"]
-                    }
+                    new QuickReply(_localizer["cancel-button"], ReplyPayloads.CancelPayload) 
                 };
+
+                var reply = new SendRequest(uid, new Message(_localizer["congratulations"], replies));
 
                 await Send(reply);
                 return;
@@ -189,30 +150,13 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger
                 return;
             }
 
-            var response = new Request
+            var quickReplies = new QuickReply[]
             {
-                Type = MessagingTypes.Response,
-                Recipient = new Recipient(uid),
-                Message = new Models.SendAPI.Message
-                {
-                    Text = _localizer["unsupported-command"],
-                    QuickReplies = new Models.SendAPI.QuickReply[]
-                    {
-                        new Models.SendAPI.QuickReply
-                        {
-                            ContentType = QuickReplyContentTypes.Text,
-                            Title = _localizer["subscribe-button"],
-                            Payload = ReplyPayloads.SubscribePayload
-                        },
-                        new Models.SendAPI.QuickReply
-                        {
-                            ContentType = QuickReplyContentTypes.Text,
-                            Title = _localizer["cancel-button"],
-                            Payload = ReplyPayloads.CancelPayload
-                        }
-                    }
-                }
+                new QuickReply(_localizer["subscribe-button"], ReplyPayloads.SubscribePayload), 
+                new QuickReply(_localizer["cancel-button"], ReplyPayloads.CancelPayload), 
             };
+
+            var response = new SendRequest(uid, new Message(_localizer["unsupported-command"], quickReplies));
 
             await Send(response);
         }
@@ -237,20 +181,10 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger
                 await _localDbContext.SaveChangesAsync();
             }
 
-            var reply = new Request
-            {
-                Type = MessagingTypes.Response,
-                Recipient = new Recipient(uid),
-                Message = new Models.SendAPI.Message
-                {
-                    Text = _localizer["subscription-cancelled"]
-                }
-            };
-
-            await Send(reply);
+            await Send(new SendRequest(uid, new Message(_localizer["subscription-cancelled"])));
         }
 
-        private async Task GatherLanguage(string uid, Message msg)
+        private async Task GatherLanguage(string uid, Models.Webhook.Messages.Message msg)
         {
             if (msg.QuickReply.Payload != null)
             {
@@ -285,60 +219,27 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger
 
                 if (quickReplies.Count == 10)
                 {
-                    quickReplies.Add(new Models.SendAPI.QuickReply
-                    {
-                        ContentType = "QuickReplyContentTypes.Text",
-                        Title = _localizer["next"],
-                        Payload = ReplyPayloads.NextPage
-                    });
+                    quickReplies.Add(new QuickReply(_localizer["next"], ReplyPayloads.NextPage));
                 }
 
-                quickReplies.Add(new Models.SendAPI.QuickReply
-                {
-                    ContentType = QuickReplyContentTypes.Text,
-                    Title = _localizer["cancel-button"],
-                    Payload = ReplyPayloads.CancelPayload
-                });
-
-                var reply = new Request
-                {
-                    Type = MessagingTypes.Response,
-                    Recipient = new Recipient(uid),
-                    Message = new Models.SendAPI.Message
-                    {
-                        Text = _localizer["class-selection"],
-                        QuickReplies = quickReplies
-                    }
-                };
-
+                quickReplies.Add(new QuickReply(_localizer["cancel-button"], ReplyPayloads.CancelPayload));
+                var reply = new SendRequest(uid, new Message(_localizer["class-selection"], quickReplies));
+                
                 await Send(reply);
             }
             else
             {
-                var response = new Request
+                var replies = new QuickReply[]
                 {
-                    Type = MessagingTypes.Response,
-                    Recipient = new Recipient(uid),
-                    Message = new Models.SendAPI.Message
-                    {
-                        Text = _localizer["unsupported-command"],
-                        QuickReplies = new Models.SendAPI.QuickReply[]
-                        {
-                            new Models.SendAPI.QuickReply
-                            {
-                                ContentType = QuickReplyContentTypes.Text,
-                                Title = _localizer["cancel-button"],
-                                Payload = ReplyPayloads.CancelPayload
-                            }
-                        }
-                    }
+                    new QuickReply(_localizer["cancel-button"], ReplyPayloads.CancelPayload) 
                 };
+                var response = new SendRequest(uid, new Message(_localizer["unsupported-command"], replies));
 
                 await Send(response);
             }
         }
 
-        private async Task GatherClass(string uid, Message msg)
+        private async Task GatherClass(string uid, Models.Webhook.Messages.Message msg)
         {
             if (msg.QuickReply.Payload != null)
             {
@@ -352,43 +253,18 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger
 
                 if (msg.QuickReply.Payload == ReplyPayloads.NextPage)
                 {
-                    user.ClassOffset = user.ClassOffset + 10;
+                    user.ClassOffset += 10;
                     var buttons = await GetClasses(user.ClassOffset);
                     
                     if (buttons.Count == 10)
                     {
-                        buttons.Add(new Models.SendAPI.QuickReply
-                        {
-                            ContentType = QuickReplyContentTypes.Text,
-                            Title = _localizer["next"],
-                            Payload = ReplyPayloads.NextPage
-                        });
+                        buttons.Add(new QuickReply(_localizer["next"], ReplyPayloads.NextPage));
                     }
 
-                    buttons.Add(new Models.SendAPI.QuickReply
-                    {
-                        ContentType = QuickReplyContentTypes.Text,
-                        Title = _localizer["previous"],
-                        Payload = ReplyPayloads.PreviousPage
-                    });
+                    buttons.Add(new QuickReply(_localizer["previous"], ReplyPayloads.PreviousPage));
+                    buttons.Add(new QuickReply(_localizer["cancel-button"], ReplyPayloads.CancelPayload));
 
-                    buttons.Add(new Models.SendAPI.QuickReply
-                    {
-                        ContentType = QuickReplyContentTypes.Text,
-                        Title = _localizer["cancel-button"],
-                        Payload = ReplyPayloads.CancelPayload
-                    });
-
-                    var reply = new Request
-                    {
-                        Type = MessagingTypes.Response,
-                        Recipient = new Recipient(uid),
-                        Message = new Models.SendAPI.Message
-                        {
-                            Text = _localizer["class-selection"],
-                            QuickReplies = buttons
-                        }
-                    };
+                    var reply = new SendRequest(uid, new Message(_localizer["class-selection"], buttons));
 
                     await Send(reply);
                     return;
@@ -396,44 +272,19 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger
 
                 if (msg.QuickReply.Payload == ReplyPayloads.PreviousPage)
                 {
-                    user.ClassOffset = user.ClassOffset - 10;
+                    user.ClassOffset -= 10;
 
                     var buttons = await GetClasses(user.ClassOffset);
 
-                    buttons.Add(new Models.SendAPI.QuickReply
-                    {
-                        ContentType = QuickReplyContentTypes.Text,
-                        Title = _localizer["previous"],
-                        Payload = ReplyPayloads.NextPage
-                    });
-
-                    buttons.Add(new Models.SendAPI.QuickReply
-                    {
-                        ContentType = QuickReplyContentTypes.Text,
-                        Title = _localizer["cancel-button"],
-                        Payload = ReplyPayloads.CancelPayload
-                    });
+                    buttons.Add(new QuickReply(_localizer["next"], ReplyPayloads.NextPage));
+                    buttons.Add(new QuickReply(_localizer["cancel-button"], ReplyPayloads.CancelPayload));
 
                     if (user.ClassOffset >= 10)
                     {
-                        buttons.Add(new Models.SendAPI.QuickReply
-                        {
-                            ContentType = QuickReplyContentTypes.Text,
-                            Title = _localizer["previous"],
-                            Payload = ReplyPayloads.PreviousPage
-                        });
+                        buttons.Add(new QuickReply(_localizer["previous"], ReplyPayloads.PreviousPage));
                     }
 
-                    var reply = new Request
-                    {
-                        Type = MessagingTypes.Response,
-                        Recipient = new Recipient(uid),
-                        Message = new Models.SendAPI.Message
-                        {
-                            Text = _localizer["class-selection"],
-                            QuickReplies = buttons
-                        }
-                    };
+                    var reply = new SendRequest(uid, new Message(_localizer["class-selection"], buttons));
 
                     await Send(reply);
                     return;
@@ -444,57 +295,29 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger
                 _localDbContext.IncompleteUsers.Update(user);
                 await _localDbContext.SaveChangesAsync();
 
-                var response = new Request
+                var replies = new QuickReply[]
                 {
-                    Type = MessagingTypes.Response,
-                    Recipient = new Recipient(uid),
-                    Message = new Models.SendAPI.Message
-                    {
-                        Text = _localizer["confirmation"],
-                        QuickReplies = new Models.SendAPI.QuickReply[]
-                        {
-                            new Models.SendAPI.QuickReply
-                            {
-                                ContentType = QuickReplyContentTypes.Text,
-                                Title = _localizer["subscribe-button"],
-                                Payload = ReplyPayloads.SubscribePayload
-                            },
-                            new Models.SendAPI.QuickReply
-                            {
-                                ContentType = QuickReplyContentTypes.Text,
-                                Title = _localizer["cancel-button"],
-                                Payload = ReplyPayloads.CancelPayload
-                            }
-                        }
-                    }
+                    new QuickReply(_localizer["subscribe-button"], ReplyPayloads.SubscribePayload),
+                    new QuickReply(_localizer["cancel-button"], ReplyPayloads.CancelPayload)
                 };
+                var response = new SendRequest(uid, new Message(_localizer["confirmation"], replies));
 
                 await Send(response);
             }
             else
             {
-                var response = new Request
+                var replies = new QuickReply[]
                 {
-                    Type = MessagingTypes.Response,
-                    Recipient = new Recipient(uid),
-                    Message = new Models.SendAPI.Message
-                    {
-                        Text = _localizer["unsupported-command"],
-                        QuickReplies = new Models.SendAPI.QuickReply[]
-                        {
-                            new Models.SendAPI.QuickReply
-                            {
-                                ContentType = QuickReplyContentTypes.Text,
-                                Title = _localizer["cancel-button"],
-                                Payload = ReplyPayloads.CancelPayload
-                            }
-                        }
-                    }
+                    new QuickReply(_localizer["cancel-button"], ReplyPayloads.CancelPayload), 
                 };
+
+                var response = new SendRequest(uid, new Message(_localizer["cancel-button"], replies));
+
+                await Send(response);
             }
         }
 
-        private async Task<List<Models.SendAPI.QuickReply>> GetClasses(int offset)
+        private async Task<List<QuickReply>> GetClasses(int offset)
         {
             var classes = await _mediator.Send(new GetClassesQuery());
             var classNames = classes
@@ -506,18 +329,13 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger
 
             foreach (var x in classNames)
             {
-                replies.Add(new Models.SendAPI.QuickReply
-                {
-                    ContentType = QuickReplyContentTypes.Text,
-                    Title = x,
-                    Payload = x,
-                });
+                replies.Add(new QuickReply(x, x));
             }
 
             return replies;
         }
 
-        private async Task Send(Request req)
+        private async Task Send(SendRequest req)
         {
             throw new NotImplementedException();
         }

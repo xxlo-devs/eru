@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace eru.Infrastructure.PlatformClients.FacebookMessenger.Models.Webhook.Messaging
+namespace eru.Infrastructure.PlatformClients.FacebookMessenger.Models.Webhook.Messages
 {
     public class QuickReply
     {
