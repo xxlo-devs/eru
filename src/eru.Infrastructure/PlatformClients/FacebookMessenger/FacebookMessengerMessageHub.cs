@@ -35,130 +35,28 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger
 
         public async Task HandleIncomingMessage(Messaging message)
         {
-            if (await _mediator.Send(new GetUserQuery {UserId = message.Sender.Id, Platform = FacebookMessengerPlatformClient.StaticPlatformId}) != null)
+            if (await _mediator.Send(new GetUserQuery {UserId = message.Sender.Id, Platform = FacebookMessengerPlatformClient.StaticPlatformId}) != null || await _localDbContext.IncompleteUsers.FindAsync(message.Sender.Id) != null)
             {
-                await HandleRegistratedUserRequest(message);
-                return;
-            }
-
-            if (await _localDbContext.IncompleteUsers.FindAsync(message.Sender.Id) != null)
-            {
-                await HandleUserBeingRegistratedRequest(message);
-                return;
-            }
-
-            await HandleNewUserRequest(message);
-            return;
-        }
-
-        private async Task HandleRegistratedUserRequest(Messaging message)
-        {
-            var user = await _mediator.Send(new GetUserQuery {UserId = message.Sender.Id, Platform = FacebookMessengerPlatformClient.StaticPlatformId});
-            CultureInfo.CurrentCulture = new CultureInfo(user.PreferredLanguage);
-            CultureInfo.CurrentUICulture = new CultureInfo(user.PreferredLanguage);
-
-            if (message.Message.QuickReply.Payload == ReplyPayloads.CancelPayload)
-            {
-                await CancelSubscription(message.Sender.Id);
-            }
-
-            var replies = new QuickReply[]
-            {
-                new QuickReply(_localizer["cancel-button"], ReplyPayloads.CancelPayload), 
-            };
-            var response = new SendRequest(user.Id, new Message(_localizer["unsupported-command"], replies));
-
-            await Send(response);
-        }
-
-        private async Task HandleUserBeingRegistratedRequest(Messaging message)
-        {
-            var user = await _localDbContext.IncompleteUsers.FindAsync(message.Sender.Id);
-
-            if (user.Stage == Stage.Created)
-            {
-                await GatherLanguage(user.Id, message.Message);
-                return;
-            }
-
-            if (user.Stage == Stage.GatheredLanguage)
-            {
-                await GatherClass(user.Id, message.Message);
-                return;
-            }
-
-            if (user.Stage == Stage.GatheredClass)
-            {
-                await ConfirmSubscription(user.Id, message.Message);
-                return;
-            }
-        }
-
-        private async Task HandleNewUserRequest(Messaging message)
-        {
-            var user = new IncompleteUser
-            {
-                Id = message.Sender.Id,
-                Platform = FacebookMessengerPlatformClient.StaticPlatformId,
-                Stage = Stage.Created
-            };
-
-            await _localDbContext.AddAsync(user);
-            await _localDbContext.SaveChangesAsync();
-
-            var replies = new QuickReply[]
-            {
-                new QuickReply(_localizer["cancel-button"], ReplyPayloads.CancelPayload),
-                new QuickReply("English", ReplyPayloads.LanguagePayload("en")),
-                new QuickReply("Polski", ReplyPayloads.LanguagePayload("pl")), 
-            };
-
-            var reply = new SendRequest(user.Id, new Message(_localizer["greeting"], replies));
-
-            await Send(reply);
-        }
-
-        private async Task ConfirmSubscription(string uid, Models.Webhook.Messages.Message msg)
-        {
-            if (msg.QuickReply.Payload == ReplyPayloads.SubscribePayload)
-            {
-                var tempUser = await _localDbContext.IncompleteUsers.FindAsync(uid);
-                var command = new CreateUserCommand
+                if (message.Message.QuickReply.Payload != null)
                 {
-                    Id = tempUser.Id,
-                    Platform = tempUser.Platform,
-                    Class = tempUser.Platform,
-                    PreferredLanguage = tempUser.PreferredLanguage
-                };
-
-                await _mediator.Send(command);
-
-                var replies = new QuickReply[]
+                    if (message.Message.QuickReply.Payload == ReplyPayloads.CancelPayload)
+                    {
+                        await CancelSubscription(message.Sender.Id);
+                    }
+                    else
+                    {
+                        await HandleKnownUserRequest(message.Sender.Id, message.Message.QuickReply.Payload);
+                    }
+                }
+                else
                 {
-                    new QuickReply(_localizer["cancel-button"], ReplyPayloads.CancelPayload) 
-                };
-
-                var reply = new SendRequest(uid, new Message(_localizer["congratulations"], replies));
-
-                await Send(reply);
-                return;
+                    await UnsupportedCommand(message.Sender.Id);
+                }
             }
-
-            if (msg.QuickReply.Payload == ReplyPayloads.CancelPayload)
+            else
             {
-                await CancelSubscription(uid);
-                return;
+                await HandleUnknownUserRequest(message.Sender.Id);
             }
-
-            var quickReplies = new QuickReply[]
-            {
-                new QuickReply(_localizer["subscribe-button"], ReplyPayloads.SubscribePayload), 
-                new QuickReply(_localizer["cancel-button"], ReplyPayloads.CancelPayload), 
-            };
-
-            var response = new SendRequest(uid, new Message(_localizer["unsupported-command"], quickReplies));
-
-            await Send(response);
         }
 
         private async Task CancelSubscription(string uid)
@@ -184,140 +82,165 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger
             await Send(new SendRequest(uid, new Message(_localizer["subscription-cancelled"])));
         }
 
-        private async Task GatherLanguage(string uid, Models.Webhook.Messages.Message msg)
+        private async Task UnsupportedCommand(string uid)
         {
-            if (msg.QuickReply.Payload != null)
+            var globalUser = await _mediator.Send(new GetUserQuery {UserId = uid, Platform = FacebookMessengerPlatformClient.StaticPlatformId});
+            var localUser = await _localDbContext.IncompleteUsers.FindAsync(uid);
+
+            if (globalUser != null)
             {
-                var user = await _localDbContext.IncompleteUsers.FindAsync(uid);
-
-                if (msg.QuickReply.Payload == ReplyPayloads.CancelPayload)
-                {
-                    await CancelSubscription(uid);
-                    return;
-                }
-
-                if (msg.QuickReply.Payload == ReplyPayloads.LanguagePayload("en"))
-                {
-                    user.PreferredLanguage = "en";
-                    user.Stage = Stage.GatheredLanguage;
-                    CultureInfo.CurrentCulture = new CultureInfo(user.PreferredLanguage);
-                    CultureInfo.CurrentUICulture = new CultureInfo(user.PreferredLanguage);
-                }
-
-                if (msg.QuickReply.Payload == ReplyPayloads.LanguagePayload("pl"))
-                {
-                    user.PreferredLanguage = "pl";
-                    user.Stage = Stage.GatheredLanguage;
-                    CultureInfo.CurrentCulture = new CultureInfo(user.PreferredLanguage);
-                    CultureInfo.CurrentUICulture = new CultureInfo(user.PreferredLanguage);
-                }
-
-                _localDbContext.IncompleteUsers.Update(user);
-                await _localDbContext.SaveChangesAsync();
-
-                var quickReplies = await GetClasses(0);
-
-                if (quickReplies.Count == 10)
-                {
-                    quickReplies.Add(new QuickReply(_localizer["next"], ReplyPayloads.NextPage));
-                }
-
-                quickReplies.Add(new QuickReply(_localizer["cancel-button"], ReplyPayloads.CancelPayload));
-                var reply = new SendRequest(uid, new Message(_localizer["class-selection"], quickReplies));
-                
-                await Send(reply);
-            }
-            else
-            {
-                var replies = new QuickReply[]
-                {
-                    new QuickReply(_localizer["cancel-button"], ReplyPayloads.CancelPayload) 
-                };
-                var response = new SendRequest(uid, new Message(_localizer["unsupported-command"], replies));
+                CultureInfo.CurrentCulture = new CultureInfo(globalUser.PreferredLanguage);
+                CultureInfo.CurrentUICulture = new CultureInfo(globalUser.PreferredLanguage);
+                var response = new SendRequest(uid, new Message(_localizer["unsupported-command"], GetCancelButton()));
 
                 await Send(response);
             }
+
+            if (localUser != null)
+            {
+                switch (localUser.Stage)
+                {
+                    case Stage.Created: 
+                        await Send(new SendRequest(uid, 
+                            new Message(_localizer["unsupported-command"], GetLangSelector())));
+                        break;
+
+                    case Stage.GatheredLanguage:
+                        CultureInfo.CurrentCulture = new CultureInfo(localUser.PreferredLanguage);
+                        CultureInfo.CurrentUICulture = new CultureInfo(localUser.PreferredLanguage);
+                        await Send(new SendRequest(uid,
+                            new Message(_localizer["unsupported-command"], await GetClassSelector(localUser.ClassOffset))));
+                        break;
+
+                    case Stage.GatheredClass:
+                        CultureInfo.CurrentCulture = new CultureInfo(localUser.PreferredLanguage);
+                        CultureInfo.CurrentUICulture = new CultureInfo(localUser.PreferredLanguage);
+                        await Send(new SendRequest(uid, 
+                            new Message(_localizer["unsupported-command"], GetConfirmationSelector())));
+                        break;
+                }
+            }
         }
 
-        private async Task GatherClass(string uid, Models.Webhook.Messages.Message msg)
+        private async Task HandleKnownUserRequest(string uid, string payload)
         {
-            if (msg.QuickReply.Payload != null)
+            var user = await _localDbContext.IncompleteUsers.FindAsync(uid);
+
+            if (user.Stage == Stage.Created)
             {
-                var user = await _localDbContext.IncompleteUsers.FindAsync(uid);
+                user.PreferredLanguage = payload;
+                user.Stage = Stage.GatheredLanguage;
+                _localDbContext.Update(user);
+                await _localDbContext.SaveChangesAsync();
 
-                if (msg.QuickReply.Payload == ReplyPayloads.CancelPayload)
-                {
-                    await CancelSubscription(uid);
-                    return;
-                }
+                CultureInfo.CurrentCulture = new CultureInfo(user.PreferredLanguage);
+                CultureInfo.CurrentUICulture = new CultureInfo(user.PreferredLanguage);
 
-                if (msg.QuickReply.Payload == ReplyPayloads.NextPage)
-                {
-                    user.ClassOffset += 10;
-                    var buttons = await GetClasses(user.ClassOffset);
-                    
-                    if (buttons.Count == 10)
-                    {
-                        buttons.Add(new QuickReply(_localizer["next"], ReplyPayloads.NextPage));
-                    }
+                var reply = new SendRequest(uid, new Message(_localizer["class-selection"], await GetClassSelector(user.ClassOffset)));
+                await Send(reply);
+                return;
+            }
 
-                    buttons.Add(new QuickReply(_localizer["previous"], ReplyPayloads.PreviousPage));
-                    buttons.Add(new QuickReply(_localizer["cancel-button"], ReplyPayloads.CancelPayload));
+            if (user.Stage == Stage.GatheredLanguage)
+            {
+                CultureInfo.CurrentCulture = new CultureInfo(user.PreferredLanguage);
+                CultureInfo.CurrentUICulture = new CultureInfo(user.PreferredLanguage);
 
-                    var reply = new SendRequest(uid, new Message(_localizer["class-selection"], buttons));
-
-                    await Send(reply);
-                    return;
-                }
-
-                if (msg.QuickReply.Payload == ReplyPayloads.PreviousPage)
+                if (payload == ReplyPayloads.PreviousPage)
                 {
                     user.ClassOffset -= 10;
+                    _localDbContext.Update(user);
+                    await _localDbContext.SaveChangesAsync();
 
-                    var buttons = await GetClasses(user.ClassOffset);
-
-                    buttons.Add(new QuickReply(_localizer["next"], ReplyPayloads.NextPage));
-                    buttons.Add(new QuickReply(_localizer["cancel-button"], ReplyPayloads.CancelPayload));
-
-                    if (user.ClassOffset >= 10)
-                    {
-                        buttons.Add(new QuickReply(_localizer["previous"], ReplyPayloads.PreviousPage));
-                    }
-
-                    var reply = new SendRequest(uid, new Message(_localizer["class-selection"], buttons));
-
+                    var reply = new SendRequest(uid, new Message(_localizer["class-selection"], await GetClassSelector(user.ClassOffset)));
                     await Send(reply);
                     return;
                 }
 
-                user.Class = msg.QuickReply.Payload;
-                user.Stage = Stage.GatheredClass;
-                _localDbContext.IncompleteUsers.Update(user);
-                await _localDbContext.SaveChangesAsync();
-
-                var replies = new QuickReply[]
+                if (payload == ReplyPayloads.NextPage)
                 {
-                    new QuickReply(_localizer["subscribe-button"], ReplyPayloads.SubscribePayload),
-                    new QuickReply(_localizer["cancel-button"], ReplyPayloads.CancelPayload)
-                };
-                var response = new SendRequest(uid, new Message(_localizer["confirmation"], replies));
+                    user.ClassOffset += 10;
+                    _localDbContext.Update(user);
+                    await _localDbContext.SaveChangesAsync();
 
-                await Send(response);
+                    var reply = new SendRequest(uid, new Message(_localizer["class-selection"], await GetClassSelector(user.ClassOffset)));
+                    await Send(reply);
+                    return;
+                }
+
+                if (payload != ReplyPayloads.PreviousPage & payload != ReplyPayloads.NextPage)
+                {
+                    user.Class = payload;
+                    user.Stage = Stage.GatheredClass;
+                    _localDbContext.Update(user);
+                    await _localDbContext.SaveChangesAsync();
+
+                    var reply = new SendRequest(uid, new Message(_localizer["confirmation"], GetConfirmationSelector()));
+                    await Send(reply);
+                    return;
+                }
             }
-            else
+
+            if (user.Stage == Stage.GatheredClass)
             {
-                var replies = new QuickReply[]
+                if (payload == ReplyPayloads.SubscribePayload)
                 {
-                    new QuickReply(_localizer["cancel-button"], ReplyPayloads.CancelPayload), 
-                };
+                    CultureInfo.CurrentCulture = new CultureInfo(user.PreferredLanguage);
+                    CultureInfo.CurrentUICulture = new CultureInfo(user.PreferredLanguage);
 
-                var response = new SendRequest(uid, new Message(_localizer["cancel-button"], replies));
+                    var command = new CreateUserCommand
+                    {
+                        Id = user.Id,
+                        Platform = user.Platform,
+                        Class = user.Class,
+                        PreferredLanguage = user.Class
+                    };
 
-                await Send(response);
+                    await _mediator.Send(command);
+
+                    _localDbContext.Remove(user);
+                    await _localDbContext.SaveChangesAsync();
+
+                    var response = new SendRequest(uid, new Message(_localizer["congratulations"], GetCancelButton()));
+                    await Send(response);
+                    return;
+                }
             }
         }
 
-        private async Task<List<QuickReply>> GetClasses(int offset)
+        private async Task HandleUnknownUserRequest(string uid)
+        {
+            var user = new IncompleteUser
+            {
+                Id = uid,
+                Platform = FacebookMessengerPlatformClient.StaticPlatformId,
+                Stage = Stage.Created
+            };
+
+            await _localDbContext.AddAsync(user);
+            await _localDbContext.SaveChangesAsync();
+
+            var reply = new SendRequest(user.Id, new Message(_localizer["greeting"], GetLangSelector()));
+
+            await Send(reply);
+        }
+
+        private IEnumerable<QuickReply> GetCancelButton() => new[] { new QuickReply(_localizer["cancel-button"], ReplyPayloads.CancelPayload) };
+
+        private IEnumerable<QuickReply> GetLangSelector() => new []
+        {
+            new QuickReply(_localizer["cancel-button"], ReplyPayloads.CancelPayload),
+            new QuickReply("English", ReplyPayloads.English),
+            new QuickReply("Polski", ReplyPayloads.Polish)
+        };
+
+        private IEnumerable<QuickReply> GetConfirmationSelector() => new []
+        {
+            new QuickReply(_localizer["subscribe-button"], ReplyPayloads.SubscribePayload),
+            new QuickReply(_localizer["cancel-button"], ReplyPayloads.CancelPayload)
+        };
+
+        private async Task<IEnumerable<QuickReply>> GetClassSelector(int offset)
         {
             var classes = await _mediator.Send(new GetClassesQuery());
             var classNames = classes
@@ -327,10 +250,25 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger
 
             var replies = new List<Models.SendAPI.QuickReply>();
 
+            if (offset > 0)
+            {
+                replies.Add(new QuickReply(_localizer["previous"], ReplyPayloads.PreviousPage));
+            }
+
             foreach (var x in classNames)
             {
                 replies.Add(new QuickReply(x, x));
             }
+
+            if (classNames.Count() == 10)
+            {
+                if (classes.Count() - offset - 10 > 0)
+                {
+                    replies.Add(new QuickReply(_localizer["next"], ReplyPayloads.NextPage));
+                }
+            }
+
+            replies.Add(new QuickReply(_localizer["cancel-button"], ReplyPayloads.CancelPayload));
 
             return replies;
         }

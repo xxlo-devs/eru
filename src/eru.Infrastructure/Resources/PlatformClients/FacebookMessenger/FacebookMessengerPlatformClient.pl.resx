@@ -106,4 +106,7 @@
   <data name="new-substitutions" xml:space="preserve">
     <value>Oto zastępstwa na nadchodzący dzień!</value>
   </data>
+  <data name="closing" xml:space="preserve">
+    <value>Jeżeli nie chcesz już otrzymywać powiadomień o zastępstwach, kliknij Anuluj. </value>
+  </data>
 </root>

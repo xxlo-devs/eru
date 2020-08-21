@@ -2,8 +2,11 @@
 using eru.Application.Common.Interfaces;
 using eru.Domain.Entity;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
+using eru.Application.Users.Queries.GetUser;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.Models.SendAPI;
+using eru.Infrastructure.PlatformClients.FacebookMessenger.Models.SendAPI.Static;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Localization;
@@ -28,12 +31,28 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger
 
         public async Task SendMessage(string id, string content)
         {
-            throw new NotImplementedException();
+            var req = new SendRequest(id, new Message(content, new[] {new QuickReply(_localizer["cancel"], ReplyPayloads.CancelPayload)}), MessageTags.AccountUpdate);
+            await Send(req);
         }
 
         public async Task SendMessage(string id, IEnumerable<Substitution> substitutions)
         {
-            throw new NotImplementedException();
+            var user = await _mediator.Send(new GetUserQuery {UserId = id, Platform = PlatformId});
+            CultureInfo.CurrentCulture = new CultureInfo(user.PreferredLanguage);
+            CultureInfo.CurrentUICulture = new CultureInfo(user.PreferredLanguage);
+
+            var req = new SendRequest(user.Id, new Message(_localizer["new-substitutions"]), MessageTags.ConfirmedEventUpdate);
+            await Send(req);
+
+            foreach (var x in substitutions)
+            {
+                var substitution = string.Format(_localizer["substitution"], x.Teacher, x.Lesson, x.Subject, x.Substituting, x.Room, x.Note);
+                req = new SendRequest(user.Id, new Message(substitution), MessageTags.ConfirmedEventUpdate);
+                await Send(req);
+            }
+
+            req = new SendRequest(user.Id, new Message(_localizer["closing"], new[] {new QuickReply(_localizer["cancel"], ReplyPayloads.CancelPayload)}), MessageTags.ConfirmedEventUpdate);
+            await Send(req);
         }
 
         private async Task Send(SendRequest req)

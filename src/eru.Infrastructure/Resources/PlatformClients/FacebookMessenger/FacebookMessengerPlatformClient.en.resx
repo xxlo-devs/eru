@@ -106,4 +106,7 @@
   <data name="new-substitutions" xml:space="preserve">
     <value>Here are substitutions for the next day!</value>
   </data>
+  <data name="closing" xml:space="preserve">
+    <value>If you want to stop getting these notifications, just click Cancel. </value>
+  </data>
 </root>
