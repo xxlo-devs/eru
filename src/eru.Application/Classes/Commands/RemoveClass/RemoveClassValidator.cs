@@ -13,8 +13,8 @@ namespace eru.Application.Classes.Commands.RemoveClass
         {
             _context = context;
             RuleFor(x => x.Name)
-                .NotEmpty()
-                .MustAsync(Exist);
+                .NotEmpty().WithMessage("Name cannot be empty.")
+                .MustAsync(Exist).WithMessage("Mentioned class must already exist.");
         }
 
         private async Task<bool> Exist(string name, CancellationToken cancellationToken) 

@@ -37,7 +37,7 @@ namespace eru.Application.Users.Commands.CreateUser
                 PreferredLanguage = command.PreferredLanguage
             };
 
-            await _dbContext.Users.AddAsync(user);
+            await _dbContext.Users.AddAsync(user, cancellationToken);
             await _dbContext.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;

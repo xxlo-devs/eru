@@ -64,7 +64,7 @@ namespace eru.Application.Tests.Users.Commands
             var result = await validator.ValidateAsync(request, CancellationToken.None);
 
             result.IsValid.Should().BeFalse();
-            result.Errors.Should().HaveCount(1).And.Contain(x => x.ErrorMessage == "The specified condition was not met for ''.");
+            result.Errors.Should().HaveCount(1).And.Contain(x=>x.ErrorCode == "AsyncPredicateValidator" && x.ErrorMessage == "Mentioned user must already exist.");
         }
     }
 }
