@@ -74,7 +74,7 @@ namespace eru.Application.Tests.Users.Commands
         }
 
         [Fact]
-        public async Task DoesValidatorPreventFromCreatingAccountWithInvalidClass()
+        public async Task DoesValidatorPreventFromCreatingAccountWithNonExistingClass()
         {
             var context = new FakeDbContext();
             var validator = new CreateUserCommandValidator(context);
