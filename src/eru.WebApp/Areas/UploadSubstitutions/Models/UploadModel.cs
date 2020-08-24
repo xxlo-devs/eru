@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
+using eru.Application.Substitutions.Commands;
 using eru.Domain.Entity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -46,19 +47,19 @@ namespace eru.WebApp.Areas.UploadSubstitutions.Models
         [XmlAttribute(AttributeName = "substituting")]
         public string Substituting { get; set; }
 
-        public Substitution ToSubstitution()
+        public SubstitutionDto ToSubstitutionDto()
         {
-            return new Substitution
+            return new SubstitutionDto
             {
+                Absent = Absent,
                 Cancelled = Cancelled,
-                Classes = Forms.Split(',').Select(x=>new Class(x)).ToArray(),
+                ClassesNames = Forms.Split(','),
                 Groups = Groups,
                 Lesson = Lesson,
                 Note = Note,
                 Room = Room,
                 Subject = Subject,
-                Substituting = Substituting,
-                Teacher = Absent
+                Substituting = Substituting
             };
         }
     }
@@ -83,9 +84,9 @@ namespace eru.WebApp.Areas.UploadSubstitutions.Models
             return new DateTime(int.Parse(Year), int.Parse(Month), int.Parse(Day));
         }
 
-        public IEnumerable<Substitution> GetSubstitutions()
+        public IEnumerable<SubstitutionDto> GetSubstitutionsDto()
         {
-            return Substitutions.Select(x => x.ToSubstitution()).ToArray();
+            return Substitutions.Select(x => x.ToSubstitutionDto());
         }
     }
 
@@ -94,14 +95,5 @@ namespace eru.WebApp.Areas.UploadSubstitutions.Models
     {
         [XmlElement(ElementName = "date")] 
         public DateNode DateNode { get; set; }
-
-        public SubstitutionsPlan ToSubstitutionsPlan()
-        {
-            return new SubstitutionsPlan
-            {
-                Date = DateNode.GetDateTime(),
-                Substitutions = DateNode.GetSubstitutions()
-            };
-        }
     }
 }

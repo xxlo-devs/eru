@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using eru.Application.Substitutions.Commands;
 using eru.WebApp.Areas.UploadSubstitutions.Models;
 using MediatR;
@@ -31,9 +32,11 @@ namespace eru.WebApp.Areas.UploadSubstitutions.Controllers
         {
             await _mediator.Send(new UploadSubstitutionsCommand
             {
-                SubstitutionsPlan = uploadModel.XmlModel.ToSubstitutionsPlan(),
+                UploadDateTime = DateTime.Now,
                 IpAddress = HttpContext.Connection.RemoteIpAddress.ToString(), 
-                Key = uploadModel.ApiKey
+                Key = uploadModel.ApiKey,
+                SubstitutionsDate = uploadModel.XmlModel.DateNode.GetDateTime(),
+                Substitutions = uploadModel.XmlModel.DateNode.GetSubstitutionsDto()
             });
             return Ok();
         }

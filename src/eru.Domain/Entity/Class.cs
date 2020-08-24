@@ -1,27 +1,34 @@
-﻿namespace eru.Domain.Entity
+﻿using System;
+
+namespace eru.Domain.Entity
 {
     public class Class
     {
-        public Class()
+        private Class()
         {
             //Required by EF
         }
 
-        public Class(string name)
+        public Class(int year, string section)
         {
-            Name = name;
+            Year = year;
+            Section = section;
         }
         
-        public string Name { get; set; }
+        public string Id { get; set; }
+        public int Year { get; set; }
+        public string Section { get; set; }
 
         public override bool Equals(object obj)
         {
-            return obj is Class @class && @class.Name == Name;
+            return obj is Class @class 
+                   && @class.Year == Year
+                   && @class.Section == Section;
         }
 
         public override int GetHashCode()
         {
-            return Name.GetHashCode();
+            return HashCode.Combine(Year.GetHashCode(), Section.GetHashCode());
         }
     }
 }

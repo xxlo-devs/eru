@@ -20,8 +20,11 @@ namespace eru.Infrastructure.Persistence
         {
             modelBuilder.Entity<Class>(x =>
             {
-                x.HasKey(y => y.Name);
-                x.Property(y => y.Name).HasMaxLength(255);
+                x.HasKey(y => y.Id);
+                x.Property(y => y.Id)
+                    .HasMaxLength(255);
+                x.Property(y => y.Section)
+                    .HasMaxLength(255);
             });
 
             modelBuilder.Entity<User>(x =>
