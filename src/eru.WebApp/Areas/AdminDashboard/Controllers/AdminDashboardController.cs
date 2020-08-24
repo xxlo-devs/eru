@@ -35,8 +35,8 @@ namespace eru.WebApp.Areas.AdminDashboard.Controllers
             var classes = new Dictionary<string, int>();
             foreach (var @class in await _mediator.Send(new GetClassesQuery()))
             {
-                classes[@class.Name] =
-                    await _mediator.Send(new GetSubscribersCount(@class.Name), CancellationToken.None);
+                classes[@class.Id] =
+                    await _mediator.Send(new GetSubscribersCount(@class.Id), CancellationToken.None);
             }
             var status = new Status
             {
