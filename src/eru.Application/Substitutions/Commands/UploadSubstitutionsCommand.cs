@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using eru.Application.Common.Interfaces;
 using eru.Domain.Entity;
+using Hangfire;
 using MediatR;
 
 namespace eru.Application.Substitutions.Commands
@@ -23,14 +24,14 @@ namespace eru.Application.Substitutions.Commands
     public class UploadSubstitutionsCommandHandler : IRequestHandler<UploadSubstitutionsCommand, Unit>
     {
         private readonly IApplicationDbContext _context;
-        private readonly IBackgroundExecutor _backgroundExecutor;
+        private readonly IHangfireWrapper _hangfireWrapper;
         private readonly IEnumerable<IPlatformClient> _clients;
 
-        public UploadSubstitutionsCommandHandler(IApplicationDbContext context, IBackgroundExecutor backgroundExecutor, IEnumerable<IPlatformClient> clients)
+        public UploadSubstitutionsCommandHandler(IApplicationDbContext context, IEnumerable<IPlatformClient> clients, IHangfireWrapper hangfireWrapper)
         {
             _context = context;
-            _backgroundExecutor = backgroundExecutor;
             _clients = clients;
+            _hangfireWrapper = hangfireWrapper;
         }
 
         public Task<Unit> Handle(UploadSubstitutionsCommand request, CancellationToken cancellationToken)
@@ -52,7 +53,8 @@ namespace eru.Application.Substitutions.Commands
                         .Where(x => x.Platform == client.PlatformId && x.Class == @class.ToString());
                     foreach (var id in ids)
                     {
-                        _backgroundExecutor.Enqueue(() => client.SendMessage(id.Id, data[@class].AsEnumerable()));
+                        _hangfireWrapper.BackgroundJobClient.Enqueue(() =>
+                            client.SendMessage(id.Id, data[@class].AsEnumerable()));
                     }
                 }
             }

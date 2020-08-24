@@ -12,6 +12,9 @@ using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
+using Hangfire;
+using Hangfire.Common;
+using Hangfire.States;
 using Xunit;
 
 namespace eru.Application.Tests.Substitutions.Commands
@@ -92,14 +95,16 @@ namespace eru.Application.Tests.Substitutions.Commands
                 }
             };
             var fakeDbContext = new FakeDbContext();
-            var backgroundExecutor = new Mock<IBackgroundExecutor>();
+            var hangfireWrapper = new Mock<IHangfireWrapper>();
+            var backgroundJobClient = new Mock<IBackgroundJobClient>();
+            hangfireWrapper.Setup(x => x.BackgroundJobClient).Returns(backgroundJobClient.Object);
             var sampleClient = new Mock<IPlatformClient>();
             sampleClient.Setup(x => x.PlatformId).Returns("DebugMessageService");
-            var handler = new UploadSubstitutionsCommandHandler(fakeDbContext, backgroundExecutor.Object, new []{sampleClient.Object});
+            var handler = new UploadSubstitutionsCommandHandler(fakeDbContext, new []{sampleClient.Object}, hangfireWrapper.Object);
 
             await handler.Handle(request, CancellationToken.None);
             
-            backgroundExecutor.Verify(x=>x.Enqueue(It.IsAny<Expression<Func<Task>>>()), Times.Exactly(3));
+            backgroundJobClient.Verify(x=>x.Create(It.Is<Job>(job => job.Method.Name == "SendMessage"), It.IsAny<IState>()));
         }
 
         [Fact]
