@@ -8,6 +8,7 @@ using Microsoft.Extensions.Primitives;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -47,7 +48,8 @@ namespace eru.Application.Tests.Substitutions.Commands
                         Absent = "sample teacher 2"
                     }, 
                 },
-                SubstitutionsDate = MockData.CorrectDate
+                SubstitutionsDate = MockData.CorrectDate,
+                UploadDateTime = MockData.CorrectDate
             };
 
             var output = request.ToString();
@@ -60,8 +62,8 @@ namespace eru.Application.Tests.Substitutions.Commands
         {
             var request = new UploadSubstitutionsCommand
             {
-                IpAddress = "198.51.100.1",
-                Key = "sample-key",
+                IpAddress = MockData.CorrectIpAddress,
+                Key = MockData.CorrectUploadKey,
                 Substitutions = new []
                 {
                     new SubstitutionDto
@@ -86,7 +88,8 @@ namespace eru.Application.Tests.Substitutions.Commands
                         Absent = "sample teacher 3"
                     }, 
                 },
-                UploadDateTime = MockData.CorrectDate
+                UploadDateTime = MockData.CorrectDate,
+                SubstitutionsDate = MockData.CorrectDate
             };
             var fakeDbContext = new FakeDbContext();
             var hangfireWrapper = new Mock<IHangfireWrapper>();
@@ -94,7 +97,16 @@ namespace eru.Application.Tests.Substitutions.Commands
             hangfireWrapper.Setup(x => x.BackgroundJobClient).Returns(backgroundJobClient.Object);
             var sampleClient = new Mock<IPlatformClient>();
             sampleClient.Setup(x => x.PlatformId).Returns("DebugMessageService");
-            var handler = new UploadSubstitutionsCommandHandler(fakeDbContext, new []{sampleClient.Object}, hangfireWrapper.Object, new ClassParser());
+
+            var classParser = new Mock<IClassesParser>();
+            classParser.Setup(classparser => classparser.Parse(It.IsAny<IEnumerable<string>>())).Returns(
+                (IEnumerable<string> x) =>
+                {
+                    if(x.Contains("I a") & x.Contains("III c")) return Task.FromResult(new[] {new Class(1, "a"), new Class(3, "c")}.AsEnumerable());
+                    else return Task.FromResult(new[] {new Class(1, "a"), new Class(2, "b")}.AsEnumerable());
+                });
+            
+            var handler = new UploadSubstitutionsCommandHandler(fakeDbContext, new []{sampleClient.Object}, hangfireWrapper.Object, classParser.Object);
 
             await handler.Handle(request, CancellationToken.None);
             
@@ -125,7 +137,8 @@ namespace eru.Application.Tests.Substitutions.Commands
                         Absent = "sample teacher 2"
                     }
                 },
-                UploadDateTime = MockData.CorrectDate
+                UploadDateTime = MockData.CorrectDate,
+                SubstitutionsDate = MockData.CorrectDate
             };
 
             var result = await validator.ValidateAsync(request, CancellationToken.None);
@@ -148,6 +161,8 @@ namespace eru.Application.Tests.Substitutions.Commands
             {
                 IpAddress = "198-51-100-1",
                 Key = MockData.CorrectUploadKey,
+                UploadDateTime = MockData.CorrectDate,
+                SubstitutionsDate = MockData.CorrectDate,
                 Substitutions = new []
                 {
                     new SubstitutionDto
@@ -161,8 +176,7 @@ namespace eru.Application.Tests.Substitutions.Commands
                         Substituting = "sample teacher 1",
                         Absent = "sample teacher 2"
                     }
-                },
-                UploadDateTime = MockData.CorrectDate
+                }
             };
 
             var result = await validator.ValidateAsync(request, CancellationToken.None);
@@ -180,6 +194,8 @@ namespace eru.Application.Tests.Substitutions.Commands
             var request = new UploadSubstitutionsCommand
             {
                 IpAddress = MockData.CorrectIpAddress,
+                SubstitutionsDate = MockData.CorrectDate,
+                UploadDateTime = MockData.CorrectDate,
                 Key = "invalid-key",
                 Substitutions = new []
                 {
@@ -213,6 +229,7 @@ namespace eru.Application.Tests.Substitutions.Commands
             {
                 IpAddress = MockData.CorrectIpAddress,
                 Key = MockData.CorrectUploadKey,
+                SubstitutionsDate = MockData.CorrectDate,
                 UploadDateTime = MockData.CorrectDate,
                 Substitutions = ArraySegment<SubstitutionDto>.Empty
             };
@@ -220,7 +237,7 @@ namespace eru.Application.Tests.Substitutions.Commands
             var result = await validator.ValidateAsync(request, CancellationToken.None);
 
             result.IsValid.Should().BeFalse();
-            result.Errors.Should().HaveCount(1).And.ContainSingle(x=>x.ErrorCode == "PredicateValidator" && x.ErrorMessage == "SubstitutionsPlan must have at least one substitution.");
+            result.Errors.Should().HaveCount(1).And.ContainSingle(x=>x.ErrorCode == "NotEmptyValidator" && x.ErrorMessage == "Substitutions cannot be empty.");
         }
 
     }

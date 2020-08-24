@@ -24,13 +24,13 @@ namespace eru.Application.Tests.Users.Commands
             var handler = new CancelSubscriptionCommandHandler(context);
             var request = new CancelSubscriptionCommand
             {
-                UserId = "sample-user",
+                UserId = MockData.ExistingUserId,
                 Platform = "DebugMessageService"
             };
 
             await handler.Handle(request, CancellationToken.None);
 
-            context.Users.Should().NotContain(x => x.Id == "sample-user" & x.Platform == "DebugMessageService");
+            context.Users.Should().NotContain(x => x.Id == MockData.ExistingUserId & x.Platform == "DebugMessageService");
         }
 
         [Fact]
@@ -40,7 +40,7 @@ namespace eru.Application.Tests.Users.Commands
             var validator = new CancelSubscriptionCommandValidator(context);
             var request = new CancelSubscriptionCommand
             {
-                UserId = "sample-user",
+                UserId = MockData.ExistingUserId,
                 Platform = "DebugMessageService"
             };
 

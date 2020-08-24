@@ -24,14 +24,14 @@ namespace eru.Application.Tests.Users.Commands
             {
                 Id = "new-user",
                 Platform = "DebugMessageService",
-                Class = "III c",
+                Class = MockData.ExistingClassId,
                 PreferredLanguage = "en-US"
             };
 
             await handler.Handle(request, CancellationToken.None);
 
             context.Users.Should().ContainSingle(x =>
-                x.Id == "new-user" & x.Platform == "DebugMessageService" & x.Class == "III c" & x.PreferredLanguage == "en-US");
+                x.Id == "new-user" & x.Platform == "DebugMessageService" & x.Class == MockData.ExistingClassId & x.PreferredLanguage == "en-US");
         }
 
         [Fact]
@@ -44,7 +44,7 @@ namespace eru.Application.Tests.Users.Commands
             {
                 Id = "new-user",
                 Platform = "DebugMessageService",
-                Class = "III c",
+                Class = MockData.ExistingClassId,
                 PreferredLanguage = "en-US"
             };
 
@@ -61,9 +61,9 @@ namespace eru.Application.Tests.Users.Commands
             var validator = new CreateUserCommandValidator(context);
             var request = new CreateUserCommand
             {
-                Id = "sample-user",
+                Id = MockData.ExistingUserId,
                 Platform = "DebugMessageService",
-                Class = "I a",
+                Class = MockData.ExistingClassId,
                 PreferredLanguage = "en-US"
             };
 
@@ -74,7 +74,7 @@ namespace eru.Application.Tests.Users.Commands
         }
 
         [Fact]
-        public async Task DoesValidatorPreventFromCreatingAccountWithInvalidClass()
+        public async Task DoesValidatorPreventFromCreatingAccountWithNonExistingClass()
         {
             var context = new FakeDbContext();
             var validator = new CreateUserCommandValidator(context);
@@ -82,7 +82,7 @@ namespace eru.Application.Tests.Users.Commands
             {
                 Id = "new-user",
                 Platform = "DebugMessageService",
-                Class = "Vz",
+                Class = "invalid-class-id",
                 PreferredLanguage = "en-US"
             };
 
@@ -101,7 +101,7 @@ namespace eru.Application.Tests.Users.Commands
             {
                 Id = "new-user",
                 Platform = "DebugMessageService",
-                Class = "II b",
+                Class = MockData.ExistingClassId,
                 PreferredLanguage = "nonexistinglanguage"
             };
 

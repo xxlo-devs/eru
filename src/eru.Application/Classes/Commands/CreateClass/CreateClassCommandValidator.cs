@@ -13,13 +13,22 @@ namespace eru.Application.Classes.Commands.CreateClass
         {
             _context = context;
 
-            RuleFor(x => x.Name)
-                .NotEmpty().WithMessage("Name cannot be empty.")
-                .MaximumLength(255).WithMessage("Name must have length up to 255 characters.")
-                .MustAsync(IsUnique).WithMessage("Name must be unique.");
+            RuleFor(x => x)
+                .MustAsync(IsUnique).WithMessage("Mentioned class must be unique.");
+
+            RuleFor(x => x.Year)
+                .NotEmpty().WithMessage("Year cannot be empty.")
+                .Must(IsYearValid).WithMessage("Year must be between 0 and 12.");
+
+            RuleFor(x => x.Section)
+                .NotEmpty().WithMessage("Section cannot be empty.")
+                .MaximumLength(255).WithMessage("Section must have length up to 255 characters");
         }
 
-        private async Task<bool> IsUnique(string name, CancellationToken cancellationToken) 
-            => !await _context.Classes.AnyAsync(x => x.Name == name, cancellationToken);
+        private async Task<bool> IsUnique(CreateClassCommand command, CancellationToken cancellationToken) 
+            => !await _context.Classes.AnyAsync(x => x.Year == command.Year & x.Section == command.Section, cancellationToken);
+        
+        private bool IsYearValid(int year) 
+            => year >= 0 & year <= 12;
     }
 }

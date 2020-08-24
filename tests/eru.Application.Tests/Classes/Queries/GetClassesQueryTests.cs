@@ -23,14 +23,12 @@ namespace eru.Application.Tests.Classes.Queries
             var request = new GetClassesQuery();
             var expectedClasses = new List<ClassDto>()
             {
-                new ClassDto {Name = "I a"},
-                new ClassDto {Name = "II b"},
-                new ClassDto {Name = "III c"}
+                new ClassDto {Id = MockData.ExistingClassId, Year = 1, Section = "a"}
             };
 
             var result = await handler.Handle(request, CancellationToken.None);
 
-            result.Should().HaveCount(3).And.BeEquivalentTo(expectedClasses);
+            result.Should().HaveCount(1).And.BeEquivalentTo(expectedClasses);
         }
     }
 }
