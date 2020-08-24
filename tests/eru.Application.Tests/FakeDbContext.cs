@@ -30,6 +30,12 @@ namespace eru.Application.Tests
                     .HasMaxLength(255);
                 x.Property(y => y.Section)
                     .HasMaxLength(255);
+
+                x.HasData(
+                    new Class(1, "a") {Id = "sample-class"},
+                    new Class(2, "b") {Id = "sample-class-2"},
+                    new Class(3, "c") {Id = "sample-class-3"}
+                );
             });
 
             modelBuilder.Entity<User>(x =>
@@ -41,9 +47,9 @@ namespace eru.Application.Tests
                 x.Property(y => y.PreferredLanguage).HasMaxLength(255);
 
                 x.HasData(
-                    new User { Id = "sample-user", Platform = "DebugMessageService", Class = "II b", PreferredLanguage = "pl" },
-                    new User { Id = "sample-user-2", Platform = "DebugMessageService", Class = "I a", PreferredLanguage = "en"},
-                    new User { Id = "sample-user-3", Platform = "DebugMessageService", Class = "II b", PreferredLanguage = "pl"}
+                    new User { Id = "sample-user", Platform = "DebugMessageService", Class = "sample-class-2", PreferredLanguage = "pl" },
+                    new User { Id = "sample-user-2", Platform = "DebugMessageService", Class = "sample-class", PreferredLanguage = "en"},
+                    new User { Id = "sample-user-3", Platform = "DebugMessageService", Class = "sample-class-2", PreferredLanguage = "pl"}
                 );
             });
 

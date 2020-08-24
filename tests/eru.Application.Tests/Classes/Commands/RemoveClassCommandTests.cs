@@ -17,12 +17,12 @@ namespace eru.Application.Tests.Classes.Commands
             var handler = new RemoveClassCommandHandler(context);
             var request = new RemoveClassCommand()
             {
-                Name = "III c"
+                Id = "sample-class-3"
             };
 
             await handler.Handle(request, CancellationToken.None);
 
-            (await context.Classes.ToArrayAsync()).Should().HaveCount(2).And.NotContain(new Class("III c"));
+            (await context.Classes.ToArrayAsync()).Should().HaveCount(2).And.NotContain(new Class(3, "c"));
         }
         
         [Fact]
@@ -32,7 +32,7 @@ namespace eru.Application.Tests.Classes.Commands
             var validator = new RemoveClassValidator(context);
             var request = new RemoveClassCommand
             {
-                Name = "III c"
+                Id = "sample-class-3"
             };
 
             var result = await validator.ValidateAsync(request);
@@ -42,7 +42,7 @@ namespace eru.Application.Tests.Classes.Commands
         }
 
         [Fact]
-        public async Task DoesValidatorPreventFromRemovingClassWithNoNameGiven()
+        public async Task DoesValidatorPreventFromRemovingClassWithNoIdGiven()
         {
             var context = new FakeDbContext();
             var validator = new RemoveClassValidator(context);
@@ -65,7 +65,7 @@ namespace eru.Application.Tests.Classes.Commands
             var validator = new RemoveClassValidator(context);
             var request = new RemoveClassCommand
             {
-                Name = "II a"
+                Id = "non-existent-class"
             };
 
             var result = await validator.ValidateAsync(request);

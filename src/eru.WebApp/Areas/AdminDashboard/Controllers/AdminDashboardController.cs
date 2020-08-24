@@ -11,6 +11,7 @@ using eru.WebApp.Areas.AdminDashboard.Model;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.VisualBasic;
 
 namespace eru.WebApp.Areas.AdminDashboard.Controllers
 {
@@ -47,15 +48,15 @@ namespace eru.WebApp.Areas.AdminDashboard.Controllers
         }
 
         [HttpPost("class")]
-        public async Task AddClass(string name)
+        public async Task AddClass(int year, string section)
         {
-            await _mediator.Send(new CreateClassCommand {Name = name});
+            await _mediator.Send(new CreateClassCommand {Year = year, Section = section});
         }
         
         [HttpDelete("class")]
-        public async Task RemoveClass(string name)
+        public async Task RemoveClass(string id)
         {
-            await _mediator.Send(new RemoveClassCommand {Name = name});
+            await _mediator.Send(new RemoveClassCommand {Id = id});
         }
     }
 }
