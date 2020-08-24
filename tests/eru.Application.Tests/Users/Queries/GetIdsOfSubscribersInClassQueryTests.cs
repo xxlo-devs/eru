@@ -16,7 +16,7 @@ namespace eru.Application.Tests.Users.Queries
             var request = new GetIdsOfSubscribersInClassQuery
             {
                 Platform = "DebugMessageService",
-                Class = "II b"
+                Class = "sample-class-2"
             };
 
             var expected = new[]

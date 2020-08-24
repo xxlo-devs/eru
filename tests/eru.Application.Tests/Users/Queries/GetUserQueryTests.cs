@@ -24,7 +24,7 @@ namespace eru.Application.Tests.Users.Queries
             {
                 Id = "sample-user", 
                 Platform = "DebugMessageService",
-                Class = "II b",
+                Class = "sample-class-2",
                 PreferredLanguage = "pl"
             };
 

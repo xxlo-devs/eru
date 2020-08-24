@@ -22,7 +22,8 @@ namespace eru.Infrastructure.Persistence
             {
                 x.HasKey(y => y.Id);
                 x.Property(y => y.Id)
-                    .HasMaxLength(255);
+                    .HasMaxLength(255)
+                    .ValueGeneratedOnAdd();
                 x.Property(y => y.Section)
                     .HasMaxLength(255);
             });

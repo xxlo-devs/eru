@@ -44,7 +44,7 @@ namespace eru.Application.Tests.Users.Commands
             {
                 Id = "new-user",
                 Platform = "DebugMessageService",
-                Class = "III c",
+                Class = "sample-class-3",
                 PreferredLanguage = "en-US"
             };
 
@@ -63,7 +63,7 @@ namespace eru.Application.Tests.Users.Commands
             {
                 Id = "sample-user",
                 Platform = "DebugMessageService",
-                Class = "I a",
+                Class = "sample-class",
                 PreferredLanguage = "en-US"
             };
 
@@ -101,7 +101,7 @@ namespace eru.Application.Tests.Users.Commands
             {
                 Id = "new-user",
                 Platform = "DebugMessageService",
-                Class = "II b",
+                Class = "sample-class-2",
                 PreferredLanguage = "nonexistinglanguage"
             };
 
