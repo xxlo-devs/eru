@@ -16,15 +16,15 @@ namespace eru.Application.Tests.Users.Queries
             var handler = new GetUserQueryHandler(context);
             var request = new GetUserQuery
             {
-                UserId = "sample-user",
+                UserId = MockData.ExistingUserId,
                 Platform = "DebugMessageService"
             };
 
             var expected = new User
             {
-                Id = "sample-user", 
+                Id = MockData.ExistingUserId, 
                 Platform = "DebugMessageService",
-                Class = "sample-class-2",
+                Class = MockData.ExistingClassId,
                 PreferredLanguage = "pl"
             };
 

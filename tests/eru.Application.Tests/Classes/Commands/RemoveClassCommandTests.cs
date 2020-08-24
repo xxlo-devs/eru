@@ -17,12 +17,12 @@ namespace eru.Application.Tests.Classes.Commands
             var handler = new RemoveClassCommandHandler(context);
             var request = new RemoveClassCommand()
             {
-                Id = "sample-class-3"
+                Id = MockData.ExistingClassId
             };
 
             await handler.Handle(request, CancellationToken.None);
 
-            (await context.Classes.ToArrayAsync()).Should().HaveCount(2).And.NotContain(new Class(3, "c"));
+            (await context.Classes.ToArrayAsync()).Should().HaveCount(0).And.NotContain(new Class(3, "c"));
         }
         
         [Fact]
@@ -32,7 +32,7 @@ namespace eru.Application.Tests.Classes.Commands
             var validator = new RemoveClassValidator(context);
             var request = new RemoveClassCommand
             {
-                Id = "sample-class-3"
+                Id = MockData.ExistingClassId
             };
 
             var result = await validator.ValidateAsync(request);

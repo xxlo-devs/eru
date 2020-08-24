@@ -16,12 +16,12 @@ namespace eru.Application.Tests.Users.Queries
             var request = new GetIdsOfSubscribersInClassQuery
             {
                 Platform = "DebugMessageService",
-                Class = "sample-class-2"
+                Class = MockData.ExistingClassId
             };
 
             var expected = new[]
             {
-                "sample-user", "sample-user-3"
+                MockData.ExistingUserId
             };
 
             var actual = await handler.Handle(request, CancellationToken.None);

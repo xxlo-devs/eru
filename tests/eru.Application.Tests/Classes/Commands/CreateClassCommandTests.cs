@@ -27,7 +27,7 @@ namespace eru.Application.Tests.Classes.Commands
 
             await handler.Handle(request, CancellationToken.None);
 
-            context.Classes.Should().HaveCount(4).And.Contain(x => x.Year == 3 & x.Section == "f");
+            context.Classes.Should().HaveCount(2).And.Contain(x => x.Year == 3 & x.Section == "f");
         }
 
         [Fact]
@@ -84,8 +84,8 @@ namespace eru.Application.Tests.Classes.Commands
             var validator = new CreateClassCommandValidator(context);
             var request = new CreateClassCommand
             {
-                Year = 3,
-                Section = "c"
+                Year = 1,
+                Section = "a"
             };
 
             var result = await validator.ValidateAsync(request);

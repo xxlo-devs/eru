@@ -62,8 +62,8 @@ namespace eru.Application.Tests.Substitutions.Commands
         {
             var request = new UploadSubstitutionsCommand
             {
-                IpAddress = "198.51.100.1",
-                Key = "sample-key",
+                IpAddress = MockData.CorrectIpAddress,
+                Key = MockData.CorrectUploadKey,
                 Substitutions = new []
                 {
                     new SubstitutionDto
@@ -102,9 +102,8 @@ namespace eru.Application.Tests.Substitutions.Commands
             classParser.Setup(classparser => classparser.Parse(It.IsAny<IEnumerable<string>>())).Returns(
                 (IEnumerable<string> x) =>
                 {
-                    if(x.Contains("III c")) return Task.FromResult(new[] {new Class(1, "a"), new Class(3, "c")}.AsEnumerable());
-                    if(x.Contains("II b")) return Task.FromResult(new[] {new Class(1, "a"), new Class(2, "b")}.AsEnumerable());
-                    throw new Exception();
+                    if(x.Contains("I a") & x.Contains("III c")) return Task.FromResult(new[] {new Class(1, "a"), new Class(3, "c")}.AsEnumerable());
+                    else return Task.FromResult(new[] {new Class(1, "a"), new Class(2, "b")}.AsEnumerable());
                 });
             
             var handler = new UploadSubstitutionsCommandHandler(fakeDbContext, new []{sampleClient.Object}, hangfireWrapper.Object, classParser.Object);
@@ -232,7 +231,7 @@ namespace eru.Application.Tests.Substitutions.Commands
                 Key = MockData.CorrectUploadKey,
                 SubstitutionsDate = MockData.CorrectDate,
                 UploadDateTime = MockData.CorrectDate,
-                Substitutions = ArraySegment<SubstitutionDto>.Empty.ToArray()
+                Substitutions = ArraySegment<SubstitutionDto>.Empty
             };
 
             var result = await validator.ValidateAsync(request, CancellationToken.None);

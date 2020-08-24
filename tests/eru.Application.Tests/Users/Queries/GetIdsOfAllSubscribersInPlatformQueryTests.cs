@@ -21,9 +21,7 @@ namespace eru.Application.Tests.Users.Queries
 
             var expected = new[]
             {
-                "sample-user",
-                "sample-user-2",
-                "sample-user-3"
+                MockData.ExistingUserId
             };
 
             var actual = await handler.Handle(request, CancellationToken.None);

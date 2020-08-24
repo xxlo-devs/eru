@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net;
 using eru.Application.Common.Interfaces;
 using eru.Domain.Entity;
@@ -29,7 +30,8 @@ namespace eru.Application.Substitutions.Commands
                 .NotEmpty().WithMessage("SubstitutionsDate cannot be empty.");
 
             RuleFor(x => x.UploadDateTime)
-                .NotEmpty().WithMessage("UploadDateTime cannot be empty.");
+                .NotEmpty().WithMessage("UploadDateTime cannot be empty.")
+                .Must(IsUploadDateTimeInThePast).WithMessage("UploadDateTime must be in the past.");
             
             RuleFor(x => x.Substitutions)
                 .NotEmpty().WithMessage("Substitutions cannot be empty.");
@@ -42,5 +44,8 @@ namespace eru.Application.Substitutions.Commands
         
         private bool IsIpAddressValid(string address)
             => IPAddress.TryParse(address, out _);
+
+        private bool IsUploadDateTimeInThePast(DateTime uploadDateTime)
+            => uploadDateTime.CompareTo(DateTime.Now) <= 0;
     }
 }
