@@ -12,7 +12,7 @@ namespace eru.Domain.Entity
         public Class(int year, string section)
         {
             Year = year;
-            Section = section;
+            Section = section.Trim().ToLower();
         }
         
         public string Id { get; set; }
