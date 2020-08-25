@@ -5,6 +5,8 @@ namespace eru.Application.Classes.Queries.GetClasses
 {
     public class ClassDto : IMapFrom<Class>
     {
-        public string Name { get; set; }
+        public string Id { get; set; }
+        public int Year { get; set; }
+        public string Section { get; set; }
     }
 }

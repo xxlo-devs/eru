@@ -12,13 +12,13 @@ namespace eru.Application.Users.Queries.GetSubscribersCount
         public GetSubscribersCountValidator(IApplicationDbContext context)
         {
             _context = context;
-            RuleFor(x => x.ClassName)
-                .MustAsync(IsValidClassName);
+            RuleFor(x => x.ClassId)
+                .MustAsync(IsValidClassId);
         }
 
-        private async Task<bool> IsValidClassName(string name, CancellationToken cancellationToken)
+        private async Task<bool> IsValidClassId(string id, CancellationToken cancellationToken)
         {
-            return name == null || await _context.Classes.AnyAsync(x => x.Name == name, cancellationToken);
+            return id == null || await _context.Classes.AnyAsync(x => x.Id == id, cancellationToken);
         }
     }
 }

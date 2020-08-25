@@ -21,12 +21,13 @@ namespace eru.Application.Tests.Classes.Commands
             var handler = new CreateClassCommandHandler(context);
             var request = new CreateClassCommand
             {
-                Name = "III f"
+                Year = 3,
+                Section = "f"
             };
 
             await handler.Handle(request, CancellationToken.None);
 
-            context.Classes.Should().HaveCount(4).And.Contain(x => x.Name == "III f");
+            context.Classes.Should().HaveCount(2).And.Contain(x => x.Year == 3 & x.Section == "f");
         }
 
         [Fact]
@@ -36,7 +37,8 @@ namespace eru.Application.Tests.Classes.Commands
             var validator = new CreateClassCommandValidator(context);
             var request = new CreateClassCommand
             {
-                Name = "III f"
+                Year = 3,
+                Section = "f"
             };
 
             var result = await validator.ValidateAsync(request);
@@ -46,13 +48,14 @@ namespace eru.Application.Tests.Classes.Commands
         }
 
         [Fact]
-        public async Task DoesValidatorPreventFromCreatingClassWithTooLongName()
+        public async Task DoesValidatorPreventFromCreatingClassWithTooLongSectionName()
         {
             var context = new FakeDbContext();
             var validator = new CreateClassCommandValidator(context);
             var request = new CreateClassCommand
             {
-                Name = new string(Enumerable.Repeat('a',300).ToArray())
+                Year = 3,
+                Section = new string(Enumerable.Repeat('a',300).ToArray())
             };
 
             var result = await validator.ValidateAsync(request);
@@ -62,7 +65,7 @@ namespace eru.Application.Tests.Classes.Commands
         }
 
         [Fact]
-        public async Task DoesValidatorPreventFromCreatingClassWithNoName()
+        public async Task DoesValidatorPreventFromCreatingClassWithNoYearAndSection()
         {
             var context = new FakeDbContext();
             var validator = new CreateClassCommandValidator(context);
@@ -71,23 +74,24 @@ namespace eru.Application.Tests.Classes.Commands
             var result = await validator.ValidateAsync(request);
 
             result.IsValid.Should().BeFalse();
-            result.Errors.Should().HaveCount(1).And.ContainSingle(x=>x.ErrorCode == "NotEmptyValidator");
+            result.Errors.Should().HaveCount(2).And.Contain(x=>x.ErrorCode == "NotEmptyValidator");
         }
 
         [Fact]
-        public async Task DoesValidatorPreventFromCreatingClassWithSameNameAsPreviouslyCreatedClass()
+        public async Task DoesValidatorPreventFromCreatingDuplicateClass()
         {
             var context = new FakeDbContext();
             var validator = new CreateClassCommandValidator(context);
             var request = new CreateClassCommand
             {
-                Name = "II b"
+                Year = 1,
+                Section = "a"
             };
 
             var result = await validator.ValidateAsync(request);
 
             result.IsValid.Should().BeFalse();
-            result.Errors.Should().HaveCount(1).And.ContainSingle(x=>x.ErrorMessage == "Name must be unique." && x.ErrorCode == "AsyncPredicateValidator");
+            result.Errors.Should().HaveCount(1).And.ContainSingle(x=>x.ErrorMessage == "Mentioned class must be unique." && x.ErrorCode == "AsyncPredicateValidator");
         }
 
     }

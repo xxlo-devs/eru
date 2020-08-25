@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net;
 using eru.Application.Common.Interfaces;
 using eru.Domain.Entity;
@@ -25,34 +26,26 @@ namespace eru.Application.Substitutions.Commands
                 .NotEmpty().WithMessage("Key cannot be empty.")
                 .Must(IsKeyValid).WithMessage("Key must be a correct key from configuration.");
 
-            RuleFor(x => x.SubstitutionsPlan)
-                .NotEmpty().WithMessage("SubstitutionsPlan cannot be empty.")
-                .Must(IsPlanValid).WithMessage("SubstitutionsPlan must have at least one substitution.")
-                .DependentRules(() =>
-                {
-                    RuleFor(x => x.SubstitutionsPlan)
-                        .Must(AreAllClassesCorrect).WithMessage("All classes mentioned in SubstitutionsPlan must be present in database.");
-                });
+            RuleFor(x => x.SubstitutionsDate)
+                .NotEmpty().WithMessage("SubstitutionsDate cannot be empty.");
+
+            RuleFor(x => x.UploadDateTime)
+                .NotEmpty().WithMessage("UploadDateTime cannot be empty.")
+                .Must(IsUploadDateTimeInThePast).WithMessage("UploadDateTime must be in the past.");
+            
+            RuleFor(x => x.Substitutions)
+                .NotEmpty().WithMessage("Substitutions cannot be empty.");
         }
 
         private bool IsKeyValid(string key)
         {
             return _configuration.GetValue<string>("UploadKey") == key;
         }
-
-        private bool IsPlanValid(SubstitutionsPlan plan)
-        {
-            return plan?.Substitutions?.Any() == true;
-        }
-
-        private bool AreAllClassesCorrect(SubstitutionsPlan plan)
-        {
-            return plan.Substitutions
-                .SelectMany(x => x.Classes)
-                .All(x => _context.Classes.Contains(x));
-        }
-
+        
         private bool IsIpAddressValid(string address)
             => IPAddress.TryParse(address, out _);
+
+        private bool IsUploadDateTimeInThePast(DateTime uploadDateTime)
+            => uploadDateTime.CompareTo(DateTime.Now) <= 0;
     }
 }

@@ -11,6 +11,7 @@ using eru.WebApp.Areas.AdminDashboard.Model;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.VisualBasic;
 
 namespace eru.WebApp.Areas.AdminDashboard.Controllers
 {
@@ -34,8 +35,8 @@ namespace eru.WebApp.Areas.AdminDashboard.Controllers
             var classes = new Dictionary<string, int>();
             foreach (var @class in await _mediator.Send(new GetClassesQuery()))
             {
-                classes[@class.Name] =
-                    await _mediator.Send(new GetSubscribersCount(@class.Name), CancellationToken.None);
+                classes[@class.Id] =
+                    await _mediator.Send(new GetSubscribersCount(@class.Id), CancellationToken.None);
             }
             var status = new Status
             {
@@ -47,15 +48,15 @@ namespace eru.WebApp.Areas.AdminDashboard.Controllers
         }
 
         [HttpPost("class")]
-        public async Task AddClass(string name)
+        public async Task AddClass(int year, string section)
         {
-            await _mediator.Send(new CreateClassCommand {Name = name});
+            await _mediator.Send(new CreateClassCommand {Year = year, Section = section});
         }
         
         [HttpDelete("class")]
-        public async Task RemoveClass(string name)
+        public async Task RemoveClass(string id)
         {
-            await _mediator.Send(new RemoveClassCommand {Name = name});
+            await _mediator.Send(new RemoveClassCommand {Id = id});
         }
     }
 }

@@ -14,11 +14,11 @@ namespace eru.Application.Users.Queries.GetSubscribersCount
             
         }
 
-        public GetSubscribersCount(string className)
+        public GetSubscribersCount(string classId)
         {
-            ClassName = className;
+            ClassId = classId;
         }
-        public string ClassName { get; set; } = null;
+        public string ClassId { get; set; } = null;
     }
     
     public class GetSubscribersCountHandler : IRequestHandler<GetSubscribersCount, int>
@@ -32,9 +32,9 @@ namespace eru.Application.Users.Queries.GetSubscribersCount
 
         public async Task<int> Handle(GetSubscribersCount request, CancellationToken cancellationToken)
         {
-            if (request.ClassName != null)
+            if (request.ClassId != null)
             {
-                return await _context.Users.Where(x => x.Class == request.ClassName).CountAsync(cancellationToken);
+                return await _context.Users.Where(x => x.Class == request.ClassId).CountAsync(cancellationToken);
             }
             return await _context.Users.CountAsync(cancellationToken);
         }
