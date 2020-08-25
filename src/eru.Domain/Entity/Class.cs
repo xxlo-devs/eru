@@ -30,5 +30,10 @@ namespace eru.Domain.Entity
         {
             return HashCode.Combine(Year.GetHashCode(), Section.GetHashCode());
         }
+        
+        public override string ToString()
+        {
+            return string.Format("{0}{1}", Year.ToString(), Section); 
+        }
     }
 }
