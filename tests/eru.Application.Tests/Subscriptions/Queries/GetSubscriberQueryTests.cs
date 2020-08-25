@@ -1,11 +1,11 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using eru.Application.Users.Queries.GetUser;
+using eru.Application.Subscriptions.Queries.GetSubscriber;
 using eru.Domain.Entity;
 using FluentAssertions;
 using Xunit;
 
-namespace eru.Application.Tests.Users.Queries
+namespace eru.Application.Tests.Subscriptions.Queries
 {
     public class GetUserQueryTests
     {
@@ -20,7 +20,7 @@ namespace eru.Application.Tests.Users.Queries
                 Platform = "DebugMessageService"
             };
 
-            var expected = new User
+            var expected = new Subscriber
             {
                 Id = MockData.ExistingUserId, 
                 Platform = "DebugMessageService",

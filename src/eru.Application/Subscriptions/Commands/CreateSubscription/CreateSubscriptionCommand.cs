@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using eru.Application.Common.Interfaces;
 using eru.Domain.Entity;
 using MediatR;
-using Microsoft.Extensions.Configuration;
 
-namespace eru.Application.Users.Commands.CreateUser
+namespace eru.Application.Subscriptions.Commands.CreateSubscription
 {
-    public class CreateUserCommand : IRequest
+    public class CreateSubscriptionCommand : IRequest
     {
         public string Id { get; set; }
         public string Platform { get; set; }
@@ -18,18 +14,18 @@ namespace eru.Application.Users.Commands.CreateUser
         public string Class { get; set; }
     }
 
-    public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Unit>
+    public class CreateSubscriptionCommandHandler : IRequestHandler<CreateSubscriptionCommand, Unit>
     {
         private readonly IApplicationDbContext _dbContext;
 
-        public CreateUserCommandHandler(IApplicationDbContext dbContext)
+        public CreateSubscriptionCommandHandler(IApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
         }
 
-        public async Task<Unit> Handle(CreateUserCommand command, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(CreateSubscriptionCommand command, CancellationToken cancellationToken)
         {
-            var user = new User
+            var user = new Subscriber
             {
                 Id = command.Id,
                 Platform = command.Platform,
@@ -37,7 +33,7 @@ namespace eru.Application.Users.Commands.CreateUser
                 PreferredLanguage = command.PreferredLanguage
             };
 
-            await _dbContext.Users.AddAsync(user, cancellationToken);
+            await _dbContext.Subscribers.AddAsync(user, cancellationToken);
             await _dbContext.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;

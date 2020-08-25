@@ -1,26 +1,20 @@
-﻿using eru.Application.Users.Commands.CreateUser;
-using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
-using Castle.Core.Internal;
+using eru.Application.Subscriptions.Commands.CreateSubscription;
 using FluentAssertions;
 using Xunit;
-using Microsoft.Extensions.Configuration;
 
-namespace eru.Application.Tests.Users.Commands
+namespace eru.Application.Tests.Subscriptions.Commands
 {
-    public class CreateUserCommandTests
+    public class CreateSupscriptionsCommandTests
     {
         [Fact]
-        public async Task ShouldCreateUserCorrectly()
+        public async Task ShouldCreateSubscriptionCorrectly()
         {
             var context = new FakeDbContext();
 
-            var handler = new CreateUserCommandHandler(context);
-            var request = new CreateUserCommand
+            var handler = new CreateSubscriptionCommandHandler(context);
+            var request = new CreateSubscriptionCommand
             {
                 Id = "new-user",
                 Platform = "DebugMessageService",
@@ -30,7 +24,7 @@ namespace eru.Application.Tests.Users.Commands
 
             await handler.Handle(request, CancellationToken.None);
 
-            context.Users.Should().ContainSingle(x =>
+            context.Subscribers.Should().ContainSingle(x =>
                 x.Id == "new-user" & x.Platform == "DebugMessageService" & x.Class == MockData.ExistingClassId & x.PreferredLanguage == "en-US");
         }
 
@@ -38,9 +32,9 @@ namespace eru.Application.Tests.Users.Commands
         public async Task DoesValidatorAllowsCorrectRequest()
         {
             var context = new FakeDbContext();
-            var validator = new CreateUserCommandValidator(context);
+            var validator = new CreateSubscriptionCommandValidator(context);
 
-            var request = new CreateUserCommand
+            var request = new CreateSubscriptionCommand
             {
                 Id = "new-user",
                 Platform = "DebugMessageService",
@@ -55,11 +49,11 @@ namespace eru.Application.Tests.Users.Commands
         }
 
         [Fact]
-        public async Task DoesValidatorPreventFromCreatingDuplicateAccount()
+        public async Task DoesValidatorPreventFromCreatingDuplicateSubscription()
         {
             var context = new FakeDbContext();
-            var validator = new CreateUserCommandValidator(context);
-            var request = new CreateUserCommand
+            var validator = new CreateSubscriptionCommandValidator(context);
+            var request = new CreateSubscriptionCommand
             {
                 Id = MockData.ExistingUserId,
                 Platform = "DebugMessageService",
@@ -70,15 +64,15 @@ namespace eru.Application.Tests.Users.Commands
             var result = await validator.ValidateAsync(request);
 
             result.IsValid.Should().BeFalse();
-            result.Errors.Should().HaveCount(1).And.ContainSingle(x => x.ErrorCode == "AsyncPredicateValidator" && x.ErrorMessage == "Mentioned user must not exist.");
+            result.Errors.Should().HaveCount(1).And.ContainSingle(x => x.ErrorCode == "AsyncPredicateValidator" && x.ErrorMessage == "Mentioned subscriber must not exist.");
         }
 
         [Fact]
         public async Task DoesValidatorPreventFromCreatingAccountWithNonExistingClass()
         {
             var context = new FakeDbContext();
-            var validator = new CreateUserCommandValidator(context);
-            var request = new CreateUserCommand
+            var validator = new CreateSubscriptionCommandValidator(context);
+            var request = new CreateSubscriptionCommand
             {
                 Id = "new-user",
                 Platform = "DebugMessageService",
@@ -96,8 +90,8 @@ namespace eru.Application.Tests.Users.Commands
         public async Task DoesValidatorPreventFromCreatingAccountWithInvalidLanguage()
         {
             var context = new FakeDbContext();
-            var validator = new CreateUserCommandValidator(context);
-            var request = new CreateUserCommand
+            var validator = new CreateSubscriptionCommandValidator(context);
+            var request = new CreateSubscriptionCommand
             {
                 Id = "new-user",
                 Platform = "DebugMessageService",

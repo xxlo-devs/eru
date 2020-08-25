@@ -14,7 +14,7 @@ namespace eru.Infrastructure.Persistence
         
         public DbSet<Class> Classes { get; set; }
 
-        public DbSet<User> Users { get; set; } 
+        public DbSet<Subscriber> Subscribers { get; set; } 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -28,7 +28,7 @@ namespace eru.Infrastructure.Persistence
                     .HasMaxLength(255);
             });
 
-            modelBuilder.Entity<User>(x =>
+            modelBuilder.Entity<Subscriber>(x =>
             {
                 x.HasKey(y => new {y.Id, y.Platform});
                 x.Property(y => y.Id).HasMaxLength(255);

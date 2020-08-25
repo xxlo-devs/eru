@@ -74,7 +74,7 @@ namespace eru.Application.Substitutions.Commands
                 foreach (var @class in temp.Keys)
                 {
                     var ids = _context
-                        .Users
+                        .Subscribers
                         .Where(x => x.Platform == client.PlatformId && x.Class == @class.ToString());
                     foreach (var id in ids)
                     {

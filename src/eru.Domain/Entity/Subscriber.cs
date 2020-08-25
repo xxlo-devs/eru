@@ -4,7 +4,7 @@ using System.Text;
 
 namespace eru.Domain.Entity
 {
-    public class User
+    public class Subscriber
     {
         public string Id { get; set; } 
         public string Platform { get; set; }

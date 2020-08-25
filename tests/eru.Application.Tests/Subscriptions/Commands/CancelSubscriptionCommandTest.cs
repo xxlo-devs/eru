@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
-using eru.Application.Users.Commands.CancelSubscription;
+using eru.Application.Subscriptions.Commands.CancelSubscription;
 using FluentAssertions;
 using FluentValidation;
-using Microsoft.Extensions.Configuration;
 using Xunit;
 
-namespace eru.Application.Tests.Users.Commands
+namespace eru.Application.Tests.Subscriptions.Commands
 {
     public class CancelSubscriptionCommandTest
     {
@@ -30,7 +27,7 @@ namespace eru.Application.Tests.Users.Commands
 
             await handler.Handle(request, CancellationToken.None);
 
-            context.Users.Should().NotContain(x => x.Id == MockData.ExistingUserId & x.Platform == "DebugMessageService");
+            context.Subscribers.Should().NotContain(x => x.Id == MockData.ExistingUserId & x.Platform == "DebugMessageService");
         }
 
         [Fact]
@@ -51,7 +48,7 @@ namespace eru.Application.Tests.Users.Commands
         }
 
         [Fact]
-        public async Task DoesValidatorPreventFromUnsubscribingNonExistingUser()
+        public async Task DoesValidatorPreventFromCancellingNonExistingSubscription()
         {
             var context = new FakeDbContext();
             var validator = new CancelSubscriptionCommandValidator(context);
@@ -64,7 +61,7 @@ namespace eru.Application.Tests.Users.Commands
             var result = await validator.ValidateAsync(request, CancellationToken.None);
 
             result.IsValid.Should().BeFalse();
-            result.Errors.Should().HaveCount(1).And.Contain(x=>x.ErrorCode == "AsyncPredicateValidator" && x.ErrorMessage == "Mentioned user must already exist.");
+            result.Errors.Should().HaveCount(1).And.Contain(x=>x.ErrorCode == "AsyncPredicateValidator" && x.ErrorMessage == "Mentioned subscriber must already exist.");
         }
     }
 }

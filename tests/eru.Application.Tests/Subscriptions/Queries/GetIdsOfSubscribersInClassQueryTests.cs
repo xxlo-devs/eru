@@ -1,10 +1,10 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using eru.Application.Users.Queries.GetIdsOfSubscribersInClass;
+using eru.Application.Subscriptions.Queries.GetIdsOfSubscribersInClass;
 using FluentAssertions;
 using Xunit;
 
-namespace eru.Application.Tests.Users.Queries
+namespace eru.Application.Tests.Subscriptions.Queries
 {
     public class GetIdsOfSubscribersInClassQueryTests
     {

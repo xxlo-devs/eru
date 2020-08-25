@@ -5,8 +5,7 @@ using System.Threading.Tasks;
 using eru.Application.Common.Interfaces;
 using MediatR;
 
-
-namespace eru.Application.Users.Queries.GetIdsOfAllSubscribersInPlatform
+namespace eru.Application.Subscriptions.Queries.GetIdsOfAllSubscribersInPlatform
 {
     public class GetIdsOfAllSubscribersInPlatformQuery : IRequest<IEnumerable<string>>
     {
@@ -23,6 +22,6 @@ namespace eru.Application.Users.Queries.GetIdsOfAllSubscribersInPlatform
         }
 
         public Task<IEnumerable<string>> Handle(GetIdsOfAllSubscribersInPlatformQuery request, CancellationToken cancellationToken)
-            => Task.FromResult(_dbContext.Users.Where(x => x.Platform == request.Platform).Select(x => x.Id).AsEnumerable());
+            => Task.FromResult(_dbContext.Subscribers.Where(x => x.Platform == request.Platform).Select(x => x.Id).AsEnumerable());
     }
 }
