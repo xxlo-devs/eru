@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using eru.Application.Common.Interfaces;
 using FluentValidation;
-using Microsoft.EntityFrameworkCore;
 
-namespace eru.Application.Users.Commands.CancelSubscription
+namespace eru.Application.Subscriptions.Commands.CancelSubscription
 {
     public class CancelSubscriptionCommandValidator : AbstractValidator<CancelSubscriptionCommand>
     {
@@ -19,7 +14,7 @@ namespace eru.Application.Users.Commands.CancelSubscription
             _dbContext = dbContext;
 
             RuleFor(x => x)
-                .MustAsync(DoesUserExist).WithMessage("Mentioned user must already exist.");
+                .MustAsync(DoesSubscriberExist).WithMessage("Mentioned subscriber must already exist.");
 
             RuleFor(x => x.UserId)
                 .NotEmpty().WithMessage("UserId cannot be empty.")
@@ -30,7 +25,7 @@ namespace eru.Application.Users.Commands.CancelSubscription
                 .MaximumLength(255).WithMessage("Platform must have length up to 255 characters.");
         }
 
-        private async Task<bool> DoesUserExist(CancelSubscriptionCommand command, CancellationToken cancellationToken) => 
-            await _dbContext.Users.FindAsync(command.UserId, command.Platform) != null;
+        private async Task<bool> DoesSubscriberExist(CancelSubscriptionCommand command, CancellationToken cancellationToken) => 
+            await _dbContext.Subscribers.FindAsync(command.UserId, command.Platform) != null;
     }
 }

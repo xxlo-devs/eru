@@ -13,7 +13,7 @@ namespace eru.Application.Tests
         }
 
         public DbSet<Class> Classes { get; set; }
-        public DbSet<User> Users { get; set; }
+        public DbSet<Subscriber> Subscribers { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -37,7 +37,7 @@ namespace eru.Application.Tests
                 );
             });
 
-            modelBuilder.Entity<User>(x =>
+            modelBuilder.Entity<Subscriber>(x =>
             {
                 x.HasKey(y => new {y.Id, y.Platform});
                 x.Property(y => y.Id).HasMaxLength(255);
@@ -46,7 +46,7 @@ namespace eru.Application.Tests
                 x.Property(y => y.PreferredLanguage).HasMaxLength(255);
 
                 x.HasData(
-                    new User { Id = "sample-user", Platform = "DebugMessageService", Class = "sample-class-id", PreferredLanguage = "pl" }
+                    new Subscriber { Id = "sample-user", Platform = "DebugMessageService", Class = "sample-class-id", PreferredLanguage = "pl" }
                 );
             });
 

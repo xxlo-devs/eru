@@ -4,15 +4,15 @@ using eru.Application.Common.Interfaces;
 using eru.Domain.Entity;
 using MediatR;
 
-namespace eru.Application.Users.Queries.GetUser
+namespace eru.Application.Subscriptions.Queries.GetSubscriber
 {
-    public class GetUserQuery : IRequest<User>
+    public class GetUserQuery : IRequest<Subscriber>
     {
         public string UserId { get; set; }
         public string Platform { get; set; }
     }
 
-    public class GetUserQueryHandler : IRequestHandler<GetUserQuery, User>
+    public class GetUserQueryHandler : IRequestHandler<GetUserQuery, Subscriber>
     {
         private readonly IApplicationDbContext _dbContext;
 
@@ -21,7 +21,7 @@ namespace eru.Application.Users.Queries.GetUser
             _dbContext = dbContext;
         }
 
-        public async Task<User> Handle(GetUserQuery request, CancellationToken cancellationToken)
-            => await _dbContext.Users.FindAsync(request.UserId, request.Platform);
+        public async Task<Subscriber> Handle(GetUserQuery request, CancellationToken cancellationToken)
+            => await _dbContext.Subscribers.FindAsync(request.UserId, request.Platform);
     }
 }

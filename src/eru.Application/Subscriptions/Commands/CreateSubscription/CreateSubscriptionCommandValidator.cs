@@ -4,18 +4,18 @@ using System.Threading.Tasks;
 using eru.Application.Common.Interfaces;
 using FluentValidation;
 
-namespace eru.Application.Users.Commands.CreateUser
+namespace eru.Application.Subscriptions.Commands.CreateSubscription
 {
-    public class CreateUserCommandValidator : AbstractValidator<CreateUserCommand>
+    public class CreateSubscriptionCommandValidator : AbstractValidator<CreateSubscriptionCommand>
     {
         private readonly IApplicationDbContext _dbContext;
 
-        public CreateUserCommandValidator(IApplicationDbContext dbContext)
+        public CreateSubscriptionCommandValidator(IApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
 
             RuleFor(x => x)
-                .MustAsync(IsUserUnique).WithMessage("Mentioned user must not exist.");
+                .MustAsync(IsSubscriberUnique).WithMessage("Mentioned subscriber must not exist.");
 
             RuleFor(x => x.Id)
                 .NotEmpty().WithMessage("Id cannot be empty.")
@@ -36,8 +36,8 @@ namespace eru.Application.Users.Commands.CreateUser
                 .Must(DoesLanguageExist).WithMessage("PreferredLanguage must be a valid iso language code.");
         }
 
-        private async Task<bool> IsUserUnique(CreateUserCommand command, CancellationToken cancellationToken) => 
-            await _dbContext.Users.FindAsync(command.Id, command.Platform) == null;
+        private async Task<bool> IsSubscriberUnique(CreateSubscriptionCommand command, CancellationToken cancellationToken) => 
+            await _dbContext.Subscribers.FindAsync(command.Id, command.Platform) == null;
 
         private async Task<bool> DoesClassExist(string className, CancellationToken cancellationToken) =>
             await _dbContext.Classes.FindAsync(className) != null;

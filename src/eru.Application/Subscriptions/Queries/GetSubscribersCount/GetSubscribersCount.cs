@@ -5,7 +5,7 @@ using eru.Application.Common.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace eru.Application.Users.Queries.GetSubscribersCount
+namespace eru.Application.Subscriptions.Queries.GetSubscribersCount
 {
     public class GetSubscribersCount : IRequest<int>
     {
@@ -34,9 +34,9 @@ namespace eru.Application.Users.Queries.GetSubscribersCount
         {
             if (request.ClassId != null)
             {
-                return await _context.Users.Where(x => x.Class == request.ClassId).CountAsync(cancellationToken);
+                return await _context.Subscribers.Where(x => x.Class == request.ClassId).CountAsync(cancellationToken);
             }
-            return await _context.Users.CountAsync(cancellationToken);
+            return await _context.Subscribers.CountAsync(cancellationToken);
         }
     }
 }

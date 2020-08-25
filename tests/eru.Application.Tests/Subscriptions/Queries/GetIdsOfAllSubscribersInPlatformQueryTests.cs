@@ -1,11 +1,10 @@
 ﻿using System.Threading;
-using eru.Application.Users.Queries.GetIdsOfAllSubscribersInPlatform;
 using System.Threading.Tasks;
+using eru.Application.Subscriptions.Queries.GetIdsOfAllSubscribersInPlatform;
 using FluentAssertions;
 using Xunit;
-using System.Collections.Generic;
 
-namespace eru.Application.Tests.Users.Queries
+namespace eru.Application.Tests.Subscriptions.Queries
 {
     public class GetIdsOfAllSubscribersInPlatformQueryTests
     {
