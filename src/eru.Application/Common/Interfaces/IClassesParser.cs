@@ -6,7 +6,7 @@ namespace eru.Application.Common.Interfaces
 {
     public interface IClassesParser
     {
-        Task<Class> Parse(string name);
-        Task<IEnumerable<Class>> Parse(IEnumerable<string> names);
+        Class Parse(string name);
+        IEnumerable<Class> Parse(IEnumerable<string> names);
     }
 }

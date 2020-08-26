@@ -7,7 +7,7 @@ namespace eru.Infrastructure.Tests.ClassesParser
     public class ClassesParserTests
     {
         [Fact]
-        public async void CanParseEveryClassFormat()
+        public void CanParseEveryClassFormat()
         {
             var classNames = new[] {"1a", "2A", "3 a", "4 A", "Ia", "IA", "I b", "I B", "Ib1", "IB1"};
             var parser = new Infrastructure.ClassesParser.ClassesParser();
@@ -26,13 +26,13 @@ namespace eru.Infrastructure.Tests.ClassesParser
                 new Class(1, "b1")
             };
 
-            var classes = await parser.Parse(classNames);
+            var classes = parser.Parse(classNames);
 
             classes.Should().BeEquivalentTo(expectedClasses);
         }
 
         [Fact]
-        public async void CanParseEveryDigitYear()
+        public void CanParseEveryDigitYear()
         {
             var classNames = new[] {"1a", "2a", "3a", "4a", "5a", "6a", "7a", "8a", "9a", "10a", "11a", "12a"};
             var parser = new Infrastructure.ClassesParser.ClassesParser();
@@ -53,13 +53,13 @@ namespace eru.Infrastructure.Tests.ClassesParser
                 new Class(12, "a")
             };
 
-            var result = await parser.Parse(classNames);
+            var result = parser.Parse(classNames);
             
             result.Should().BeEquivalentTo(expectedClasses);
         }
 
         [Fact]
-        public async void CanParseEveryRomanYear()
+        public void CanParseEveryRomanYear()
         {
             var classNames = new[] {"Ia", "IIa", "IIIa", "IVa", "Va", "VIa", "VIIa", "VIIIa", "IXa", "Xa", "XIa", "XIIa"};
             var parser = new Infrastructure.ClassesParser.ClassesParser();
@@ -80,7 +80,7 @@ namespace eru.Infrastructure.Tests.ClassesParser
                 new Class(12, "a")
             };
 
-            var result = await parser.Parse(classNames);
+            var result = parser.Parse(classNames);
 
             result.Should().BeEquivalentTo(expectedClasses);
         }
