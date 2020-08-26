@@ -1,10 +1,11 @@
-﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+﻿@page
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @using Microsoft.AspNetCore.Localization
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Microsoft.Extensions.Configuration
 @{
     Layout = null;
-    var culture = Context.Features.Get<IRequestCultureFeature>().RequestCulture.Culture.Name;
+    var culture = HttpContext.Features.Get<IRequestCultureFeature>().RequestCulture.Culture.Name;
     //TODO Write how to setup SEQ in docs
     var seqServer = Configuration.GetSection("Serilog:WriteTo")?.GetChildren()?.Skip(2).FirstOrDefault()?.GetSection("Args:serverUrl")?.Value;
 }
@@ -16,9 +17,7 @@
 <head>
     <title>@Localizer["title"]</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css"/>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/dist/dashboard.css" asp-append-version="true"/>
 </head>
 <body>
 <div id="wrapper">
@@ -90,8 +89,8 @@
                     </tbody>
                 </table>
                 <div class="has-text-centered">
-                    <button class="button" onclick="createClass()">Add class</button>
-                    <button class="button" onclick="removeClass()">Remove class</button>
+                    <button class="button" onclick="eru.createClass()">Add class</button>
+                    <button class="button" onclick="eru.removeClass()">Remove class</button>
                 </div>
             </div>
         </div>
@@ -114,104 +113,6 @@
         </p>
     </div>
 </footer>
-<style type="text/css" media="screen">
-    body {
-        display: flex;
-        min-height: 100vh;
-        flex-direction: column;
-    }
-     
-    #wrapper {
-        flex: 1;
-    }
-    
-    .center-table {
-          margin-left: auto;
-          margin-right: auto;
-    }
-</style>
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-
-  // Get all "navbar-burger" elements
-  const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
-
-  // Check if there are any navbar burgers
-  if ($navbarBurgers.length > 0) {
-
-    // Add a click event on each of them
-    $navbarBurgers.forEach( el => {
-      el.addEventListener('click', () => {
-
-        // Get the target from the "data-target" attribute
-        const target = el.dataset.target;
-        const $target = document.getElementById(target);
-
-        // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
-        el.classList.toggle('is-active');
-        $target.classList.toggle('is-active');
-
-      });
-    });
-  }
-});
-document.querySelector('#auto-refresh').checked = localStorage.getItem('auto-refresh') === 'true';
-async function refreshData(force = false) {
-    if (localStorage.getItem('auto-refresh') === 'true' || force) {
-            await fetch('admin/status')
-                .then(res => {
-                    if (res.ok) {
-                        res.json().then(json => {
-                            const {days, hours, minutes, seconds } = json.uptime;
-                            document.querySelector('#uptime').textContent = `${days} Days ${hours} Hours ${minutes} Minutes ${seconds} Seconds`;
-                            document.querySelector('#subscribers').textContent = json.subscribers;
-                            const classesTable = document.querySelector('#classes-table>tbody');
-                            for (const property in json.classes) {
-                                const name = property;
-                                const subscribers = json.classes[property];
-                                if (Array.prototype.slice.call(classesTable.children).filter(x=>x.innerText.startsWith(name)).length === 0) {
-                                    const row = classesTable.insertRow(0);
-                                    row.insertCell(0).textContent = name;
-                                    row.insertCell(1).textContent = subscribers;
-                                }
-                            }
-                        })
-                    }else {
-                        console.error(`Couldn't load data from server. ${res.statusText} ${res.status}`);
-                    }
-                })
-    }
-}
-setInterval(refreshData, 1000);
-refreshData(true);
-async function createClass() {
-    const name = prompt('Enter class name: ');
-    if (name) {
-        await fetch(`/admin/class?name=${name}`, {
-            method: 'POST'
-        }).then(res => {
-            if (res.ok) {
-                refreshData(true);
-            }else {
-                alert(`Couldn't create new class with given name!`);
-            }
-        });
-    }
-}
-async function removeClass() {
-    const name = prompt('Enter class name: ');
-    if (name) {
-        await fetch(`/admin/class?name=${name}`, {
-            method: 'DELETE'
-        }).then(res => {
-            if (res.ok) {
-                refreshData(true);
-            }else {
-                alert(`Couldn't remove class with given name!`);
-            }
-        });
-    }
-}
-</script>
 </body>
+<script src="~/dist/dashboard.js" asp-append-version="true"></script>
 </html>

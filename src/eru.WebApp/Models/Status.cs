@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace eru.WebApp.Areas.AdminDashboard.Model
+namespace eru.WebApp.Models
 {
     public class Status
     {

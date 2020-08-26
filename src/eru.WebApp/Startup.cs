@@ -31,6 +31,7 @@ namespace eru.WebApp
             {
                 options.ResourcesPath = "Resources";
             });
+            services.AddRazorPages();
             services
                 .AddControllersWithViews(options =>
                 {
@@ -79,6 +80,7 @@ namespace eru.WebApp
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapRazorPages();
                 endpoints.MapHealthChecks("/health");
             });
         }

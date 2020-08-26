@@ -1,24 +1,21 @@
 ﻿using System;
 using System.Threading.Tasks;
 using eru.Application.Substitutions.Commands;
-using eru.WebApp.Areas.UploadSubstitutions.Models;
+using eru.WebApp.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Localization;
 
-namespace eru.WebApp.Areas.UploadSubstitutions.Controllers
+namespace eru.WebApp.Controllers
 {
     [Route("substitutions")]
-    [Area("UploadSubstitutions")]
     public class UploadController : Controller
     {
         private readonly IMediator _mediator;
-        private readonly IHtmlLocalizer<UploadController> _localizer;
 
-        public UploadController(IMediator mediator, IHtmlLocalizer<UploadController> localizer)
+        public UploadController(IMediator mediator)
         {
             _mediator = mediator;
-            _localizer = localizer;
         }
 
         [HttpGet]

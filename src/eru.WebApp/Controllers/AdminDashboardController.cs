@@ -6,16 +6,13 @@ using eru.Application.Classes.Commands.CreateClass;
 using eru.Application.Classes.Commands.RemoveClass;
 using eru.Application.Classes.Queries.GetClasses;
 using eru.Application.Subscriptions.Queries.GetSubscribersCount;
-using eru.WebApp.Areas.AdminDashboard.Model;
+using eru.WebApp.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.VisualBasic;
 
-namespace eru.WebApp.Areas.AdminDashboard.Controllers
+namespace eru.WebApp.Controllers
 {
     [Route("admin")]
-    [Area("AdminDashboard")]
     public class AdminDashboardController : Controller
     {
         private readonly IMediator _mediator;

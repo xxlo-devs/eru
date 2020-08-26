@@ -1,0 +1,86 @@
+﻿@page
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.AspNetCore.Localization
+@using Microsoft.AspNetCore.Mvc.Localization
+@{
+    Layout = null;
+    var culture = HttpContext.Features.Get<IRequestCultureFeature>().RequestCulture.Culture.Name;
+}
+@inject IViewLocalizer Localizer
+<!DOCTYPE html>
+
+<html lang="@culture">
+<head>
+    <title>@Localizer["title"]</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="~/dist/upload.css" asp-append-version="true"/>
+</head>
+<body>
+<svg class="chroma" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+    <path fill="#ff5500" fill-opacity="1" d="M0,192L180,288L360,192L540,192L720,256L900,160L1080,288L1260,64L1440,224L1440,0L1260,0L1080,0L900,0L720,0L540,0L360,0L180,0L0,0Z"></path>
+</svg>
+<div id="wrapper">
+    <section class="hero">
+        <div class="container is-half">
+            <h1 class="is-size-1 title animate__animated animate__lightSpeedInRight">@Localizer["title"]</h1>
+        </div>
+    </section>
+    <section id="form-container" class="section">
+        <div class="container">
+            <div class="field">
+                <label class="label">@Localizer["api-key"]</label>
+                <div class="control has-icons-left">
+                    <span class="icon is-small is-left">
+                        <box-icon name="lock-alt"></box-icon>
+                    </span>
+                    <input id="key-input" class="input" type="password" placeholder="@Localizer["api-key"]"/>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">@Localizer["file"]</label>
+                <div class="file has-name is-fullwidth">
+                    <label class="file-label">
+                        <input id="file-input" class="file-input" type="file" name="substitutions" accept="application/xml"/>
+                        <span class="file-cta">
+                            <span class="file-icon">
+                                <box-icon name="cloud-upload"></box-icon>
+                            </span>
+                            <span class="file-label">
+                                @Localizer["choose-file"]
+                            </span>
+                        </span>
+                        <span id="file-name" class="file-name"></span>
+                    </label>
+                </div>
+            </div>
+            <div class="field is-grouped">
+                <div class="control">
+                    <button id="submit-button" class="button">@Localizer["submit"]</button>
+                </div>
+                <div class="control">
+                    <button id="cancel-button" class="button is-light">@Localizer["cancel"]</button>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<footer class="footer">
+    <div class="content has-text-centered">
+        <p>
+            <a href="https://github.com/xxlo-devs/eru">
+                <strong>eru</strong>
+            </a> by <a href="https://github.com/xxlo-devs">xxlo-devs</a>
+            (<a href="https://github.com/KanarekLife">KanarekLife (Stanisław Nieradko)</a> and <a href="https://github.com/bazik33">Bazik33</a>) in 2020.
+        </p>
+        <p>
+            Released under <a href="https://github.com/xxlo-devs/eru/blob/master/LICENSE">MIT License</a>. We ❤️ Open-Source.
+        </p>
+        <p>
+            <a href="?culture=pl"><img width="40px" src="pictures/flags/polish_flag.svg" alt="Język Polski"/></a>
+            <a href="?culture=en"><img width="40px" src="pictures/flags/uk_flag.svg" alt="English"/></a>
+        </p>
+    </div>
+</footer>
+</body>
+<script src="~/dist/upload.js" asp-append-version="true"></script>
+</html>
