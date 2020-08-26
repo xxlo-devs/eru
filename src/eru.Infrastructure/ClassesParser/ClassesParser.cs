@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using eru.Application.Common.Exceptions;
 using eru.Application.Common.Interfaces;
 using eru.Domain.Entity;
 
@@ -14,16 +15,16 @@ namespace eru.Infrastructure.ClassesParser
         {
             name = name.Trim();
 
-            if (name[0] >= 48 && name[0] <= 57)
+            if (name[0] >= '0' && name[0] <= '9') 
             {
-                if (name[1] >= 48 && name[1] <= 57)
+                if (name[1] >= '0' && name[1] <= '9')
                 {
                     var number = int.Parse(name.Substring(0, 2));
                     if (number == 10 || number == 11 || number == 12)
                         return new Class(number, name.Substring(2));
                 }
 
-                return new Class(int.Parse(name.Substring(0, 1)), name.Substring(1));
+                return new Class(name[0] - '0', name.Substring(1));
             }
 
             if (name.StartsWith("I"))
@@ -86,10 +87,10 @@ namespace eru.Infrastructure.ClassesParser
                 return new Class(10, name.Substring(1));
             }
 
-            throw new Exception("Class must have a year number!");
+            throw new ClassesParsingException();
         }
 
-        public IEnumerable<Class> Parse(IEnumerable<string> names) 
-            => names.ToArray().Select(className => Parse(className)).ToList();
+        public IEnumerable<Class> Parse(IEnumerable<string> names)
+            => names.Select(className => Parse(className));
     }
 }
