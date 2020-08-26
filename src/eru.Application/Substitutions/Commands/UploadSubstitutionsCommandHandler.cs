@@ -30,7 +30,7 @@ namespace eru.Application.Substitutions.Commands
             var data = new HashSet<Substitution>();
             foreach (var substitution in request.Substitutions)
             {
-                var classes = await _classesParser.Parse(substitution.ClassesNames);
+                var classes = _classesParser.Parse(substitution.ClassesNames);
                 var trackedClasses = new List<Class>();
                 foreach (var @class in classes)
                 {

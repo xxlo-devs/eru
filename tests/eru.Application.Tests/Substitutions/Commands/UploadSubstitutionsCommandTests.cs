@@ -102,8 +102,8 @@ namespace eru.Application.Tests.Substitutions.Commands
             classParser.Setup(classparser => classparser.Parse(It.IsAny<IEnumerable<string>>())).Returns(
                 (IEnumerable<string> x) =>
                 {
-                    if(x.Contains("I a") & x.Contains("III c")) return Task.FromResult(new[] {new Class(1, "a"), new Class(3, "c")}.AsEnumerable());
-                    else return Task.FromResult(new[] {new Class(1, "a"), new Class(2, "b")}.AsEnumerable());
+                    if(x.Contains("I a") & x.Contains("III c")) return new[] {new Class(1, "a"), new Class(3, "c")};
+                    else return new[] {new Class(1, "a"), new Class(2, "b")};
                 });
             
             var handler = new UploadSubstitutionsCommandHandler(fakeDbContext, new []{sampleClient.Object}, hangfireWrapper.Object, classParser.Object);
