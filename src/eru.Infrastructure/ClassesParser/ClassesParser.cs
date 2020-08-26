@@ -14,9 +14,9 @@ namespace eru.Infrastructure.ClassesParser
         {
             name = name.Trim();
 
-            if (Regex.IsMatch(name[0].ToString(), "[0-9]"))
+            if (name[0] >= 48 && name[0] <= 57)
             {
-                if (Regex.IsMatch(name[1].ToString(), "[0-9]"))
+                if (name[1] >= 48 && name[1] <= 57)
                 {
                     var number = int.Parse(name.Substring(0, 2));
                     if (number == 10 || number == 11 || number == 12)
