@@ -31,6 +31,7 @@
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       </Content>
       <Content Include="Assets\upload.js" />
+      <Content Remove="Logs\**" />
     </ItemGroup>
 
     <ItemGroup>
@@ -69,6 +70,7 @@
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>Upload.pl.Designer.cs</LastGenOutput>
       </EmbeddedResource>
+      <EmbeddedResource Remove="Logs\**" />
     </ItemGroup>
 
     <ItemGroup>
@@ -98,6 +100,7 @@
         <DependentUpon>Dashboard.en.resx</DependentUpon>
         <DesignTime>True</DesignTime>
       </Compile>
+      <Compile Remove="Logs\**" />
     </ItemGroup>
 
     <ItemGroup>
@@ -112,6 +115,10 @@
       <_ContentIncludedByDefault Remove="wwwroot\dist\js\dashboard.js.map" />
       <_ContentIncludedByDefault Remove="wwwroot\dist\js\upload.js" />
       <_ContentIncludedByDefault Remove="wwwroot\dist\js\upload.js.map" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Logs\**" />
     </ItemGroup>
 
     <Target Name="ParcelBeforePublish" BeforeTargets="PrepareForPublish">
