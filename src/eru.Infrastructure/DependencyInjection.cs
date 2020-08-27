@@ -26,6 +26,7 @@ namespace eru.Infrastructure
             services.AddScoped<IApplicationDbContext>(provider => provider.GetService<ApplicationDbContext>());
             
             services.AddTransient<IStopwatch, Stopwatch.Stopwatch>();
+            services.AddTransient<IClassesParser, ClassesParser.ClassesParser>();
             services.AddTransient<IHangfireWrapper, HangfireWrapper>();
             services.AddHealthChecks()
                 .AddDbContextCheck<ApplicationDbContext>();
