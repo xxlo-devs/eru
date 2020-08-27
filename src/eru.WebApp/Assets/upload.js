@@ -1,6 +1,7 @@
 ﻿import './scss/common.scss'
 import './scss/upload.scss'
 import 'boxicons';
+import 'regenerator-runtime/runtime'
 
 document.getElementById('file-input').onchange = displayFileName;
 document.getElementById('cancel-button').onclick = cancel;
@@ -29,7 +30,7 @@ function submit() {
         reader.readAsText(file, 'CP1250');
         reader.onload = async function (evt) {
             const data = evt.target.result.replace(/[\w\W]+?\n+?/,"");
-            await fetch(window.location.href, {
+            await fetch('/substitutions', {
                 method: 'POST',
                 body: data,
                 headers: {

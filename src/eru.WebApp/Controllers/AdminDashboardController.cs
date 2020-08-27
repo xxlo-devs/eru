@@ -22,9 +22,6 @@ namespace eru.WebApp.Controllers
             _mediator = mediator;
         }
 
-        public IActionResult Dashboard()
-            => View();
-        
         [HttpGet("status")]
         public async Task<Status> GetStatus()
         {

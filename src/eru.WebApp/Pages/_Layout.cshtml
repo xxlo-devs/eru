@@ -1,0 +1,39 @@
+﻿@using Microsoft.AspNetCore.Localization
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    var culture = Context.Features.Get<IRequestCultureFeature>().RequestCulture.Culture.Name;
+}
+<!DOCTYPE HTML>
+<html lang="@culture">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    @if (IsSectionDefined("AddToHead"))
+    {
+        @await RenderSectionAsync("AddToHead", required: true)
+    }
+</head>
+<body>
+@RenderBody()
+<footer class="footer">
+    <div class="content has-text-centered">
+        <p>
+            <a href="https://github.com/xxlo-devs/eru">
+                <strong>eru</strong>
+            </a> by <a href="https://github.com/xxlo-devs">xxlo-devs</a>
+            (<a href="https://github.com/KanarekLife">KanarekLife (Stanisław Nieradko)</a> and <a href="https://github.com/bazik33">Bazik33</a>) in 2020.
+        </p>
+        <p>
+            Released under <a href="https://github.com/xxlo-devs/eru/blob/master/LICENSE">MIT License</a>. We ❤️ Open-Source.
+        </p>
+        <p>
+            <a href="?culture=pl"><img width="40px" src="pictures/flags/polish_flag.svg" alt="Język Polski"/></a>
+            <a href="?culture=en"><img width="40px" src="pictures/flags/uk_flag.svg" alt="English"/></a>
+        </p>
+    </div>
+</footer>
+</body>
+@if (IsSectionDefined("AddToScripts"))
+{
+    @await RenderSectionAsync("AddToScripts", false)
+}
+</html>

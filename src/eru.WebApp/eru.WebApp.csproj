@@ -53,21 +53,21 @@
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>Upload.pl.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Areas\UploadSubstitutions\Views\Upload\Upload.pl.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>Upload.pl.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Areas\UploadSubstitutions\Views\Upload\Upload.en.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>Upload.en.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Areas\AdminDashboard\Views\AdminDashboard\Dashboard.en.resx">
+      <EmbeddedResource Update="Resources\Pages\Dashboard.en.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>Dashboard.en.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Areas\AdminDashboard\Views\AdminDashboard\Dashboard.pl.resx">
+      <EmbeddedResource Update="Resources\Pages\Dashboard.pl.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>Dashboard.pl.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Pages\Upload.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Upload.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Pages\Upload.pl.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Upload.pl.Designer.cs</LastGenOutput>
       </EmbeddedResource>
     </ItemGroup>
 

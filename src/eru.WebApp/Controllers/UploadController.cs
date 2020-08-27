@@ -18,12 +18,6 @@ namespace eru.WebApp.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet]
-        public IActionResult Upload()
-        {
-            return View();
-        }
-
         [HttpPost]
         public async Task<IActionResult> Upload(UploadModel uploadModel)
         {
