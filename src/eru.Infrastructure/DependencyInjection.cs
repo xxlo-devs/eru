@@ -4,6 +4,7 @@ using eru.Application.Common.Exceptions;
 using eru.Application.Common.Interfaces;
 using eru.Infrastructure.Hangfire;
 using eru.Infrastructure.Persistence;
+using eru.Infrastructure.PlatformClients;
 using Hangfire;
 using Hangfire.Dashboard.BasicAuthorization;
 using Hangfire.MemoryStorage;
@@ -30,11 +31,18 @@ namespace eru.Infrastructure
             services.AddTransient<IHangfireWrapper, HangfireWrapper>();
             services.AddHealthChecks()
                 .AddDbContextCheck<ApplicationDbContext>();
+
+            services.AddPlatformClients(configuration);
+            
             return services;
         }
 
-        public static IApplicationBuilder UseInfrastructure(this IApplicationBuilder app, IConfiguration configuration) =>
-            app
-                .UseConfiguredHangfire(configuration);
+        public static IApplicationBuilder UseInfrastructure(this IApplicationBuilder app, IConfiguration configuration)
+        {
+            app.UseConfiguredHangfire(configuration);
+            app.UsePlatformClients(configuration);
+
+            return app;
+        }
     }
 }
