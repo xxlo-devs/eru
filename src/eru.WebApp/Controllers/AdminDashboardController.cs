@@ -25,11 +25,15 @@ namespace eru.WebApp.Controllers
         [HttpGet("status")]
         public async Task<Status> GetStatus()
         {
-            var classes = new Dictionary<string, int>();
+            var classes = new List<ClassInfo>();
             foreach (var @class in await _mediator.Send(new GetClassesQuery()))
             {
-                classes[@class.Id] =
-                    await _mediator.Send(new GetSubscribersCount(@class.Id), CancellationToken.None);
+                classes.Add(new ClassInfo()
+                {
+                    Id = @class.Id,
+                    Name = @class.ToString(),
+                    SubscribersCount = await _mediator.Send(new GetSubscribersCount(@class.Id), CancellationToken.None)
+                });
             }
             var status = new Status
             {

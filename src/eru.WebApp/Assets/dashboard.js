@@ -36,15 +36,20 @@ async function refreshData(force = false) {
                         document.querySelector('#uptime').textContent = `${days} Days ${hours} Hours ${minutes} Minutes ${seconds} Seconds`;
                         document.querySelector('#subscribers').textContent = json.subscribers;
                         const classesTable = document.querySelector('#classes-table>tbody');
-                        for (const property in json.classes) {
-                            const name = property;
-                            const subscribers = json.classes[property];
-                            if (Array.prototype.slice.call(classesTable.children).filter(x=>x.innerText.startsWith(name)).length === 0) {
+                        json.classes.forEach(({id, name, subscribersCount}) => {
+                            if (Array.prototype.slice.call(classesTable.children).filter(x=>x.innerText.startsWith(id)).length === 0) {
                                 const row = classesTable.insertRow(0);
-                                row.insertCell(0).textContent = name;
-                                row.insertCell(1).textContent = subscribers;
+                                row.insertCell(0).textContent = id;
+                                row.insertCell(1).textContent = name;
+                                row.insertCell(2).textContent = subscribersCount;
+                                const removeButton = document.createElement('button');
+                                removeButton.textContent = 'Remove';
+                                removeButton.addEventListener('click', async function() {
+                                    await removeClass(id)
+                                })
+                                row.insertCell(3).appendChild(removeButton);
                             }
-                        }
+                        });
                     })
                 }else {
                     console.error(`Couldn't load data from server. ${res.statusText} ${res.status}`);
@@ -53,11 +58,12 @@ async function refreshData(force = false) {
     }
 }
 setInterval(refreshData, 1000);
-refreshData(true);
-export async function createClass() {
-    const name = prompt('Enter class name: ');
-    if (name) {
-        await fetch(`/admin/class?name=${name}`, {
+document.querySelector('#create-class-button').onclick = createClass;
+async function createClass() {
+    const year = document.querySelector('#year-input').value;
+    const section = document.querySelector('#section-input').value;
+    if (year && section) {
+        await fetch(`/admin/class?year=${year}&section=${section}`, {
             method: 'POST'
         }).then(res => {
             if (res.ok) {
@@ -68,13 +74,14 @@ export async function createClass() {
         });
     }
 }
-export async function removeClass() {
-    const name = prompt('Enter class name: ');
-    if (name) {
-        await fetch(`/admin/class?name=${name}`, {
+async function removeClass(id) {
+    if (id) {
+        await fetch(`/admin/class?id=${id}`, {
             method: 'DELETE'
         }).then(res => {
             if (res.ok) {
+                const classesTable = document.querySelector('#classes-table>tbody');
+                classesTable.removeChild(Array.from(classesTable.children).filter(x=>x.innerText.startsWith(id))[0])
                 refreshData(true);
             }else {
                 alert(`Couldn't remove class with given name!`);
@@ -82,3 +89,4 @@ export async function removeClass() {
         });
     }
 }
+refreshData(true);

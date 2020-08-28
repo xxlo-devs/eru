@@ -33,7 +33,7 @@ namespace eru.WebApp
             });
             services.AddRazorPages();
             services
-                .AddControllersWithViews(options =>
+                .AddControllers(options =>
                 {
                     options.Filters.Add(new ApiExceptionFilterAttribute());
                 })

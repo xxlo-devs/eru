@@ -54,11 +54,11 @@
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>Upload.pl.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Pages\Dashboard.en.resx">
+      <EmbeddedResource Update="Resources\Pages\Admin.en.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>Dashboard.en.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Pages\Dashboard.pl.resx">
+      <EmbeddedResource Update="Resources\Pages\Admin.pl.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>Dashboard.pl.Designer.cs</LastGenOutput>
       </EmbeddedResource>
@@ -115,6 +115,14 @@
       <_ContentIncludedByDefault Remove="wwwroot\dist\js\dashboard.js.map" />
       <_ContentIncludedByDefault Remove="wwwroot\dist\js\upload.js" />
       <_ContentIncludedByDefault Remove="wwwroot\dist\js\upload.js.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\dashboard.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\dashboard.css.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\dashboard.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\dashboard.js.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\upload.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\upload.css.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\upload.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\upload.js.map" />
     </ItemGroup>
 
     <ItemGroup>

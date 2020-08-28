@@ -7,6 +7,13 @@ namespace eru.WebApp.Models
     {
         public TimeSpan Uptime { get; set; }
         public int Subscribers { get; set; }
-        public Dictionary<string, int> Classes { get; set; }
+        public IEnumerable<ClassInfo> Classes { get; set; }
+    }
+
+    public class ClassInfo
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public int SubscribersCount { get; set; }
     }
 }
