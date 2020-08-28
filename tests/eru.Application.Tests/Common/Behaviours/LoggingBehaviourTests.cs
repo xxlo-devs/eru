@@ -14,7 +14,7 @@ namespace eru.Application.Tests.Common.Behaviours
         [Fact]
         public async Task DoesLoggingBehaviourWorksCorrectly()
         {
-            var loggerFactory = MELTBuilder.CreateLoggerFactory();
+            var loggerFactory = TestLoggerFactory.Create();
             var loggingBehaviour = new LoggingBehaviour<SampleRequest>(loggerFactory.CreateLogger<SampleRequest>());
             var request = new SampleRequest
             {
@@ -24,7 +24,7 @@ namespace eru.Application.Tests.Common.Behaviours
 
             await loggingBehaviour.Process(request, CancellationToken.None);
             
-            loggerFactory.LogEntries.Should()
+            loggerFactory.Sink.LogEntries.Should()
                 .ContainSingle(x => x.LogLevel == LogLevel.Information &&  x.Message == "eru Request: SampleRequest {Version = v2.0, IsWorking = True}");
         }
     }

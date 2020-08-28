@@ -14,7 +14,7 @@ namespace eru.Application.Tests.Common.Behaviours
         [Fact]
         public async Task DoesUnhandledExceptionBehaviourWorksCorrectlyWhenNoExceptionIsThrown()
         {
-            var loggerFactory = MELTBuilder.CreateLoggerFactory();
+            var loggerFactory = TestLoggerFactory.Create();
             var behaviour = new UnhandledExceptionBehaviour<SampleRequest, SampleResponse>(loggerFactory.CreateLogger<SampleRequest>());
             var request = new SampleRequest
             {
@@ -25,13 +25,13 @@ namespace eru.Application.Tests.Common.Behaviours
             await behaviour.Handle(request, CancellationToken.None,
                 () => Task.FromResult(new SampleResponse {HasWorked = true}));
 
-            loggerFactory.LogEntries.Should().BeEmpty();
+            loggerFactory.Sink.LogEntries.Should().BeEmpty();
         }
 
         [Fact]
         public Task DoesUnhandledExceptionBehaviourWorksCorrectlyWhenExceptionIsThrown()
         {
-            var loggerFactory = MELTBuilder.CreateLoggerFactory();
+            var loggerFactory = TestLoggerFactory.Create();
             var behaviour = new UnhandledExceptionBehaviour<SampleRequest, SampleResponse>(loggerFactory.CreateLogger<SampleRequest>());
             var request = new SampleRequest
             {
@@ -43,7 +43,7 @@ namespace eru.Application.Tests.Common.Behaviours
                 () => throw new Exception("Test Exception")).GetAwaiter().GetResult();
 
             a.Should().Throw<Exception>();
-            loggerFactory.LogEntries.Should().ContainSingle(x =>
+            loggerFactory.Sink.LogEntries.Should().ContainSingle(x =>
                 x.LogLevel == LogLevel.Error && x.Message ==
                 "eru Request: Unhandled Exception for Request SampleRequest {Version = v2.0, IsWorking = True}");
             return Task.CompletedTask;
