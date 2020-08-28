@@ -31,8 +31,9 @@ namespace eru.WebApp
             {
                 options.ResourcesPath = "Resources";
             });
+            services.AddRazorPages();
             services
-                .AddControllersWithViews(options =>
+                .AddControllers(options =>
                 {
                     options.Filters.Add(new ApiExceptionFilterAttribute());
                 })
@@ -79,6 +80,7 @@ namespace eru.WebApp
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapRazorPages();
                 endpoints.MapHealthChecks("/health");
             });
         }

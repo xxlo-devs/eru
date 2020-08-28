@@ -28,6 +28,7 @@ namespace eru.Application.Substitutions.Commands
         public async Task<Unit> Handle(UploadSubstitutionsCommand request, CancellationToken cancellationToken)
         {
             var data = new HashSet<Substitution>();
+            var newClasses = new List<Class>();
             foreach (var substitution in request.Substitutions)
             {
                 var classes = _classesParser.Parse(substitution.ClassesNames);
@@ -37,8 +38,12 @@ namespace eru.Application.Substitutions.Commands
                     var tmpClass = await _context.Classes.FirstOrDefaultAsync(x => x.Year == @class.Year && x.Section == @class.Section, cancellationToken);
                     if (tmpClass == null)
                     {
-                        var entity = await _context.Classes.AddAsync(@class, cancellationToken);
-                        trackedClasses.Add(entity.Entity);
+                        if (!newClasses.Any(x=>x.Year == @class.Year && x.Section == @class.Section))
+                        {
+                            var entity = await _context.Classes.AddAsync(@class, cancellationToken);
+                            newClasses.Add(entity.Entity);
+                            trackedClasses.Add(entity.Entity);   
+                        }
                     }
                     else
                     {

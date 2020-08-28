@@ -29,7 +29,8 @@ namespace eru.Application.Classes.Queries.GetClasses
         public async Task<IEnumerable<ClassDto>> Handle(GetClassesQuery request, CancellationToken cancellationToken) 
             => await _context.Classes
                 .ProjectTo<ClassDto>(_mapper.ConfigurationProvider)
-                .OrderBy(x => x.Year).ThenBy(x => x.Section)
+                .OrderBy(x => x.Year)
+                .ThenBy(x => x.Section)
                 .ToListAsync(cancellationToken);
     }
 }
