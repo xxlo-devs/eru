@@ -8,6 +8,11 @@ namespace eru.Application.Classes.Commands.CreateClass
 {
     public class CreateClassCommand : IRequest
     {
+        public CreateClassCommand(int year, string section)
+        {
+            Year = year;
+            Section = section;
+        }
         public int Year { get; set; }
         public string Section { get; set; }
     }

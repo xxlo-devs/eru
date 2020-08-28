@@ -7,6 +7,10 @@ namespace eru.Application.Classes.Commands.RemoveClass
 {
     public class RemoveClassCommand : IRequest
     {
+        public RemoveClassCommand(string id)
+        {
+            Id = id;
+        }
         public string Id { get; set; }
     }
     

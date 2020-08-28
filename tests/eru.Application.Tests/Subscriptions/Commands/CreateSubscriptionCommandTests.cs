@@ -14,18 +14,12 @@ namespace eru.Application.Tests.Subscriptions.Commands
             var context = new FakeDbContext();
 
             var handler = new CreateSubscriptionCommandHandler(context);
-            var request = new CreateSubscriptionCommand
-            {
-                Id = "new-user",
-                Platform = "DebugMessageService",
-                Class = MockData.ExistingClassId,
-                PreferredLanguage = "en-US"
-            };
+            var request = new CreateSubscriptionCommand("new-user", "DebugMessageService", "en",MockData.ExistingClassId);
 
             await handler.Handle(request, CancellationToken.None);
 
             context.Subscribers.Should().ContainSingle(x =>
-                x.Id == "new-user" & x.Platform == "DebugMessageService" & x.Class == MockData.ExistingClassId & x.PreferredLanguage == "en-US");
+                x.Id == "new-user" & x.Platform == "DebugMessageService" & x.Class == MockData.ExistingClassId & x.PreferredLanguage == "en");
         }
 
         [Fact]
@@ -34,13 +28,7 @@ namespace eru.Application.Tests.Subscriptions.Commands
             var context = new FakeDbContext();
             var validator = new CreateSubscriptionCommandValidator(context);
 
-            var request = new CreateSubscriptionCommand
-            {
-                Id = "new-user",
-                Platform = "DebugMessageService",
-                Class = MockData.ExistingClassId,
-                PreferredLanguage = "en-US"
-            };
+            var request = new CreateSubscriptionCommand("new-user", "DebugMessageService", "en", MockData.ExistingClassId);
 
             var result = await validator.ValidateAsync(request, CancellationToken.None);
 
@@ -53,13 +41,7 @@ namespace eru.Application.Tests.Subscriptions.Commands
         {
             var context = new FakeDbContext();
             var validator = new CreateSubscriptionCommandValidator(context);
-            var request = new CreateSubscriptionCommand
-            {
-                Id = MockData.ExistingUserId,
-                Platform = "DebugMessageService",
-                Class = MockData.ExistingClassId,
-                PreferredLanguage = "en-US"
-            };
+            var request = new CreateSubscriptionCommand(MockData.ExistingUserId, "DebugMessageService", "en", MockData.ExistingClassId);
 
             var result = await validator.ValidateAsync(request);
 
@@ -72,13 +54,7 @@ namespace eru.Application.Tests.Subscriptions.Commands
         {
             var context = new FakeDbContext();
             var validator = new CreateSubscriptionCommandValidator(context);
-            var request = new CreateSubscriptionCommand
-            {
-                Id = "new-user",
-                Platform = "DebugMessageService",
-                Class = "invalid-class-id",
-                PreferredLanguage = "en-US"
-            };
+            var request = new CreateSubscriptionCommand("new-user", "DebugMessageService", "en", "invalid-class-id");
 
             var result = await validator.ValidateAsync(request);
 
@@ -91,13 +67,7 @@ namespace eru.Application.Tests.Subscriptions.Commands
         {
             var context = new FakeDbContext();
             var validator = new CreateSubscriptionCommandValidator(context);
-            var request = new CreateSubscriptionCommand
-            {
-                Id = "new-user",
-                Platform = "DebugMessageService",
-                Class = MockData.ExistingClassId,
-                PreferredLanguage = "nonexistinglanguage"
-            };
+            var request = new CreateSubscriptionCommand("new-user", "DebugMessageService", "nonexistinglanguage", MockData.ExistingClassId);
 
             var result = await validator.ValidateAsync(request);
 

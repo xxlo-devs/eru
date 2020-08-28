@@ -8,6 +8,13 @@ namespace eru.Application.Subscriptions.Commands.CreateSubscription
 {
     public class CreateSubscriptionCommand : IRequest
     {
+        public CreateSubscriptionCommand(string id, string platform, string preferredLanguage, string @class)
+        {
+            Id = id;
+            Platform = platform;
+            PreferredLanguage = preferredLanguage;
+            Class = @class;
+        }
         public string Id { get; set; }
         public string Platform { get; set; }
         public string PreferredLanguage { get; set; }

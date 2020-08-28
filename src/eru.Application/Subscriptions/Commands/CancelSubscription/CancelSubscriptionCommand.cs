@@ -7,6 +7,11 @@ namespace eru.Application.Subscriptions.Commands.CancelSubscription
 {
     public class CancelSubscriptionCommand : IRequest
     {
+        public CancelSubscriptionCommand(string userId, string platform)
+        {
+            UserId = userId;
+            Platform = platform;
+        }
         public string UserId { get; set; }
         public string Platform { get; set; }
     }

@@ -47,13 +47,13 @@ namespace eru.WebApp.Controllers
         [HttpPost("class")]
         public async Task AddClass(int year, string section)
         {
-            await _mediator.Send(new CreateClassCommand {Year = year, Section = section});
+            await _mediator.Send(new CreateClassCommand(year, section));
         }
         
         [HttpDelete("class")]
         public async Task RemoveClass(string id)
         {
-            await _mediator.Send(new RemoveClassCommand {Id = id});
+            await _mediator.Send(new RemoveClassCommand(id));
         }
     }
 }

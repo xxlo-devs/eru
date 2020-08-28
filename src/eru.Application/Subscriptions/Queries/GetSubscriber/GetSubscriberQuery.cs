@@ -8,6 +8,11 @@ namespace eru.Application.Subscriptions.Queries.GetSubscriber
 {
     public class GetUserQuery : IRequest<Subscriber>
     {
+        public GetUserQuery(string userId, string platform)
+        {
+            UserId = userId;
+            Platform = platform;
+        }
         public string UserId { get; set; }
         public string Platform { get; set; }
     }
