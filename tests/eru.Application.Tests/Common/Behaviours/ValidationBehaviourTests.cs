@@ -64,7 +64,7 @@ namespace eru.Application.Tests.Common.Behaviours
             a.Should()
                 .Throw<ValidationException>()
                 .Which
-                .Errors.Should().ContainKey("Version").And.Subject.Values.Should().ContainSingle(x=>x.Contains("'Version' must not be empty."));
+                .Errors.Should().ContainKey("Version").And.Subject.Values.Should().ContainSingle(x=>x.Contains("Version cannot be empty."));
             return Task.CompletedTask;
         }
     }

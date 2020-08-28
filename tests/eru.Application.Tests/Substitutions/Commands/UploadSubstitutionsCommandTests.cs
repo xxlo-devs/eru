@@ -240,5 +240,73 @@ namespace eru.Application.Tests.Substitutions.Commands
             result.Errors.Should().HaveCount(1).And.ContainSingle(x=>x.ErrorCode == "NotEmptyValidator" && x.ErrorMessage == "Substitutions cannot be empty.");
         }
 
+        [Fact]
+        public async Task DoesNewlyCreatedClassesAreNotDuplicated()
+        {
+            var request = new UploadSubstitutionsCommand
+            {
+                IpAddress = MockData.CorrectIpAddress,
+                Key = MockData.CorrectUploadKey,
+                Substitutions = new []
+                {
+                    new SubstitutionDto
+                    {
+                        Cancelled = false,
+                        ClassesNames = new []{"II a", "III c" },
+                        Groups = "Cała klasa",
+                        Lesson = 3,
+                        Room = "204",
+                        Subject = "j. Polski",
+                        Substituting = "sample teacher 1",
+                        Absent = "sample teacher 2"
+                    }, 
+                    new SubstitutionDto
+                    {
+                        Cancelled = true,
+                        ClassesNames = new []{"II a", "II b" },
+                        Groups = "Cała klasa",
+                        Lesson = 2,
+                        Room = "304",
+                        Subject = "matematyka",
+                        Absent = "sample teacher 3"
+                    }, 
+                },
+                UploadDateTime = MockData.CorrectDate,
+                SubstitutionsDate = MockData.CorrectDate
+            };
+            var fakeDbContext = new FakeDbContext();
+            var hangfireWrapper = new Mock<IHangfireWrapper>();
+            var backgroundJobClient = new Mock<IBackgroundJobClient>();
+            hangfireWrapper.Setup(x => x.BackgroundJobClient).Returns(backgroundJobClient.Object);
+            var sampleClient = new Mock<IPlatformClient>();
+            sampleClient.Setup(x => x.PlatformId).Returns("DebugMessageService");
+
+            var classParser = new Mock<IClassesParser>();
+            classParser.Setup(classesParser => classesParser.Parse(It.IsAny<IEnumerable<string>>())).Returns(
+                (IEnumerable<string> x) =>
+                {
+                    var array = x.ToArray();
+                    if(array.Contains("II a") & array.Contains("III c"))
+                        return new[] {new Class(2, "a"), new Class(3, "c")};
+                    else 
+                        return new[] {new Class(2, "a"), new Class(2, "b")};
+                });
+            
+            var handler = new UploadSubstitutionsCommandHandler(fakeDbContext, new []{sampleClient.Object}, hangfireWrapper.Object, classParser.Object);
+
+            await handler.Handle(request, CancellationToken.None);
+
+            fakeDbContext.Classes.Should()
+                .HaveCount(4)
+                .And
+                .Contain(new[]
+                {
+                    new Class(1, "a"), 
+                    new Class(2, "a"),
+                    new Class(3, "c"),
+                    new Class(2, "b"),
+                });
+        }
+
     }
 }
