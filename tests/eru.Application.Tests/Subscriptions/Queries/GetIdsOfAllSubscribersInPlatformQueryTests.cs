@@ -13,10 +13,7 @@ namespace eru.Application.Tests.Subscriptions.Queries
         {
             var context = new FakeDbContext();
             var handler = new GetIdsOfAllSubscribersInPlatformQueryHandler(context);
-            var request = new GetIdsOfAllSubscribersInPlatformQuery
-            {
-                Platform = "DebugMessageService"
-            };
+            var request = new GetIdsOfAllSubscribersInPlatformQuery("DebugMessageService");
 
             var expected = new[]
             {

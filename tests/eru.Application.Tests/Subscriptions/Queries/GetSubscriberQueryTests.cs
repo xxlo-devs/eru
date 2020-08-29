@@ -14,11 +14,7 @@ namespace eru.Application.Tests.Subscriptions.Queries
         {
             var context = new FakeDbContext();
             var handler = new GetUserQueryHandler(context);
-            var request = new GetUserQuery
-            {
-                UserId = MockData.ExistingUserId,
-                Platform = "DebugMessageService"
-            };
+            var request = new GetUserQuery(MockData.ExistingUserId, "DebugMessageService");
 
             var expected = new Subscriber
             {

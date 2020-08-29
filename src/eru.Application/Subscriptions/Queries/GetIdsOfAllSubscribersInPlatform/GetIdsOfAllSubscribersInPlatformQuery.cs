@@ -9,6 +9,10 @@ namespace eru.Application.Subscriptions.Queries.GetIdsOfAllSubscribersInPlatform
 {
     public class GetIdsOfAllSubscribersInPlatformQuery : IRequest<IEnumerable<string>>
     {
+        public GetIdsOfAllSubscribersInPlatformQuery(string platform)
+        {
+            Platform = platform;
+        }
         public string Platform { get; set; }
     }
 

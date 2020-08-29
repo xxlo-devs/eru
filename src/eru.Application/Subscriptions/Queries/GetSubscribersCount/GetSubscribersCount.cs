@@ -18,7 +18,7 @@ namespace eru.Application.Subscriptions.Queries.GetSubscribersCount
         {
             ClassId = classId;
         }
-        public string ClassId { get; set; } = null;
+        public string ClassId { get; set; }
     }
     
     public class GetSubscribersCountHandler : IRequestHandler<GetSubscribersCount, int>

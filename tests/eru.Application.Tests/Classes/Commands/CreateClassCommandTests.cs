@@ -19,11 +19,7 @@ namespace eru.Application.Tests.Classes.Commands
         {
             var context = new FakeDbContext();
             var handler = new CreateClassCommandHandler(context);
-            var request = new CreateClassCommand
-            {
-                Year = 3,
-                Section = "f"
-            };
+            var request = new CreateClassCommand(3, "f");
 
             await handler.Handle(request, CancellationToken.None);
 
@@ -35,11 +31,7 @@ namespace eru.Application.Tests.Classes.Commands
         {
             var context = new FakeDbContext();
             var validator = new CreateClassCommandValidator(context);
-            var request = new CreateClassCommand
-            {
-                Year = 3,
-                Section = "f"
-            };
+            var request = new CreateClassCommand(3, "f");
 
             var result = await validator.ValidateAsync(request);
 
@@ -52,11 +44,7 @@ namespace eru.Application.Tests.Classes.Commands
         {
             var context = new FakeDbContext();
             var validator = new CreateClassCommandValidator(context);
-            var request = new CreateClassCommand
-            {
-                Year = 3,
-                Section = new string(Enumerable.Repeat('a',300).ToArray())
-            };
+            var request = new CreateClassCommand(3, new string(Enumerable.Repeat('a',300).ToArray()));
 
             var result = await validator.ValidateAsync(request);
 
@@ -69,7 +57,7 @@ namespace eru.Application.Tests.Classes.Commands
         {
             var context = new FakeDbContext();
             var validator = new CreateClassCommandValidator(context);
-            var request = new CreateClassCommand();
+            var request = new CreateClassCommand(0, null);
             
             var result = await validator.ValidateAsync(request);
 
@@ -82,11 +70,7 @@ namespace eru.Application.Tests.Classes.Commands
         {
             var context = new FakeDbContext();
             var validator = new CreateClassCommandValidator(context);
-            var request = new CreateClassCommand
-            {
-                Year = 1,
-                Section = "a"
-            };
+            var request = new CreateClassCommand(1, "a");
 
             var result = await validator.ValidateAsync(request);
 

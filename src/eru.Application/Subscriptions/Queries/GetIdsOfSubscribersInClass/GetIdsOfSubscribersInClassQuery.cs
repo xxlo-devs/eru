@@ -9,6 +9,11 @@ namespace eru.Application.Subscriptions.Queries.GetIdsOfSubscribersInClass
 {
     public class GetIdsOfSubscribersInClassQuery : IRequest<IEnumerable<string>>
     {
+        public GetIdsOfSubscribersInClassQuery(string @class, string platform)
+        {
+            Class = @class;
+            Platform = platform;
+        }
         public string Class { get; set; }
         public string Platform { get; set; }
     }

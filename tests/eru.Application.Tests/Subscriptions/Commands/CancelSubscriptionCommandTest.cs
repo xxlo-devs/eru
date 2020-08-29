@@ -19,11 +19,7 @@ namespace eru.Application.Tests.Subscriptions.Commands
             var context = new FakeDbContext();
 
             var handler = new CancelSubscriptionCommandHandler(context);
-            var request = new CancelSubscriptionCommand
-            {
-                UserId = MockData.ExistingUserId,
-                Platform = "DebugMessageService"
-            };
+            var request = new CancelSubscriptionCommand(MockData.ExistingUserId, "DebugMessageService");
 
             await handler.Handle(request, CancellationToken.None);
 
@@ -35,11 +31,7 @@ namespace eru.Application.Tests.Subscriptions.Commands
         {
             var context = new FakeDbContext();
             var validator = new CancelSubscriptionCommandValidator(context);
-            var request = new CancelSubscriptionCommand
-            {
-                UserId = MockData.ExistingUserId,
-                Platform = "DebugMessageService"
-            };
+            var request = new CancelSubscriptionCommand(MockData.ExistingUserId, "DebugMessageService");
 
             var result = await validator.ValidateAsync(request, CancellationToken.None);
 
@@ -52,11 +44,7 @@ namespace eru.Application.Tests.Subscriptions.Commands
         {
             var context = new FakeDbContext();
             var validator = new CancelSubscriptionCommandValidator(context);
-            var request = new CancelSubscriptionCommand
-            {
-                UserId = "non-existing-user",
-                Platform = "DebugMessageService"
-            };
+            var request = new CancelSubscriptionCommand("non-existing-user", "DebugMessageService");
 
             var result = await validator.ValidateAsync(request, CancellationToken.None);
 
