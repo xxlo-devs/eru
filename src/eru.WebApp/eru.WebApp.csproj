@@ -8,32 +8,7 @@
       <ProjectReference Include="..\eru.Application\eru.Application.csproj" />
       <ProjectReference Include="..\eru.Infrastructure\eru.Infrastructure.csproj" />
     </ItemGroup>
-
-    <ItemGroup>
-      <Content Update="Areas\UploadSubstitutions\Views\Upload\Upload.cshtml">
-        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      </Content>
-      <Content Update="wwwroot\favicon.ico">
-        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      </Content>
-      <Content Update="wwwroot\favicon.ico">
-        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      </Content>
-      <Content Update="wwwroot\pictures\flags\polish_flag.svg">
-        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      </Content>
-      <Content Update="wwwroot\pictures\flags\uk_flag.svg">
-        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      </Content>
-      <Content Include="Assets\upload.js" />
-      <Content Remove="Logs\**" />
-    </ItemGroup>
-
+  
     <ItemGroup>
       <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.7" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.7">
@@ -44,92 +19,8 @@
       <PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
       <PackageReference Include="Serilog.Sinks.Seq" Version="4.0.0" />
     </ItemGroup>
-
-    <ItemGroup>
-      <EmbeddedResource Update="Resources\Views\Upload\Upload.en.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>Upload.en.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Views\Upload\Upload.pl.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>Upload.pl.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Pages\Admin.en.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>Dashboard.en.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Pages\Admin.pl.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>Dashboard.pl.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Pages\Upload.en.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>Upload.en.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Pages\Upload.pl.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>Upload.pl.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Remove="Logs\**" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Compile Update="Resources\Views\Upload\Upload.en.Designer.cs">
-        <DependentUpon>Upload.en.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Resources\Views\Upload\Upload.pl.Designer.cs">
-        <DependentUpon>Upload.pl.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Areas\UploadSubstitutions\Resources\Views\Upload\Upload.pl.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>Upload.pl.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Areas\UploadSubstitutions\Resources\Views\Upload\Upload.en.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>Upload.en.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Resources\Areas\AdminDashboard\Views\AdminDashboard\Dashboard.pl.Designer.cs">
-        <AutoGen>True</AutoGen>
-        <DependentUpon>Dashboard.pl.resx</DependentUpon>
-        <DesignTime>True</DesignTime>
-      </Compile>
-      <Compile Update="Resources\Areas\AdminDashboard\Views\AdminDashboard\Dashboard.en.Designer.cs">
-        <AutoGen>True</AutoGen>
-        <DependentUpon>Dashboard.en.resx</DependentUpon>
-        <DesignTime>True</DesignTime>
-      </Compile>
-      <Compile Remove="Logs\**" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <_ContentIncludedByDefault Remove="Views\Shared\Footer.cshtml" />
-      <_ContentIncludedByDefault Remove="wwwroot\dist\bundle.css" />
-      <_ContentIncludedByDefault Remove="wwwroot\dist\bundle.css.map" />
-      <_ContentIncludedByDefault Remove="wwwroot\dist\bundle.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\dist\bundle.js.map" />
-      <_ContentIncludedByDefault Remove="wwwroot\dist\polish_flag.9ef42498.svg" />
-      <_ContentIncludedByDefault Remove="wwwroot\dist\uk_flag.ba921cf1.svg" />
-      <_ContentIncludedByDefault Remove="wwwroot\dist\js\dashboard.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\dist\js\dashboard.js.map" />
-      <_ContentIncludedByDefault Remove="wwwroot\dist\js\upload.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\dist\js\upload.js.map" />
-      <_ContentIncludedByDefault Remove="wwwroot\dist\dashboard.css" />
-      <_ContentIncludedByDefault Remove="wwwroot\dist\dashboard.css.map" />
-      <_ContentIncludedByDefault Remove="wwwroot\dist\dashboard.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\dist\dashboard.js.map" />
-      <_ContentIncludedByDefault Remove="wwwroot\dist\upload.css" />
-      <_ContentIncludedByDefault Remove="wwwroot\dist\upload.css.map" />
-      <_ContentIncludedByDefault Remove="wwwroot\dist\upload.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\dist\upload.js.map" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Remove="Logs\**" />
-    </ItemGroup>
-
-    <Target Name="ParcelBeforePublish" BeforeTargets="PrepareForPublish">
+  
+    <Target Name="BuildBeforePublish" BeforeTargets="PrepareForPublish">
       <Exec Command="npm run build" />
     </Target>
 
