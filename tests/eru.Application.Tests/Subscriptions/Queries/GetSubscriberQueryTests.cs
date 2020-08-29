@@ -7,18 +7,18 @@ using Xunit;
 
 namespace eru.Application.Tests.Subscriptions.Queries
 {
-    public class GetUserQueryTests
+    public class GetSubscriberQueryTests
     {
         [Fact]
-        public async Task ShouldReturnSelectedUserCorrectly()
+        public async Task ShouldReturnSelectedSubscriberCorrectly()
         {
             var context = new FakeDbContext();
-            var handler = new GetUserQueryHandler(context);
-            var request = new GetUserQuery(MockData.ExistingUserId, "DebugMessageService");
+            var handler = new GetSubscriberQueryHandler(context);
+            var request = new GetSubscriberQuery(MockData.ExistingSubscriberId, "DebugMessageService");
 
             var expected = new Subscriber
             {
-                Id = MockData.ExistingUserId, 
+                Id = MockData.ExistingSubscriberId, 
                 Platform = "DebugMessageService",
                 Class = MockData.ExistingClassId,
                 PreferredLanguage = "pl"

@@ -32,7 +32,7 @@ namespace eru.Application.Subscriptions.Commands.CreateSubscription
 
         public async Task<Unit> Handle(CreateSubscriptionCommand command, CancellationToken cancellationToken)
         {
-            var user = new Subscriber
+            var subscriber = new Subscriber
             {
                 Id = command.Id,
                 Platform = command.Platform,
@@ -40,7 +40,7 @@ namespace eru.Application.Subscriptions.Commands.CreateSubscription
                 PreferredLanguage = command.PreferredLanguage
             };
 
-            await _dbContext.Subscribers.AddAsync(user, cancellationToken);
+            await _dbContext.Subscribers.AddAsync(subscriber, cancellationToken);
             await _dbContext.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;
