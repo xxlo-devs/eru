@@ -6,9 +6,12 @@ using eru.Application.Classes.Commands.CreateClass;
 using eru.Application.Classes.Commands.RemoveClass;
 using eru.Application.Classes.Queries.GetClasses;
 using eru.Application.Subscriptions.Queries.GetSubscribersCount;
+using eru.Domain.Entity;
 using eru.WebApp.Models;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace eru.WebApp.Controllers
 {
@@ -42,6 +45,13 @@ namespace eru.WebApp.Controllers
                 Classes = classes
             };
             return status;
+        }
+
+        [HttpGet("/logout")]
+        public async Task<RedirectResult> Logout()
+        {
+            await HttpContext.RequestServices.GetService<SignInManager<User>>().SignOutAsync();
+            return RedirectPermanent("/login");
         }
 
         [HttpPost("class")]
