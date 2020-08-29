@@ -46,7 +46,7 @@ namespace eru.Application.Tests
                 x.Property(y => y.PreferredLanguage).HasMaxLength(255);
 
                 x.HasData(
-                    new Subscriber { Id = "sample-user", Platform = "DebugMessageService", Class = "sample-class-id", PreferredLanguage = "pl" }
+                    new Subscriber { Id = "sample-subscriber", Platform = "DebugMessageService", Class = "sample-class-id", PreferredLanguage = "pl" }
                 );
             });
 

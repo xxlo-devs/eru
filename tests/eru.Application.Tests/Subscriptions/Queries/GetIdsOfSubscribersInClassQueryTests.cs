@@ -9,7 +9,7 @@ namespace eru.Application.Tests.Subscriptions.Queries
     public class GetIdsOfSubscribersInClassQueryTests
     {
         [Fact]
-        public async Task ShouldReturnAllUsersFromGivenClassCorrectly()
+        public async Task ShouldReturnAllSubscribersFromGivenClassCorrectly()
         {
             var context = new FakeDbContext();
             var handler = new GetIdsOfSubscribersInClassQueryHandler(context);
@@ -17,7 +17,7 @@ namespace eru.Application.Tests.Subscriptions.Queries
 
             var expected = new[]
             {
-                MockData.ExistingUserId
+                MockData.ExistingSubscriberId
             };
 
             var actual = await handler.Handle(request, CancellationToken.None);
