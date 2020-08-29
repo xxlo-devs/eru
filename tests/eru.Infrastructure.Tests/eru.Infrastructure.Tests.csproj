@@ -25,8 +25,4 @@
         <ProjectReference Include="..\..\src\eru.Infrastructure\eru.Infrastructure.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="PlatformClients" />
-    </ItemGroup>
-
 </Project>
