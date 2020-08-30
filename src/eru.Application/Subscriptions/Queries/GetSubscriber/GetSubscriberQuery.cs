@@ -6,22 +6,28 @@ using MediatR;
 
 namespace eru.Application.Subscriptions.Queries.GetSubscriber
 {
-    public class GetUserQuery : IRequest<Subscriber>
+    public class GetSubscriberQuery : IRequest<Subscriber>
     {
-        public string UserId { get; set; }
+        public GetSubscriberQuery(string id, string platform)
+        {
+            Id = id;
+            Platform = platform;
+        }
+
+        public string Id { get; set; }
         public string Platform { get; set; }
     }
 
-    public class GetUserQueryHandler : IRequestHandler<GetUserQuery, Subscriber>
+    public class GetSubscriberQueryHandler : IRequestHandler<GetSubscriberQuery, Subscriber>
     {
         private readonly IApplicationDbContext _dbContext;
 
-        public GetUserQueryHandler(IApplicationDbContext dbContext)
+        public GetSubscriberQueryHandler(IApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
         }
 
-        public async Task<Subscriber> Handle(GetUserQuery request, CancellationToken cancellationToken)
-            => await _dbContext.Subscribers.FindAsync(request.UserId, request.Platform);
+        public async Task<Subscriber> Handle(GetSubscriberQuery request, CancellationToken cancellationToken)
+            => await _dbContext.Subscribers.FindAsync(request.Id, request.Platform);
     }
 }

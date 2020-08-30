@@ -7,7 +7,7 @@ namespace eru.Application.Tests.Common.Behaviours
         public SampleValidator()
         {
             RuleFor(x => x.Version)
-                .NotEmpty();
+                .NotEmpty().WithMessage("Version cannot be empty.");
         }
     }
 }

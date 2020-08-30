@@ -17,7 +17,7 @@ namespace eru.Application.Tests.Common.Behaviours
         {
             var fakeStopwatch = new Mock<IStopwatch>();
             fakeStopwatch.Setup(x => x.ElapsedMilliseconds).Returns(100);
-            var loggerFactory = MELTBuilder.CreateLoggerFactory();
+            var loggerFactory = TestLoggerFactory.Create();
             var behaviour = new PerformanceBehaviour<SampleRequest, SampleResponse>(fakeStopwatch.Object, 
                 loggerFactory.CreateLogger<SampleRequest>());
             var request = new SampleRequest
@@ -29,7 +29,7 @@ namespace eru.Application.Tests.Common.Behaviours
             await behaviour.Handle(request, CancellationToken.None,
                 () => Task.FromResult(new SampleResponse {HasWorked = true}));
 
-            loggerFactory.LogEntries.Should().BeEmpty();
+            loggerFactory.Sink.LogEntries.Should().BeEmpty();
         }
 
         [Fact]
@@ -37,7 +37,7 @@ namespace eru.Application.Tests.Common.Behaviours
         {
             var fakeStopwatch = new Mock<IStopwatch>();
             fakeStopwatch.Setup(x => x.ElapsedMilliseconds).Returns(1000);
-            var loggerFactory = MELTBuilder.CreateLoggerFactory();
+            var loggerFactory = TestLoggerFactory.Create();
             var behaviour = new PerformanceBehaviour<SampleRequest, SampleResponse>(fakeStopwatch.Object, 
                 loggerFactory.CreateLogger<SampleRequest>());
             var request = new SampleRequest
@@ -49,7 +49,7 @@ namespace eru.Application.Tests.Common.Behaviours
             await behaviour.Handle(request, CancellationToken.None,
                 () => Task.FromResult(new SampleResponse {HasWorked = true}));
 
-            loggerFactory.LogEntries.Should().ContainSingle(x=>x.LogLevel == LogLevel.Warning && x.Message == "eru Long Running Request: SampleRequest (1000 milliseconds) {Version = v2.0, IsWorking = True}");
+            loggerFactory.Sink.LogEntries.Should().ContainSingle(x=>x.LogLevel == LogLevel.Warning && x.Message == "eru Long Running Request: SampleRequest (1000 milliseconds) {Version = v2.0, IsWorking = True}");
         }
     }
 }

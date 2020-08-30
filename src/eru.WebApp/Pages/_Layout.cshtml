@@ -1,0 +1,23 @@
+﻿@using Microsoft.AspNetCore.Localization
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    var culture = Context.Features.Get<IRequestCultureFeature>().RequestCulture.Culture.Name;
+}
+<!DOCTYPE HTML>
+<html lang="@culture">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    @if (IsSectionDefined("AddToHead"))
+    {
+        @await RenderSectionAsync("AddToHead", required: true)
+    }
+</head>
+<body>
+@RenderBody()
+<partial name="Footer"/>
+</body>
+@if (IsSectionDefined("AddToScripts"))
+{
+    @await RenderSectionAsync("AddToScripts", false)
+}
+</html>

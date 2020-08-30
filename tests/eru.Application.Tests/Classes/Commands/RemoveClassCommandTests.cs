@@ -15,10 +15,7 @@ namespace eru.Application.Tests.Classes.Commands
         {
             var context = new FakeDbContext();
             var handler = new RemoveClassCommandHandler(context);
-            var request = new RemoveClassCommand()
-            {
-                Id = MockData.ExistingClassId
-            };
+            var request = new RemoveClassCommand(MockData.ExistingClassId);
 
             await handler.Handle(request, CancellationToken.None);
 
@@ -30,10 +27,7 @@ namespace eru.Application.Tests.Classes.Commands
         {
             var context = new FakeDbContext();
             var validator = new RemoveClassValidator(context);
-            var request = new RemoveClassCommand
-            {
-                Id = MockData.ExistingClassId
-            };
+            var request = new RemoveClassCommand(MockData.ExistingClassId);
 
             var result = await validator.ValidateAsync(request);
 
@@ -42,11 +36,11 @@ namespace eru.Application.Tests.Classes.Commands
         }
 
         [Fact]
-        public async Task DoesValidatorPreventFromRemovingClassWithNoIdGiven()
+        public async Task DoesValidatorPreventFromRemovingClassWithNullIdGiven()
         {
             var context = new FakeDbContext();
             var validator = new RemoveClassValidator(context);
-            var request = new RemoveClassCommand();
+            var request = new RemoveClassCommand(null);
 
             var result = await validator.ValidateAsync(request);
 
@@ -63,10 +57,7 @@ namespace eru.Application.Tests.Classes.Commands
         {
             var context = new FakeDbContext();
             var validator = new RemoveClassValidator(context);
-            var request = new RemoveClassCommand
-            {
-                Id = "non-existent-class"
-            };
+            var request = new RemoveClassCommand("non-existent-class");
 
             var result = await validator.ValidateAsync(request);
 

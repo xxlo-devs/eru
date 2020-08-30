@@ -7,7 +7,12 @@ namespace eru.Application.Subscriptions.Commands.CancelSubscription
 {
     public class CancelSubscriptionCommand : IRequest
     {
-        public string UserId { get; set; }
+        public CancelSubscriptionCommand(string id, string platform)
+        {
+            Id = id;
+            Platform = platform;
+        }
+        public string Id { get; set; }
         public string Platform { get; set; }
     }
 
@@ -22,9 +27,9 @@ namespace eru.Application.Subscriptions.Commands.CancelSubscription
 
         public async Task<Unit> Handle(CancelSubscriptionCommand command, CancellationToken cancellationToken)
         {
-            var user = await _dbContext.Subscribers.FindAsync(command.UserId, command.Platform);
+            var subscriber = await _dbContext.Subscribers.FindAsync(command.Id, command.Platform);
 
-            _dbContext.Subscribers.Remove(user);
+            _dbContext.Subscribers.Remove(subscriber);
             await _dbContext.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;

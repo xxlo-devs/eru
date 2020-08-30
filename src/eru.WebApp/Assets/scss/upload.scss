@@ -1,0 +1,28 @@
+﻿body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+#wrapper {
+  flex: 1;
+}
+
+.chroma > path {
+  fill: black;
+  animation: chroma 8s linear infinite alternate both;
+}
+
+@keyframes chroma {
+  0% {
+    fill: #19dcea;
+  }
+
+  100% {
+    fill: #b22cff;
+  }
+}
+
+.title {
+  font-family: 'Quicksand', sans-serif;
+}

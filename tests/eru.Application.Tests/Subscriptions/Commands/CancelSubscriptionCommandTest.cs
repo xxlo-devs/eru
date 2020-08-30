@@ -19,15 +19,11 @@ namespace eru.Application.Tests.Subscriptions.Commands
             var context = new FakeDbContext();
 
             var handler = new CancelSubscriptionCommandHandler(context);
-            var request = new CancelSubscriptionCommand
-            {
-                UserId = MockData.ExistingUserId,
-                Platform = "DebugMessageService"
-            };
+            var request = new CancelSubscriptionCommand(MockData.ExistingSubscriberId, "DebugMessageService");
 
             await handler.Handle(request, CancellationToken.None);
 
-            context.Subscribers.Should().NotContain(x => x.Id == MockData.ExistingUserId & x.Platform == "DebugMessageService");
+            context.Subscribers.Should().NotContain(x => x.Id == MockData.ExistingSubscriberId & x.Platform == "DebugMessageService");
         }
 
         [Fact]
@@ -35,11 +31,7 @@ namespace eru.Application.Tests.Subscriptions.Commands
         {
             var context = new FakeDbContext();
             var validator = new CancelSubscriptionCommandValidator(context);
-            var request = new CancelSubscriptionCommand
-            {
-                UserId = MockData.ExistingUserId,
-                Platform = "DebugMessageService"
-            };
+            var request = new CancelSubscriptionCommand(MockData.ExistingSubscriberId, "DebugMessageService");
 
             var result = await validator.ValidateAsync(request, CancellationToken.None);
 
@@ -52,11 +44,7 @@ namespace eru.Application.Tests.Subscriptions.Commands
         {
             var context = new FakeDbContext();
             var validator = new CancelSubscriptionCommandValidator(context);
-            var request = new CancelSubscriptionCommand
-            {
-                UserId = "non-existing-user",
-                Platform = "DebugMessageService"
-            };
+            var request = new CancelSubscriptionCommand("non-existing-subscriber", "DebugMessageService");
 
             var result = await validator.ValidateAsync(request, CancellationToken.None);
 
