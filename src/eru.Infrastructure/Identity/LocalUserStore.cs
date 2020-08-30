@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using eru.Domain.Entity;
@@ -7,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace eru.Infrastructure.Identity
 {
-    public class LocalUserStore : IUserPasswordStore<User>, IQueryableUserStore<User>
+    public class LocalUserStore : IUserPasswordStore<User>, IQueryableUserStore<User>, IUserLockoutStore<User>
     {
         private readonly UserDbContext _userDb;
 
@@ -96,5 +97,42 @@ namespace eru.Infrastructure.Identity
         }
 
         public IQueryable<User> Users => _userDb.Users;
+        public Task<int> GetAccessFailedCountAsync(User user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(user.AccessFailed);
+        }
+
+        public Task<bool> GetLockoutEnabledAsync(User user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(user.LockoutEnabled);
+        }
+
+        public Task<DateTimeOffset?> GetLockoutEndDateAsync(User user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(user.LockoutEndDate);
+        }
+
+        public Task<int> IncrementAccessFailedCountAsync(User user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(++user.AccessFailed);
+        }
+
+        public Task ResetAccessFailedCountAsync(User user, CancellationToken cancellationToken)
+        {
+            user.AccessFailed = 0;
+            return Task.CompletedTask;
+        }
+
+        public Task SetLockoutEnabledAsync(User user, bool enabled, CancellationToken cancellationToken)
+        {
+            user.LockoutEnabled = enabled;
+            return Task.CompletedTask;
+        }
+
+        public Task SetLockoutEndDateAsync(User user, DateTimeOffset? lockoutEnd, CancellationToken cancellationToken)
+        {
+            user.LockoutEndDate = lockoutEnd;
+            return Task.CompletedTask;
+        }
     }
 }

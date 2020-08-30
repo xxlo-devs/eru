@@ -23,7 +23,7 @@ namespace eru.Infrastructure.Identity
                     .Select(x=>x.Get<ConfigUser>());
                 foreach (var user in users)
                 {
-                    await userManager.CreateAsync(new User()
+                    await userManager.CreateAsync(new User
                     {
                         Username = user.Username
                     }, user.Password);

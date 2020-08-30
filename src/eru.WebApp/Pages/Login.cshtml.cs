@@ -29,8 +29,8 @@ namespace eru.WebApp.Pages
         
         public async Task<RedirectResult> OnPost()
         {
-            _logger.LogInformation($"{Model.Username} - {Model.Password}");
-            await _signInManager.PasswordSignInAsync(Model.Username, Model.Password, false, false);
+            await _signInManager.PasswordSignInAsync(Model.Username, Model.Password, false, true);
+            
             if (HttpContext.Request.Query.TryGetValue("ReturnUrl", out var redirect))
             {
                 if (redirect.Count > 0)
