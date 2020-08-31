@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 using eru.Domain.Entity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +10,9 @@ namespace eru.WebApp.Pages
 {
     public class LoginModel
     {
+        [Required]
         public string Username { get; set; }
+        [Required]
         public string Password { get; set; }
     }
     
@@ -29,6 +32,11 @@ namespace eru.WebApp.Pages
         
         public async Task<IActionResult> OnPostAsync()
         {
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
+
             var result = await _signInManager.PasswordSignInAsync(Model.Username, Model.Password, false, true);
             if (result.Succeeded)
             {

@@ -85,7 +85,7 @@ async function removeClass (id) {
 }
 
 function toggleRefresh() {
-    localStorage.setItem('auto-refresh', this.checked);
+    localStorage.setItem('auto-refresh', document.querySelector('#auto-refresh').checked);
 }
 
 document.querySelector('#auto-refresh').checked = window.localStorage.getItem('auto-refresh') === 'true';

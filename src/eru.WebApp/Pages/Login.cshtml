@@ -15,10 +15,13 @@
 }
 
 <form method="post">
+    @if(!ModelState.IsValid) 
+    {
     <div class="notification is-danger">
         <button class="delete"></button>
         <div asp-validation-summary="All"></div>
     </div>
+    }
     <div class="field">
         <label class="label">@Localizer["username"]</label>
         <div class="control">
