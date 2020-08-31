@@ -31,7 +31,10 @@ namespace eru.WebApp
             {
                 options.ResourcesPath = "Resources";
             });
-            services.AddRazorPages();
+            services.AddRazorPages(options =>
+            {
+                options.Conventions.AuthorizePage("/admin");
+            });
             services
                 .AddControllers(options =>
                 {

@@ -21,4 +21,72 @@
     <data name="title" xml:space="preserve">
         <value>Admin Dashboard</value>
     </data>
+    <data name="stats" xml:space="preserve">
+        <value>Stats</value>
+        <comment>stats</comment>
+    </data>
+    <data name="name" xml:space="preserve">
+        <value>Name</value>
+        <comment>name</comment>
+    </data>
+    <data name="value" xml:space="preserve">
+        <value>Value</value>
+        <comment>value</comment>
+    </data>
+    <data name="uptime" xml:space="preserve">
+        <value>Uptime</value>
+        <comment>uptime</comment>
+    </data>
+    <data name="loading" xml:space="preserve">
+        <value>Loading...</value>
+        <comment>loading</comment>
+    </data>
+    <data name="subscribers" xml:space="preserve">
+        <value>Subscribers</value>
+        <comment>subscribers</comment>
+    </data>
+    <data name="classes" xml:space="preserve">
+        <value>Classes</value>
+        <comment>classes</comment>
+    </data>
+    <data name="id" xml:space="preserve">
+        <value>Id</value>
+        <comment>id</comment>
+    </data>
+    <data name="class-name" xml:space="preserve">
+        <value>Class Name</value>
+        <comment>class-name</comment>
+    </data>
+    <data name="actions" xml:space="preserve">
+        <value>Actions</value>
+        <comment>actions</comment>
+    </data>
+    <data name="year" xml:space="preserve">
+        <value>Year</value>
+        <comment>year</comment>
+    </data>
+    <data name="section" xml:space="preserve">
+        <value>Section</value>
+        <comment>section</comment>
+    </data>
+    <data name="create-class" xml:space="preserve">
+        <value>Create Class</value>
+        <comment>create-class</comment>
+    </data>
+    <data name="logout" xml:space="preserve">
+        <value>Logout</value>
+        <comment>logout</comment>
+    </data>
+    <data name="logs" xml:space="preserve">
+        <value>Logs</value>
+        <comment>logs</comment>
+    </data>
+    <data name="auto-refresh" xml:space="preserve">
+        <value>Auto Refresh</value>
+        <comment>auto-refresh</comment>
+    </data>
+    <data name="remove-class-button" xml:space="preserve">
+        <value>Remove</value>
+        <comment>remove-class-button</comment>
+    </data>
 </root>

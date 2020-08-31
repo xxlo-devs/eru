@@ -1,21 +1,25 @@
 ﻿@page
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @inject IViewLocalizer Localizer
 @inject IConfiguration Configuration
 @{
-    Layout = "_Layout";
+    ViewData["title"] = Localizer["title"];
+    Layout = "Layouts/BaseLayout";
     //TODO Write how to setup SEQ in docs
     var seqServer = Configuration.GetSection("Serilog:WriteTo")?.GetChildren()?.Skip(2).FirstOrDefault()?.GetSection("Args:serverUrl")?.Value;
 }
 @section AddToHead
 {
-    <title>@Localizer["title"]</title>
-    <link rel="stylesheet" href="~/dist/dashboard.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/dist/css/dashboard.min.css" asp-append-version="true"/>
 }
 @section AddToScripts
 {
-    <script src="~/dist/dashboard.js" asp-append-version="true"></script>
+    <script>
+        window.remove_class_button = '@Localizer["remove-class-button"]';
+    </script>
+    <script src="~/dist/js/dashboard.min.js" asp-append-version="true"></script>
 }
 <div id="wrapper">
     <nav class="navbar" role="navigation" aria-label="main navigation">
@@ -37,9 +41,14 @@
                 @if (!string.IsNullOrEmpty(seqServer))
                 {
                     <a class="navbar-item" href="@seqServer">
-                        Logs
+                        @Localizer["logs"]
                     </a>
                 }
+            </div>
+            <div class="navbar-end">
+                <a class="navbar-item" href="/logout">
+                    @Localizer["logout"]
+                </a>
             </div>
         </div>
     </nav>
@@ -47,40 +56,40 @@
         <div class="tile is-vertical">
             <div class="tile is-child box has-text-centered">
                 <div class="field">
-                    <label for="auto-refresh" class="has-text-weight-bold">Auto Refresh</label>
-                    <input id="auto-refresh" type="checkbox" name="auto-refresh-status" class="switch" onchange="localStorage.setItem('auto-refresh', this.checked)"/>
+                    <label for="auto-refresh" class="has-text-weight-bold">@Localizer["auto-refresh"]</label>
+                    <input id="auto-refresh" type="checkbox" name="auto-refresh-status" class="switch" onchange="toggleRefresh()"/>
                 </div>
             </div>
             <div class="tile is-child box">
-                <p class="title has-text-centered">Stats</p>
+                <p class="title has-text-centered">@Localizer["stats"]</p>
                 <table class="table center-table is-striped">
                     <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Value</th>
+                        <th>@Localizer["name"]</th>
+                        <th>@Localizer["value"]</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr>
-                        <td>Uptime</td>
-                        <td id="uptime">Loading...</td>
+                        <td>@Localizer["uptime"]</td>
+                        <td id="uptime">@Localizer["loading"]</td>
                     </tr>
                     <tr>
-                        <td>Subscribers</td>
-                        <td id="subscribers">Loading...</td>
+                        <td>@Localizer["subscribers"]</td>
+                        <td id="subscribers">@Localizer["loading"]</td>
                     </tr>
                     </tbody>
                 </table>
             </div>
             <div class="tile is-child box">
-                <p class="title has-text-centered">Classes</p>
+                <p class="title has-text-centered">@Localizer["classes"]</p>
                 <table class="table center-table is-striped" id="classes-table">
                     <thead>
                     <tr>
-                        <th>Id</th>
-                        <th>Class Name</th>
-                        <th>Subscribers</th>
-                        <th>Actions</th>
+                        <th>@Localizer["id"]</th>
+                        <th>@Localizer["class-name"]</th>
+                        <th>@Localizer["subscribers"]</th>
+                        <th>@Localizer["actions"]</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -88,20 +97,20 @@
                 </table>
                 <div class="container">
                     <div class="field">
-                        <label class="label">Year</label>
+                        <label class="label">@Localizer["year"]</label>
                         <div class="control">
                             <input id="year-input" class="input" type="number" placeholder="0-12" max="12" min="0"/>
                         </div>
                     </div>
                     <div class="field">
-                        <label class="label">Section</label>
+                        <label class="label">@Localizer["section"]</label>
                         <div class="control">
                             <input id="section-input" class="input" type="text" placeholder="ex. b1"/>
                         </div>
                     </div>
                     <div class="field is-grouped">
                         <div class="control">
-                            <button id="create-class-button" class="button is-link">Create class</button>
+                            <button onclick="createClass()" class="button is-link">@Localizer["create-class"]</button>
                         </div>
                     </div>
                 </div>

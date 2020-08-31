@@ -3,6 +3,7 @@ using System.Reflection;
 using eru.Application.Common.Exceptions;
 using eru.Application.Common.Interfaces;
 using eru.Infrastructure.Hangfire;
+using eru.Infrastructure.Identity;
 using eru.Infrastructure.Persistence;
 using Hangfire;
 using Hangfire.Dashboard.BasicAuthorization;
@@ -20,6 +21,7 @@ namespace eru.Infrastructure
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDatabase(configuration);
+            services.AddIdentity();
             
             services.AddConfiguredHangfire();
             
@@ -35,6 +37,7 @@ namespace eru.Infrastructure
 
         public static IApplicationBuilder UseInfrastructure(this IApplicationBuilder app, IConfiguration configuration) =>
             app
+                .UseIdentity()
                 .UseConfiguredHangfire(configuration);
     }
 }
