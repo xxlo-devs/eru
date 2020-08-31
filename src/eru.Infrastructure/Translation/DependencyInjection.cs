@@ -1,8 +1,10 @@
 ﻿using System.Globalization;
+using System.Linq;
 using eru.Application.Common.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
@@ -10,7 +12,7 @@ namespace eru.Infrastructure.Translation
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddTranslator(this IServiceCollection services)
+        public static IServiceCollection AddTranslator(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddLocalization(options =>
             {
@@ -18,12 +20,12 @@ namespace eru.Infrastructure.Translation
             });
             services.Configure<RequestLocalizationOptions>(options =>
             {
-                var cultures = new[]
-                {
-                    new CultureInfo("en"),
-                    new CultureInfo("pl"),
-                };
-                options.DefaultRequestCulture = new RequestCulture("en");
+                var cultures = configuration
+                    .GetSection("CultureSettings:AvailableCultures")
+                    .GetChildren()
+                    .Select(x => new CultureInfo(x.Value))
+                    .ToList();
+                options.DefaultRequestCulture = new RequestCulture(configuration["CultureSettings:DefaultCulture"]);
                 options.SupportedCultures = cultures;
                 options.SupportedUICultures = cultures;
             });
