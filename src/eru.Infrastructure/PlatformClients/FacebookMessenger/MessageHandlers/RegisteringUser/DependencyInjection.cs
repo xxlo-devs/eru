@@ -16,7 +16,7 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
             services.AddTransient<IConfirmSubscriptionMessageHandler, ConfirmSubscriptionMessageHandler>();
             services.AddTransient<IGatherClassMessageHandler, GatherClassMessageHandler>();
             services.AddTransient<IGatherLanguageMessageHandler, GatherLanguageMessageHandler>();
-            services.AddTransient<IGathterYearMessageHandler, GatherYearMessageHandler>();
+            services.AddTransient<IGatherYearMessageHandler, GatherYearMessageHandler>();
             services.AddTransient<IUnsupportedCommandMessageHandler, UnsupportedCommandMessageHandler>();
             services.AddTransient<IRegisteringUserMessageHandler, RegisteringUserMessageHandler>();
 

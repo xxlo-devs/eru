@@ -2,7 +2,7 @@
 
 namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.GatherYear
 {
-    public interface IGathterYearMessageHandler
+    public interface IGatherYearMessageHandler
     {
         public Task Handle(string uid, string payload);
     }

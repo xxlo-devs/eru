@@ -1,8 +1,17 @@
-﻿using System.Threading;
+﻿using System.Globalization;
+using System.Threading;
+using eru.Application.Classes.Queries.GetClasses;
 using eru.Application.Subscriptions.Commands.CreateSubscription;
 using eru.Infrastructure.PlatformClients.FacebookMessenger;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser;
+using eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.CancelRegistration;
+using eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.ConfirmSubscription;
+using eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.GatherClass;
+using eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.GatherLanguage;
+using eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.GatherYear;
+using eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.UnsupportedCommand;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.Models.SendApi;
+using eru.Infrastructure.PlatformClients.FacebookMessenger.RegistrationDb.DbContext;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.RegistrationDb.Enums;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.SendAPIClient;
 using FluentAssertions;
@@ -14,123 +23,134 @@ using QuickReply = eru.Infrastructure.PlatformClients.FacebookMessenger.Models.W
 
 namespace eru.Infrastructure.Tests.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUserTests
 {
+    internal class RegisteringUserMessageHandlerBuilder
+    {
+        public RegisteringUserMessageHandlerBuilder()
+        {
+            RegistrationDbContext = new FakeRegistrationDb();
+            CancelHandlerMock = new Mock<ICancelRegistrationMessageHandler>();
+            ConfirmHandlerMock = new Mock<IConfirmSubscriptionMessageHandler>();
+            ClassHandlerMock = new Mock<IGatherClassMessageHandler>();
+            YearHandlerMock = new Mock<IGatherYearMessageHandler>();
+            LangHandlerMock = new Mock<IGatherLanguageMessageHandler>();
+            UnsupportedHandlerMock = new Mock<IUnsupportedCommandMessageHandler>();
+            Handler = new RegisteringUserMessageHandler();
+        }
+
+        public IRegistrationDbContext RegistrationDbContext { get; set; }
+        public IRegisteringUserMessageHandler Handler { get; set; }
+        public Mock<ICancelRegistrationMessageHandler> CancelHandlerMock { get; set; }
+        public Mock<IConfirmSubscriptionMessageHandler> ConfirmHandlerMock { get; set; }
+        public Mock<IGatherClassMessageHandler> ClassHandlerMock { get; set; }
+        public Mock<IGatherYearMessageHandler> YearHandlerMock { get; set; }
+        public Mock<IGatherLanguageMessageHandler> LangHandlerMock { get; set; }
+        public Mock<IUnsupportedCommandMessageHandler> UnsupportedHandlerMock { get; set; }
+
+        public void VerifyNoOtherCalls()
+        {
+            CancelHandlerMock.VerifyNoOtherCalls();
+            ConfirmHandlerMock.VerifyNoOtherCalls();
+            ClassHandlerMock.VerifyNoOtherCalls();
+            YearHandlerMock.VerifyNoOtherCalls();
+            LangHandlerMock.VerifyNoOtherCalls();
+            UnsupportedHandlerMock.VerifyNoOtherCalls();
+        }
+    }
     public class RegisteringUserHandlerTests
     {
         [Fact]
         public async void ShouldRouteUnsupportedCommandRequestToAppropriateHandler()
         {
-            var context = new FakeRegistrationDb();
-            var apiClient = new Mock<ISendApiClient>();
+            var builder = new RegisteringUserMessageHandlerBuilder();
             
-            var handler = new RegisteringUserMessageHandler();
-            
-            await handler.Handle("sample-registering-user", new Message
+            await builder.Handler.Handle("sample-registering-user", new Message
             {
                 Mid = "sample-message-id",
                 Text = "unsupported command! :)"
             });
             
-            apiClient.Verify(x => x.Send(It.IsAny<SendRequest>()), Times.Once);
+            builder.UnsupportedHandlerMock.Verify(x => x.Handle("sample-registering-user"), Times.Once);
+            builder.VerifyNoOtherCalls();
         }
         
         [Fact]
         public async void ShouldRouteCancelRegistrationRequestToAppropriateHandler()
         {
-            var context = new FakeRegistrationDb();
-            var apiClient = new Mock<ISendApiClient>();
-            
-            var handler = new RegisteringUserMessageHandler();
-            
-            await handler.Handle("sample-registering-user-with-class", new Message
+            var builder = new RegisteringUserMessageHandlerBuilder();
+
+            await builder.Handler.Handle("sample-registering-user-with-class", new Message
             {
                 Mid = "sample-message-id",
                 Text = "Cancel",
                 QuickReply = new QuickReply {Payload = ReplyPayloads.CancelPayload}
             });
 
-            context.IncompleteUsers.Should().NotContain(x => x.Id == "sample-registering-user-with-class");
-            apiClient.Verify(x => x.Send(It.IsAny<SendRequest>()), Times.Once);
+            builder.CancelHandlerMock.Verify(x => x.Handle("sample-registering-user-with-class"), Times.Once);
+            builder.VerifyNoOtherCalls();
         }
         
         [Fact]
         public async void ShouldRouteGatherLanguageRequestToAppropriateHandler()
         {
-            var context = new FakeRegistrationDb();
-            var apiClient = new Mock<ISendApiClient>();
+            var builder = new RegisteringUserMessageHandlerBuilder();
             
-            var handler = new RegisteringUserMessageHandler();
-            
-            await handler.Handle("sample-registering-user", new Message
+            await builder.Handler.Handle("sample-registering-user", new Message
             {
                 Mid = "sample-message-id",
                 Text = "English",
                 QuickReply = new QuickReply {Payload = ReplyPayloads.English}
             });
-
-            context.IncompleteUsers.Should().ContainSingle(x =>
-                x.Id == "sample-registering-user" && x.Platform == "FacebookMessenger" && x.PreferredLanguage == "en" && x.Stage == Stage.GatheredLanguage);
-            apiClient.Verify(x => x.Send(It.IsAny<SendRequest>()), Times.Once);
+            
+            builder.LangHandlerMock.Verify(x => x.Handle("sample-registering-user", ReplyPayloads.English), Times.Once);
+            builder.VerifyNoOtherCalls();
         }
         
         [Fact]
         public async void ShouldRouteGatherYearRequestToAppropriateHandler()
         {
-            var context = new FakeRegistrationDb();
-            var apiClient = new Mock<ISendApiClient>();
+            var builder = new RegisteringUserMessageHandlerBuilder();
             
-            var handler = new RegisteringUserMessageHandler();
-            
-            await handler.Handle("sample-registering-user-with-lang", new Message
+            await builder.Handler.Handle("sample-registering-user-with-lang", new Message
             {
                 Mid = "sample-message-id",
                 Text = "1st Grade",
                 QuickReply = new QuickReply {Payload = "year:1"}
             });
             
-            context.IncompleteUsers.Should().ContainSingle(x =>
-                x.Id == "sample-registering-user-with-lang" && x.Platform == "FacebookMessenger" && x.PreferredLanguage == "en-us" && x.Year == 1 && x.Stage == Stage.GatheredYear);
-            apiClient.Verify(x => x.Send(It.IsAny<SendRequest>()), Times.Once);
+            builder.YearHandlerMock.Verify(x => x.Handle("sample-registering-user-with-lang", "year:1"), Times.Once);
+            builder.VerifyNoOtherCalls();
         }
         
         [Fact]
         public async void ShouldRouteGatherClassRequestToAppropriateHandler()
         {
-            var context = new FakeRegistrationDb();
-            var apiClient = new Mock<ISendApiClient>();
+            var builder = new RegisteringUserMessageHandlerBuilder();
             
-            var handler = new RegisteringUserMessageHandler();
-            
-            await handler.Handle("sample-registering-user-with-year", new Message
+            await builder.Handler.Handle("sample-registering-user-with-year", new Message
             {
                 Mid = "sample-message-id",
                 Text = "Ia",
                 QuickReply = new QuickReply {Payload = "class:sample-class"}
             });
             
-            context.IncompleteUsers.Should().ContainSingle(x =>
-                x.Id == "sample-registering-user-with-lang" && x.Platform == "FacebookMessenger" && x.PreferredLanguage == "en-us" && x.Year == 1 && x.ClassId == "class:sample-class" && x.Stage == Stage.GatheredYear);
-            apiClient.Verify(x => x.Send(It.IsAny<SendRequest>()), Times.Once);
+            builder.ClassHandlerMock.Verify(x => x.Handle("sample-registering-user-with-year", "class:sample-class"));
+            builder.VerifyNoOtherCalls();
         }
 
         [Fact]
         public async void ShouldRouteConfirmRegistrationRequestToAppropriateHandler()
         {
-            var mediator = new Mock<IMediator>();
-            var context = new FakeRegistrationDb();
-            var apiClient = new Mock<ISendApiClient>();
+            var builder = new RegisteringUserMessageHandlerBuilder();
             
-            var handler = new RegisteringUserMessageHandler();
-            
-            await handler.Handle("sample-registering-user-with-class", new Message
+            await builder.Handler.Handle("sample-registering-user-with-class", new Message
             {
                 Mid = "sample-message-id",
                 Text = "Subscribe",
                 QuickReply = new QuickReply {Payload = ReplyPayloads.SubscribePayload}
             });
 
-            context.IncompleteUsers.Should().NotContain(x => x.Id == "sample-registering-user-with-class");
-            apiClient.Verify(x => x.Send(It.IsAny<SendRequest>()), Times.Once);
-            mediator.Verify(x => x.Send(It.IsAny<CreateSubscriptionCommand>(), It.IsAny<CancellationToken>()), Times.Once);
+            builder.ConfirmHandlerMock.Verify(x => x.Handle("sample-registering-user-with-class"), Times.Once);
+            builder.VerifyNoOtherCalls();
         }
     }
 }
