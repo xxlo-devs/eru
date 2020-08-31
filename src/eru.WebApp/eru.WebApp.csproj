@@ -20,9 +20,5 @@
       <PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
       <PackageReference Include="Serilog.Sinks.Seq" Version="4.0.0" />
     </ItemGroup>
-  
-    <Target Name="BuildBeforePublish" BeforeTargets="PrepareForPublish">
-      <Exec Command="npm run build" />
-    </Target>
 
 </Project>
