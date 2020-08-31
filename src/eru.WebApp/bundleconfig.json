@@ -22,13 +22,15 @@
   {
     "outputFileName": "wwwroot/dist/js/login.min.js",
     "inputFiles": [
-      "wwwroot/js/login.js"
+      "wwwroot/js/login.js",
+      "wwwroot/js/form.js"
     ]
   },
   {
     "outputFileName": "wwwroot/dist/js/upload.min.js",
     "inputFiles": [
-      "wwwroot/js/upload.js"
+      "wwwroot/js/upload.js",
+      "wwwroot/js/form.js"
     ]
   }
 ]
