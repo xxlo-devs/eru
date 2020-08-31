@@ -4,6 +4,7 @@ using eru.Application.Common.Exceptions;
 using eru.Application.Common.Interfaces;
 using eru.Infrastructure.Hangfire;
 using eru.Infrastructure.Persistence;
+using eru.Infrastructure.Translation;
 using Hangfire;
 using Hangfire.Dashboard.BasicAuthorization;
 using Hangfire.MemoryStorage;
@@ -19,6 +20,8 @@ namespace eru.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddTranslator();
+            
             services.AddDatabase(configuration);
             
             services.AddConfiguredHangfire();
@@ -35,6 +38,13 @@ namespace eru.Infrastructure
 
         public static IApplicationBuilder UseInfrastructure(this IApplicationBuilder app, IConfiguration configuration) =>
             app
+                .UseTranslator()
                 .UseConfiguredHangfire(configuration);
+
+        public static IMvcBuilder UseInfrastructure(this IMvcBuilder mvcBuilder)
+        {
+            return mvcBuilder
+                .UseTranslator();
+        }
     }
 }

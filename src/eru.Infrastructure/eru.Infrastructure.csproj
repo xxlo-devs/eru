@@ -20,4 +20,46 @@
       <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="3.1.7" />
     </ItemGroup>
 
+    <ItemGroup>
+      <EmbeddedResource Update="Resources\ClassParser\ClassParser.pl.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>ClassParser.pl.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\ClassParser\ClassParser.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>ClassParser.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Persistence\ApplicationDbContext.pl.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>ApplicationDbContext.pl.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Persistence\ApplicationDbContext.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>ApplicationDbContext.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Resources\ClassParser\ClassParser.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>ClassParser.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\ClassParser\ClassParser.pl.Designer.cs">
+        <AutoGen>True</AutoGen>
+        <DependentUpon>ClassParser.pl.resx</DependentUpon>
+        <DesignTime>True</DesignTime>
+      </Compile>
+      <Compile Update="Resources\Persistence\ApplicationDbContext.pl.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>ApplicationDbContext.pl.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Persistence\ApplicationDbContext.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>ApplicationDbContext.en.resx</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
 </Project>
