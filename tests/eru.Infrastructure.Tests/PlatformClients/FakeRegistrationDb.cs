@@ -37,7 +37,10 @@ namespace eru.Infrastructure.Tests.PlatformClients
                     .HasMaxLength(255);
                 
                 x.HasData(
-                    new IncompleteUser { Id = "sample-registering-user", Platform = "FacebookMessenger", ClassId = string.Empty, PreferredLanguage = string.Empty, Year = 0, Stage = Stage.Created}
+                    new IncompleteUser { Id = "sample-registering-user", Platform = "FacebookMessenger", ClassId = null, PreferredLanguage = null, Year = 0, Stage = Stage.Created},
+                    new IncompleteUser { Id = "sample-registering-user-with-lang", Platform = "FacebookMessenger", ClassId = null, PreferredLanguage = "en-us", Year = 0, Stage = Stage.GatheredLanguage},
+                    new IncompleteUser { Id = "sample-registering-user-with-year", Platform = "FacebookMessenger", ClassId = null, PreferredLanguage = "en-us", Year = 1, Stage = Stage.GatheredYear},
+                    new IncompleteUser { Id = "sample-registering-user-with-class", Platform = "FacebookMessenger", ClassId = "a", PreferredLanguage = "en-us", Year = 1, Stage = Stage.GatheredClass}
                 );
             });
             
