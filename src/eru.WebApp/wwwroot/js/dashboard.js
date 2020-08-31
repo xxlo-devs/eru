@@ -18,6 +18,9 @@
         })
     }
 })
+if(!window.remove_class_button) {
+    window.remove_class_button = undefined;
+}
 async function refreshData (force = false) {
     if (window.localStorage.getItem('auto-refresh') === 'true' || force) {
         await window.fetch('/admin/status')
@@ -36,7 +39,7 @@ async function refreshData (force = false) {
                                 row.insertCell(1).textContent = name
                                 row.insertCell(2).textContent = subscribersCount
                                 const removeButton = document.createElement('button')
-                                removeButton.textContent = 'Remove'
+                                removeButton.textContent = window.remove_class_button;
                                 removeButton.addEventListener('click', async function () {
                                     await removeClass(id)
                                 })
