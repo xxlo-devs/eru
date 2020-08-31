@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "parcel Assets/upload.js Assets/dashboard.js --out-dir ./wwwroot/dist --public-url /dist --global eru",
-    "build": "npm install && parcel build Assets/upload.js Assets/dashboard.js --out-dir ./wwwroot/dist --public-url /dist --global eru"
+    "dev": "parcel Assets/upload.js Assets/dashboard.js Assets/login.js --out-dir ./wwwroot/dist --public-url /dist --global eru",
+    "build": "npm install && parcel build Assets/upload.js Assets/dashboard.js Assets/login.js --out-dir ./wwwroot/dist --public-url /dist --global eru"
   },
   "repository": {
     "type": "git",

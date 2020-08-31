@@ -1,10 +1,8 @@
 ﻿using System.Threading.Tasks;
 using eru.Domain.Entity;
-using Hangfire.Logging;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Logging;
 
 namespace eru.WebApp.Pages
 {
@@ -13,21 +11,20 @@ namespace eru.WebApp.Pages
         public string Username { get; set; }
         public string Password { get; set; }
     }
+    
     public class Login : PageModel
     {
-        private readonly ILogger<Login> _logger;
         private readonly SignInManager<User> _signInManager;
 
-        public Login(ILogger<Login> logger, SignInManager<User> signInManager)
+        public Login(SignInManager<User> signInManager)
         {
-            _logger = logger;
             _signInManager = signInManager;
         }
 
         [BindProperty]
         public LoginModel Model { get; set; }
         
-        public async Task<RedirectResult> OnPost()
+        public async Task<RedirectResult> OnPostAsync()
         {
             await _signInManager.PasswordSignInAsync(Model.Username, Model.Password, false, true);
             

@@ -3,24 +3,49 @@
 @model eru.WebApp.Pages.Login
 
 @{
-    Layout = null;
+    Layout = "_Layout";
+}
+@section AddToHead
+{
+    <link rel="stylesheet" type="text/css" href="dist/login.css"/>
 }
 
-<!DOCTYPE html>
+@section AddToScripts
+{
+    <script src="dist/login.js"></script>
+}
 
-<html>
-<head>
-    <title></title>
-</head>
-<body>
-<div>
-    <form method="post">
-        Username: 
-        <input type="text" asp-for="Model.Username"/>
-        Password:
-        <input type="password" asp-for="Model.Password"/>
-        <input type="submit"/>
-    </form>
+<svg class="chroma" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+    <path fill="#ff5500" fill-opacity="1" d="M0,192L180,288L360,192L540,192L720,256L900,160L1080,288L1260,64L1440,224L1440,0L1260,0L1080,0L900,0L720,0L540,0L360,0L180,0L0,0Z"></path>
+</svg>
+<div id="wrapper">
+    <section class="hero">
+        <div class="container is-half">
+            <h1 class="is-size-1 title animate__animated animate__lightSpeedInRight">Login</h1>
+        </div>
+    </section>
+    <section id="form-container" class="columns">
+        <form method="post" class="container">
+            <div class="field">
+                <label class="label">Username</label>
+                <div class="control">
+                    <input type="text" class="input" asp-for="Model.Username"/>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">Password</label>
+                <div class="control">
+                    <input type="password" class="input" asp-for="Model.Password"/>
+                </div>
+            </div>
+            <div class="field is-grouped">
+                <div class="control">
+                    <input type="submit" class="button is-link" value="Submit">
+                </div>
+                <div class="control">
+                    <button type="button" id="cancel-button" class="button is-light">Cancel</button>
+                </div>
+            </div>
+        </form>
+    </section>
 </div>
-</body>
-</html>
