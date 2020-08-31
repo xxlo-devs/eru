@@ -1,0 +1,34 @@
+﻿[
+  {
+    "outputFileName": "wwwroot/dist/css/form.min.css",
+    "inputFiles": [
+      "wwwroot/css/common.css",
+      "wwwroot/css/form.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/dist/css/dashboard.min.css",
+    "inputFiles": [
+      "wwwroot/css/common.css",
+      "wwwroot/css/dashboard.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/dist/js/dashboard.min.js",
+    "inputFiles": [
+      "wwwroot/js/dashboard.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/dist/js/login.min.js",
+    "inputFiles": [
+      "wwwroot/js/login.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/dist/js/upload.min.js",
+    "inputFiles": [
+      "wwwroot/js/upload.js"
+    ]
+  }
+]

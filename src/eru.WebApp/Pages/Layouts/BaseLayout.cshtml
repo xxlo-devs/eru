@@ -7,14 +7,15 @@
 <html lang="@culture">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@ViewData["title"]</title>
     @if (IsSectionDefined("AddToHead"))
     {
-        @await RenderSectionAsync("AddToHead", required: true)
+        @await RenderSectionAsync("AddToHead",false)
     }
 </head>
 <body>
 @RenderBody()
-<partial name="Footer"/>
+<partial name="Partials/Footer"/>
 </body>
 @if (IsSectionDefined("AddToScripts"))
 {
