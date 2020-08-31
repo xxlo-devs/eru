@@ -18,10 +18,5 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger
         {
             throw new System.NotImplementedException();
         }
-
-        public async Task Send()
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }
