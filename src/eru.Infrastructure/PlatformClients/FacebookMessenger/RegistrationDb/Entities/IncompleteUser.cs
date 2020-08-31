@@ -1,4 +1,6 @@
-﻿namespace eru.Infrastructure.PlatformClients.FacebookMessenger.RegistrationDbContext
+﻿using eru.Infrastructure.PlatformClients.FacebookMessenger.RegistrationDb.Enums;
+
+namespace eru.Infrastructure.PlatformClients.FacebookMessenger.RegistrationDb.Entities
 {
     public class IncompleteUser
     {

@@ -1,6 +1,8 @@
 ﻿using System;
 using eru.Domain.Entity;
-using eru.Infrastructure.PlatformClients.FacebookMessenger.RegistrationDbContext;
+using eru.Infrastructure.PlatformClients.FacebookMessenger.RegistrationDb.DbContext;
+using eru.Infrastructure.PlatformClients.FacebookMessenger.RegistrationDb.Entities;
+using eru.Infrastructure.PlatformClients.FacebookMessenger.RegistrationDb.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace eru.Infrastructure.Tests.PlatformClients

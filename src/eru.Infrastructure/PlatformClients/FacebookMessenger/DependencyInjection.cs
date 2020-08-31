@@ -1,4 +1,5 @@
-﻿using eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers;
+﻿using eru.Application.Common.Interfaces;
+using eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.RegistrationDb;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -13,6 +14,7 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger
             services.AddFacebookMessengerRegistrationDatabase();
             services.AddMessageHandling();
             services.AddTransient<FbMiddleware>();
+            services.AddTransient<IPlatformClient, FacebookMessengerPlatformClient>();
             
             return services;
         }

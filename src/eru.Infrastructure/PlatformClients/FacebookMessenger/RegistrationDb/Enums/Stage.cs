@@ -1,4 +1,4 @@
-﻿namespace eru.Infrastructure.PlatformClients.FacebookMessenger.RegistrationDbContext
+﻿namespace eru.Infrastructure.PlatformClients.FacebookMessenger.RegistrationDb.Enums
 {
     public enum Stage
     {

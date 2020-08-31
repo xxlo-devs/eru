@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using eru.Infrastructure.PlatformClients.FacebookMessenger.RegistrationDb.Entities;
+using Microsoft.EntityFrameworkCore;
 
-namespace eru.Infrastructure.PlatformClients.FacebookMessenger.RegistrationDbContext
+namespace eru.Infrastructure.PlatformClients.FacebookMessenger.RegistrationDb.DbContext
 {
-    public class RegistrationDbContext : DbContext, IRegistrationDbContext
+    public class RegistrationDbContext : Microsoft.EntityFrameworkCore.DbContext, IRegistrationDbContext
     {
         public RegistrationDbContext(DbContextOptions options) : base(options)
         {

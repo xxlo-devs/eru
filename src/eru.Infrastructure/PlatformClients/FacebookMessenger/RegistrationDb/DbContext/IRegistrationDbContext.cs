@@ -1,8 +1,9 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using eru.Infrastructure.PlatformClients.FacebookMessenger.RegistrationDb.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace eru.Infrastructure.PlatformClients.FacebookMessenger.RegistrationDbContext
+namespace eru.Infrastructure.PlatformClients.FacebookMessenger.RegistrationDb.DbContext
 {
     public interface IRegistrationDbContext
     {
