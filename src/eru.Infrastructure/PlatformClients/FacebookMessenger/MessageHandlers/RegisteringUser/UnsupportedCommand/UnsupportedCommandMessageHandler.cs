@@ -60,7 +60,7 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
                     var dict = yearsSet.ToDictionary(x => x.ToString(), x => $"{ReplyPayloads.YearPrefix}{x.ToString()}");
                     var replies = _selector.GetSelector(dict, user.ListOffset);
                     
-                    var response = new SendRequest(uid, new Message("Now select your class, in the same way as language.", replies));
+                    var response = new SendRequest(uid, new Message("Now select your class year, in the same way as language.", replies));
                     await _apiClient.Send(response);
                     
                     break;

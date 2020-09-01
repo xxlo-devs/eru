@@ -37,7 +37,7 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
             var classesInDb = await _mediator.Send(new GetClassesQuery());
             var dict = classesInDb.Where(x => x.Year == user.Year).OrderBy(x => x.Section).ToDictionary(x => x.ToString(), x => x.Id);
             
-            var response = new SendRequest(uid, new Message("", _selector.GetSelector(dict, user.ListOffset)));
+            var response = new SendRequest(uid, new Message("Great! Now you need to select your class, by clicking on a button below. If you don't see your class, use the \"arrow\" buttons to scroll the list.", _selector.GetSelector(dict, user.ListOffset)));
             await _apiClient.Send(response);
         }
     }

@@ -39,7 +39,7 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
             var classesInDb = await _mediator.Send(new GetClassesQuery());
             var dict = new SortedSet<int>(classesInDb.Select(x => x.Year)).ToDictionary(x => x.ToString(), x => $"{ReplyPayloads.YearPrefix}{x.ToString()}");
 
-            var response = new SendRequest(uid, new Message("", _selector.GetSelector(dict, user.ListOffset)));
+            var response = new SendRequest(uid, new Message("Now select your class year, in the same way as language.", _selector.GetSelector(dict, user.ListOffset)));
             await _apiClient.Send(response);
         }
     }

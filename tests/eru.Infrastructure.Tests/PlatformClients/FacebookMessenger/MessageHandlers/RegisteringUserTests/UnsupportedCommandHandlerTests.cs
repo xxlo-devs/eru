@@ -19,7 +19,7 @@ namespace eru.Infrastructure.Tests.PlatformClients.FacebookMessenger.MessageHand
             var context = new FakeRegistrationDb();
             var mediator = new Mock<IMediator>();
             var apiClient = new Mock<ISendApiClient>();
-            var selector = new Selector();
+            var selector = new Infrastructure.PlatformClients.FacebookMessenger.Selector.Selector();
             
             var config = new ConfigurationBuilder().AddInMemoryCollection(new[]
                 {

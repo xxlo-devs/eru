@@ -32,7 +32,7 @@ namespace eru.Infrastructure.Tests.PlatformClients.FacebookMessenger.MessageHand
                         new ClassDto {Id = "sample-class-3", Year = 2, Section = "c"},
                     }.AsEnumerable());
                 });
-            var selector = new Selector();
+            var selector = new Infrastructure.PlatformClients.FacebookMessenger.Selector.Selector();
             
             var handler = new GatherYearMessageHandler(context, apiClient.Object, mediator.Object, selector);
             await handler.Handle("sample-registering-user-with-lang", "year:1");
