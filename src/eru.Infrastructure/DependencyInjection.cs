@@ -1,16 +1,14 @@
-﻿using System.Linq;
-using System.Reflection;
-using eru.Application.Common.Exceptions;
-using eru.Application.Common.Interfaces;
+﻿using eru.Application.Common.Interfaces;
 using eru.Infrastructure.Hangfire;
+using eru.Infrastructure.Identity;
 using eru.Infrastructure.Persistence;
 using eru.Infrastructure.PlatformClients;
 using Hangfire;
 using Hangfire.Dashboard.BasicAuthorization;
 using Hangfire.MemoryStorage;
 using MediatR;
+using eru.Infrastructure.Translation;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -20,7 +18,11 @@ namespace eru.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddTranslator(configuration);
+            
             services.AddDatabase(configuration);
+            
+            services.AddIdentity();
             
             services.AddConfiguredHangfire();
             
@@ -36,13 +38,16 @@ namespace eru.Infrastructure
             
             return services;
         }
+        public static IApplicationBuilder UseInfrastructure(this IApplicationBuilder app, IConfiguration configuration) =>
+            app
+                .UseTranslator()
+                .UseIdentity()
+                .UseConfiguredHangfire(configuration);
 
-        public static IApplicationBuilder UseInfrastructure(this IApplicationBuilder app, IConfiguration configuration)
+        public static IMvcBuilder UseInfrastructure(this IMvcBuilder mvcBuilder)
         {
-            app.UseConfiguredHangfire(configuration);
-            app.UsePlatformClients(configuration);
-
-            return app;
+            return mvcBuilder
+                .UseTranslator();
         }
     }
 }

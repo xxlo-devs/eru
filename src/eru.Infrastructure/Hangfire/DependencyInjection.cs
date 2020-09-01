@@ -1,6 +1,5 @@
-﻿using System.Linq;
-using Hangfire;
-using Hangfire.Dashboard.BasicAuthorization;
+﻿using Hangfire;
+using Hangfire.Dashboard;
 using Hangfire.MemoryStorage;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -26,29 +25,22 @@ namespace eru.Infrastructure.Hangfire
             
             return services;
         }
+        
+        public class AuthorizationFilter : IDashboardAuthorizationFilter
+        {
+            public bool Authorize(DashboardContext context)
+            {
+                var httpContext = context.GetHttpContext();
+                return httpContext.User.Identity.IsAuthenticated;
+            }
+        }
 
         public static IApplicationBuilder UseConfiguredHangfire(this IApplicationBuilder app,
             IConfiguration configuration)
         {
-            var users = configuration
-                .GetSection("HangfireDashboardUsers")
-                .GetChildren()
-                .Select(x=>x.Get<HangfireUser>())
-                .Select(x => new BasicAuthAuthorizationUser
-                {
-                    Login = x.Username,
-                    PasswordClear = x.Password
-                });
-            
             app.UseHangfireDashboard("/jobs", new DashboardOptions
             {
-                Authorization = new []{ new BasicAuthAuthorizationFilter(new BasicAuthAuthorizationFilterOptions
-                {
-                    LoginCaseSensitive = true,
-                    RequireSsl = false,
-                    SslRedirect = false,
-                    Users = users
-                }) },
+                Authorization = new [] {new AuthorizationFilter()},
                 AppPath = "/admin"
             });
             
