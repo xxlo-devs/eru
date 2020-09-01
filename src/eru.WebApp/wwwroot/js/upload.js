@@ -17,7 +17,9 @@ function cancel() {
     document.getElementById('file-input').value = null;
     document.getElementById('key-input').value = "";
 }
-
+if(!window.successMessage) {
+    window.successMessage = undefined;
+}
 function submit() {
     const file = document.getElementById('file-input').files[0];
     if (file) {
@@ -35,7 +37,7 @@ function submit() {
             }).then(response => {
                 cancel();
                 if (response.ok) {
-                    addNotification('@Localizer["upload-succeed"]', ['is-success']);
+                    addNotification(window.successMessage, ['is-success']);
                 } else {
                     response.json().then(json => {
                         let errors = [];
