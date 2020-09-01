@@ -33,6 +33,7 @@ namespace eru.Infrastructure
 
         public static IApplicationBuilder UseInfrastructure(this IApplicationBuilder app, IConfiguration configuration) =>
             app
+                .UseDatabase()
                 .UseTranslator()
                 .UseIdentity()
                 .UseConfiguredHangfire(configuration);
