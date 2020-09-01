@@ -1,4 +1,5 @@
 ﻿using eru.Application.Common.Exceptions;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,6 +24,17 @@ namespace eru.Infrastructure.Persistence
 
             return services;
         }
+
+        public static IApplicationBuilder UseDatabase(this IApplicationBuilder app)
+        {
+            var config = app.ApplicationServices.GetService<IConfiguration>();
+            if (config.GetValue<bool>("Database:AutomaticallyMigrate"))
+            {
+                var dbContext = app.ApplicationServices.CreateScope().ServiceProvider.GetService<ApplicationDbContext>();
+                dbContext.Database.Migrate();
+            }
+            return app;
+        }
         
         
         private static void SetupSqliteDbContext(IServiceCollection services, IConfiguration configuration)
@@ -30,9 +42,15 @@ namespace eru.Infrastructure.Persistence
             var connectionString = configuration.GetValue<string>("Database:ConnectionString");
             if(string.IsNullOrEmpty(connectionString)) throw new DatabaseSettingsException();
             var dbContextOptionsBuilder = new DbContextOptionsBuilder()
-                .UseSqlite(connectionString);
+                .UseSqlite(connectionString, y =>
+                {
+                    y.MigrationsAssembly("eru.Infrastructure");
+                });
             using var dbContext = new DbContext(dbContextOptionsBuilder.Options);
-            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(connectionString));
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(connectionString, y =>
+            {
+                y.MigrationsAssembly("eru.Infrastructure");
+            }));
         }
     }
 }
