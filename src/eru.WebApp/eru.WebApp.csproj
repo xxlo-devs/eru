@@ -10,6 +10,7 @@
     </ItemGroup>
   
     <ItemGroup>
+      <PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />
       <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.7" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.7">
         <PrivateAssets>all</PrivateAssets>
@@ -20,8 +21,28 @@
       <PackageReference Include="Serilog.Sinks.Seq" Version="4.0.0" />
     </ItemGroup>
   
-    <Target Name="BuildBeforePublish" BeforeTargets="PrepareForPublish">
-      <Exec Command="npm run build" />
-    </Target>
+    <ItemGroup>
+      <EmbeddedResource Update="Resources\Pages\Login.pl.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Login.pl.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Pages\Login.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Login.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+    </ItemGroup>
+  
+    <ItemGroup>
+      <Compile Update="Resources\Pages\Login.en.Designer.cs">
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Login.en.resx</DependentUpon>
+        <DesignTime>True</DesignTime>
+      </Compile>
+      <Compile Update="Resources\Pages\Login.pl.Designer.cs">
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Login.pl.resx</DependentUpon>
+        <DesignTime>True</DesignTime>
+      </Compile>
+    </ItemGroup>
 
 </Project>

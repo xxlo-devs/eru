@@ -3,6 +3,7 @@ using System.Reflection;
 using eru.Application.Common.Exceptions;
 using eru.Application.Common.Interfaces;
 using eru.Infrastructure.Hangfire;
+using eru.Infrastructure.Identity;
 using eru.Infrastructure.Persistence;
 using eru.Infrastructure.Translation;
 using Hangfire;
@@ -24,6 +25,8 @@ namespace eru.Infrastructure
             
             services.AddDatabase(configuration);
             
+            services.AddIdentity();
+            
             services.AddConfiguredHangfire();
             
             services.AddScoped<IApplicationDbContext>(provider => provider.GetService<ApplicationDbContext>());
@@ -39,6 +42,7 @@ namespace eru.Infrastructure
         public static IApplicationBuilder UseInfrastructure(this IApplicationBuilder app, IConfiguration configuration) =>
             app
                 .UseTranslator()
+                .UseIdentity()
                 .UseConfiguredHangfire(configuration);
 
         public static IMvcBuilder UseInfrastructure(this IMvcBuilder mvcBuilder)
