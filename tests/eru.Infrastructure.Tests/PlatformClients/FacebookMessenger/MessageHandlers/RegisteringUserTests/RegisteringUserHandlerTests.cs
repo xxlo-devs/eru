@@ -27,23 +27,21 @@ namespace eru.Infrastructure.Tests.PlatformClients.FacebookMessenger.MessageHand
     {
         public RegisteringUserMessageHandlerBuilder()
         {
-            RegistrationDbContext = new FakeRegistrationDb();
             CancelHandlerMock = new Mock<ICancelRegistrationMessageHandler>();
             ConfirmHandlerMock = new Mock<IConfirmSubscriptionMessageHandler>();
             ClassHandlerMock = new Mock<IGatherClassMessageHandler>();
-            YearHandlerMock = new Mock<IGatherYearMessageHandler>();
             LangHandlerMock = new Mock<IGatherLanguageMessageHandler>();
+            YearHandlerMock = new Mock<IGatherYearMessageHandler>();
             UnsupportedHandlerMock = new Mock<IUnsupportedCommandMessageHandler>();
-            Handler = new RegisteringUserMessageHandler();
+            Handler = new RegisteringUserMessageHandler(CancelHandlerMock.Object, ConfirmHandlerMock.Object, ClassHandlerMock.Object, LangHandlerMock.Object, YearHandlerMock.Object, UnsupportedHandlerMock.Object);
         }
-
-        public IRegistrationDbContext RegistrationDbContext { get; set; }
+        
         public IRegisteringUserMessageHandler Handler { get; set; }
         public Mock<ICancelRegistrationMessageHandler> CancelHandlerMock { get; set; }
         public Mock<IConfirmSubscriptionMessageHandler> ConfirmHandlerMock { get; set; }
         public Mock<IGatherClassMessageHandler> ClassHandlerMock { get; set; }
-        public Mock<IGatherYearMessageHandler> YearHandlerMock { get; set; }
         public Mock<IGatherLanguageMessageHandler> LangHandlerMock { get; set; }
+        public Mock<IGatherYearMessageHandler> YearHandlerMock { get; set; }
         public Mock<IUnsupportedCommandMessageHandler> UnsupportedHandlerMock { get; set; }
 
         public void VerifyNoOtherCalls()

@@ -15,7 +15,7 @@ namespace eru.Infrastructure.Tests.PlatformClients.FacebookMessenger.MessageHand
             var context = new FakeRegistrationDb();
             var apiClient = new Mock<ISendApiClient>();
             
-            var handler = new UnsupportedCommandMessageHandler();
+            var handler = new UnsupportedCommandMessageHandler(context, apiClient.Object, null, null);
             await handler.Handle("sample-registering-user");
             
             apiClient.Verify(x => x.Send(It.IsAny<SendRequest>()), Times.Once);

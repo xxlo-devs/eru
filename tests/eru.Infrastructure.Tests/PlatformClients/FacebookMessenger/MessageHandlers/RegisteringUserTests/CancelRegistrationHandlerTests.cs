@@ -15,7 +15,7 @@ namespace eru.Infrastructure.Tests.PlatformClients.FacebookMessenger.MessageHand
             var context = new FakeRegistrationDb();
             var apiClient = new Mock<ISendApiClient>();
             
-            var handler = new CancelRegistrationMessageHandler();
+            var handler = new CancelRegistrationMessageHandler(context, apiClient.Object);
             await handler.Handle("sample-registering-user-with-class");
 
             context.IncompleteUsers.Should().NotContain(x => x.Id == "sample-registering-user-with-class");

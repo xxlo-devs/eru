@@ -27,7 +27,7 @@ namespace eru.Infrastructure.Tests.PlatformClients.FacebookMessenger.MessageHand
                 });
             var apiClient = new Mock<ISendApiClient>();
             
-            var handler = new ConfirmSubscriptionMessageHandler();
+            var handler = new ConfirmSubscriptionMessageHandler(mediator.Object, context, apiClient.Object);
             await handler.Handle("sample-registering-user-with-class");
 
             context.IncompleteUsers.Should().NotContain(x => x.Id == "sample-registering-user-with-class");
