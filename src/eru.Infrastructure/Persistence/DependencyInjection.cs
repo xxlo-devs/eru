@@ -17,14 +17,16 @@ namespace eru.Infrastructure.Persistence
                 case "sqlite":
                     SetupSqliteDbContext(services, configuration);
                     break;
+                case "postgresql":
+                    SetupPostgresDbContext(services, configuration);
+                    break;
                 default:
                     throw new DatabaseSettingsException();
             }
 
             return services;
         }
-        
-        
+
         private static void SetupSqliteDbContext(IServiceCollection services, IConfiguration configuration)
         {
             var connectionString = configuration.GetValue<string>("Database:ConnectionString");
@@ -33,6 +35,23 @@ namespace eru.Infrastructure.Persistence
                 .UseSqlite(connectionString);
             using var dbContext = new DbContext(dbContextOptionsBuilder.Options);
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(connectionString));
+        }
+        
+        
+        private static void SetupPostgresDbContext(IServiceCollection services, IConfiguration configuration)
+        {
+            var connectionString = configuration.GetValue<string>("Database:ConnectionString");
+            if(string.IsNullOrEmpty(connectionString)) throw new DatabaseSettingsException();
+            var dbContextOptionsBuilder = new DbContextOptionsBuilder()
+                .UseNpgsql(connectionString, y =>
+                {
+                    y.MigrationsAssembly("eru.Infrastructure");
+                });
+            using var dbContext = new DbContext(dbContextOptionsBuilder.Options);
+            services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString, y =>
+            {
+                y.MigrationsAssembly("eru.Infrastructure");
+            }));
         }
     }
 }
