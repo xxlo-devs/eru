@@ -38,11 +38,14 @@ namespace eru.Infrastructure
             
             return services;
         }
-        public static IApplicationBuilder UseInfrastructure(this IApplicationBuilder app, IConfiguration configuration) =>
+
+        public static IApplicationBuilder
+            UseInfrastructure(this IApplicationBuilder app, IConfiguration configuration) =>
             app
                 .UseTranslator()
                 .UseIdentity()
-                .UseConfiguredHangfire(configuration);
+                .UseConfiguredHangfire(configuration)
+                .UsePlatformClients(configuration);
 
         public static IMvcBuilder UseInfrastructure(this IMvcBuilder mvcBuilder)
         {

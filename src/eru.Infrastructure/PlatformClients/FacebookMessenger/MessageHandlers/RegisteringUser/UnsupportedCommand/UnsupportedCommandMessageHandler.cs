@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using eru.Application.Classes.Queries.GetClasses;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.Models.SendApi;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.RegistrationDb.DbContext;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.RegistrationDb.Enums;
+using eru.Infrastructure.PlatformClients.FacebookMessenger.Selector;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.SendAPIClient;
+using FluentAssertions;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 
@@ -17,13 +20,15 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
         private readonly IRegistrationDbContext _dbContext;
         private readonly ISendApiClient _apiClient;
         private readonly IConfiguration _configuration;
+        private readonly ISelector _selector;
         
-        public UnsupportedCommandMessageHandler(IRegistrationDbContext dbContext, ISendApiClient apiClient, IMediator mediator, IConfiguration configuration)
+        public UnsupportedCommandMessageHandler(IRegistrationDbContext dbContext, ISendApiClient apiClient, IMediator mediator, IConfiguration configuration, ISelector selector)
         {
             _dbContext = dbContext;
             _apiClient = apiClient;
             _mediator = mediator;
             _configuration = configuration;
+            _selector = selector;
         }
         public async Task Handle(string uid)
         {
@@ -33,10 +38,17 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
             {
                 case Stage.Created:
                 {
-                    var response = new SendRequest(uid, new Message("Great! Now you need to select your class, by clicking on a button below. If you don't see your class, use the \"arrow\" buttons to scroll the list.", new []
+                    // TODO Use LINQ ToDictionary() method
+                    var supportedCultures = _configuration.GetSection("CultureSettings:AvailableCultures").AsEnumerable().Select(x => x.Value).Skip(1);
+                    var dict = new Dictionary<string, string>();
+                    foreach (var x in supportedCultures)
                     {
-                        new QuickReply("Cancel", "cancel")
-                    }));
+                        var culture = new CultureInfo(x);
+                        dict.Add(culture.DisplayName, $"{ReplyPayloads.LangPrefix}{x}");
+                    }
+
+                    var replies = _selector.GetSelector(dict, user.ListOffset);
+                    var response = new SendRequest(uid, new Message("Hello! Eru is a substitution information system that enables you to get personalized notifications about all substitutions directly from school. If you want to try it, choose your language by clicking on a correct flag below. If you don't want to use this bot, just click Cancel at any time.", replies));
                     await _apiClient.Send(response);
                     
                     break;
@@ -44,6 +56,7 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
 
                 case Stage.GatheredLanguage:
                 {
+                    // TODO Use LINQ ToDictionary() method
                     var classesInDb = await _mediator.Send(new GetClassesQuery());
                     var yearsSet = new SortedSet<int>();
                     foreach (var x in classesInDb)
@@ -51,23 +64,15 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
                         yearsSet.Add(x.Year);
                     }
 
-                    var years = yearsSet.Skip(user.ListOffset).Take(10).AsEnumerable();
-                    
-                    var replies = new List<QuickReply>();
-                    foreach (var x in years)
+                    var dict = new Dictionary<string, string>();
+                    foreach (var x in yearsSet)
                     {
-                        replies.Add(new QuickReply(x.ToString(), $"{ReplyPayloads.YearPrefix}{x.ToString()}"));
+                        dict.Add(x.ToString(), $"{ReplyPayloads.YearPrefix}{x.ToString()}");
                     }
+
+                    var replies = _selector.GetSelector(dict, user.ListOffset);
                     
-                    if(user.ListOffset > 0)
-                        replies.Add(new QuickReply("<-", ReplyPayloads.PreviousPage));
-                    
-                    if(yearsSet.Count - user.ListOffset - 10 > 0)
-                        replies.Add(new QuickReply("->", ReplyPayloads.NextPage));
-                    
-                    replies.Add(new QuickReply("Cancel", ReplyPayloads.CancelPayload));
-                    
-                    var response = new SendRequest(uid, new Message("", replies));
+                    var response = new SendRequest(uid, new Message("Now select your class, in the same way as language.", replies));
                     await _apiClient.Send(response);
                     
                     break;
@@ -75,21 +80,16 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
                 
                 case Stage.GatheredYear:
                 {
+                    // TODO Use LINQ ToDictionary() method
                     var classesInDb = await _mediator.Send(new GetClassesQuery());
-                    var classes = classesInDb.Where(x => x.Year == user.Year).OrderBy(x => x.Section).Skip(user.ListOffset).Take(10).AsEnumerable();
-
-                    var replies = new List<QuickReply>();
+                    var classes = classesInDb.Where(x => x.Year == user.Year).OrderBy(x => x.Section);
+                    var dict = new Dictionary<string, string>();
                     foreach (var x in classes)
                     {
-                        replies.Add(new QuickReply(x.ToString(), string.Format("{0}{1}", ReplyPayloads.ClassPrefix, x.Id)));
+                        dict.Add(x.ToString(), x.Id);
                     }
-                    
-                    if(user.ListOffset > 0)
-                        replies.Add(new QuickReply("<-", ReplyPayloads.PreviousPage));
-                    if(classesInDb.Count() - user.ListOffset - 10 > 0)
-                        replies.Add(new QuickReply("->", ReplyPayloads.NextPage));
-                    
-                    replies.Add(new QuickReply("Cancel", ReplyPayloads.CancelPayload));
+
+                    var replies = _selector.GetSelector(dict, user.ListOffset);
                     
                     var response = new SendRequest(uid, new Message("Great! Now you need to select your class, by clicking on a button below. If you don't see your class, use the \"arrow\" buttons to scroll the list.", replies));
                     await _apiClient.Send(response);
@@ -99,6 +99,7 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
                 
                 case Stage.GatheredClass:
                 {
+                    // TODO Use LINQ ToDictionary() method
                     var response = new SendRequest(uid, new Message("Now we have all the required informations to create your subscription. If you want to get a message about all substiututions concerning you as soon as the school publish that information, click the Subscribe button. If you want to delete (or modify) your data, click Cancel.", new []
                     {
                         new QuickReply("Subscribe", ReplyPayloads.SubscribePayload),
