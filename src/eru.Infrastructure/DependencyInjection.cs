@@ -1,17 +1,9 @@
-﻿using System.Linq;
-using System.Reflection;
-using eru.Application.Common.Exceptions;
-using eru.Application.Common.Interfaces;
+﻿using eru.Application.Common.Interfaces;
 using eru.Infrastructure.Hangfire;
 using eru.Infrastructure.Identity;
 using eru.Infrastructure.Persistence;
 using eru.Infrastructure.Translation;
-using Hangfire;
-using Hangfire.Dashboard.BasicAuthorization;
-using Hangfire.MemoryStorage;
-using MediatR;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
