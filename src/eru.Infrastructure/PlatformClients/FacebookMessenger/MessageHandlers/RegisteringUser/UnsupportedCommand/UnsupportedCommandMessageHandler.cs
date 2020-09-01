@@ -38,7 +38,6 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
             {
                 case Stage.Created:
                 {
-                    // TODO Use LINQ ToDictionary() method
                     var supportedCultures = _configuration.GetSection("CultureSettings:AvailableCultures").AsEnumerable().Select(x => x.Value).Skip(1);
                     var dict = new Dictionary<string, string>();
                     foreach (var x in supportedCultures)
@@ -56,20 +55,9 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
 
                 case Stage.GatheredLanguage:
                 {
-                    // TODO Use LINQ ToDictionary() method
                     var classesInDb = await _mediator.Send(new GetClassesQuery());
-                    var yearsSet = new SortedSet<int>();
-                    foreach (var x in classesInDb)
-                    {
-                        yearsSet.Add(x.Year);
-                    }
-
-                    var dict = new Dictionary<string, string>();
-                    foreach (var x in yearsSet)
-                    {
-                        dict.Add(x.ToString(), $"{ReplyPayloads.YearPrefix}{x.ToString()}");
-                    }
-
+                    var yearsSet = new SortedSet<int>(classesInDb.Select(x => x.Year));
+                    var dict = yearsSet.ToDictionary(x => x.ToString(), x => $"{ReplyPayloads.YearPrefix}{x.ToString()}");
                     var replies = _selector.GetSelector(dict, user.ListOffset);
                     
                     var response = new SendRequest(uid, new Message("Now select your class, in the same way as language.", replies));
@@ -80,15 +68,9 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
                 
                 case Stage.GatheredYear:
                 {
-                    // TODO Use LINQ ToDictionary() method
                     var classesInDb = await _mediator.Send(new GetClassesQuery());
                     var classes = classesInDb.Where(x => x.Year == user.Year).OrderBy(x => x.Section);
-                    var dict = new Dictionary<string, string>();
-                    foreach (var x in classes)
-                    {
-                        dict.Add(x.ToString(), x.Id);
-                    }
-
+                    var dict = classes.ToDictionary(x => x.ToString(), x => x.Id);
                     var replies = _selector.GetSelector(dict, user.ListOffset);
                     
                     var response = new SendRequest(uid, new Message("Great! Now you need to select your class, by clicking on a button below. If you don't see your class, use the \"arrow\" buttons to scroll the list.", replies));
@@ -99,7 +81,6 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
                 
                 case Stage.GatheredClass:
                 {
-                    // TODO Use LINQ ToDictionary() method
                     var response = new SendRequest(uid, new Message("Now we have all the required informations to create your subscription. If you want to get a message about all substiututions concerning you as soon as the school publish that information, click the Subscribe button. If you want to delete (or modify) your data, click Cancel.", new []
                     {
                         new QuickReply("Subscribe", ReplyPayloads.SubscribePayload),

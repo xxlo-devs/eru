@@ -17,12 +17,12 @@ namespace eru.Infrastructure.Tests.PlatformClients.FacebookMessenger.MessageHand
             var context = new FakeRegistrationDb();
             var apiClient = new Mock<ISendApiClient>();
             
-            var handler = new GatherClassMessageHandler();
+            var handler = new GatherClassMessageHandler(context, apiClient.Object);
             await handler.Handle("sample-registering-user-with-year", "class:sample-class");
 
             context.IncompleteUsers.Should().ContainSingle(x =>
                 x.Id == "sample-registering-user-with-year" && x.Platform == "FacebookMessenger" && x.Year == 1 &&
-                x.ClassId == "sample-class" && x.PreferredLanguage == "en-us" && x.Stage == Stage.GatheredClass);
+                x.ClassId == "sample-class" && x.PreferredLanguage == "en" && x.Stage == Stage.GatheredClass);
             apiClient.Verify(x => x.Send(It.IsAny<SendRequest>()), Times.Once);
         }
     }

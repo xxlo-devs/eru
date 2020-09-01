@@ -1,12 +1,44 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using eru.Application.Classes.Queries.GetClasses;
+using eru.Infrastructure.PlatformClients.FacebookMessenger.Models.SendApi;
+using eru.Infrastructure.PlatformClients.FacebookMessenger.RegistrationDb.DbContext;
+using eru.Infrastructure.PlatformClients.FacebookMessenger.RegistrationDb.Enums;
+using eru.Infrastructure.PlatformClients.FacebookMessenger.Selector;
+using eru.Infrastructure.PlatformClients.FacebookMessenger.SendAPIClient;
+using MediatR;
 
 namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.GatherYear
 {
     public class GatherYearMessageHandler : IGatherYearMessageHandler
-    {
+    {        
+        private readonly IRegistrationDbContext _dbContext;
+        private readonly ISendApiClient _apiClient;
+        private readonly IMediator _mediator;
+        private readonly ISelector _selector; 
+        
+        public GatherYearMessageHandler(IRegistrationDbContext dbContext, ISendApiClient apiClient, IMediator mediator, ISelector selector)
+        {
+            _dbContext = dbContext;
+            _apiClient = apiClient;
+            _mediator = mediator;
+            _selector = selector;
+        }
         public async Task Handle(string uid, string payload)
         {
-            throw new System.NotImplementedException();
+            var user = await _dbContext.IncompleteUsers.FindAsync(uid);
+            user.Year = int.Parse(payload.Substring(ReplyPayloads.YearPrefix.Length ));
+            user.Stage = Stage.GatheredYear;
+            user.ListOffset = 0;
+            _dbContext.IncompleteUsers.Update(user);
+            await _dbContext.SaveChangesAsync(CancellationToken.None);
+            
+            var classesInDb = await _mediator.Send(new GetClassesQuery());
+            var dict = classesInDb.Where(x => x.Year == user.Year).OrderBy(x => x.Section).ToDictionary(x => x.ToString(), x => x.Id);
+            
+            var response = new SendRequest(uid, new Message("", _selector.GetSelector(dict, user.ListOffset)));
+            await _apiClient.Send(response);
         }
     }
 }
