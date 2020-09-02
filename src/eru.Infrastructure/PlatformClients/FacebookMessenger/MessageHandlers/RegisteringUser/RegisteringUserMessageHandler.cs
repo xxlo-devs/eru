@@ -5,6 +5,7 @@ using eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.Regis
 using eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.GatherClass;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.GatherLanguage;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.GatherYear;
+using eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.Paging;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.Models.Webhook.Messages;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.RegistrationDb.DbContext;
 using Microsoft.AspNetCore.Routing.Template;
@@ -19,8 +20,9 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
         private readonly IGatherLanguageMessageHandler _langHandler;
         private readonly IGatherYearMessageHandler _yearHandler;
         private readonly IUnsupportedCommandMessageHandler _unsupportedHandler;
+        private readonly IPagingMessageHandler _pagingHandler;
 
-        public RegisteringUserMessageHandler(ICancelRegistrationMessageHandler cancelHandler, IConfirmSubscriptionMessageHandler confirmHandler, IGatherClassMessageHandler classHandler, IGatherLanguageMessageHandler langHandler, IGatherYearMessageHandler yearHandler, IUnsupportedCommandMessageHandler unsupportedHandler)
+        public RegisteringUserMessageHandler(ICancelRegistrationMessageHandler cancelHandler, IConfirmSubscriptionMessageHandler confirmHandler, IGatherClassMessageHandler classHandler, IGatherLanguageMessageHandler langHandler, IGatherYearMessageHandler yearHandler, IUnsupportedCommandMessageHandler unsupportedHandler, IPagingMessageHandler pagingHandler)
         {
             _cancelHandler = cancelHandler;
             _confirmHandler = confirmHandler;
@@ -28,34 +30,44 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
             _langHandler = langHandler;
             _yearHandler = yearHandler;
             _unsupportedHandler = unsupportedHandler;
+            _pagingHandler = pagingHandler;
         }
         public async Task Handle(string uid, Message message)
         {
             if (message?.QuickReply?.Payload != null)
             {
-                if (message.QuickReply.Payload == ReplyPayloads.CancelPayload)
+                switch (message.QuickReply.Payload)
                 {
-                    await _cancelHandler.Handle(uid);
+                    case ReplyPayloads.CancelPayload:
+                        await _cancelHandler.Handle(uid);
+                        break;
+                    
+                    case ReplyPayloads.SubscribePayload:
+                        await _confirmHandler.Handle(uid);
+                        break;
+                    
+                    case ReplyPayloads.PreviousPage:
+                        await _pagingHandler.ShowPreviousPage(uid);
+                        break;
+                    
+                    case ReplyPayloads.NextPage:
+                        await _pagingHandler.ShowNextPage(uid);
+                        break;
                 }
 
-                if (message.QuickReply.Payload == ReplyPayloads.SubscribePayload)
-                {
-                    await _confirmHandler.Handle(uid);
-                }
-
-                if (message.QuickReply.Payload.StartsWith("lang:"))
+                if (message.QuickReply.Payload.StartsWith(ReplyPayloads.LangPrefix))
                 {
                     await _langHandler.Handle(uid, message.QuickReply.Payload);
                 }
-
-                if (message.QuickReply.Payload.StartsWith("class:"))
-                {
-                    await _classHandler.Handle(uid, message.QuickReply.Payload);
-                }
-
-                if (message.QuickReply.Payload.StartsWith("year:"))
+                
+                if (message.QuickReply.Payload.StartsWith(ReplyPayloads.YearPrefix))
                 {
                     await _yearHandler.Handle(uid, message.QuickReply.Payload);
+                }
+
+                if (message.QuickReply.Payload.StartsWith(ReplyPayloads.ClassPrefix))
+                {
+                    await _classHandler.Handle(uid, message.QuickReply.Payload);
                 }
             }
             else

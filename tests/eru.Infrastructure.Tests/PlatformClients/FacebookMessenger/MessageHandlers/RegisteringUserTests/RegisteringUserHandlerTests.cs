@@ -9,6 +9,7 @@ using eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.Regis
 using eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.GatherClass;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.GatherLanguage;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.GatherYear;
+using eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.Paging;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.UnsupportedCommand;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.Models.SendApi;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.RegistrationDb.DbContext;
@@ -33,7 +34,8 @@ namespace eru.Infrastructure.Tests.PlatformClients.FacebookMessenger.MessageHand
             LangHandlerMock = new Mock<IGatherLanguageMessageHandler>();
             YearHandlerMock = new Mock<IGatherYearMessageHandler>();
             UnsupportedHandlerMock = new Mock<IUnsupportedCommandMessageHandler>();
-            Handler = new RegisteringUserMessageHandler(CancelHandlerMock.Object, ConfirmHandlerMock.Object, ClassHandlerMock.Object, LangHandlerMock.Object, YearHandlerMock.Object, UnsupportedHandlerMock.Object);
+            PagingHandlerMock = new Mock<IPagingMessageHandler>();
+            Handler = new RegisteringUserMessageHandler(CancelHandlerMock.Object, ConfirmHandlerMock.Object, ClassHandlerMock.Object, LangHandlerMock.Object, YearHandlerMock.Object, UnsupportedHandlerMock.Object, PagingHandlerMock.Object);
         }
         
         public IRegisteringUserMessageHandler Handler { get; set; }
@@ -43,6 +45,7 @@ namespace eru.Infrastructure.Tests.PlatformClients.FacebookMessenger.MessageHand
         public Mock<IGatherLanguageMessageHandler> LangHandlerMock { get; set; }
         public Mock<IGatherYearMessageHandler> YearHandlerMock { get; set; }
         public Mock<IUnsupportedCommandMessageHandler> UnsupportedHandlerMock { get; set; }
+        public Mock<IPagingMessageHandler> PagingHandlerMock { get; set; }
 
         public void VerifyNoOtherCalls()
         {
@@ -96,10 +99,10 @@ namespace eru.Infrastructure.Tests.PlatformClients.FacebookMessenger.MessageHand
             {
                 Mid = "sample-message-id",
                 Text = "English",
-                QuickReply = new QuickReply {Payload = ReplyPayloads.English}
+                QuickReply = new QuickReply {Payload = $"{ReplyPayloads.LangPrefix}en"}
             });
             
-            builder.LangHandlerMock.Verify(x => x.Handle("sample-registering-user", ReplyPayloads.English), Times.Once);
+            builder.LangHandlerMock.Verify(x => x.Handle("sample-registering-user", $"{ReplyPayloads.LangPrefix}en"), Times.Once);
             builder.VerifyNoOtherCalls();
         }
         
@@ -148,6 +151,36 @@ namespace eru.Infrastructure.Tests.PlatformClients.FacebookMessenger.MessageHand
             });
 
             builder.ConfirmHandlerMock.Verify(x => x.Handle("sample-registering-user-with-class"), Times.Once);
+            builder.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async void ShouldRoutePreviousPageRequestToAppropriateHandler()
+        {
+            var builder = new RegisteringUserMessageHandlerBuilder();
+
+            await builder.Handler.Handle("sample-registering-user", new Message
+            {
+                Mid = "sample-message-id",
+                Text = "<-",
+                QuickReply = new QuickReply {Payload = ReplyPayloads.PreviousPage}
+            });
+            
+            builder.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async void ShouldRouteNextPageRequestToAppropriateHandler()
+        {
+            var builder = new RegisteringUserMessageHandlerBuilder();
+
+            await builder.Handler.Handle("sample-registering-user", new Message
+            {
+                Mid = "sample-message-id",
+                Text = "->",
+                QuickReply = new QuickReply {Payload = ReplyPayloads.NextPage}
+            });
+            
             builder.VerifyNoOtherCalls();
         }
     }

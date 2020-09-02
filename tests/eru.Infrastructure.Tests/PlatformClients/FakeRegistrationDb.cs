@@ -40,7 +40,10 @@ namespace eru.Infrastructure.Tests.PlatformClients
                     new IncompleteUser { Id = "sample-registering-user", Platform = "FacebookMessenger", ClassId = null, PreferredLanguage = null, Year = 0, Stage = Stage.Created, ListOffset = 0},
                     new IncompleteUser { Id = "sample-registering-user-with-lang", Platform = "FacebookMessenger", ClassId = null, PreferredLanguage = "en", Year = 0, Stage = Stage.GatheredLanguage, ListOffset = 0},
                     new IncompleteUser { Id = "sample-registering-user-with-year", Platform = "FacebookMessenger", ClassId = null, PreferredLanguage = "en", Year = 1, Stage = Stage.GatheredYear, ListOffset = 0},
-                    new IncompleteUser { Id = "sample-registering-user-with-class", Platform = "FacebookMessenger", ClassId = "sample-class", PreferredLanguage = "en", Year = 1, Stage = Stage.GatheredClass, ListOffset = 0}
+                    new IncompleteUser { Id = "sample-registering-user-with-class", Platform = "FacebookMessenger", ClassId = "sample-class", PreferredLanguage = "en", Year = 1, Stage = Stage.GatheredClass, ListOffset = 0},
+                    new IncompleteUser { Id = "language-paging-test-user", Platform = "FacebookMessenger", ClassId = null, PreferredLanguage = null, Year = 0, Stage = Stage.Created, ListOffset = 10},
+                    new IncompleteUser { Id = "year-paging-test-user", Platform = "FacebookMessenger", ClassId = null, PreferredLanguage = "en", Year = 0, Stage = Stage.GatheredLanguage, ListOffset = 10},
+                    new IncompleteUser { Id = "class-paging-test-user", Platform = "FacebookMessenger", ClassId = null, PreferredLanguage = "en", Year = 1, Stage = Stage.GatheredYear, ListOffset = 10}
                 );
             });
             
