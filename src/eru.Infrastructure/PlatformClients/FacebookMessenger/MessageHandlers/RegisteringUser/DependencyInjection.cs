@@ -3,7 +3,6 @@ using eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.Regis
 using eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.GatherClass;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.GatherLanguage;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.GatherYear;
-using eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.UnsupportedCommand;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser
@@ -17,7 +16,6 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
             services.AddTransient<IGatherClassMessageHandler, GatherClassMessageHandler>();
             services.AddTransient<IGatherLanguageMessageHandler, GatherLanguageMessageHandler>();
             services.AddTransient<IGatherYearMessageHandler, GatherYearMessageHandler>();
-            services.AddTransient<IUnsupportedCommandMessageHandler, UnsupportedCommandMessageHandler>();
             services.AddTransient<IRegisteringUserMessageHandler, RegisteringUserMessageHandler>();
 
             return services;

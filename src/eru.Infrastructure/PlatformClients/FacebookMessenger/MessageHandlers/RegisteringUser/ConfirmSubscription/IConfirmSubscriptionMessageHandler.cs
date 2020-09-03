@@ -4,6 +4,6 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
 {
     public interface IConfirmSubscriptionMessageHandler
     {
-        public Task Handle(string uid);
+        public Task Handle(string uid, string payload);
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.Models.SendApi;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.RegistrationDb.DbContext;
@@ -20,11 +21,23 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
             _dbContext = dbContext;
         }
 
-        public async Task Handle(string uid)
+        public async Task Handle(string uid, string payload)
+        {
+            if (payload == ReplyPayloads.SubscribePayload)
+            {
+                await Confirm(uid);
+            }
+            else
+            {
+                await UnsupportedCommand(uid);
+            }
+        }
+
+        private async Task Confirm(string uid)
         {
             var user = await _dbContext.IncompleteUsers.FindAsync(uid);
             await _mediator.Send(user.ToCreateSubscriptionCommand());
-
+            
             _dbContext.IncompleteUsers.Remove(user);
             await _dbContext.SaveChangesAsync(CancellationToken.None);
             
@@ -33,6 +46,11 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
                 new QuickReply("Cancel", ReplyPayloads.CancelPayload), 
             }));
             await _apiClient.Send(response);
+        }
+
+        private async Task UnsupportedCommand(string uid)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using eru.Application.Classes.Queries.GetClasses;
@@ -27,8 +28,46 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
         }
         public async Task Handle(string uid, string payload)
         {
+            if (payload == ReplyPayloads.PreviousPage)
+            {
+                await ToPreviousPage(uid);
+                return;
+            }
+
+            if (payload == ReplyPayloads.NextPage)
+            {
+                await ToNextPage(uid);
+                return;
+            }
+
+            if (payload.StartsWith(ReplyPayloads.YearPrefix))
+            {
+                await Gather(uid, int.Parse(payload.Substring(ReplyPayloads.YearPrefix.Length)));
+                return;
+            }
+
+            await UnsupportedCommand(uid);
+        }
+        
+        private async Task ToPreviousPage(string uid)
+        {
+            throw new NotImplementedException();
+        }
+
+        private async Task ToNextPage(string uid)
+        {
+            throw new NotImplementedException();
+        }
+
+        private async Task UnsupportedCommand(string uid)
+        {
+            throw new NotImplementedException();
+        }
+
+        private async Task Gather(string uid, int year)
+        {
             var user = await _dbContext.IncompleteUsers.FindAsync(uid);
-            user.Year = int.Parse(payload.Substring(ReplyPayloads.YearPrefix.Length ));
+            user.Year = year;
             user.Stage = Stage.GatheredYear;
             user.ListOffset = 0;
             _dbContext.IncompleteUsers.Update(user);

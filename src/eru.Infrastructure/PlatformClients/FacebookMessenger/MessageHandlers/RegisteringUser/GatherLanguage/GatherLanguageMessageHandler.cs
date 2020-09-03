@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -29,8 +30,44 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
         }
         public async Task Handle(string uid, string payload)
         {
+            if (payload == ReplyPayloads.PreviousPage)
+            {
+                await ToPreviousPage(uid);
+            }
+
+            if (payload == ReplyPayloads.NextPage)
+            {
+                await ToNextPage(uid);
+            }
+
+            if (payload.StartsWith(ReplyPayloads.LangPrefix))
+            {
+                await Gather(uid, payload.Substring(ReplyPayloads.LangPrefix.Length));
+                return;
+            }
+
+            await UnsupportedCommand(uid);
+        }
+
+        private async Task ToPreviousPage(string uid)
+        {
+            throw new NotImplementedException();
+        }
+
+        private async Task ToNextPage(string uid)
+        {
+            throw new NotImplementedException();
+        }
+
+        private async Task UnsupportedCommand(string uid)
+        {
+            throw new NotImplementedException();
+        }
+
+        private async Task Gather(string uid, string lang)
+        {
             var user = await _dbContext.IncompleteUsers.FindAsync(uid);
-            user.PreferredLanguage = payload.Substring(ReplyPayloads.LangPrefix.Length);
+            user.PreferredLanguage = lang;
             user.ListOffset = 0;
             user.Stage = Stage.GatheredLanguage;
             _dbContext.IncompleteUsers.Update(user);
@@ -38,7 +75,7 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
             
             var classesInDb = await _mediator.Send(new GetClassesQuery());
             var dict = new SortedSet<int>(classesInDb.Select(x => x.Year)).ToDictionary(x => x.ToString(), x => $"{ReplyPayloads.YearPrefix}{x.ToString()}");
-
+            
             var response = new SendRequest(uid, new Message("Now select your class year, in the same way as language.", _selector.GetSelector(dict, user.ListOffset)));
             await _apiClient.Send(response);
         }
