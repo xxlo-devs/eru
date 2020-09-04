@@ -14,14 +14,14 @@ namespace eru.Application.Substitutions.Commands
     {
         private readonly IApplicationDbContext _context;
         private readonly IClassesParser _classesParser;
-        private readonly IHangfireWrapper _hangfireWrapper;
+        private readonly IBackgroundJobClient _hangfire;
         private readonly IEnumerable<IPlatformClient> _clients;
 
-        public UploadSubstitutionsCommandHandler(IApplicationDbContext context, IEnumerable<IPlatformClient> clients, IHangfireWrapper hangfireWrapper, IClassesParser classesParser)
+        public UploadSubstitutionsCommandHandler(IApplicationDbContext context, IEnumerable<IPlatformClient> clients, IBackgroundJobClient hangfire, IClassesParser classesParser)
         {
             _context = context;
             _clients = clients;
-            _hangfireWrapper = hangfireWrapper;
+            _hangfire = hangfire;
             _classesParser = classesParser;
         }
 
@@ -83,7 +83,7 @@ namespace eru.Application.Substitutions.Commands
                         .Where(x => x.Platform == client.PlatformId && x.Class == @class.ToString());
                     foreach (var id in ids)
                     {
-                        _hangfireWrapper.BackgroundJobClient.Enqueue(() =>
+                        _hangfire.Enqueue(() =>
                             client.SendMessage(id.Id, temp[@class].AsEnumerable()));
                     }
                 }
