@@ -4,6 +4,6 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
 {
     public interface IGatherClassMessageHandler
     {
-        public Task Handle(string uid, string payload);
+        public Task Handle(string uid, Payload payload);
     }
 }

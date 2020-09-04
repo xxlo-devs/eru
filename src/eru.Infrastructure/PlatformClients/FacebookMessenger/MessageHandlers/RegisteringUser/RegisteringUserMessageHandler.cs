@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Text.Json;
+using System.Threading.Tasks;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.CancelRegistration;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.ConfirmSubscription;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.GatherClass;
@@ -30,13 +31,15 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
         }
         public async Task Handle(string uid, Message message)
         {
-            if (message.QuickReply.Payload == ReplyPayloads.CancelPayload)
+            var payload = JsonSerializer.Deserialize<Payload>(message.QuickReply.Payload);
+            var user = await _dbContext.IncompleteUsers.FindAsync(uid);
+
+            if (payload.Type == Type.Cancel)
             {
                 await _cancelHandler.Handle(uid);
                 return;
             }
             
-            var user = await _dbContext.IncompleteUsers.FindAsync(uid);
             switch (user.Stage)
             {
                 case Stage.Created:

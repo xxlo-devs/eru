@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Text.Json;
+using System.Threading.Tasks;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser.CancelSubscription;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser.UnsupportedCommand;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.Models.Webhook.Messages;
@@ -18,7 +19,9 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.K
         
         public async Task Handle(string uid, Message message)
         {
-            if (message?.QuickReply?.Payload == ReplyPayloads.CancelPayload)
+            var payload = JsonSerializer.Deserialize<Payload>(message.QuickReply.Payload);
+
+            if (payload.Type == Type.Cancel)
             {
                 await _cancelSubscriptionMessageHandler.Handle(uid);
                 return;

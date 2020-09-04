@@ -27,7 +27,7 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger
         {
             var message = new SendRequest(id, new Message(content, new[]
             {
-                new QuickReply("Cancel", ReplyPayloads.CancelPayload), 
+                new QuickReply("Cancel", new Payload(Type.Cancel).ToJson()), 
             }), MessageTags.AccountUpdate);
 
             await _apiClient.Send(message);
@@ -48,7 +48,7 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger
                 await _apiClient.Send(req);
             }
 
-            req = new SendRequest(id, new Message("If you want to stop getting these notifications, just click Cancel. ", new[] {new QuickReply("Cancel", ReplyPayloads.CancelPayload)}), MessageTags.ConfirmedEventUpdate);
+            req = new SendRequest(id, new Message("If you want to stop getting these notifications, just click Cancel. ", new[] {new QuickReply("Cancel", new Payload(Type.Cancel).ToJson())}), MessageTags.ConfirmedEventUpdate);
             await _apiClient.Send(req);
         }
     }

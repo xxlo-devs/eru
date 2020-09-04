@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using eru.Application.Classes.Queries.GetClasses;
@@ -26,35 +27,27 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
             _mediator = mediator;
             _selector = selector;
         }
-        public async Task Handle(string uid, string payload)
+        public async Task Handle(string uid, Payload payload)
         {
-            if (payload == ReplyPayloads.PreviousPage)
+            if (payload.Type == Type.Year)
             {
-                await ToPreviousPage(uid);
-                return;
-            }
+                if (payload.Page != null)
+                {
+                    await ShowPage();
+                    return;
+                }
 
-            if (payload == ReplyPayloads.NextPage)
-            {
-                await ToNextPage(uid);
-                return;
-            }
-
-            if (payload.StartsWith(ReplyPayloads.YearPrefix))
-            {
-                await Gather(uid, int.Parse(payload.Substring(ReplyPayloads.YearPrefix.Length)));
-                return;
+                if (payload.Id != null)
+                {
+                    await Gather(uid, int.Parse(payload.Id));
+                    return; 
+                }
             }
 
             await UnsupportedCommand(uid);
         }
-        
-        private async Task ToPreviousPage(string uid)
-        {
-            throw new NotImplementedException();
-        }
 
-        private async Task ToNextPage(string uid)
+        private async Task ShowPage()
         {
             throw new NotImplementedException();
         }

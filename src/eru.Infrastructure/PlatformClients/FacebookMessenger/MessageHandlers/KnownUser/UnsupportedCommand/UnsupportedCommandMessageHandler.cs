@@ -18,7 +18,7 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.K
             await _apiClient.Send(new SendRequest(uid,
                 new Message("This is not a supported command. If you want to cancel your subscription, just click Cancel. If you want to recieve notifications, just ignore this message.", new[]
                 {
-                    new QuickReply("Cancel", ReplyPayloads.CancelPayload), 
+                    new QuickReply("Cancel", new Payload(Type.Cancel).ToJson()), 
                 })));
         }
     }

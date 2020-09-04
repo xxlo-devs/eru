@@ -21,9 +21,9 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
             _dbContext = dbContext;
         }
 
-        public async Task Handle(string uid, string payload)
+        public async Task Handle(string uid, Payload payload)
         {
-            if (payload == ReplyPayloads.SubscribePayload)
+            if (payload.Type == Type.Subscribe)
             {
                 await Confirm(uid);
             }
@@ -43,7 +43,7 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
             
             var response = new SendRequest(uid, new Message("Congratulations! You've successfully subscribed to eru Messenger notifications :)", new []
             {
-                new QuickReply("Cancel", ReplyPayloads.CancelPayload), 
+                new QuickReply("Cancel", new Payload(Type.Cancel).ToJson()), 
             }));
             await _apiClient.Send(response);
         }

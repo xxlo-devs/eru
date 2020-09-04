@@ -19,24 +19,21 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
             _apiClient = apiClient;
         }
         
-        public async Task Handle(string uid, string payload)
+        public async Task Handle(string uid, Payload payload)
         {
-            if (payload == ReplyPayloads.PreviousPage)
+            if (payload.Type == Type.Class)
             {
-                await ToPreviousPage(uid);
-                return;
-            }
+                if (payload.Page != null)
+                {
+                    await ShowPage();
+                    return; 
+                }
 
-            if (payload == ReplyPayloads.NextPage)
-            {
-                await ToNextPage(uid);
-                return;
-            }
-
-            if (payload.StartsWith(ReplyPayloads.ClassPrefix))
-            {
-                await Gather(uid, payload.Substring(ReplyPayloads.ClassPrefix.Length));
-                return;
+                if (payload.Id != null)
+                {
+                    await Gather(uid, payload.Id);
+                    return; 
+                }
             }
 
             await UnsupportedCommand(uid);
@@ -47,12 +44,7 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
             throw new NotImplementedException();
         }
 
-        private async Task ToNextPage(string uid)
-        {
-            throw new NotImplementedException();
-        }
-
-        private async Task ToPreviousPage(string uid)
+        private async Task ShowPage()
         {
             throw new NotImplementedException();
         }
@@ -69,8 +61,8 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
             
             var response = new SendRequest(uid, new Message("Now we have all the required informations to create your subscription. If you want to get a message about all substiututions concerning you as soon as the school publish that information, click the Subscribe button. If you want to delete (or modify) your data, click Cancel.", new []
             {
-                new QuickReply("Subscribe", ReplyPayloads.SubscribePayload),
-                new QuickReply("Cancel", ReplyPayloads.CancelPayload) 
+                new QuickReply("Subscribe", new Payload(Type.Subscribe).ToJson()),
+                new QuickReply("Cancel", new Payload(Type.Cancel).ToJson()) 
             }));
             await _apiClient.Send(response);
         }

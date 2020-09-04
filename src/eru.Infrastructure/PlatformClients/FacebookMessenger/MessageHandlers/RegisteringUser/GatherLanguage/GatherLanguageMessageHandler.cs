@@ -28,33 +28,27 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
             _mediator = mediator;
             _selector = selector;
         }
-        public async Task Handle(string uid, string payload)
+        public async Task Handle(string uid, Payload payload)
         {
-            if (payload == ReplyPayloads.PreviousPage)
+            if (payload.Type == Type.Lang)
             {
-                await ToPreviousPage(uid);
-            }
+                if (payload.Page != null)
+                {
+                    await ShowPage();
+                    return;
+                }
 
-            if (payload == ReplyPayloads.NextPage)
-            {
-                await ToNextPage(uid);
-            }
-
-            if (payload.StartsWith(ReplyPayloads.LangPrefix))
-            {
-                await Gather(uid, payload.Substring(ReplyPayloads.LangPrefix.Length));
-                return;
+                if (payload.Id != null)
+                {
+                    await Gather(uid, payload.Id);
+                    return;
+                }
             }
 
             await UnsupportedCommand(uid);
         }
 
-        private async Task ToPreviousPage(string uid)
-        {
-            throw new NotImplementedException();
-        }
-
-        private async Task ToNextPage(string uid)
+        private async Task ShowPage()
         {
             throw new NotImplementedException();
         }
