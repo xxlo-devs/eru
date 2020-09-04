@@ -43,15 +43,6 @@
         <DependentUpon>Login.pl.resx</DependentUpon>
         <DesignTime>True</DesignTime>
       </Compile>
-      <Compile Remove="Controllers\AdminDashboardController.cs" />
-    </ItemGroup>
-  
-    <ItemGroup>
-      <_ContentIncludedByDefault Remove="wwwroot\dist\css\dashboard.min.css" />
-      <_ContentIncludedByDefault Remove="wwwroot\dist\css\form.min.css" />
-      <_ContentIncludedByDefault Remove="wwwroot\dist\js\dashboard.min.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\dist\js\login.min.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\dist\js\upload.min.js" />
     </ItemGroup>
 
 </Project>
