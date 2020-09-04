@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using eru.Application.Classes.Queries.GetClasses;
+using eru.Application.Common.Interfaces;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.Models.SendApi;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.RegistrationDb.DbContext;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.RegistrationDb.Enums;
@@ -18,14 +19,16 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
         private readonly IRegistrationDbContext _dbContext;
         private readonly ISendApiClient _apiClient;
         private readonly IMediator _mediator;
-        private readonly ISelector _selector; 
+        private readonly ISelector _selector;
+        private readonly ITranslator<FacebookMessengerPlatformClient> _translator;
         
-        public GatherYearMessageHandler(IRegistrationDbContext dbContext, ISendApiClient apiClient, IMediator mediator, ISelector selector)
+        public GatherYearMessageHandler(IRegistrationDbContext dbContext, ISendApiClient apiClient, IMediator mediator, ISelector selector, ITranslator<FacebookMessengerPlatformClient> translator)
         {
             _dbContext = dbContext;
             _apiClient = apiClient;
             _mediator = mediator;
             _selector = selector;
+            _translator = translator;
         }
         public async Task Handle(string uid, Payload payload)
         {
@@ -33,7 +36,7 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
             {
                 if (payload.Page != null)
                 {
-                    await ShowPage();
+                    await ShowPage(uid, payload.Page.Value);
                     return;
                 }
 
@@ -47,7 +50,7 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
             await UnsupportedCommand(uid);
         }
 
-        private async Task ShowPage()
+        private async Task ShowPage(string uid, int page)
         {
             throw new NotImplementedException();
         }
@@ -69,7 +72,7 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
             var classesInDb = await _mediator.Send(new GetClassesQuery());
             var dict = classesInDb.Where(x => x.Year == user.Year).OrderBy(x => x.Section).ToDictionary(x => x.ToString(), x => x.Id);
             
-            var response = new SendRequest(uid, new Message("Great! Now you need to select your class, by clicking on a button below. If you don't see your class, use the \"arrow\" buttons to scroll the list.", _selector.GetSelector(dict, user.ListOffset)));
+            var response = new SendRequest(uid, new Message(await _translator.TranslateString("class-selection", user.PreferredLanguage), _selector.GetSelector(dict, 0, Type.Class)));
             await _apiClient.Send(response);
         }
     }

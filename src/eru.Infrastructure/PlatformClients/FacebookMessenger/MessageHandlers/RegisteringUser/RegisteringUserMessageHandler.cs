@@ -44,25 +44,25 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
             {
                 case Stage.Created:
                 {
-                    await _langHandler.Handle(uid, message.QuickReply.Payload);
+                    await _langHandler.Handle(uid, payload);
                     break;
                 }
 
                 case Stage.GatheredLanguage:
                 {
-                    await _yearHandler.Handle(uid, message.QuickReply.Payload);
+                    await _yearHandler.Handle(uid, payload);
                     break;
                 }
 
                 case Stage.GatheredYear:
                 {
-                    await _classHandler.Handle(uid, message.QuickReply.Payload);
+                    await _classHandler.Handle(uid, payload);
                     break;
                 }
 
                 case Stage.GatheredClass:
                 {
-                    await _confirmHandler.Handle(uid, message.QuickReply.Payload);
+                    await _confirmHandler.Handle(uid, payload);
                     break;
                 }
             }

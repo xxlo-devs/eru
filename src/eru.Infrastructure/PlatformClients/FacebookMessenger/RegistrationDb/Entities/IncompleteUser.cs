@@ -6,14 +6,13 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.RegistrationDb.En
     public class IncompleteUser
     {
         public string Id { get; set; } 
-        public string Platform { get; set; }
         public string PreferredLanguage { get; set; }
         public int Year { get; set; }
         public string ClassId { get; set; }
         public Stage Stage { get; set; }
         public int ListOffset { get; set; }
         
-        public CreateSubscriptionCommand ToCreateSubscriptionCommand() => new CreateSubscriptionCommand(Id, Platform, PreferredLanguage, ClassId);
+        public CreateSubscriptionCommand ToCreateSubscriptionCommand() => new CreateSubscriptionCommand(Id, "FacebookMessenger", PreferredLanguage, ClassId);
         
     }
 }

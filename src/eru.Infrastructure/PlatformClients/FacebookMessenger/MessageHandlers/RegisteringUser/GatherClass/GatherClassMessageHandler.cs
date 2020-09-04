@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using eru.Application.Common.Interfaces;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.Models.SendApi;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.RegistrationDb.DbContext;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.RegistrationDb.Enums;
@@ -12,11 +13,13 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
     {
         private readonly IRegistrationDbContext _dbContext;
         private readonly ISendApiClient _apiClient;
+        private readonly ITranslator<FacebookMessengerPlatformClient> _translator;
 
-        public GatherClassMessageHandler(IRegistrationDbContext dbContext, ISendApiClient apiClient)
+        public GatherClassMessageHandler(IRegistrationDbContext dbContext, ISendApiClient apiClient, ITranslator<FacebookMessengerPlatformClient> translator)
         {
             _dbContext = dbContext;
             _apiClient = apiClient;
+            _translator = translator;
         }
         
         public async Task Handle(string uid, Payload payload)
@@ -59,10 +62,10 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
             _dbContext.IncompleteUsers.Update(user);
             await _dbContext.SaveChangesAsync(CancellationToken.None);
             
-            var response = new SendRequest(uid, new Message("Now we have all the required informations to create your subscription. If you want to get a message about all substiututions concerning you as soon as the school publish that information, click the Subscribe button. If you want to delete (or modify) your data, click Cancel.", new []
+            var response = new SendRequest(uid, new Message(await _translator.TranslateString("confirmation", user.PreferredLanguage), new []
             {
-                new QuickReply("Subscribe", new Payload(Type.Subscribe).ToJson()),
-                new QuickReply("Cancel", new Payload(Type.Cancel).ToJson()) 
+                new QuickReply(await _translator.TranslateString("subscribe-button", user.PreferredLanguage), new Payload(Type.Subscribe).ToJson()),
+                new QuickReply(await _translator.TranslateString("cancel-button", user.PreferredLanguage), new Payload(Type.Cancel).ToJson()) 
             }));
             await _apiClient.Send(response);
         }

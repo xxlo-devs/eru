@@ -7,8 +7,9 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.Selector
 {
     public class Selector : ISelector
     {
-        public IEnumerable<QuickReply> GetSelector(Dictionary<string, string> items, int offset)
+        public IEnumerable<QuickReply> GetSelector(Dictionary<string, string> items, int page, Type payloadType)
         {
+            var offset = page * 10;
             var replies = new List<QuickReply>();
 
             var buttons =items.Skip(offset).Take(10);
@@ -17,14 +18,18 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.Selector
             {
                 replies.Add(new QuickReply(x.Key, x.Value));
             }
-            
-            if(offset > 0)
-                replies.Add(new QuickReply("<-", ReplyPayloads.PreviousPage));
-            
-            if(items.Count() - offset - 10 > 0)
-                replies.Add(new QuickReply("->", ReplyPayloads.NextPage));
-            
-            replies.Add(new QuickReply("Cancel", ReplyPayloads.CancelPayload));
+
+            if (page > 0)
+            {
+                replies.Add(new QuickReply("<-", new Payload(payloadType, page - 1).ToJson()));
+            }
+
+            if (items.Count() - offset - 10 > 0)
+            {
+                replies.Add(new QuickReply("->", new Payload(payloadType, page + 1).ToJson()));
+            }
+
+            replies.Add(new QuickReply("Cancel", new Payload(Type.Cancel).ToJson()));
 
             return replies;
         }

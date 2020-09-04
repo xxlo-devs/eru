@@ -6,6 +6,6 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.Selector
 {
     public interface ISelector
     {
-        public IEnumerable<QuickReply> GetSelector(Dictionary<string, string> items, int offset);
+        public IEnumerable<QuickReply> GetSelector(Dictionary<string, string> items, int page, Type payloadType);
     }
 }

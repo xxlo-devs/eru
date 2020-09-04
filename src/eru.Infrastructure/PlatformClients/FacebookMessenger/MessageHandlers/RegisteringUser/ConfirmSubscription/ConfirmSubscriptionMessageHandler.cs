@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using eru.Application.Common.Interfaces;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.Models.SendApi;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.RegistrationDb.DbContext;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.SendAPIClient;
@@ -13,12 +14,14 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
         private readonly IMediator _mediator;
         private readonly IRegistrationDbContext _dbContext;
         private readonly ISendApiClient _apiClient;
+        private readonly ITranslator<FacebookMessengerPlatformClient> _translator;
 
-        public ConfirmSubscriptionMessageHandler(IMediator mediator, IRegistrationDbContext dbContext, ISendApiClient apiClient)
+        public ConfirmSubscriptionMessageHandler(IMediator mediator, IRegistrationDbContext dbContext, ISendApiClient apiClient, ITranslator<FacebookMessengerPlatformClient> translator)
         {
             _mediator = mediator;
             _apiClient = apiClient;
             _dbContext = dbContext;
+            _translator = translator;
         }
 
         public async Task Handle(string uid, Payload payload)
@@ -41,9 +44,9 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
             _dbContext.IncompleteUsers.Remove(user);
             await _dbContext.SaveChangesAsync(CancellationToken.None);
             
-            var response = new SendRequest(uid, new Message("Congratulations! You've successfully subscribed to eru Messenger notifications :)", new []
+            var response = new SendRequest(uid, new Message(await _translator.TranslateString("confirmation", user.PreferredLanguage), new []
             {
-                new QuickReply("Cancel", new Payload(Type.Cancel).ToJson()), 
+                new QuickReply(await _translator.TranslateString("cancel-button", user.PreferredLanguage), new Payload(Type.Cancel).ToJson()), 
             }));
             await _apiClient.Send(response);
         }

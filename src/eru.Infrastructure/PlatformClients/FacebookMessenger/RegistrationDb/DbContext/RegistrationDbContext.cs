@@ -19,8 +19,6 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.RegistrationDb.Db
                 
                 x.Property(y => y.Id)
                     .HasMaxLength(255);
-                x.Property(y => y.Platform)
-                    .HasMaxLength(255);
                 x.Property(y => y.ClassId)
                     .HasMaxLength(255);
                 x.Property(y => y.PreferredLanguage)
