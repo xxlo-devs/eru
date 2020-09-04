@@ -21,9 +21,5 @@
       <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.4" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Compile Remove="Hangfire\HangfireWrapper.cs" />
-    </ItemGroup>
-
 
 </Project>
