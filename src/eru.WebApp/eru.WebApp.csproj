@@ -30,6 +30,14 @@
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>Login.en.Designer.cs</LastGenOutput>
       </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Pages\Index.pl.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Index.pl.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Pages\Index.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Index.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
     </ItemGroup>
   
     <ItemGroup>
@@ -41,6 +49,16 @@
       <Compile Update="Resources\Pages\Login.pl.Designer.cs">
         <AutoGen>True</AutoGen>
         <DependentUpon>Login.pl.resx</DependentUpon>
+        <DesignTime>True</DesignTime>
+      </Compile>
+      <Compile Update="Resources\Pages\Index.pl.Designer.cs">
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Index.pl.resx</DependentUpon>
+        <DesignTime>True</DesignTime>
+      </Compile>
+      <Compile Update="Resources\Pages\Index.en.Designer.cs">
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Index.en.resx</DependentUpon>
         <DesignTime>True</DesignTime>
       </Compile>
     </ItemGroup>

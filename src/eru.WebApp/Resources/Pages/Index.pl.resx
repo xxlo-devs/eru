@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true">
+            
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="who-are-we" xml:space="preserve">
+        <value>Kim jesteśmy?</value>
+        <comment>who-are-we</comment>
+    </data>
+    <data name="who-are-we-content" xml:space="preserve">
+        <value>Witajcie! My, Stanisław Nieradko (XXLO IIb1) oraz Błażej Sak (XXLO IIc1), wiemy że informacja o zastępstwach dociera do nas, uczniów, zbyt wolno. Postanowiliśmy coś z tym zrobić. Z tego powodu stworzyliśmy eru. Platformę do szybkiej wysyłki informacji o zastępstwach do wszystkich zainteresowanych uczniów. Mamy nadzieję że polubicie naszą platformę i korzystanie z niej będzie przyjemnością. Pozdrawiamy,</value>
+        <comment>who-are-we-content</comment>
+    </data>
+    <data name="eru-team" xml:space="preserve">
+        <value>zespół deweloperski eru</value>
+        <comment>eru-team</comment>
+    </data>
+    <data name="how-to-get-started" xml:space="preserve">
+        <value>Jak rozpocząć korzystanie z platformy?</value>
+        <comment>how-to-get-started</comment>
+    </data>
+    <data name="get-started-1" xml:space="preserve">
+        <value>Zarejestrowanie się jest bardzo proste! Wybierz z listy interesującą się platformę (jeżeli brakuje twojej ulubionej, zgłoś się do nas! Spróbujemy coś na to poradzić ;) ) a następnie postępuj zgodnie z instrukcją. Zazwyczaj będzie to wymagało od ciebie napisanie do naszego bota oraz odpowiedzenie na kilka pytań rejestracyjnych.</value>
+        <comment>get-started-1</comment>
+    </data>
+    <data name="get-started-2" xml:space="preserve">
+        <value>Informujemy iż NIE przechowujemy żadnych niepotrzebnych informacji o użytkownikach. Nie mamy dostępu także do waszych informacji personalnych. Jednakże platforma (gdy zdecydujecie się z niej korzystać) zapisuje takie informacje jak: id użytkownika, preferowany język oraz klasa, które zostaną automatycznie wykasowane w dniu wyrejestrowania się z usługi.</value>
+        <comment>get-started-2</comment>
+    </data>
+    <data name="supported-platforms" xml:space="preserve">
+        <value>Wspierane platformy:</value>
+        <comment>supported-platforms</comment>
+    </data>
+    <data name="thank-you" xml:space="preserve">
+        <value>Dziękujemy!</value>
+        <comment>thank-you</comment>
+    </data>
+    <data name="help-info" xml:space="preserve">
+        <value>Projekt nie byłby możliwy do zrealizowania bez wielkiej pomocy wice-dyrektora XXLO Kamila Żmudzińskiego. Bardzo dziękujemy za wsparcie przy tworzeniu naszej platformy!</value>
+        <comment>help-info</comment>
+    </data>
+    <data name="you-can-help" xml:space="preserve">
+        <value>Możesz nam pomóc!</value>
+        <comment>you-can-help</comment>
+    </data>
+    <data name="help-details" xml:space="preserve">
+        <value>Znalazłeś jakiś błąd? Masz pomysł na nową, przydatną funkcję? Zgłoś się do nas! Możesz stworzyć tzw. issue na platformie &lt;a target="_blank" href="https://github.com/xxlo-devs/eru"&gt;GitHub&lt;/a&gt; lub napisać na naszego maila &lt;a href="mailto:eru@2137420.xyz"&gt;eru@2137420.xyz&lt;/a&gt;!</value>
+        <comment>help-details</comment>
+    </data>
+</root>
