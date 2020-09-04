@@ -1,26 +1,13 @@
-﻿document.addEventListener('DOMContentLoaded', () => {
-    // Get all "navbar-burger" elements
-    const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0)
-
-    // Check if there are any navbar burgers
-    if ($navbarBurgers.length > 0) {
-        // Add a click event on each of them
-        $navbarBurgers.forEach(el => {
-            el.addEventListener('click', () => {
-                // Get the target from the "data-target" attribute
-                const target = el.dataset.target
-                const $target = document.getElementById(target)
-
-                // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
-                el.classList.toggle('is-active')
-                $target.classList.toggle('is-active')
-            })
-        })
-    }
-})
-if(!window.remove_class_button) {
-    window.remove_class_button = undefined;
+﻿//These variables need to be set. Otherwise some text will be missing :(
+if (window.remove_class_button === undefined || 
+    window.days === undefined || 
+    window.hours === undefined || 
+    window.minutes === undefined || 
+    window.seconds === undefined ||
+    window.notification_send_confirmation === undefined) {
+    alert('One of language variables is not set! Some texts might not be visible :(');
 }
+
 async function refreshData (force = false) {
     if (window.localStorage.getItem('auto-refresh') === 'true' || force) {
         await window.fetch('/admin/status')
@@ -28,7 +15,7 @@ async function refreshData (force = false) {
                 if (res.ok) {
                     res.json().then(json => {
                         const { days, hours, minutes, seconds } = json.uptime
-                        document.querySelector('#uptime').textContent = `${days} Days ${hours} Hours ${minutes} Minutes ${seconds} Seconds`
+                        document.querySelector('#uptime').textContent = `${days} ${window.days} ${hours} ${window.hours} ${minutes} ${window.minutes} ${seconds} ${window.seconds}`
                         document.querySelector('#subscribers').textContent = json.subscribers
                         const classesTable = document.querySelector('#classes-table>tbody')
                         json.classes.forEach((e) => {
@@ -87,7 +74,44 @@ async function removeClass (id) {
 function toggleRefresh() {
     localStorage.setItem('auto-refresh', document.querySelector('#auto-refresh').checked);
 }
-
 document.querySelector('#auto-refresh').checked = window.localStorage.getItem('auto-refresh') === 'true';
+
+function clearNotificationSender() {
+    document.querySelector('#notification-content').value = '';
+}
+
+async function sendNotification() {
+    const content = document.querySelector('#notification-content').value;
+    if(content && confirm(window.notification_send_confirmation + content)) {
+        await fetch('/admin/notification', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(content)
+        }).then((res) => {
+           if(res.ok) {
+               alert('OK');
+           } else {
+               alert('Couldn\'t send the notification.');
+           }
+        });
+    }
+}
+
 setInterval(refreshData, 1000);
 refreshData(true).then();
+
+document.addEventListener('DOMContentLoaded', () => {
+    const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0)
+    if ($navbarBurgers.length > 0) {
+        $navbarBurgers.forEach(el => {
+            el.addEventListener('click', () => {
+                const target = el.dataset.target
+                const $target = document.getElementById(target)
+                el.classList.toggle('is-active')
+                $target.classList.toggle('is-active')
+            })
+        })
+    }
+})

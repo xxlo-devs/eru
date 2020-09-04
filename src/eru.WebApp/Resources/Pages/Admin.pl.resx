@@ -89,4 +89,48 @@
         <value>Usuń</value>
         <comment>remove-class-button</comment>
     </data>
+    <data name="settings" xml:space="preserve">
+        <value>Ustawienia</value>
+        <comment>settings</comment>
+    </data>
+    <data name="notification-sender" xml:space="preserve">
+        <value>Wysyłacz Powiadomień</value>
+        <comment>notification-sender</comment>
+    </data>
+    <data name="content" xml:space="preserve">
+        <value>Zawartość</value>
+        <comment>content</comment>
+    </data>
+    <data name="sample-content" xml:space="preserve">
+        <value>Zawartość powiadomienia. WYSYŁAJ Z UWAGĄ!</value>
+        <comment>sample-content</comment>
+    </data>
+    <data name="send" xml:space="preserve">
+        <value>Wyślij</value>
+        <comment>send</comment>
+    </data>
+    <data name="cancel" xml:space="preserve">
+        <value>Anuluj</value>
+        <comment>cancel</comment>
+    </data>
+    <data name="days" xml:space="preserve">
+        <value>Dni</value>
+        <comment>days</comment>
+    </data>
+    <data name="hours" xml:space="preserve">
+        <value>Godzin</value>
+        <comment>hours</comment>
+    </data>
+    <data name="minutes" xml:space="preserve">
+        <value>Minut</value>
+        <comment>minutes</comment>
+    </data>
+    <data name="seconds" xml:space="preserve">
+        <value>Sekund</value>
+        <comment>seconds</comment>
+    </data>
+    <data name="notification_send_confirmation" xml:space="preserve">
+        <value>Czy jesteś pewnien, że chcesz przesłać poniższe powiadomienie do WSZYSTKICH zarejetrowanych subskrybentów? Zawartość:</value>
+        <comment>notification_send_confirmation</comment>
+    </data>
 </root>

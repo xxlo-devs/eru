@@ -92,9 +92,7 @@ namespace eru.Application.Tests.Substitutions.Commands
                 SubstitutionsDate = MockData.CorrectDate
             };
             var fakeDbContext = new FakeDbContext();
-            var hangfireWrapper = new Mock<IHangfireWrapper>();
             var backgroundJobClient = new Mock<IBackgroundJobClient>();
-            hangfireWrapper.Setup(x => x.BackgroundJobClient).Returns(backgroundJobClient.Object);
             var sampleClient = new Mock<IPlatformClient>();
             sampleClient.Setup(x => x.PlatformId).Returns("DebugMessageService");
 
@@ -106,7 +104,7 @@ namespace eru.Application.Tests.Substitutions.Commands
                     else return new[] {new Class(1, "a"), new Class(2, "b")};
                 });
             
-            var handler = new UploadSubstitutionsCommandHandler(fakeDbContext, new []{sampleClient.Object}, hangfireWrapper.Object, classParser.Object);
+            var handler = new UploadSubstitutionsCommandHandler(fakeDbContext, new []{sampleClient.Object}, backgroundJobClient.Object, classParser.Object);
 
             await handler.Handle(request, CancellationToken.None);
             
@@ -275,9 +273,7 @@ namespace eru.Application.Tests.Substitutions.Commands
                 SubstitutionsDate = MockData.CorrectDate
             };
             var fakeDbContext = new FakeDbContext();
-            var hangfireWrapper = new Mock<IHangfireWrapper>();
             var backgroundJobClient = new Mock<IBackgroundJobClient>();
-            hangfireWrapper.Setup(x => x.BackgroundJobClient).Returns(backgroundJobClient.Object);
             var sampleClient = new Mock<IPlatformClient>();
             sampleClient.Setup(x => x.PlatformId).Returns("DebugMessageService");
 
@@ -292,7 +288,7 @@ namespace eru.Application.Tests.Substitutions.Commands
                         return new[] {new Class(2, "a"), new Class(2, "b")};
                 });
             
-            var handler = new UploadSubstitutionsCommandHandler(fakeDbContext, new []{sampleClient.Object}, hangfireWrapper.Object, classParser.Object);
+            var handler = new UploadSubstitutionsCommandHandler(fakeDbContext, new []{sampleClient.Object}, backgroundJobClient.Object, classParser.Object);
 
             await handler.Handle(request, CancellationToken.None);
 

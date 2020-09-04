@@ -13,6 +13,7 @@ namespace eru.Application.Tests.Subscriptions.Commands
         {
             ValidatorOptions.Global.LanguageManager.Enabled = false;
         }
+        
         [Fact]
         public async Task ShouldCancelSubscriptionCorrectly()
         {
