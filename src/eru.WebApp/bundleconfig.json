@@ -14,6 +14,12 @@
     ]
   },
   {
+    "outputFileName": "wwwroot/dist/css/index.min.css",
+    "inputFiles": [
+      "wwwroot/css/common.css"
+    ]
+  },
+  {
     "outputFileName": "wwwroot/dist/js/dashboard.min.js",
     "inputFiles": [
       "wwwroot/js/dashboard.js"
