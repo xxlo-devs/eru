@@ -30,14 +30,6 @@
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>Login.en.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Pages\Index.pl.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>Index.pl.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Pages\Index.en.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>Index.en.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
     </ItemGroup>
   
     <ItemGroup>
