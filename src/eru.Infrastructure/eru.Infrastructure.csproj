@@ -21,29 +21,4 @@
       <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.4" />
     </ItemGroup>
 
-    <ItemGroup>
-      <EmbeddedResource Update="Resources\PlatformClients\FacebookMessenger\FacebookMessengerPlatformClient.en.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>FacebookMessengerPlatformClient.en.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\PlatformClients\FacebookMessenger\FacebookMessengerPlatformClient.pl.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>FacebookMessengerPlatformClient.pl.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-    </ItemGroup>
-
-    <ItemGroup>
-      <Compile Update="Resources\PlatformClients\FacebookMessenger\FacebookMessengerPlatformClient.en.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>FacebookMessengerPlatformClient.en.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Resources\PlatformClients\FacebookMessenger\FacebookMessengerPlatformClient.pl.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>FacebookMessengerPlatformClient.pl.resx</DependentUpon>
-      </Compile>
-    </ItemGroup>
-
-
 </Project>

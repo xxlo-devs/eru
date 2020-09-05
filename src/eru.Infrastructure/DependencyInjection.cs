@@ -2,7 +2,6 @@
 using eru.Infrastructure.Hangfire;
 using eru.Infrastructure.Identity;
 using eru.Infrastructure.Persistence;
-using eru.Infrastructure.PlatformClients;
 using Hangfire;
 using Hangfire.Dashboard.BasicAuthorization;
 using Hangfire.MemoryStorage;
@@ -34,8 +33,6 @@ namespace eru.Infrastructure
             services.AddHealthChecks()
                 .AddDbContextCheck<ApplicationDbContext>();
 
-            services.AddPlatformClients(configuration);
-            
             return services;
         }
 
@@ -45,8 +42,7 @@ namespace eru.Infrastructure
                 .UseDatabase()
                 .UseTranslator()
                 .UseIdentity()
-                .UseConfiguredHangfire(configuration)
-                .UsePlatformClients(configuration);
+                .UseConfiguredHangfire(configuration);
 
         public static IMvcBuilder UseInfrastructure(this IMvcBuilder mvcBuilder)
         {

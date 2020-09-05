@@ -7,6 +7,7 @@
     <ItemGroup>
       <ProjectReference Include="..\eru.Application\eru.Application.csproj" />
       <ProjectReference Include="..\eru.Infrastructure\eru.Infrastructure.csproj" />
+      <ProjectReference Include="..\PlatformClients\eru.PlatformClients.FacebookMessenger\eru.PlatformClients.FacebookMessenger.csproj" />
     </ItemGroup>
   
     <ItemGroup>
