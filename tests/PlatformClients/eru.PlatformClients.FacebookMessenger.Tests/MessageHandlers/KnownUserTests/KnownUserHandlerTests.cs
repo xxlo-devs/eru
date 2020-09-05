@@ -4,6 +4,7 @@ using eru.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser.Unsupporte
 using eru.PlatformClients.FacebookMessenger.Models.Webhook.Messages;
 using eru.PlatformClients.FacebookMessenger.Models.Webhook.Messages.Properties;
 using eru.PlatformClients.FacebookMessenger.ReplyPayload;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -16,8 +17,9 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.KnownUserT
         {
             var cancelSubscriptionHandler = new Mock<ICancelSubscriptionMessageHandler>();
             var unsupportedCommandHandler = new Mock<IUnsupportedCommandMessageHandler>();
+            var logger = new Mock<ILogger>();
             
-            var handler = new KnownUserMessageHandler(cancelSubscriptionHandler.Object, unsupportedCommandHandler.Object);
+            var handler = new KnownUserMessageHandler(cancelSubscriptionHandler.Object, unsupportedCommandHandler.Object, logger.Object);
             
             await handler.Handle("sample-subscriber-id", new Message
             {
@@ -35,8 +37,9 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.KnownUserT
         {
             var cancelSubscriptionHandler = new Mock<ICancelSubscriptionMessageHandler>();
             var unsupportedCommandHandler = new Mock<IUnsupportedCommandMessageHandler>();
+            var logger = new Mock<ILogger>();
             
-            var handler = new KnownUserMessageHandler(cancelSubscriptionHandler.Object, unsupportedCommandHandler.Object);
+            var handler = new KnownUserMessageHandler(cancelSubscriptionHandler.Object, unsupportedCommandHandler.Object, logger.Object);
             
             await handler.Handle("sample-subscriber-id", new Message
             {

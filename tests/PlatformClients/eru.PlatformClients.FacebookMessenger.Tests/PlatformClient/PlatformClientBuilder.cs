@@ -10,6 +10,7 @@ using eru.PlatformClients.FacebookMessenger.ReplyPayload;
 using eru.PlatformClients.FacebookMessenger.Selector;
 using eru.PlatformClients.FacebookMessenger.SendAPIClient;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Moq;
 
 namespace eru.PlatformClients.FacebookMessenger.Tests.PlatformClient
@@ -22,8 +23,9 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.PlatformClient
             SetupSelector();
             SetupTranslator();
             SetupApiClient();
+            SetupLogger();
             
-            PlatformClient = new FacebookMessengerPlatformClient(ApiClientMock.Object, MediatorMock.Object, SelectorMock.Object, TranslatorMock.Object);
+            PlatformClient = new FacebookMessengerPlatformClient(ApiClientMock.Object, MediatorMock.Object, SelectorMock.Object, TranslatorMock.Object, LoggerMock.Object);
         }
 
         private void SetupMediator()
@@ -63,11 +65,17 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.PlatformClient
         {
             ApiClientMock = new Mock<ISendApiClient>();
         }
+
+        private void SetupLogger()
+        {
+            LoggerMock = new Mock<ILogger>();
+        }
         
         public FacebookMessengerPlatformClient PlatformClient { get; set; }
         public Mock<IMediator> MediatorMock { get; set; }
         public Mock<ISendApiClient> ApiClientMock { get; set; }
         public Mock<ISelector> SelectorMock { get; set; }
         public Mock<ITranslator<FacebookMessengerPlatformClient>> TranslatorMock { get; set; }
+        public Mock<ILogger> LoggerMock { get; set; }
     }
 }

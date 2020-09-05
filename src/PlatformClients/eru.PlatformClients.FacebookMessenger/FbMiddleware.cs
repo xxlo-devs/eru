@@ -7,6 +7,7 @@ using eru.PlatformClients.FacebookMessenger.MessageHandlers;
 using eru.PlatformClients.FacebookMessenger.Models.Webhook;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace eru.PlatformClients.FacebookMessenger
 {
@@ -14,11 +15,13 @@ namespace eru.PlatformClients.FacebookMessenger
     {
         private readonly IConfiguration _configuration;
         private readonly IMessageHandler _messageHandler;
+        private readonly ILogger _logger;
 
-        public FbMiddleware(IConfiguration configuration, IMessageHandler messageHandler)
+        public FbMiddleware(IConfiguration configuration, IMessageHandler messageHandler, ILogger logger)
         {
             _configuration = configuration;
             _messageHandler = messageHandler;
+            _logger = logger;
         }
         
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
@@ -34,6 +37,7 @@ namespace eru.PlatformClients.FacebookMessenger
                     break;
 
                 default:
+                    _logger.LogInformation($"eru.PlatformClients.FacebookMessenger: FbMiddleware.InvokeAsync got a request with not supported method");
                     context.Response.StatusCode = (int)HttpStatusCode.MethodNotAllowed;
                     byte[] response = Encoding.UTF8.GetBytes(string.Empty);
                     await context.Response.Body.WriteAsync(response);
@@ -54,12 +58,14 @@ namespace eru.PlatformClients.FacebookMessenger
                     context.Response.StatusCode = (int) HttpStatusCode.OK;
                     byte[] response = Encoding.UTF8.GetBytes(challenge);
                     await context.Response.Body.WriteAsync(response);
+                    _logger.LogInformation($"eru.PlatformClients.FacebookMessenger: FbMiddleware.VerifyWebhookRequest succesfully verified a webhook");
                 }
                 else
                 {
                     context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
                     byte[] response = Encoding.UTF8.GetBytes(string.Empty);
                     await context.Response.Body.WriteAsync(response);
+                    _logger.LogWarning($"eru.PlatformClients.FacebookMessenger: FbMiddleware.VerifyWebhookRequest got a verify requets with invalid token");
                 }
             }
             else
@@ -67,6 +73,7 @@ namespace eru.PlatformClients.FacebookMessenger
                 context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 byte[] response = Encoding.UTF8.GetBytes(string.Empty);
                 await context.Response.Body.WriteAsync(response);
+                _logger.LogTrace($"eru.PlatformClients.FacebookMessenger: FbMiddleware.VerifyWebhookRequest got an invalid verify request");
             }
         }
 
@@ -86,12 +93,14 @@ namespace eru.PlatformClients.FacebookMessenger
                     context.Response.StatusCode = (int) HttpStatusCode.OK;
                     byte[] response = Encoding.UTF8.GetBytes("EVENT_RECEIVED");
                     await context.Response.Body.WriteAsync(response);
+                    _logger.LogInformation("eru.PlatformClients.FacebookMessenger: FbMiddleware.HandleWebhookEvent successfully processed an event");
                 }
                 else
                 {
                     context.Response.StatusCode = (int) HttpStatusCode.NotFound;
                     byte[] response = Encoding.UTF8.GetBytes(string.Empty);
                     await context.Response.Body.WriteAsync(response);
+                    _logger.LogWarning($"eru.PlatformClients.FacebookMessenger: FbMiddleware.HandleWebhookEvent got an unsupported event");
                 }
             }
             catch
@@ -99,6 +108,7 @@ namespace eru.PlatformClients.FacebookMessenger
                 context.Response.StatusCode = (int) HttpStatusCode.BadRequest;
                 byte[] response = Encoding.UTF8.GetBytes(string.Empty);
                 await context.Response.Body.WriteAsync(response);
+                _logger.LogError($"eru.PlatformClients.FacebookMessenger: FbMiddleware.HandleWebhookEvent couldn't process event");
             }
         }
     }

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -47,7 +48,8 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.Middleware
         public async void CanRecieveGraphEvent()
         {
             var messageHandler = new FakeMessageHandler();
-            var middleware = new FbMiddleware(_configuration, messageHandler);
+            var logger = new Mock<ILogger>();
+            var middleware = new FbMiddleware(_configuration, messageHandler, logger.Object);
             var context = BuildHttpContext("{\"object\":\"page\",\"entry\":[{\"messaging\":[{\"sender\":{\"id\":\"<PSID>\"},\"recipient\":{\"id\":\"<PAGE_ID>\"},\"timestamp\":123456789,\"message\":{\"mid\":\"mid.1457764197618:41d102a3e1ae206a38\",\"text\":\"hello, world!\"}}]}]}");
             
             await middleware.InvokeAsync(context, context => throw new NotImplementedException());
@@ -66,7 +68,8 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.Middleware
         [Fact]
         public async void DoesWebhookReturnNotFoundWhenSubscriptionTargetIsUnknown()
         {
-            var middleware = new FbMiddleware(_configuration, new FakeMessageHandler());
+            var logger = new Mock<ILogger>();
+            var middleware = new FbMiddleware(_configuration, new FakeMessageHandler(), logger.Object);
             var context = BuildHttpContext("{\"object\":\"unknown\"}");
             
             await middleware.InvokeAsync(context, context => throw new NotImplementedException());
@@ -79,7 +82,8 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.Middleware
         [Fact]
         public async void DoesWebhookReturnBadRequestWhenRequestIsInvalid()
         {
-            var middleware = new FbMiddleware(_configuration, new FakeMessageHandler());
+            var logger = new Mock<ILogger>();
+            var middleware = new FbMiddleware(_configuration, new FakeMessageHandler(), logger.Object);
             var context = BuildHttpContext("{\"object\": \"page\", \"entry\": [{\"messaging\": [{\"message\": \"TEST_MESSAGE\"}]}]}");
             
             await middleware.InvokeAsync(context, context => throw new NotImplementedException());

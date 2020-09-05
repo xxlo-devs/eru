@@ -12,6 +12,7 @@ using eru.PlatformClients.FacebookMessenger.Selector;
 using eru.PlatformClients.FacebookMessenger.SendAPIClient;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -49,7 +50,9 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.UnknownUse
             var translator = new Mock<ITranslator<FacebookMessengerPlatformClient>>();
             translator.Setup(x => x.TranslateString("", "en")).Returns(Task.FromResult(""));
             
-            var handler = new StartRegistrationMessageHandler(context, apiClient.Object, config, selector.Object, translator.Object);
+            var logger = new Mock<ILogger>();
+            
+            var handler = new StartRegistrationMessageHandler(context, apiClient.Object, config, selector.Object, translator.Object, logger.Object);
             
             await handler.Handle("unknown-user");
         

@@ -7,6 +7,7 @@ using eru.PlatformClients.FacebookMessenger.ReplyPayload;
 using eru.PlatformClients.FacebookMessenger.Selector;
 using eru.PlatformClients.FacebookMessenger.SendAPIClient;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -17,6 +18,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
         [Fact]
         public async void ShouldGatherClassCorrectly()
         {
+            var logger = new Mock<ILogger>();
             var context = new FakeRegistrationDb();
             var apiClient = new Mock<ISendApiClient>();
             var translator = new Mock<ITranslator<FacebookMessengerPlatformClient>>();
@@ -26,7 +28,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             
             var selector = new Mock<ISelector>();
             
-            var handler = new GatherClassMessageHandler(context, apiClient.Object, translator.Object, selector.Object);
+            var handler = new GatherClassMessageHandler(context, apiClient.Object, translator.Object, selector.Object, logger.Object);
             await handler.Handle("sample-registering-user-with-year", new Payload(PayloadType.Class, "sample-class"));
         
             context.IncompleteUsers.Should().ContainSingle(x =>

@@ -8,6 +8,7 @@ using eru.PlatformClients.FacebookMessenger.Models.SendApi.Static;
 using eru.PlatformClients.FacebookMessenger.Selector;
 using eru.PlatformClients.FacebookMessenger.SendAPIClient;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace eru.PlatformClients.FacebookMessenger
 {
@@ -20,13 +21,15 @@ namespace eru.PlatformClients.FacebookMessenger
         private readonly IMediator _mediator;
         private readonly ISelector _selector;
         private readonly ITranslator<FacebookMessengerPlatformClient> _translator;
+        private readonly ILogger _logger;
 
-        public FacebookMessengerPlatformClient(ISendApiClient apiClient, IMediator mediator, ISelector selector, ITranslator<FacebookMessengerPlatformClient> translator)
+        public FacebookMessengerPlatformClient(ISendApiClient apiClient, IMediator mediator, ISelector selector, ITranslator<FacebookMessengerPlatformClient> translator, ILogger logger)
         {
             _apiClient = apiClient;
             _mediator = mediator;
             _selector = selector;
             _translator = translator;
+            _logger = logger;
         }
         
         public async Task SendMessage(string id, string content)
@@ -35,6 +38,7 @@ namespace eru.PlatformClients.FacebookMessenger
             var message = new SendRequest(id, new Message(content, await _selector.GetCancelSelector(user.PreferredLanguage)), MessageTags.AccountUpdate);
 
             await _apiClient.Send(message);
+            _logger.LogInformation($"eru.PlatformClients.FacebookMessenger: FacebookMessengerPlatformClient.SendMessage sent a generic message (uid: {id}, content: {content})");
         }
 
         public async Task SendMessage(string id, IEnumerable<Substitution> substitutions)
@@ -64,6 +68,8 @@ namespace eru.PlatformClients.FacebookMessenger
 
             req = new SendRequest(id, new Message(await _translator.TranslateString("closing-substitutions", user.PreferredLanguage), await _selector.GetCancelSelector(user.PreferredLanguage)), MessageTags.ConfirmedEventUpdate);
             await _apiClient.Send(req);
+            
+            _logger.LogInformation($"eru.PlatformClients.FacebookMessenger: FacebookMessengerPlatformClient.SendMessage sent substitutions to user (uid: {id}");
         }
     }
 }

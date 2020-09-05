@@ -6,6 +6,7 @@ using eru.PlatformClients.FacebookMessenger.MessageHandlers;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -24,7 +25,8 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.Middleware
             
             var config = new ConfigurationBuilder().AddInMemoryCollection(new[] {new KeyValuePair<string, string>("PlatformClients:FacebookMessenger:VerifyToken", "sample-verify-token")}).Build();
             var messageHandler = new Mock<IMessageHandler>();
-            var middleware = new FbMiddleware(config, messageHandler.Object);
+            var logger = new Mock<ILogger>();
+            var middleware = new FbMiddleware(config, messageHandler.Object, logger.Object);
             
             await middleware.InvokeAsync(context, context => throw new NotImplementedException());
             

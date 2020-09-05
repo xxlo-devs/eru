@@ -9,6 +9,7 @@ using eru.PlatformClients.FacebookMessenger.MessageHandlers.UnknownUser;
 using eru.PlatformClients.FacebookMessenger.Models.Webhook.Messages;
 using eru.PlatformClients.FacebookMessenger.Models.Webhook.Messages.Properties;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -58,12 +59,13 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers
             
             var dbContext = new FakeRegistrationDb();
             var mediator = BuildFakeMediator();
-
+            var logger = new Mock<ILogger>();
+            
             var knownUserMessageHandler = new Mock<IKnownUserMessageHandler>(); 
             var registeringUserMessageHandler = new Mock<IRegisteringUserMessageHandler>(); 
             var unknownUserMessageHandler = new Mock<IUnkownUserMessageHandler>(); 
             
-            var messageHandler = new IncomingMessageHandler(knownUserMessageHandler.Object, registeringUserMessageHandler.Object, unknownUserMessageHandler.Object, mediator, dbContext);
+            var messageHandler = new IncomingMessageHandler(knownUserMessageHandler.Object, registeringUserMessageHandler.Object, unknownUserMessageHandler.Object, mediator, dbContext, logger.Object);
 
             await messageHandler.Handle(message);
             
@@ -89,12 +91,13 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers
             
             var dbContext = new FakeRegistrationDb();
             var mediator = BuildFakeMediator();
+            var logger = new Mock<ILogger>();
             
             var knownUserMessageHandler = new Mock<IKnownUserMessageHandler>();
             var registeringUserMessageHandler = new Mock<IRegisteringUserMessageHandler>();
             var unknownUserMessageHandler = new Mock<IUnkownUserMessageHandler>();
             
-            var messageHandler = new IncomingMessageHandler(knownUserMessageHandler.Object, registeringUserMessageHandler.Object, unknownUserMessageHandler.Object, mediator, dbContext);
+            var messageHandler = new IncomingMessageHandler(knownUserMessageHandler.Object, registeringUserMessageHandler.Object, unknownUserMessageHandler.Object, mediator, dbContext, logger.Object);
 
             await messageHandler.Handle(message);
             
@@ -120,11 +123,13 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers
             
             var dbContext = new FakeRegistrationDb();
             var mediator = BuildFakeMediator();
+            var logger = new Mock<ILogger>();
+            
             var knownUserMessageHandler = new Mock<IKnownUserMessageHandler>();
             var registeringUserMessageHandler = new Mock<IRegisteringUserMessageHandler>();
             var unknownUserMessageHandler = new Mock<IUnkownUserMessageHandler>();
             
-            var messageHandler = new IncomingMessageHandler(knownUserMessageHandler.Object, registeringUserMessageHandler.Object, unknownUserMessageHandler.Object, mediator, dbContext);
+            var messageHandler = new IncomingMessageHandler(knownUserMessageHandler.Object, registeringUserMessageHandler.Object, unknownUserMessageHandler.Object, mediator, dbContext, logger.Object);
 
             await messageHandler.Handle(message);
             

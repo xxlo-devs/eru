@@ -10,6 +10,7 @@ using eru.PlatformClients.FacebookMessenger.Selector;
 using eru.PlatformClients.FacebookMessenger.SendAPIClient;
 using FluentAssertions;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -30,12 +31,13 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
                 });
             var apiClient = new Mock<ISendApiClient>();
             var translator = new Mock<ITranslator<FacebookMessengerPlatformClient>>();
+            var logger = new Mock<ILogger>();
             translator.Setup(x => x.TranslateString("congratulations", "en")).Returns(Task.FromResult("Congratulations! You've successfully subscribed to eru Messenger notifications :)"));
             translator.Setup(x => x.TranslateString("unsupported-command", "en")).Returns(Task.FromResult("This is not a supported command. If you want to delete this bot, just click Cancel. If you want to continue, follow the given instructions."));
             
             var selector = new Mock<ISelector>();
             
-            var handler = new ConfirmSubscriptionMessageHandler(mediator.Object, context, apiClient.Object, translator.Object, selector.Object);
+            var handler = new ConfirmSubscriptionMessageHandler(mediator.Object, context, apiClient.Object, translator.Object, selector.Object, logger.Object);
             await handler.Handle("sample-registering-user-with-class", new Payload(PayloadType.Subscribe));
         
             context.IncompleteUsers.Should().NotContain(x => x.Id == "sample-registering-user-with-class");

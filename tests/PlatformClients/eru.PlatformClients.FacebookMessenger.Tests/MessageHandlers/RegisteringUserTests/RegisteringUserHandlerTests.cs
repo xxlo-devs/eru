@@ -6,6 +6,7 @@ using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.Gath
 using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.GatherYear;
 using eru.PlatformClients.FacebookMessenger.RegistrationDb.DbContext;
 using eru.PlatformClients.FacebookMessenger.ReplyPayload;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 using Message = eru.PlatformClients.FacebookMessenger.Models.Webhook.Messages.Message;
@@ -23,8 +24,9 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             ClassHandlerMock = new Mock<IGatherClassMessageHandler>();
             LangHandlerMock = new Mock<IGatherLanguageMessageHandler>();
             YearHandlerMock = new Mock<IGatherYearMessageHandler>();
+            LoggerMock = new Mock<ILogger>();
             
-            Handler = new RegisteringUserMessageHandler(FakeDbContext, CancelHandlerMock.Object, ConfirmHandlerMock.Object, ClassHandlerMock.Object, LangHandlerMock.Object, YearHandlerMock.Object);
+            Handler = new RegisteringUserMessageHandler(FakeDbContext, CancelHandlerMock.Object, ConfirmHandlerMock.Object, ClassHandlerMock.Object, LangHandlerMock.Object, YearHandlerMock.Object, LoggerMock.Object);
         }
         
         public IRegisteringUserMessageHandler Handler { get; set; }
@@ -34,6 +36,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
         public Mock<IGatherClassMessageHandler> ClassHandlerMock { get; set; }
         public Mock<IGatherLanguageMessageHandler> LangHandlerMock { get; set; }
         public Mock<IGatherYearMessageHandler> YearHandlerMock { get; set; }
+        public Mock<ILogger> LoggerMock { get; set; }
 
         public void VerifyNoOtherCalls()
         {
