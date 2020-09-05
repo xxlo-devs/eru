@@ -39,7 +39,7 @@
         <comment>get-started-1</comment>
     </data>
     <data name="get-started-2" xml:space="preserve">
-        <value>Please note that we do NOT store any unnecessary data about you. We don't have access to your name, lastname, profile picture or anything. Everything we know about you is your secret id used by platform API and your class. However as soon as you unregister from our services we'll gladly delete this data ASAP.</value>
+        <value>Please note that we do NOT store any unnecessary data about you. We don't have access to your first name, last name, profile picture or anything else. Everything we know about you is your anonymous ID used by platform API and your class. However as soon as you unregister from our services we'll gladly delete this data ASAP.</value>
         <comment>get-started-2</comment>
     </data>
     <data name="supported-platforms" xml:space="preserve">
