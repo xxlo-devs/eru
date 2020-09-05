@@ -34,7 +34,7 @@
     <value>Oto zastępstwa na nadchodzący dzień!</value>
   </data>
   <data name="substitution" xml:space="preserve">
-    <value>Nauczyciel {1} na lekcji {2} (przedmiot: {3}) będzie zastępowany przez nauczyciela {4} w sali {5}. Uwagi szkoły: {6}.</value>
+    <value>Nauczyciel {0} na lekcji {1} (przedmiot: {2}) będzie zastępowany przez nauczyciela {3} w sali {4}. Uwagi szkoły: {5}.</value>
   </data>
   <data name="class-selection" xml:space="preserve">
     <value>Ostatnią rzecz jaką potrzebujemy jest twoja klasa.</value>
@@ -56,5 +56,8 @@
   </data>
   <data name="year-selection" xml:space="preserve">
     <value>Świetnie! Teraz musisz wybrać swój rocznik.</value>
+  </data>
+  <data name="cancellation" xml:space="preserve">
+    <value>Lekcja {0} (przedmiot: {1}, nauczyciel: {2}, sala: {3}) jest odwołana. Uwagi szkoły: {4}.</value>
   </data>
 </root>

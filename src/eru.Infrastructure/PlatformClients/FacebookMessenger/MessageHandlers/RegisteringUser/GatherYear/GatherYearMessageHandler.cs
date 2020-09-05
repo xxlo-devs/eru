@@ -19,15 +19,13 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
     {        
         private readonly IRegistrationDbContext _dbContext;
         private readonly ISendApiClient _apiClient;
-        private readonly IMediator _mediator;
         private readonly ISelector _selector;
         private readonly ITranslator<FacebookMessengerPlatformClient> _translator;
         
-        public GatherYearMessageHandler(IRegistrationDbContext dbContext, ISendApiClient apiClient, IMediator mediator, ISelector selector, ITranslator<FacebookMessengerPlatformClient> translator)
+        public GatherYearMessageHandler(IRegistrationDbContext dbContext, ISendApiClient apiClient, ISelector selector, ITranslator<FacebookMessengerPlatformClient> translator)
         {
             _dbContext = dbContext;
             _apiClient = apiClient;
-            _mediator = mediator;
             _selector = selector;
             _translator = translator;
         }

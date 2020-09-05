@@ -28,7 +28,7 @@
     <value>-&gt;</value>
   </data>
   <data name="substitution" xml:space="preserve">
-    <value>Teacher {1} on {2} lesson (course: {3}) will be substituted by teacher {4} in {5} room. School notes: {6}.</value>
+    <value>Teacher {0} on {1} lesson (course: {2}) will be substituted by teacher {3} in {4} room. School notes: {5}.</value>
   </data>
   <data name="new-substitutions" xml:space="preserve">
     <value>Here are substitutions for the next day!</value>
@@ -56,5 +56,8 @@
   </data>
   <data name="greeting" xml:space="preserve">
     <value>Hello! Eru is a substitution information system that enables you to get personalized notifications about all substitutions directly from school. If you want to try it, choose your language by clicking on a correct flag below. If you don't want to use this bot, just click Cancel at any time.</value>
+  </data>
+  <data name="cancellation" xml:space="preserve">
+    <value>Lesson {0} (subject: {1}, teacher: {2}, room: {3}) is cancelled. School note: {4}.</value>
   </data>
 </root>

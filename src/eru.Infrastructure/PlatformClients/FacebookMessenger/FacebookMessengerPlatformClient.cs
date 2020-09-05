@@ -49,10 +49,20 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger
 
             foreach (var x in substitutions)
             {
-                var substitution = string.Format(await _translator.TranslateString("substitution", user.PreferredLanguage), x.Teacher, x.Lesson, x.Subject, x.Substituting, x.Room, x.Note);
-                
-                req = new SendRequest(id, new Message(substitution), MessageTags.ConfirmedEventUpdate);
-                await _apiClient.Send(req);
+                if (x.Cancelled)
+                {
+                    var format = await _translator.TranslateString("cancellation", user.PreferredLanguage);
+                    var substitution = string.Format(format, x.Lesson, x.Subject, x.Teacher, x.Room, x.Note);
+                    req = new SendRequest(id, new Message(substitution), MessageTags.ConfirmedEventUpdate);
+                    await _apiClient.Send(req);
+                }
+                else
+                {
+                    var format = await _translator.TranslateString("substitution", user.PreferredLanguage);
+                    var substitution = string.Format(format, x.Teacher, x.Lesson, x.Subject, x.Substituting, x.Room, x.Note);
+                    req = new SendRequest(id, new Message(substitution), MessageTags.ConfirmedEventUpdate);
+                    await _apiClient.Send(req);
+                }
             }
 
             req = new SendRequest(id, new Message(await _translator.TranslateString("closing-substitutions", user.PreferredLanguage), await _selector.GetCancelSelector(user.PreferredLanguage)), MessageTags.ConfirmedEventUpdate);

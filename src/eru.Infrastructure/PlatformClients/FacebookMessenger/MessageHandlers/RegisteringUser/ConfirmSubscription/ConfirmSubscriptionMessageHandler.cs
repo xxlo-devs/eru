@@ -49,7 +49,7 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
             _dbContext.IncompleteUsers.Remove(user);
             await _dbContext.SaveChangesAsync(CancellationToken.None);
             
-            var response = new SendRequest(uid, new Message(await _translator.TranslateString("confirmation", user.PreferredLanguage), await _selector.GetCancelSelector(user.PreferredLanguage)));
+            var response = new SendRequest(uid, new Message(await _translator.TranslateString("congratulations", user.PreferredLanguage), await _selector.GetCancelSelector(user.PreferredLanguage)));
             await _apiClient.Send(response);
         }
 

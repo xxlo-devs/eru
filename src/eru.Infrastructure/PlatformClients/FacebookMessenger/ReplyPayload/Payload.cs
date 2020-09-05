@@ -5,6 +5,10 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.ReplyPayload
 {
     public class Payload
     {
+        public Payload()
+        {
+            
+        }
         public Payload(PayloadType type)
         {
             Type = type;

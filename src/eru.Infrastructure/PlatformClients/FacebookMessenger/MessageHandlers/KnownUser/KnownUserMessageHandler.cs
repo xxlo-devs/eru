@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser.CancelSubscription;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser.UnsupportedCommand;
@@ -20,12 +21,20 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.K
         
         public async Task Handle(string uid, Message message)
         {
-            var payload = JsonSerializer.Deserialize<Payload>(message.QuickReply.Payload);
-
-            if (payload.Type == PayloadType.Cancel)
+            if (message?.QuickReply?.Payload != null)
             {
-                await _cancelSubscriptionMessageHandler.Handle(uid);
-                return;
+                var payload = JsonSerializer.Deserialize<Payload>(message.QuickReply.Payload,
+                    new JsonSerializerOptions
+                    {
+                        IgnoreNullValues = true,
+                        Converters = {new JsonStringEnumConverter()}
+                    });
+
+                if (payload?.Type == PayloadType.Cancel)
+                {
+                    await _cancelSubscriptionMessageHandler.Handle(uid);
+                    return;
+                }
             }
 
             await _unsupportedCommandMessageHandler.Handle(uid);
