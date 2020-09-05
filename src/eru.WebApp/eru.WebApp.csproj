@@ -51,16 +51,6 @@
         <DependentUpon>Login.pl.resx</DependentUpon>
         <DesignTime>True</DesignTime>
       </Compile>
-      <Compile Update="Resources\Pages\Index.pl.Designer.cs">
-        <AutoGen>True</AutoGen>
-        <DependentUpon>Index.pl.resx</DependentUpon>
-        <DesignTime>True</DesignTime>
-      </Compile>
-      <Compile Update="Resources\Pages\Index.en.Designer.cs">
-        <AutoGen>True</AutoGen>
-        <DependentUpon>Index.en.resx</DependentUpon>
-        <DesignTime>True</DesignTime>
-      </Compile>
     </ItemGroup>
 
 </Project>
