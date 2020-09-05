@@ -9,6 +9,7 @@ using eru.Application.Common.Interfaces;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.Models.SendApi;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.RegistrationDb.DbContext;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.RegistrationDb.Enums;
+using eru.Infrastructure.PlatformClients.FacebookMessenger.ReplyPayload;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.Selector;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.SendAPIClient;
 using FluentAssertions;
@@ -35,7 +36,7 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
         }
         public async Task Handle(string uid, Payload payload)
         {
-            if (payload.Type == Type.Lang)
+            if (payload.Type == PayloadType.Lang)
             {
                 if (payload.Page != null)
                 {
@@ -73,15 +74,12 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
         private async Task Gather(string uid, string lang)
         {
             var user = await _dbContext.IncompleteUsers.FindAsync(uid);
-            user.PreferredLanguage = lang;
-            user.LastPage = 0;
-            user.Stage = Stage.GatheredLanguage;
+            user.PreferredLanguage = lang; user.Stage = Stage.GatheredLanguage; user.LastPage = 0; 
+            
             _dbContext.IncompleteUsers.Update(user);
             await _dbContext.SaveChangesAsync(CancellationToken.None);
 
-            var response = new SendRequest(uid,
-                new Message(await _translator.TranslateString("year-selection", user.PreferredLanguage),
-                    await _selector.GetYearSelector(0, user.PreferredLanguage)));
+            var response = new SendRequest(uid, new Message(await _translator.TranslateString("year-selection", user.PreferredLanguage), await _selector.GetYearSelector(0, user.PreferredLanguage)));
             await _apiClient.Send(response);
         }
     }

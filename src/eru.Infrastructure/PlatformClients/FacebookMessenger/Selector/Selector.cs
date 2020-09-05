@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using eru.Application.Classes.Queries.GetClasses;
 using eru.Application.Common.Interfaces;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.Models.SendApi;
+using eru.Infrastructure.PlatformClients.FacebookMessenger.ReplyPayload;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 
@@ -27,33 +28,33 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.Selector
         {
             var displayCulture = _configuration["CultureSettings:DefaultCulture"];
             var supportedCultures = _configuration.GetSection("CultureSettings:AvailableCultures").AsEnumerable().Select(x => x.Value).Skip(1);
-            var cultures = supportedCultures.ToDictionary(x => new CultureInfo(x).DisplayName, x => new Payload(Type.Lang, x).ToJson());
+            var cultures = supportedCultures.ToDictionary(x => new CultureInfo(x).DisplayName, x => new Payload(PayloadType.Lang, x).ToJson());
 
-            return await GetSelector(cultures, page, Type.Lang, displayCulture);
+            return await GetSelector(cultures, page, PayloadType.Lang, displayCulture);
         }
 
         public async Task<IEnumerable<QuickReply>> GetYearSelector(int page, string preferredLanguage)
         {
             var classes = await _mediator.Send(new GetClassesQuery());
-            var years = new SortedSet<int>(classes.Select(x => x.Year)).ToDictionary(x => x.ToString(), x => new Payload(Type.Year, x.ToString()).ToJson());
+            var years = new SortedSet<int>(classes.Select(x => x.Year)).ToDictionary(x => x.ToString(), x => new Payload(PayloadType.Year, x.ToString()).ToJson());
 
-            return await GetSelector(years, page, Type.Year, preferredLanguage);
+            return await GetSelector(years, page, PayloadType.Year, preferredLanguage);
         }
 
         public async Task<IEnumerable<QuickReply>> GetClassSelector(int page, int year, string preferredLanguage)
         {
             var classesFromDb = await _mediator.Send(new GetClassesQuery());
-            var classes = classesFromDb.Where(x => x.Year == year).OrderBy(x => x.Section).ToDictionary(x => x.ToString(), x => new Payload(Type.Class, x.Id).ToJson());
+            var classes = classesFromDb.Where(x => x.Year == year).OrderBy(x => x.Section).ToDictionary(x => x.ToString(), x => new Payload(PayloadType.Class, x.Id).ToJson());
 
-            return await GetSelector(classes, page, Type.Class, preferredLanguage);
+            return await GetSelector(classes, page, PayloadType.Class, preferredLanguage);
         }
 
         public async Task<IEnumerable<QuickReply>> GetConfirmationSelector(string preferredLanguage)
         {
             return new[]
             {
-                new QuickReply(await _translator.TranslateString("subscribe-button", preferredLanguage), new Payload(Type.Subscribe).ToJson()), 
-                new QuickReply(await _translator.TranslateString("cancel-button", preferredLanguage), new Payload(Type.Cancel).ToJson())
+                new QuickReply(await _translator.TranslateString("subscribe-button", preferredLanguage), new Payload(PayloadType.Subscribe).ToJson()), 
+                new QuickReply(await _translator.TranslateString("cancel-button", preferredLanguage), new Payload(PayloadType.Cancel).ToJson())
             };
         }
 
@@ -61,11 +62,11 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.Selector
         {
             return new[]
             {
-                new QuickReply(await _translator.TranslateString("cancel-button", preferredLanguage), new Payload(Type.Cancel).ToJson())
+                new QuickReply(await _translator.TranslateString("cancel-button", preferredLanguage), new Payload(PayloadType.Cancel).ToJson())
             };
         }
         
-        private async Task<IEnumerable<QuickReply>> GetSelector(Dictionary<string, string> items, int page, Type payloadType, string displayCulture)
+        private async Task<IEnumerable<QuickReply>> GetSelector(Dictionary<string, string> items, int page, PayloadType payloadType, string displayCulture)
         {
             var offset = page * 10;
 
@@ -83,7 +84,7 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.Selector
                 replies.Add(new QuickReply(await _translator.TranslateString("next-page", displayCulture), new Payload(payloadType, page + 1).ToJson()));
             }
 
-            replies.Add(new QuickReply(await _translator.TranslateString("cancel-button", displayCulture), new Payload(Type.Cancel).ToJson()));
+            replies.Add(new QuickReply(await _translator.TranslateString("cancel-button", displayCulture), new Payload(PayloadType.Cancel).ToJson()));
 
             return replies;
         }

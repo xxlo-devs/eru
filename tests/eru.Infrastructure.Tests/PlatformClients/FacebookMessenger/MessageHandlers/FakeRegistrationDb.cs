@@ -1,11 +1,10 @@
 ﻿using System;
-using eru.Domain.Entity;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.RegistrationDb.DbContext;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.RegistrationDb.Entities;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.RegistrationDb.Enums;
 using Microsoft.EntityFrameworkCore;
 
-namespace eru.Infrastructure.Tests.PlatformClients
+namespace eru.Infrastructure.Tests.PlatformClients.FacebookMessenger.MessageHandlers
 {
     public class FakeRegistrationDb : DbContext, IRegistrationDbContext
     {
@@ -35,13 +34,10 @@ namespace eru.Infrastructure.Tests.PlatformClients
                     .HasMaxLength(255);
                 
                 x.HasData(
-                    new IncompleteUser { Id = "sample-registering-user", ClassId = null, PreferredLanguage = null, Year = 0, Stage = Stage.Created, ListOffset = 0},
-                    new IncompleteUser { Id = "sample-registering-user-with-lang", ClassId = null, PreferredLanguage = "en", Year = 0, Stage = Stage.GatheredLanguage, ListOffset = 0},
-                    new IncompleteUser { Id = "sample-registering-user-with-year", ClassId = null, PreferredLanguage = "en", Year = 1, Stage = Stage.GatheredYear, ListOffset = 0},
-                    new IncompleteUser { Id = "sample-registering-user-with-class", ClassId = "sample-class", PreferredLanguage = "en", Year = 1, Stage = Stage.GatheredClass, ListOffset = 0},
-                    new IncompleteUser { Id = "language-paging-test-user", ClassId = null, PreferredLanguage = null, Year = 0, Stage = Stage.Created, ListOffset = 10},
-                    new IncompleteUser { Id = "year-paging-test-user", ClassId = null, PreferredLanguage = "en", Year = 0, Stage = Stage.GatheredLanguage, ListOffset = 10},
-                    new IncompleteUser { Id = "class-paging-test-user", ClassId = null, PreferredLanguage = "en", Year = 1, Stage = Stage.GatheredYear, ListOffset = 10}
+                    new IncompleteUser("sample-registering-user"),
+                    new IncompleteUser("sample-registering-user-with-lang") {PreferredLanguage = "en", Stage = Stage.GatheredLanguage},
+                    new IncompleteUser("sample-registering-user-with-year") {PreferredLanguage = "en", Year = 1, Stage = Stage.GatheredYear},
+                    new IncompleteUser("sample-registering-user-with-class") {PreferredLanguage = "en", Year = 1, ClassId = "sample-class", Stage = Stage.GatheredClass}
                 );
             });
             

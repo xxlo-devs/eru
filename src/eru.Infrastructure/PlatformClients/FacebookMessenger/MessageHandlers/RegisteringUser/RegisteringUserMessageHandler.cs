@@ -8,6 +8,7 @@ using eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.Regis
 using eru.Infrastructure.PlatformClients.FacebookMessenger.Models.Webhook.Messages;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.RegistrationDb.DbContext;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.RegistrationDb.Enums;
+using eru.Infrastructure.PlatformClients.FacebookMessenger.ReplyPayload;
 
 namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser
 {
@@ -34,7 +35,7 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
             var payload = JsonSerializer.Deserialize<Payload>(message.QuickReply.Payload);
             var user = await _dbContext.IncompleteUsers.FindAsync(uid);
 
-            if (payload.Type == Type.Cancel)
+            if (payload.Type == PayloadType.Cancel)
             {
                 await _cancelHandler.Handle(uid);
                 return;

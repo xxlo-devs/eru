@@ -24,6 +24,7 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
         public async Task Handle(string uid)
         {
             var user = await _dbContext.IncompleteUsers.FindAsync(uid);
+            
             _dbContext.IncompleteUsers.Remove(user);
             await _dbContext.SaveChangesAsync(CancellationToken.None);
 

@@ -22,8 +22,9 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.K
         
         public async Task Handle(string uid)
         {
-            var user = await _mediator.Send(new GetSubscriberQuery(uid, "FacebookMessenger"));
-            await _mediator.Send(new CancelSubscriptionCommand(uid, "FacebookMessenger"));
+            var user = await _mediator.Send(new GetSubscriberQuery(uid, FacebookMessengerPlatformClient.PId));
+            await _mediator.Send(new CancelSubscriptionCommand(uid, FacebookMessengerPlatformClient.PId));
+            
             var response = new SendRequest(uid, new Message(await _translator.TranslateString("subscription-cancelled", user.PreferredLanguage)));
             await _apiClient.Send(response);
         }

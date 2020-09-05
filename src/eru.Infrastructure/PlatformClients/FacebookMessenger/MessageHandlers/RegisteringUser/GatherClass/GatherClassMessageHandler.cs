@@ -5,6 +5,7 @@ using eru.Application.Common.Interfaces;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.Models.SendApi;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.RegistrationDb.DbContext;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.RegistrationDb.Enums;
+using eru.Infrastructure.PlatformClients.FacebookMessenger.ReplyPayload;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.Selector;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.SendAPIClient;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -28,7 +29,7 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
         
         public async Task Handle(string uid, Payload payload)
         {
-            if (payload.Type == Type.Class)
+            if (payload.Type == PayloadType.Class)
             {
                 if (payload.Page != null)
                 {
@@ -59,6 +60,9 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
             var user = await _dbContext.IncompleteUsers.FindAsync(uid);
             user.LastPage = page;
             
+            _dbContext.IncompleteUsers.Update(user);
+            await _dbContext.SaveChangesAsync(CancellationToken.None);
+                            
             var response = new SendRequest(uid, new Message(await _translator.TranslateString("class-selection", user.PreferredLanguage), await _selector.GetClassSelector(user.LastPage, user.Year, user.PreferredLanguage)));
             await _apiClient.Send(response);
         }
@@ -66,9 +70,7 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
         private async Task Gather(string uid, string classId)
         {
             var user = await _dbContext.IncompleteUsers.FindAsync(uid);
-            user.ClassId = classId;
-            user.Stage = Stage.GatheredClass;
-            user.LastPage = 0;
+            user.ClassId = classId; user.LastPage = 0; user.Stage = Stage.GatheredClass; 
             
             _dbContext.IncompleteUsers.Update(user);
             await _dbContext.SaveChangesAsync(CancellationToken.None);

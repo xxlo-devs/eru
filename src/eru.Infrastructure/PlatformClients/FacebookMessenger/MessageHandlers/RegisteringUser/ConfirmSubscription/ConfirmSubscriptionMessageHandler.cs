@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using eru.Application.Common.Interfaces;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.Models.SendApi;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.RegistrationDb.DbContext;
+using eru.Infrastructure.PlatformClients.FacebookMessenger.ReplyPayload;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.Selector;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.SendAPIClient;
 using MediatR;
@@ -30,7 +31,7 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
 
         public async Task Handle(string uid, Payload payload)
         {
-            if (payload.Type == Type.Subscribe)
+            if (payload.Type == PayloadType.Subscribe)
             {
                 await Confirm(uid);
             }
@@ -55,6 +56,7 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
         private async Task UnsupportedCommand(string uid)
         {
             var user = await _dbContext.IncompleteUsers.FindAsync(uid);
+            
             var response = new SendRequest(uid, new Message(await _translator.TranslateString("unsupported-command", user.PreferredLanguage), await _selector.GetConfirmationSelector(user.PreferredLanguage)));
             await _apiClient.Send(response);
         }

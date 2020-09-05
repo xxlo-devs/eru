@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser.CancelSubscription;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser.UnsupportedCommand;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.Models.Webhook.Messages;
+using eru.Infrastructure.PlatformClients.FacebookMessenger.ReplyPayload;
 
 namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser
 {
@@ -21,7 +22,7 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.K
         {
             var payload = JsonSerializer.Deserialize<Payload>(message.QuickReply.Payload);
 
-            if (payload.Type == Type.Cancel)
+            if (payload.Type == PayloadType.Cancel)
             {
                 await _cancelSubscriptionMessageHandler.Handle(uid);
                 return;

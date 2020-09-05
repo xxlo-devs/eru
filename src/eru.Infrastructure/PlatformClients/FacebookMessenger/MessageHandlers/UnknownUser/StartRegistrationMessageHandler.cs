@@ -34,11 +34,7 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.U
         
         public async Task Handle(string uid)
         {
-            var incompleteUser = new IncompleteUser
-            {
-                Id = uid,
-                Stage = Stage.Created
-            };
+            var incompleteUser = new IncompleteUser(uid);
 
             await _dbContext.IncompleteUsers.AddAsync(incompleteUser);
             await _dbContext.SaveChangesAsync(CancellationToken.None);
