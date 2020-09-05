@@ -35,7 +35,7 @@
         <comment>how-to-get-started</comment>
     </data>
     <data name="get-started-1" xml:space="preserve">
-        <value>Getting started is very simple! Just select one of available platforms that we support (we can provide support for a variaty of platforms, if the one you're using is missing, reach out to us! We'll gladly help you with that ;)) With every platform we've created a simple intruction how to subscribe to your classes substitutions. Usually you just need to start a conversation with our platform which will enable you to register to our services.</value>
+        <value>Getting started is very simple! Just select one of available platforms that we support (we can provide support for a variety of platforms, if the one you're using is missing, reach out to us! We'll gladly help you with that ;)) With every platform we've created a simple intruction how to subscribe to notifications. Usually you just need to start a conversation with our bot.</value>
         <comment>get-started-1</comment>
     </data>
     <data name="get-started-2" xml:space="preserve">
