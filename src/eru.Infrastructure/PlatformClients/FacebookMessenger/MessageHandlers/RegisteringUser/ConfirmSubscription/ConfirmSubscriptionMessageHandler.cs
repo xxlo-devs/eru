@@ -4,8 +4,10 @@ using System.Threading.Tasks;
 using eru.Application.Common.Interfaces;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.Models.SendApi;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.RegistrationDb.DbContext;
+using eru.Infrastructure.PlatformClients.FacebookMessenger.Selector;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.SendAPIClient;
 using MediatR;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.ConfirmSubscription
 {
@@ -15,13 +17,15 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
         private readonly IRegistrationDbContext _dbContext;
         private readonly ISendApiClient _apiClient;
         private readonly ITranslator<FacebookMessengerPlatformClient> _translator;
+        private readonly ISelector _selector;
 
-        public ConfirmSubscriptionMessageHandler(IMediator mediator, IRegistrationDbContext dbContext, ISendApiClient apiClient, ITranslator<FacebookMessengerPlatformClient> translator)
+        public ConfirmSubscriptionMessageHandler(IMediator mediator, IRegistrationDbContext dbContext, ISendApiClient apiClient, ITranslator<FacebookMessengerPlatformClient> translator, ISelector selector)
         {
             _mediator = mediator;
             _apiClient = apiClient;
             _dbContext = dbContext;
             _translator = translator;
+            _selector = selector;
         }
 
         public async Task Handle(string uid, Payload payload)
@@ -44,16 +48,15 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
             _dbContext.IncompleteUsers.Remove(user);
             await _dbContext.SaveChangesAsync(CancellationToken.None);
             
-            var response = new SendRequest(uid, new Message(await _translator.TranslateString("confirmation", user.PreferredLanguage), new []
-            {
-                new QuickReply(await _translator.TranslateString("cancel-button", user.PreferredLanguage), new Payload(Type.Cancel).ToJson()), 
-            }));
+            var response = new SendRequest(uid, new Message(await _translator.TranslateString("confirmation", user.PreferredLanguage), await _selector.GetCancelSelector(user.PreferredLanguage)));
             await _apiClient.Send(response);
         }
 
         private async Task UnsupportedCommand(string uid)
         {
-            throw new NotImplementedException();
+            var user = await _dbContext.IncompleteUsers.FindAsync(uid);
+            var response = new SendRequest(uid, new Message(await _translator.TranslateString("unsupported-command", user.PreferredLanguage), await _selector.GetConfirmationSelector(user.PreferredLanguage)));
+            await _apiClient.Send(response);
         }
     }
 }

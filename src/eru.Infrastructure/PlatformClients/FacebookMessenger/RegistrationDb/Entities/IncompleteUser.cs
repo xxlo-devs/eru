@@ -10,7 +10,8 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.RegistrationDb.En
         public int Year { get; set; }
         public string ClassId { get; set; }
         public Stage Stage { get; set; }
-        public int ListOffset { get; set; }
+        
+        public int LastPage { get; set; }
         
         public CreateSubscriptionCommand ToCreateSubscriptionCommand() => new CreateSubscriptionCommand(Id, "FacebookMessenger", PreferredLanguage, ClassId);
         

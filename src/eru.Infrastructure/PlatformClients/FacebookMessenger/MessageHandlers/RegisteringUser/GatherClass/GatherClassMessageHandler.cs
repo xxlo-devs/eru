@@ -5,7 +5,9 @@ using eru.Application.Common.Interfaces;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.Models.SendApi;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.RegistrationDb.DbContext;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.RegistrationDb.Enums;
+using eru.Infrastructure.PlatformClients.FacebookMessenger.Selector;
 using eru.Infrastructure.PlatformClients.FacebookMessenger.SendAPIClient;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.GatherClass
 {
@@ -14,12 +16,14 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
         private readonly IRegistrationDbContext _dbContext;
         private readonly ISendApiClient _apiClient;
         private readonly ITranslator<FacebookMessengerPlatformClient> _translator;
+        private readonly ISelector _selector;
 
-        public GatherClassMessageHandler(IRegistrationDbContext dbContext, ISendApiClient apiClient, ITranslator<FacebookMessengerPlatformClient> translator)
+        public GatherClassMessageHandler(IRegistrationDbContext dbContext, ISendApiClient apiClient, ITranslator<FacebookMessengerPlatformClient> translator, ISelector selector)
         {
             _dbContext = dbContext;
             _apiClient = apiClient;
             _translator = translator;
+            _selector = selector;
         }
         
         public async Task Handle(string uid, Payload payload)
@@ -28,7 +32,7 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
             {
                 if (payload.Page != null)
                 {
-                    await ShowPage();
+                    await ShowPage(uid, payload.Page.Value);
                     return; 
                 }
 
@@ -44,12 +48,19 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
 
         private async Task UnsupportedCommand(string uid)
         {
-            throw new NotImplementedException();
+            var user = await _dbContext.IncompleteUsers.FindAsync(uid);
+            
+            var response = new SendRequest(uid, new Message(await _translator.TranslateString("unsupported-command", user.PreferredLanguage), await _selector.GetClassSelector(user.LastPage, user.Year, user.PreferredLanguage)));
+            await _apiClient.Send(response);
         }
 
-        private async Task ShowPage()
+        private async Task ShowPage(string uid, int page)
         {
-            throw new NotImplementedException();
+            var user = await _dbContext.IncompleteUsers.FindAsync(uid);
+            user.LastPage = page;
+            
+            var response = new SendRequest(uid, new Message(await _translator.TranslateString("class-selection", user.PreferredLanguage), await _selector.GetClassSelector(user.LastPage, user.Year, user.PreferredLanguage)));
+            await _apiClient.Send(response);
         }
 
         private async Task Gather(string uid, string classId)
@@ -57,16 +68,12 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
             var user = await _dbContext.IncompleteUsers.FindAsync(uid);
             user.ClassId = classId;
             user.Stage = Stage.GatheredClass;
-            user.ListOffset = 0;
+            user.LastPage = 0;
             
             _dbContext.IncompleteUsers.Update(user);
             await _dbContext.SaveChangesAsync(CancellationToken.None);
             
-            var response = new SendRequest(uid, new Message(await _translator.TranslateString("confirmation", user.PreferredLanguage), new []
-            {
-                new QuickReply(await _translator.TranslateString("subscribe-button", user.PreferredLanguage), new Payload(Type.Subscribe).ToJson()),
-                new QuickReply(await _translator.TranslateString("cancel-button", user.PreferredLanguage), new Payload(Type.Cancel).ToJson()) 
-            }));
+            var response = new SendRequest(uid, new Message(await _translator.TranslateString("confirmation", user.PreferredLanguage), await _selector.GetConfirmationSelector(user.PreferredLanguage)));
             await _apiClient.Send(response);
         }
     }

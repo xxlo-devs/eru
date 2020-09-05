@@ -52,12 +52,19 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
 
         private async Task ShowPage(string uid, int page)
         {
-            throw new NotImplementedException();
+            var user = await _dbContext.IncompleteUsers.FindAsync(uid);
+            user.LastPage = page;
+            
+            var response = new SendRequest(uid, new Message(await _translator.TranslateString("year-selection", user.PreferredLanguage), await _selector.GetYearSelector(user.LastPage, user.PreferredLanguage)));
+            await _apiClient.Send(response);
         }
 
         private async Task UnsupportedCommand(string uid)
         {
-            throw new NotImplementedException();
+            var user = await _dbContext.IncompleteUsers.FindAsync(uid);
+
+            var response = new SendRequest(uid, new Message(await _translator.TranslateString("unsupported-command", user.PreferredLanguage), await _selector.GetYearSelector(user.LastPage, user.PreferredLanguage)));
+            await _apiClient.Send(response);        
         }
 
         private async Task Gather(string uid, int year)
@@ -65,14 +72,11 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
             var user = await _dbContext.IncompleteUsers.FindAsync(uid);
             user.Year = year;
             user.Stage = Stage.GatheredYear;
-            user.ListOffset = 0;
+            user.LastPage = 0;
             _dbContext.IncompleteUsers.Update(user);
             await _dbContext.SaveChangesAsync(CancellationToken.None);
-            
-            var classesInDb = await _mediator.Send(new GetClassesQuery());
-            var dict = classesInDb.Where(x => x.Year == user.Year).OrderBy(x => x.Section).ToDictionary(x => x.ToString(), x => x.Id);
-            
-            var response = new SendRequest(uid, new Message(await _translator.TranslateString("class-selection", user.PreferredLanguage), _selector.GetSelector(dict, 0, Type.Class)));
+
+            var response = new SendRequest(uid, new Message(await _translator.TranslateString("class-selection", user.PreferredLanguage), await _selector.GetClassSelector(0, user.Year, user.PreferredLanguage)));
             await _apiClient.Send(response);
         }
     }

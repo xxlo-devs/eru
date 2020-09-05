@@ -21,7 +21,7 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.SendAPIClient
         public async Task Send(SendRequest request)
         {
             const string graphEndpoint = "https://graph.facebook.com/v8.0/me/messages";
-            var accessToken = string.Format("{0}{1}", "?access_token=", _configuration["PlatformClients:FacebookMessenger:AccessToken"]);
+            var accessToken = $"?access_token={_configuration["PlatformClients:FacebookMessenger:AccessToken"]}";
             
             var json = JsonSerializer.Serialize(request, new JsonSerializerOptions {IgnoreNullValues = true});
             var content = new StringContent(json, Encoding.Default, "application/json");

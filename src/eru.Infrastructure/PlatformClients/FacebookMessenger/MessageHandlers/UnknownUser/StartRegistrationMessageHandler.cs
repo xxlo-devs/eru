@@ -43,15 +43,7 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.U
             await _dbContext.IncompleteUsers.AddAsync(incompleteUser);
             await _dbContext.SaveChangesAsync(CancellationToken.None);
             
-            var supportedCultures = _configuration.GetSection("CultureSettings:AvailableCultures").AsEnumerable().Select(x => x.Value).Skip(1);
-            var dict = new Dictionary<string, string>();
-            foreach (var x in supportedCultures)
-            {
-                var culture = new CultureInfo(x);
-                dict.Add(culture.DisplayName, new Payload(Type.Lang, x).ToJson());
-            }
-            
-            var response = new SendRequest(uid, new Message(await _translator.TranslateString("greeting", _configuration["CultureSettings:DefaultCulture"]), _selector.GetSelector(dict, 0, Type.Lang)));
+            var response = new SendRequest(uid, new Message(await _translator.TranslateString("greeting", _configuration["CultureSettings:DefaultCulture"]), await _selector.GetLangSelector(0)));
             await _client.Send(response);
         }
     }

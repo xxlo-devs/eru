@@ -21,16 +21,14 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
     {
         private readonly IRegistrationDbContext _dbContext;
         private readonly ISendApiClient _apiClient;
-        private readonly IMediator _mediator;
         private readonly IConfiguration _configuration;
         private readonly ISelector _selector;
         private readonly ITranslator<FacebookMessengerPlatformClient> _translator;
 
-        public GatherLanguageMessageHandler(IRegistrationDbContext dbContext, ISendApiClient apiClient, IMediator mediator, ISelector selector, IConfiguration configuration, ITranslator<FacebookMessengerPlatformClient> translator)
+        public GatherLanguageMessageHandler(IRegistrationDbContext dbContext, ISendApiClient apiClient, ISelector selector, IConfiguration configuration, ITranslator<FacebookMessengerPlatformClient> translator)
         {
             _dbContext = dbContext;
             _apiClient = apiClient;
-            _mediator = mediator;
             _selector = selector;
             _configuration = configuration;
             _translator = translator;
@@ -57,27 +55,33 @@ namespace eru.Infrastructure.PlatformClients.FacebookMessenger.MessageHandlers.R
 
         private async Task ShowPage(string uid, int page)
         {
-            throw new NotImplementedException();
+            var user = await _dbContext.IncompleteUsers.FindAsync(uid);
+            user.LastPage = page; 
+            var response = new SendRequest(uid, new Message(await _translator.TranslateString("greeting", _configuration["CultureSettings:DefaultCulture"]), await _selector.GetLangSelector(user.LastPage)));
+            await _apiClient.Send(response);
         }
 
         private async Task UnsupportedCommand(string uid)
         {
-            throw new NotImplementedException();
+            var user = await _dbContext.IncompleteUsers.FindAsync(uid);
+            
+            var response = new SendRequest(uid, 
+                new Message(await _translator.TranslateString("unsupported-command", _configuration["CultureSettings:DefaultCulture"]), await _selector.GetLangSelector(user.LastPage)));
+            await _apiClient.Send(response);
         }
 
         private async Task Gather(string uid, string lang)
         {
             var user = await _dbContext.IncompleteUsers.FindAsync(uid);
             user.PreferredLanguage = lang;
-            user.ListOffset = 0;
+            user.LastPage = 0;
             user.Stage = Stage.GatheredLanguage;
             _dbContext.IncompleteUsers.Update(user);
             await _dbContext.SaveChangesAsync(CancellationToken.None);
-            
-            var classesInDb = await _mediator.Send(new GetClassesQuery());
-            var dict = new SortedSet<int>(classesInDb.Select(x => x.Year)).ToDictionary(x => x.ToString(), x => new Payload(Type.Year, x.ToString()).ToJson());
-            
-            var response = new SendRequest(uid, new Message(await _translator.TranslateString("year-selection", user.PreferredLanguage), _selector.GetSelector(dict, 0, Type.Year)));
+
+            var response = new SendRequest(uid,
+                new Message(await _translator.TranslateString("year-selection", user.PreferredLanguage),
+                    await _selector.GetYearSelector(0, user.PreferredLanguage)));
             await _apiClient.Send(response);
         }
     }
