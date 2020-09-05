@@ -9,17 +9,17 @@ namespace eru.Infrastructure.Tests.PlatformClients.FacebookMessenger.MessageHand
 {
     public class CancelRegistrationHandlerTests
     {
-        [Fact]
-        public async void ShouldCancelRegistrationCorrectly()
-        {
-            var context = new FakeRegistrationDb();
-            var apiClient = new Mock<ISendApiClient>();
-            
-            var handler = new CancelRegistrationMessageHandler(context, apiClient.Object);
-            await handler.Handle("sample-registering-user-with-class");
-
-            context.IncompleteUsers.Should().NotContain(x => x.Id == "sample-registering-user-with-class");
-            apiClient.Verify(x => x.Send(It.IsAny<SendRequest>()), Times.Once);
-        }
+        // [Fact]
+        // public async void ShouldCancelRegistrationCorrectly()
+        // {
+        //     var context = new FakeRegistrationDb();
+        //     var apiClient = new Mock<ISendApiClient>();
+        //     
+        //     var handler = new CancelRegistrationMessageHandler(context, apiClient.Object);
+        //     await handler.Handle("sample-registering-user-with-class");
+        //
+        //     context.IncompleteUsers.Should().NotContain(x => x.Id == "sample-registering-user-with-class");
+        //     apiClient.Verify(x => x.Send(It.IsAny<SendRequest>()), Times.Once);
+        // }
     }
 }
