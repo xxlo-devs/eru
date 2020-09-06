@@ -1,0 +1,21 @@
+﻿name: Publish docker image via dockerhub
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Deploy docker
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout master
+        uses: actions/checkout@v1
+
+      - name: Publish to Registry
+        uses: elgohr/Publish-Docker-Github-Action@master
+        with:
+          name: xxlo-devs/eru
+          registry: ghcr.io
+          username: ${{ secrets.GHCR_USERNAME }}
+          password: ${{ secrets.GHCR_PASSWORD }}
