@@ -269,3 +269,5 @@ Logs
 
 #Site
 /site/
+
+*.db
