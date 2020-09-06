@@ -18,7 +18,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
         [Fact]
         public async void ShouldGatherYearCorrectly()
         {
-            var logger = new Mock<ILogger>();
+            var logger = new Mock<ILogger<GatherYearMessageHandler>>();
             var context = new FakeRegistrationDb();
             var apiClient = new Mock<ISendApiClient>();
             var selector = new Mock<ISelector>();

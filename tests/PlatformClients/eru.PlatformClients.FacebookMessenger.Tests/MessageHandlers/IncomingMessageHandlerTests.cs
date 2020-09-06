@@ -59,7 +59,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers
             
             var dbContext = new FakeRegistrationDb();
             var mediator = BuildFakeMediator();
-            var logger = new Mock<ILogger>();
+            var logger = new Mock<ILogger<IncomingMessageHandler>>();
             
             var knownUserMessageHandler = new Mock<IKnownUserMessageHandler>(); 
             var registeringUserMessageHandler = new Mock<IRegisteringUserMessageHandler>(); 
@@ -91,7 +91,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers
             
             var dbContext = new FakeRegistrationDb();
             var mediator = BuildFakeMediator();
-            var logger = new Mock<ILogger>();
+            var logger = new Mock<ILogger<IncomingMessageHandler>>();
             
             var knownUserMessageHandler = new Mock<IKnownUserMessageHandler>();
             var registeringUserMessageHandler = new Mock<IRegisteringUserMessageHandler>();
@@ -123,7 +123,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers
             
             var dbContext = new FakeRegistrationDb();
             var mediator = BuildFakeMediator();
-            var logger = new Mock<ILogger>();
+            var logger = new Mock<ILogger<IncomingMessageHandler>>();
             
             var knownUserMessageHandler = new Mock<IKnownUserMessageHandler>();
             var registeringUserMessageHandler = new Mock<IRegisteringUserMessageHandler>();

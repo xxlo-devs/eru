@@ -20,7 +20,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
         [Fact]
         public async void ShoudGatherLanguageCorrectly()
         {
-            var logger = new Mock<ILogger>();
+            var logger = new Mock<ILogger<GatherLanguageMessageHandler>>();
             var context = new FakeRegistrationDb();
             var apiClient = new Mock<ISendApiClient>();
             var config = new ConfigurationBuilder().AddInMemoryCollection(new[] {new KeyValuePair<string, string>("CultureSettings:DefaultCulture", "en"),}).Build();

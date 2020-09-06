@@ -24,7 +24,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             ClassHandlerMock = new Mock<IGatherClassMessageHandler>();
             LangHandlerMock = new Mock<IGatherLanguageMessageHandler>();
             YearHandlerMock = new Mock<IGatherYearMessageHandler>();
-            LoggerMock = new Mock<ILogger>();
+            LoggerMock = new Mock<ILogger<RegisteringUserMessageHandler>>();
             
             Handler = new RegisteringUserMessageHandler(FakeDbContext, CancelHandlerMock.Object, ConfirmHandlerMock.Object, ClassHandlerMock.Object, LangHandlerMock.Object, YearHandlerMock.Object, LoggerMock.Object);
         }
@@ -36,7 +36,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
         public Mock<IGatherClassMessageHandler> ClassHandlerMock { get; set; }
         public Mock<IGatherLanguageMessageHandler> LangHandlerMock { get; set; }
         public Mock<IGatherYearMessageHandler> YearHandlerMock { get; set; }
-        public Mock<ILogger> LoggerMock { get; set; }
+        public Mock<ILogger<RegisteringUserMessageHandler>> LoggerMock { get; set; }
 
         public void VerifyNoOtherCalls()
         {

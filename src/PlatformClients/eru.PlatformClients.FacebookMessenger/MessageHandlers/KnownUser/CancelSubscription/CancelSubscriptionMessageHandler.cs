@@ -14,8 +14,8 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser.Cancel
         private readonly IMediator _mediator;
         private readonly ISendApiClient _apiClient;
         private readonly ITranslator<FacebookMessengerPlatformClient> _translator;
-        private readonly ILogger _logger;
-        public CancelSubscriptionMessageHandler(IMediator mediator, ISendApiClient apiClient, ITranslator<FacebookMessengerPlatformClient> translator, ILogger logger)
+        private readonly ILogger<CancelSubscriptionMessageHandler> _logger;
+        public CancelSubscriptionMessageHandler(IMediator mediator, ISendApiClient apiClient, ITranslator<FacebookMessengerPlatformClient> translator, ILogger<CancelSubscriptionMessageHandler> logger)
         {
             _mediator = mediator;
             _apiClient = apiClient;

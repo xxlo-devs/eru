@@ -31,7 +31,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
                 });
             var apiClient = new Mock<ISendApiClient>();
             var translator = new Mock<ITranslator<FacebookMessengerPlatformClient>>();
-            var logger = new Mock<ILogger>();
+            var logger = new Mock<ILogger<ConfirmSubscriptionMessageHandler>>();
             translator.Setup(x => x.TranslateString("congratulations", "en")).Returns(Task.FromResult("Congratulations! You've successfully subscribed to eru Messenger notifications :)"));
             translator.Setup(x => x.TranslateString("unsupported-command", "en")).Returns(Task.FromResult("This is not a supported command. If you want to delete this bot, just click Cancel. If you want to continue, follow the given instructions."));
             

@@ -13,9 +13,9 @@ namespace eru.PlatformClients.FacebookMessenger.SendAPIClient
     {
         private readonly HttpClient _client;
         private readonly IConfiguration _configuration;
-        private readonly ILogger _logger;
+        private readonly ILogger<SendApiClient> _logger;
 
-        public SendApiClient(IConfiguration configuration, ILogger logger)
+        public SendApiClient(IConfiguration configuration, ILogger<SendApiClient> logger)
         {
             _client = new HttpClient();
             _configuration = configuration;

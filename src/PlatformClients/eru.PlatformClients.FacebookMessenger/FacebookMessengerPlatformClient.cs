@@ -21,9 +21,9 @@ namespace eru.PlatformClients.FacebookMessenger
         private readonly IMediator _mediator;
         private readonly ISelector _selector;
         private readonly ITranslator<FacebookMessengerPlatformClient> _translator;
-        private readonly ILogger _logger;
+        private readonly ILogger<FacebookMessengerPlatformClient> _logger;
 
-        public FacebookMessengerPlatformClient(ISendApiClient apiClient, IMediator mediator, ISelector selector, ITranslator<FacebookMessengerPlatformClient> translator, ILogger logger)
+        public FacebookMessengerPlatformClient(ISendApiClient apiClient, IMediator mediator, ISelector selector, ITranslator<FacebookMessengerPlatformClient> translator, ILogger<FacebookMessengerPlatformClient> logger)
         {
             _apiClient = apiClient;
             _mediator = mediator;

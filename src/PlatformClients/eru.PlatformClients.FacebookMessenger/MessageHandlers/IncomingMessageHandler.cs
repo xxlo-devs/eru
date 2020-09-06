@@ -17,9 +17,9 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers
         private readonly IUnkownUserMessageHandler _unknownUserHandler;
         private readonly IMediator _mediator;
         private readonly IRegistrationDbContext _localDbContext;
-        private readonly ILogger _logger; 
+        private readonly ILogger<IncomingMessageHandler> _logger; 
         
-        public IncomingMessageHandler(IKnownUserMessageHandler knownUserHandler, IRegisteringUserMessageHandler registeringMessageHandler, IUnkownUserMessageHandler unknownUserHandler, IMediator mediator, IRegistrationDbContext localDbContext, ILogger logger)
+        public IncomingMessageHandler(IKnownUserMessageHandler knownUserHandler, IRegisteringUserMessageHandler registeringMessageHandler, IUnkownUserMessageHandler unknownUserHandler, IMediator mediator, IRegistrationDbContext localDbContext, ILogger<IncomingMessageHandler> logger)
         {
             _knownUserHandler = knownUserHandler;
             _registeringUserHandler = registeringMessageHandler;

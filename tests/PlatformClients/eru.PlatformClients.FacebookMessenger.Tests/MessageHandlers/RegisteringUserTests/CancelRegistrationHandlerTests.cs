@@ -18,7 +18,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             var context = new FakeRegistrationDb();
             var apiClient = new Mock<ISendApiClient>();
             var translator = new Mock<ITranslator<FacebookMessengerPlatformClient>>();
-            var logger = new Mock<ILogger>();
+            var logger = new Mock<ILogger<CancelRegistrationMessageHandler>>();
             translator.Setup(x => x.TranslateString("subscription-cancelled", "en")).Returns(Task.FromResult("We are sorry to see you go. Your subscription (and your data) has been deleted. If you will ever want to subscribe again, write anything to start the registration process."));
             
             var handler = new CancelRegistrationMessageHandler(context, apiClient.Object, translator.Object, logger.Object);

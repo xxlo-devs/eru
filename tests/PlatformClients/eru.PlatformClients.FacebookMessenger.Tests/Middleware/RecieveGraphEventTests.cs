@@ -48,7 +48,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.Middleware
         public async void CanRecieveGraphEvent()
         {
             var messageHandler = new FakeMessageHandler();
-            var logger = new Mock<ILogger>();
+            var logger = new Mock<ILogger<FbMiddleware>>();
             var middleware = new FbMiddleware(_configuration, messageHandler, logger.Object);
             var context = BuildHttpContext("{\"object\":\"page\",\"entry\":[{\"messaging\":[{\"sender\":{\"id\":\"<PSID>\"},\"recipient\":{\"id\":\"<PAGE_ID>\"},\"timestamp\":123456789,\"message\":{\"mid\":\"mid.1457764197618:41d102a3e1ae206a38\",\"text\":\"hello, world!\"}}]}]}");
             
@@ -68,7 +68,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.Middleware
         [Fact]
         public async void DoesWebhookReturnNotFoundWhenSubscriptionTargetIsUnknown()
         {
-            var logger = new Mock<ILogger>();
+            var logger = new Mock<ILogger<FbMiddleware>>();
             var middleware = new FbMiddleware(_configuration, new FakeMessageHandler(), logger.Object);
             var context = BuildHttpContext("{\"object\":\"unknown\"}");
             
@@ -82,7 +82,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.Middleware
         [Fact]
         public async void DoesWebhookReturnBadRequestWhenRequestIsInvalid()
         {
-            var logger = new Mock<ILogger>();
+            var logger = new Mock<ILogger<FbMiddleware>>();
             var middleware = new FbMiddleware(_configuration, new FakeMessageHandler(), logger.Object);
             var context = BuildHttpContext("{\"object\": \"page\", \"entry\": [{\"messaging\": [{\"message\": \"TEST_MESSAGE\"}]}]}");
             

@@ -50,7 +50,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.UnknownUse
             var translator = new Mock<ITranslator<FacebookMessengerPlatformClient>>();
             translator.Setup(x => x.TranslateString("", "en")).Returns(Task.FromResult(""));
             
-            var logger = new Mock<ILogger>();
+            var logger = new Mock<ILogger<StartRegistrationMessageHandler>>();
             
             var handler = new StartRegistrationMessageHandler(context, apiClient.Object, config, selector.Object, translator.Object, logger.Object);
             

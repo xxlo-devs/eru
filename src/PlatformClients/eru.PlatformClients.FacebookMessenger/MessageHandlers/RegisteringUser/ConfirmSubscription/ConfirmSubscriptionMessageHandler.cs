@@ -18,9 +18,9 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
         private readonly ISendApiClient _apiClient;
         private readonly ITranslator<FacebookMessengerPlatformClient> _translator;
         private readonly ISelector _selector;
-        private readonly ILogger _logger;
+        private readonly ILogger<ConfirmSubscriptionMessageHandler> _logger;
 
-        public ConfirmSubscriptionMessageHandler(IMediator mediator, IRegistrationDbContext dbContext, ISendApiClient apiClient, ITranslator<FacebookMessengerPlatformClient> translator, ISelector selector, ILogger logger)
+        public ConfirmSubscriptionMessageHandler(IMediator mediator, IRegistrationDbContext dbContext, ISendApiClient apiClient, ITranslator<FacebookMessengerPlatformClient> translator, ISelector selector, ILogger<ConfirmSubscriptionMessageHandler> logger)
         {
             _mediator = mediator;
             _apiClient = apiClient;

@@ -15,9 +15,9 @@ namespace eru.PlatformClients.FacebookMessenger
     {
         private readonly IConfiguration _configuration;
         private readonly IMessageHandler _messageHandler;
-        private readonly ILogger _logger;
+        private readonly ILogger<FbMiddleware> _logger;
 
-        public FbMiddleware(IConfiguration configuration, IMessageHandler messageHandler, ILogger logger)
+        public FbMiddleware(IConfiguration configuration, IMessageHandler messageHandler, ILogger<FbMiddleware> logger)
         {
             _configuration = configuration;
             _messageHandler = messageHandler;

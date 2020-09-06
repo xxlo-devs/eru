@@ -22,9 +22,9 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser
         private readonly IGatherLanguageMessageHandler _langHandler;
         private readonly IGatherYearMessageHandler _yearHandler;
         private readonly IRegistrationDbContext _dbContext;
-        private readonly ILogger _logger;
+        private readonly ILogger<RegisteringUserMessageHandler> _logger;
 
-        public RegisteringUserMessageHandler(IRegistrationDbContext dbContext, ICancelRegistrationMessageHandler cancelHandler, IConfirmSubscriptionMessageHandler confirmHandler, IGatherClassMessageHandler classHandler, IGatherLanguageMessageHandler langHandler, IGatherYearMessageHandler yearHandler, ILogger logger)
+        public RegisteringUserMessageHandler(IRegistrationDbContext dbContext, ICancelRegistrationMessageHandler cancelHandler, IConfirmSubscriptionMessageHandler confirmHandler, IGatherClassMessageHandler classHandler, IGatherLanguageMessageHandler langHandler, IGatherYearMessageHandler yearHandler, ILogger<RegisteringUserMessageHandler> logger)
         {
             _dbContext = dbContext;
             _cancelHandler = cancelHandler;

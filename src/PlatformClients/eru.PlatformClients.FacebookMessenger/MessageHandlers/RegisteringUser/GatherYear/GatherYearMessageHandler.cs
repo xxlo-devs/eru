@@ -18,9 +18,9 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
         private readonly ISendApiClient _apiClient;
         private readonly ISelector _selector;
         private readonly ITranslator<FacebookMessengerPlatformClient> _translator;
-        private readonly ILogger _logger;
+        private readonly ILogger<GatherYearMessageHandler> _logger;
         
-        public GatherYearMessageHandler(IRegistrationDbContext dbContext, ISendApiClient apiClient, ISelector selector, ITranslator<FacebookMessengerPlatformClient> translator, ILogger logger)
+        public GatherYearMessageHandler(IRegistrationDbContext dbContext, ISendApiClient apiClient, ISelector selector, ITranslator<FacebookMessengerPlatformClient> translator, ILogger<GatherYearMessageHandler> logger)
         {
             _dbContext = dbContext;
             _apiClient = apiClient;

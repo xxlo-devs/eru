@@ -14,9 +14,9 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
         private readonly IRegistrationDbContext _dbContext;
         private readonly ISendApiClient _apiClient;
         private readonly ITranslator<FacebookMessengerPlatformClient> _translator;
-        private readonly ILogger _logger;
+        private readonly ILogger<CancelRegistrationMessageHandler> _logger;
 
-        public CancelRegistrationMessageHandler(IRegistrationDbContext dbContext, ISendApiClient apiClient, ITranslator<FacebookMessengerPlatformClient> translator, ILogger logger)
+        public CancelRegistrationMessageHandler(IRegistrationDbContext dbContext, ISendApiClient apiClient, ITranslator<FacebookMessengerPlatformClient> translator, ILogger<CancelRegistrationMessageHandler> logger)
         {
             _dbContext = dbContext;
             _apiClient = apiClient;

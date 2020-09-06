@@ -15,9 +15,9 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser.Unsupp
         private readonly ITranslator<FacebookMessengerPlatformClient> _translator;
         private readonly IMediator _mediator;
         private readonly ISelector _selector;
-        private readonly ILogger _logger;
+        private readonly ILogger<UnsupportedCommandMessageHandler> _logger;
         
-        public UnsupportedCommandMessageHandler(ISendApiClient apiClient, ITranslator<FacebookMessengerPlatformClient> translator, IMediator mediator, ISelector selector, ILogger logger)
+        public UnsupportedCommandMessageHandler(ISendApiClient apiClient, ITranslator<FacebookMessengerPlatformClient> translator, IMediator mediator, ISelector selector, ILogger<UnsupportedCommandMessageHandler> logger)
         {
             _apiClient = apiClient;
             _translator = translator;

@@ -17,7 +17,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.KnownUserT
         {
             var cancelSubscriptionHandler = new Mock<ICancelSubscriptionMessageHandler>();
             var unsupportedCommandHandler = new Mock<IUnsupportedCommandMessageHandler>();
-            var logger = new Mock<ILogger>();
+            var logger = new Mock<ILogger<KnownUserMessageHandler>>();
             
             var handler = new KnownUserMessageHandler(cancelSubscriptionHandler.Object, unsupportedCommandHandler.Object, logger.Object);
             
@@ -37,7 +37,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.KnownUserT
         {
             var cancelSubscriptionHandler = new Mock<ICancelSubscriptionMessageHandler>();
             var unsupportedCommandHandler = new Mock<IUnsupportedCommandMessageHandler>();
-            var logger = new Mock<ILogger>();
+            var logger = new Mock<ILogger<KnownUserMessageHandler>>();
             
             var handler = new KnownUserMessageHandler(cancelSubscriptionHandler.Object, unsupportedCommandHandler.Object, logger.Object);
             

@@ -19,9 +19,9 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.UnknownUser
         private readonly IConfiguration _configuration;
         private readonly ISelector _selector;
         private readonly ITranslator<FacebookMessengerPlatformClient> _translator;
-        private readonly ILogger _logger;
+        private readonly ILogger<StartRegistrationMessageHandler> _logger;
             
-        public StartRegistrationMessageHandler(IRegistrationDbContext dbContext, ISendApiClient client, IConfiguration configuration, ISelector selector, ITranslator<FacebookMessengerPlatformClient> translator, ILogger logger)
+        public StartRegistrationMessageHandler(IRegistrationDbContext dbContext, ISendApiClient client, IConfiguration configuration, ISelector selector, ITranslator<FacebookMessengerPlatformClient> translator, ILogger<StartRegistrationMessageHandler> logger)
         {
             _dbContext = dbContext;
             _client = client;

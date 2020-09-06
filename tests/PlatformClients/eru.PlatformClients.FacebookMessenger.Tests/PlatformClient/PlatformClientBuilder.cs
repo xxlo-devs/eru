@@ -68,7 +68,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.PlatformClient
 
         private void SetupLogger()
         {
-            LoggerMock = new Mock<ILogger>();
+            LoggerMock = new Mock<ILogger<FacebookMessengerPlatformClient>>();
         }
         
         public FacebookMessengerPlatformClient PlatformClient { get; set; }
@@ -76,6 +76,6 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.PlatformClient
         public Mock<ISendApiClient> ApiClientMock { get; set; }
         public Mock<ISelector> SelectorMock { get; set; }
         public Mock<ITranslator<FacebookMessengerPlatformClient>> TranslatorMock { get; set; }
-        public Mock<ILogger> LoggerMock { get; set; }
+        public Mock<ILogger<FacebookMessengerPlatformClient>> LoggerMock { get; set; }
     }
 }

@@ -18,7 +18,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
         [Fact]
         public async void ShouldGatherClassCorrectly()
         {
-            var logger = new Mock<ILogger>();
+            var logger = new Mock<ILogger<GatherClassMessageHandler>>();
             var context = new FakeRegistrationDb();
             var apiClient = new Mock<ISendApiClient>();
             var translator = new Mock<ITranslator<FacebookMessengerPlatformClient>>();

@@ -25,7 +25,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.KnownUserT
             var selector = new Mock<ISelector>();
             var mediator = new Mock<IMediator>();
             var translator = new Mock<ITranslator<FacebookMessengerPlatformClient>>();
-            var logger = new Mock<ILogger>();
+            var logger = new Mock<ILogger<UnsupportedCommandMessageHandler>>();
             
             selector.Setup(x => x.GetCancelSelector("en")).Returns(Task.FromResult(new[] {new QuickReply("Cancel", new Payload(PayloadType.Cancel).ToJson())}.AsEnumerable()));
             

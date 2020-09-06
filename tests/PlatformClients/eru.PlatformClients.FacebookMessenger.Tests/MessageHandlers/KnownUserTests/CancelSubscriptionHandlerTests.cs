@@ -56,7 +56,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.KnownUserT
             var translator = new Mock<ITranslator<FacebookMessengerPlatformClient>>();
             translator.Setup(x => x.TranslateString("subscription-cancelled", "en")).Returns(Task.FromResult("We are sorry to see you go. Your subscription (and your data) has been deleted. If you will ever want to subscribe again, write anything to start the registration process."));
             var apiClient = new Mock<ISendApiClient>();
-            var logger = new Mock<ILogger>();
+            var logger = new Mock<ILogger<CancelSubscriptionMessageHandler>>();
             
             var handler = new CancelSubscriptionMessageHandler(mediator.Object, apiClient.Object, translator.Object, logger.Object);
             await handler.Handle("sample-subscriber-id");
