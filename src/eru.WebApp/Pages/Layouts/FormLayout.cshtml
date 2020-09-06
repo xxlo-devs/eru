@@ -15,11 +15,9 @@
     @await RenderSectionAsync("AddToScripts", false)
 }
 <div id="wrapper">
-    <section class="hero">
-        <div class="container is-half">
-            <h1 class="is-size-1 title animate__animated animate__lightSpeedInRight">@ViewData["title"]</h1>
-        </div>
-    </section>
+    <section class="container is-half">
+                <h1 class="is-size-1 title animate__animated animate__lightSpeedInRight">@ViewData["title"]</h1>
+            </section>
     <section id="form-container" class="section">
         <div class="container">
             @RenderBody()
