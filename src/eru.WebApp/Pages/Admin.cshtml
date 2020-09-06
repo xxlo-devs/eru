@@ -56,7 +56,7 @@
             </div>
         </div>
     </nav>
-    <div class="container"  style="max-width: 90%; margin-left: auto; margin-right: auto;">
+    <div class="container">
          <div class="tile is-ancestor">
                 <div class="tile is-parent is-vertical">
                     <div class="tile is-child">
@@ -130,12 +130,8 @@
                             <textarea id="notification-content" class="textarea is-danger" placeholder="@Localizer["sample-content"]"></textarea>
                         </div>
                         <div class="field is-grouped">
-                            <p class="control">
-                                <button class="button is-danger" onclick="sendNotification()">@Localizer["send"]</button>
-                            </p>
-                            <p class="control">
-                                <button class="button is-link" onclick="clearNotificationSender()">@Localizer["cancel"]</button>
-                            </p>
+                            <button class="button is-danger" onclick="sendNotification()">@Localizer["send"]</button>
+                            <button class="button is-link" onclick="clearNotificationSender()">@Localizer["cancel"]</button>
                         </div>
                     </div>
                 </div>
