@@ -1,4 +1,6 @@
 site_name: eru
+theme:
+   name: readthedocs
 nav:
    - Home: index.md
    - Setup: setup.md

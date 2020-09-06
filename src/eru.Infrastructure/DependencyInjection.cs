@@ -29,7 +29,6 @@ namespace eru.Infrastructure
             
             services.AddTransient<IStopwatch, Stopwatch.Stopwatch>();
             services.AddTransient<IClassesParser, ClassesParser.ClassesParser>();
-            services.AddTransient<IHangfireWrapper, HangfireWrapper>();
             services.AddHealthChecks()
                 .AddDbContextCheck<ApplicationDbContext>();
 
