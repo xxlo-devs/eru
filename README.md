@@ -20,6 +20,3 @@ We want to enable school to easily inform all interested students about all teac
 
 You want to help? Feel free to!
 Simply create an issue for idea for a solution you want to have/ problem you've encountered and either wait for one of our developers to fix it or get aboard and join us! We can't guarantee that code review will be painless though.
-
-## Setup
-
