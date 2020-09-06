@@ -1,4 +1,7 @@
-﻿.center-table {
+﻿#wrapper {
+    margin: 0;
+}
+.center-table {
     margin-left: auto;
     margin-right: auto;
 }
