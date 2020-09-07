@@ -11,93 +11,67 @@ using eru.PlatformClients.FacebookMessenger.Models.Webhook.Messages;
 using eru.PlatformClients.FacebookMessenger.RegistrationDb.DbContext;
 using eru.PlatformClients.FacebookMessenger.RegistrationDb.Enums;
 using eru.PlatformClients.FacebookMessenger.ReplyPayload;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser
 {
     public class RegisteringUserMessageHandler : MessageHandler<RegisteringUserMessageHandler>
     {
-        /*private readonly ICancelRegistrationMessageHandler _cancelHandler;
-        private readonly IConfirmSubscriptionMessageHandler _confirmHandler;
-        private readonly IGatherClassMessageHandler _classHandler;
-        private readonly IGatherLanguageMessageHandler _langHandler;
-        private readonly IGatherYearMessageHandler _yearHandler;
-        private readonly IRegistrationDbContext _dbContext;
-        private readonly ILogger<RegisteringUserMessageHandler> _logger;
+        private readonly IServiceProvider _provider;
 
-        public RegisteringUserMessageHandler(IRegistrationDbContext dbContext, ICancelRegistrationMessageHandler cancelHandler, IConfirmSubscriptionMessageHandler confirmHandler, IGatherClassMessageHandler classHandler, IGatherLanguageMessageHandler langHandler, IGatherYearMessageHandler yearHandler, ILogger<RegisteringUserMessageHandler> logger)
+        public RegisteringUserMessageHandler(IServiceProvider provider, ILogger<RegisteringUserMessageHandler> logger) : base(logger)
         {
-            _dbContext = dbContext;
-            _cancelHandler = cancelHandler;
-            _confirmHandler = confirmHandler;
-            _classHandler = classHandler;
-            _langHandler = langHandler;
-            _yearHandler = yearHandler;
-            _logger = logger;
+            _provider = provider;
         }
-        public async Task Handle(string uid, Message message)
+
+        protected override async Task Base(Messaging message)
         {
-            _logger.LogTrace($"eru.PlatformClients.FacebookMessenger: RegisteringUserMessageHandler.Handle got a message (uid: {uid}, payload: {message?.QuickReply?.Payload})");
             var payload = new Payload();
             
-            if (message?.QuickReply?.Payload != null)
+            if (message.Message.QuickReply.Payload != null)
             {
-                payload = JsonSerializer.Deserialize<Payload>(message.QuickReply.Payload, new JsonSerializerOptions
+                payload = JsonSerializer.Deserialize<Payload>(message.Message.QuickReply.Payload, new JsonSerializerOptions
                 {
                     IgnoreNullValues = true,
                     Converters = { new JsonStringEnumConverter() }
                 });
                 
-                _logger.LogTrace($"eru.PlatformClients.FacebookMessenger: RegisteringUserMessageHandler.Handle has deserialized payload; Type: {payload.Type}, Id: {payload.Id}, Page: {payload.Page}");
-                
                 if (payload.Type == PayloadType.Cancel)
                 {
-                    _logger.LogTrace($"eru.PlatformClients.FacebookMessenger: RegisteringUserMessageHandler.Handle redirected request to CancelRegistrationMessageHandler.Handle");
-                    await _cancelHandler.Handle(uid);
+                    await _provider.GetService<RegistrationMessageHandler<CancelRegistrationMessageHandler>>().Handle(message.Sender.Id, payload);
                     return;
                 }
             }
 
-            var user = await _dbContext.IncompleteUsers.FindAsync(uid);
+            var user = await _provider.GetService<IRegistrationDbContext>().IncompleteUsers.FindAsync(message.Sender.Id, payload);
             
             switch (user.Stage)
             {
                 case Stage.Created:
                 {
-                    _logger.LogTrace($"eru.PlatformClients.FacebookMessenger: RegisteringUserMessageHandler.Handle redirected request to GatherLanguageMessageHandler");
-                    await _langHandler.Handle(uid, payload);
+                    await _provider.GetService<RegistrationMessageHandler<GatherLanguageMessageHandler>>().Handle(message.Sender.Id, payload);
                     break;
                 }
 
                 case Stage.GatheredLanguage:
                 {
-                    _logger.LogTrace($"eru.PlatformClients.FacebookMessenger: RegisteringUserMessageHandler.Handle redirected request to GatherYearMessageHandler");
-                    await _yearHandler.Handle(uid, payload);
+                    await _provider.GetService<RegistrationMessageHandler<GatherYearMessageHandler>>().Handle(message.Sender.Id, payload);
                     break;
                 }
 
                 case Stage.GatheredYear:
                 {
-                    _logger.LogTrace($"eru.PlatformClients.FacebookMessenger: RegisteringUserMessageHandler.Handle redirected request to GatherClassMessageHandler");
-                    await _classHandler.Handle(uid, payload);
+                    await _provider.GetService<RegistrationMessageHandler<GatherClassMessageHandler>>().Handle(message.Sender.Id, payload);
                     break;
                 }
 
                 case Stage.GatheredClass:
                 {
-                    _logger.LogTrace($"eru.PlatformClients.FacebookMessenger: RegisteringUserMessageHandler.Handle redirected request to ConfirmSubscriptionMessageHandler");
-                    await _confirmHandler.Handle(uid, payload);
+                    await _provider.GetService<RegistrationMessageHandler<ConfirmSubscriptionMessageHandler>>().Handle(message.Sender.Id, payload);
                     break;
                 }
             }
-        }*/
-        public RegisteringUserMessageHandler(IServiceProvider provider, ILogger<RegisteringUserMessageHandler> logger) : base(logger)
-        {
-        }
-
-        protected override async Task Base(Messaging message)
-        {
-            throw new System.NotImplementedException();
         }
     }
 }

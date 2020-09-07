@@ -17,7 +17,7 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers
         
         protected abstract Task Base(Messaging message);
         
-        public async Task Handle(Messaging message)
+        public virtual async Task Handle(Messaging message)
         {
             _logger.LogTrace($"tracelog");
             await Base(message);
