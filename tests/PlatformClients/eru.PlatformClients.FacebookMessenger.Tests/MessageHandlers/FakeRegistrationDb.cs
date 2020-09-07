@@ -34,10 +34,10 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers
                     .HasMaxLength(255);
                 
                 x.HasData(
-                    new IncompleteUser("sample-registering-user"),
-                    new IncompleteUser("sample-registering-user-with-lang") {PreferredLanguage = "en", Stage = Stage.GatheredLanguage},
-                    new IncompleteUser("sample-registering-user-with-year") {PreferredLanguage = "en", Year = 1, Stage = Stage.GatheredYear},
-                    new IncompleteUser("sample-registering-user-with-class") {PreferredLanguage = "en", Year = 1, ClassId = "sample-class", Stage = Stage.GatheredClass}
+                    new IncompleteUser("sample-registering-user", "en"),
+                    new IncompleteUser("sample-registering-user-with-lang", "en") {PreferredLanguage = "en", Stage = Stage.GatheredLanguage},
+                    new IncompleteUser("sample-registering-user-with-year", "en") {PreferredLanguage = "en", Year = 1, Stage = Stage.GatheredYear},
+                    new IncompleteUser("sample-registering-user-with-class", "en") {PreferredLanguage = "en", Year = 1, ClassId = "sample-class", Stage = Stage.GatheredClass}
                 );
             });
             

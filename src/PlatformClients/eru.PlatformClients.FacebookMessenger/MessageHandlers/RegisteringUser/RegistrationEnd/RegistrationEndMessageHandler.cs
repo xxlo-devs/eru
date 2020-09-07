@@ -19,7 +19,7 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
         
         public async Task Handle(Messaging message)
         {
-            _logger.LogTrace($"EndRegistrationHandler {typeof(T).Name} got a request (userid: {message.Sender.Id}, payload: {message.Message.QuickReply.Payload}");
+            _logger.LogTrace($"EndRegistrationHandler {typeof(T).Name} got a request (userid: {message.Sender.Id}, payload: {message.Message?.QuickReply?.Payload}");
             await EndRegistration(message);
         }
         

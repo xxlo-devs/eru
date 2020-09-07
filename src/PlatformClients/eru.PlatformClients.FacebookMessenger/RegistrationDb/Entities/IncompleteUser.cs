@@ -5,10 +5,16 @@ namespace eru.PlatformClients.FacebookMessenger.RegistrationDb.Entities
 {
     public class IncompleteUser
     {
-        public IncompleteUser(string id)
+        private IncompleteUser()
+        {
+            
+        }
+        
+        public IncompleteUser(string id, string defaultLanguage)
         {
             Id = id;
             Stage = Stage.Created;
+            PreferredLanguage = defaultLanguage;
         }
         
         public CreateSubscriptionCommand ToCreateSubscriptionCommand() => new CreateSubscriptionCommand(Id, FacebookMessengerPlatformClient.PId, PreferredLanguage, ClassId);

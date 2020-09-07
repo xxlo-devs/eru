@@ -32,27 +32,26 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
         protected override async Task<IncompleteUser> UpdateUserBase(IncompleteUser user, string data)
         {
             user.PreferredLanguage = data;
-            await _yearHandler.ShowInstruction(user, 0);
+            await _yearHandler.ShowInstruction(user);
 
             return user;
         }
 
         protected override async Task ShowInstructionBase(IncompleteUser user, int page)
         {
-            var response = new SendRequest(user.Id, new Message(await _translator.TranslateString("greeting", _configuration["CultureSettings:DefaultCulture"]), await GetLangSelector(page)));
+            var response = new SendRequest(user.Id, new Message(await _translator.TranslateString("greeting", user.PreferredLanguage), await GetLangSelector(page, user.PreferredLanguage)));
             await _apiClient.Send(response);
         }
 
         protected override async Task UnsupportedCommandBase(IncompleteUser user)
         {
             var response = new SendRequest(user.Id, 
-                new Message(await _translator.TranslateString("unsupported-command", _configuration["CultureSettings:DefaultCulture"]), await GetLangSelector(user.LastPage)));
+                new Message(await _translator.TranslateString("unsupported-command", user.PreferredLanguage), await GetLangSelector(user.LastPage, user.PreferredLanguage)));
             await _apiClient.Send(response);
         }
 
-        private async Task<IEnumerable<QuickReply>> GetLangSelector(int page)
+        private async Task<IEnumerable<QuickReply>> GetLangSelector(int page, string displayCulture)
         {
-            var displayCulture = _configuration["CultureSettings:DefaultCulture"];
             var supportedCultures = _configuration.GetSection("CultureSettings:AvailableCultures").AsEnumerable().Select(x => x.Value).Skip(1);
             var cultures = supportedCultures.ToDictionary(x => new CultureInfo(x).DisplayName, x => new Payload(PayloadType.Lang, x).ToJson());
 

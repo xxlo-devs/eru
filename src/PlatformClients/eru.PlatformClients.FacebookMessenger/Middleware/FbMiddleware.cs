@@ -38,9 +38,7 @@ namespace eru.PlatformClients.FacebookMessenger.Middleware
 
                 default:
                     _logger.LogInformation($"eru.PlatformClients.FacebookMessenger: FbMiddleware.InvokeAsync got a request with not supported method");
-                    context.Response.StatusCode = (int)HttpStatusCode.MethodNotAllowed;
-                    byte[] response = Encoding.UTF8.GetBytes(string.Empty);
-                    await context.Response.Body.WriteAsync(response);
+                    await context.SendResponse(HttpStatusCode.MethodNotAllowed);
                     break;
             }
         }
@@ -55,24 +53,18 @@ namespace eru.PlatformClients.FacebookMessenger.Middleware
             {
                 if (mode == "subscribe" && token == _configuration["PlatformClients:FacebookMessenger:VerifyToken"])
                 {
-                    context.Response.StatusCode = (int) HttpStatusCode.OK;
-                    byte[] response = Encoding.UTF8.GetBytes(challenge);
-                    await context.Response.Body.WriteAsync(response);
+                    await context.SendOkResponse(challenge);
                     _logger.LogInformation($"eru.PlatformClients.FacebookMessenger: FbMiddleware.VerifyWebhookRequest succesfully verified a webhook");
                 }
                 else
                 {
-                    context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
-                    byte[] response = Encoding.UTF8.GetBytes(string.Empty);
-                    await context.Response.Body.WriteAsync(response);
+                    await context.SendResponse(HttpStatusCode.Forbidden);
                     _logger.LogWarning($"eru.PlatformClients.FacebookMessenger: FbMiddleware.VerifyWebhookRequest got a verify requets with invalid token");
                 }
             }
             else
             {
-                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                byte[] response = Encoding.UTF8.GetBytes(string.Empty);
-                await context.Response.Body.WriteAsync(response);
+                await context.SendResponse(HttpStatusCode.BadRequest);
                 _logger.LogTrace($"eru.PlatformClients.FacebookMessenger: FbMiddleware.VerifyWebhookRequest got an invalid verify request");
             }
         }
@@ -90,24 +82,18 @@ namespace eru.PlatformClients.FacebookMessenger.Middleware
                         await _messageHandler.Handle(x.Messaging.First());
                     }
                     
-                    context.Response.StatusCode = (int) HttpStatusCode.OK;
-                    byte[] response = Encoding.UTF8.GetBytes("EVENT_RECEIVED");
-                    await context.Response.Body.WriteAsync(response);
+                    await context.SendOkResponse("EVENT_RECEIVED");
                     _logger.LogInformation("eru.PlatformClients.FacebookMessenger: FbMiddleware.HandleWebhookEvent successfully processed an event");
                 }
                 else
                 {
-                    context.Response.StatusCode = (int) HttpStatusCode.NotFound;
-                    byte[] response = Encoding.UTF8.GetBytes(string.Empty);
-                    await context.Response.Body.WriteAsync(response);
+                    await context.SendResponse(HttpStatusCode.NotFound);
                     _logger.LogWarning($"eru.PlatformClients.FacebookMessenger: FbMiddleware.HandleWebhookEvent got an unsupported event");
                 }
             }
             catch
             {
-                context.Response.StatusCode = (int) HttpStatusCode.BadRequest;
-                byte[] response = Encoding.UTF8.GetBytes(string.Empty);
-                await context.Response.Body.WriteAsync(response);
+                await context.SendResponse(HttpStatusCode.BadRequest);
                 _logger.LogError($"eru.PlatformClients.FacebookMessenger: FbMiddleware.HandleWebhookEvent couldn't process event");
             }
         }

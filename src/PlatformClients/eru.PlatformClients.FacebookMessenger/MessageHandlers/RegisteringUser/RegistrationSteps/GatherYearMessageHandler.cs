@@ -32,14 +32,14 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
         protected override async Task<IncompleteUser> UpdateUserBase(IncompleteUser user, string data)
         {
             user.Year = int.Parse(data);
-            await _classHandler.ShowInstruction(user, 0);
+            await _classHandler.ShowInstruction(user);
             
             return user;
         }
 
         protected override async Task ShowInstructionBase(IncompleteUser user, int page)
         {
-            var response = new SendRequest(user.Id, new Message(await _translator.TranslateString("year-selection", user.PreferredLanguage), await GetYearSelector(user.LastPage, user.PreferredLanguage)));
+            var response = new SendRequest(user.Id, new Message(await _translator.TranslateString("year-selection", user.PreferredLanguage), await GetYearSelector(page, user.PreferredLanguage)));
             await _apiClient.Send(response);
         }
 

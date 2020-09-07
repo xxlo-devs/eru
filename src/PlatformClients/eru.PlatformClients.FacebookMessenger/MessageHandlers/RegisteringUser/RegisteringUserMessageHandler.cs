@@ -27,9 +27,9 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser
             var user = await _provider.GetService<IRegistrationDbContext>().IncompleteUsers.FindAsync(message.Sender.Id);
             var payload = new Payload();
             
-            if (message.Message.QuickReply.Payload != null)
+            if (message.Message?.QuickReply?.Payload != null)
             {
-                payload = JsonSerializer.Deserialize<Payload>(message.Message.QuickReply.Payload, new JsonSerializerOptions
+                payload = JsonSerializer.Deserialize<Payload>(message.Message?.QuickReply?.Payload, new JsonSerializerOptions
                 {
                     IgnoreNullValues = true,
                     Converters = { new JsonStringEnumConverter() }

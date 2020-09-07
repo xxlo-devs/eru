@@ -45,7 +45,7 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
             await UnsupportedCommand(user);
         }
         
-        public async Task ShowInstruction(IncompleteUser user, int page)
+        public async Task ShowInstruction(IncompleteUser user, int page = 0)
         {
             await ShowInstructionBase(user, page);
             user.LastPage = page;
@@ -85,7 +85,7 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
                 replies.Add(new QuickReply(await _translator.TranslateString("previous-page", displayCulture), new Payload(payloadType, page - 1).ToJson()));
             }
 
-            if (items.Count() - offset - 10 > 0)
+            if (items.Count - offset - 10 > 0)
             {
                 replies.Add(new QuickReply(await _translator.TranslateString("next-page", displayCulture), new Payload(payloadType, page + 1).ToJson()));
             }

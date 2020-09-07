@@ -25,7 +25,7 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers
         {
             if (await _provider.GetService<IMediator>().Send(new GetSubscriberQuery(message.Sender.Id, FacebookMessengerPlatformClient.PId)) != null)
             {
-                await _provider.GetService<MessageHandler<StartRegistrationMessageHandler>>().Handle(message);
+                await _provider.GetService<MessageHandler<KnownUserMessageHandler>>().Handle(message);
                 return;
             }
 
