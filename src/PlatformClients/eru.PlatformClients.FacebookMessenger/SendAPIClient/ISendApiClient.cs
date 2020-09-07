@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using eru.PlatformClients.FacebookMessenger.Models.SendApi;
+using eru.PlatformClients.FacebookMessenger.SendAPIClient.Requests;
 
 namespace eru.PlatformClients.FacebookMessenger.SendAPIClient
 {

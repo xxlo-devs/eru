@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
-using eru.PlatformClients.FacebookMessenger.Models.Webhook.Messages.Properties;
+using eru.PlatformClients.FacebookMessenger.Middleware.Webhook.Messages.Properties;
 
-namespace eru.PlatformClients.FacebookMessenger.Models.Webhook.Messages
+namespace eru.PlatformClients.FacebookMessenger.Middleware.Webhook.Messages
 {
     public class Messaging
     {

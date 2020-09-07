@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace eru.PlatformClients.FacebookMessenger.Models.SendApi
+namespace eru.PlatformClients.FacebookMessenger.SendAPIClient.Requests
 {
     public class Message
     {

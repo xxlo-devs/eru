@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace eru.PlatformClients.FacebookMessenger.Models.SendApi.Properties
+namespace eru.PlatformClients.FacebookMessenger.SendAPIClient.Requests.Properties
 {
     public class Recipient
     {

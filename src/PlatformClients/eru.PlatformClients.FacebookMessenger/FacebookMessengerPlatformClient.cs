@@ -3,10 +3,10 @@ using System.Threading.Tasks;
 using eru.Application.Common.Interfaces;
 using eru.Application.Subscriptions.Queries.GetSubscriber;
 using eru.Domain.Entity;
-using eru.PlatformClients.FacebookMessenger.Models.SendApi;
-using eru.PlatformClients.FacebookMessenger.Models.SendApi.Static;
 using eru.PlatformClients.FacebookMessenger.ReplyPayload;
 using eru.PlatformClients.FacebookMessenger.SendAPIClient;
+using eru.PlatformClients.FacebookMessenger.SendAPIClient.Requests;
+using eru.PlatformClients.FacebookMessenger.SendAPIClient.Requests.Static;
 using MediatR;
 using Microsoft.Extensions.Logging;
 

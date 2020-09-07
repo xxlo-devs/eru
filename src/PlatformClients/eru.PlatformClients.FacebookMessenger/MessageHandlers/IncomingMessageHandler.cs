@@ -4,7 +4,7 @@ using eru.Application.Subscriptions.Queries.GetSubscriber;
 using eru.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser;
 using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser;
 using eru.PlatformClients.FacebookMessenger.MessageHandlers.UnknownUser;
-using eru.PlatformClients.FacebookMessenger.Models.Webhook.Messages;
+using eru.PlatformClients.FacebookMessenger.Middleware.Webhook.Messages;
 using eru.PlatformClients.FacebookMessenger.RegistrationDb.DbContext;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;

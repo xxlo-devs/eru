@@ -1,4 +1,4 @@
-﻿namespace eru.PlatformClients.FacebookMessenger.Models.SendApi.Static
+﻿namespace eru.PlatformClients.FacebookMessenger.SendAPIClient.Requests.Static
 {
     public static class MessagingTypes
     {

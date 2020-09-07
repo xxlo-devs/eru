@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using eru.PlatformClients.FacebookMessenger.Models.Webhook.Messages;
+using eru.PlatformClients.FacebookMessenger.Middleware.Webhook.Messages;
 using eru.PlatformClients.FacebookMessenger.ReplyPayload;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;

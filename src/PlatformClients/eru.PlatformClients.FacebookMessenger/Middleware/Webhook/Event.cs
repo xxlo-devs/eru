@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace eru.PlatformClients.FacebookMessenger.Models.Webhook
+namespace eru.PlatformClients.FacebookMessenger.Middleware.Webhook
 {
     public class Event
     {

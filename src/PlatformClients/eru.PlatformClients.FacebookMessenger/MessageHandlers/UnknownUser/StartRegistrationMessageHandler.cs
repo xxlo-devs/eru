@@ -4,8 +4,7 @@ using System.Threading.Tasks;
 using eru.Application.Common.Interfaces;
 using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser;
 using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.RegistrationSteps;
-using eru.PlatformClients.FacebookMessenger.Models.SendApi;
-using eru.PlatformClients.FacebookMessenger.Models.Webhook.Messages;
+using eru.PlatformClients.FacebookMessenger.Middleware.Webhook.Messages;
 using eru.PlatformClients.FacebookMessenger.RegistrationDb.DbContext;
 using eru.PlatformClients.FacebookMessenger.RegistrationDb.Entities;
 using eru.PlatformClients.FacebookMessenger.SendAPIClient;
@@ -13,7 +12,7 @@ using Hangfire.Logging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Message = eru.PlatformClients.FacebookMessenger.Models.SendApi.Message;
+using Message = eru.PlatformClients.FacebookMessenger.SendAPIClient.Requests.Message;
 
 namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.UnknownUser
 {

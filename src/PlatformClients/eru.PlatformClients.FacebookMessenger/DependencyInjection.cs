@@ -1,5 +1,6 @@
 ﻿using eru.Application.Common.Interfaces;
 using eru.PlatformClients.FacebookMessenger.MessageHandlers;
+using eru.PlatformClients.FacebookMessenger.Middleware;
 using eru.PlatformClients.FacebookMessenger.RegistrationDb;
 using eru.PlatformClients.FacebookMessenger.SendAPIClient;
 using Microsoft.AspNetCore.Builder;

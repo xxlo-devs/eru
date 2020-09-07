@@ -4,12 +4,12 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using eru.PlatformClients.FacebookMessenger.MessageHandlers;
-using eru.PlatformClients.FacebookMessenger.Models.Webhook;
+using eru.PlatformClients.FacebookMessenger.Middleware.Webhook;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace eru.PlatformClients.FacebookMessenger
+namespace eru.PlatformClients.FacebookMessenger.Middleware
 {
     public class FbMiddleware : IMiddleware
     {

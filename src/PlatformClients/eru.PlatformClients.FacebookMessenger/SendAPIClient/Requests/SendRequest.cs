@@ -1,8 +1,8 @@
 ﻿using System.Text.Json.Serialization;
-using eru.PlatformClients.FacebookMessenger.Models.SendApi.Properties;
-using eru.PlatformClients.FacebookMessenger.Models.SendApi.Static;
+using eru.PlatformClients.FacebookMessenger.SendAPIClient.Requests.Properties;
+using eru.PlatformClients.FacebookMessenger.SendAPIClient.Requests.Static;
 
-namespace eru.PlatformClients.FacebookMessenger.Models.SendApi
+namespace eru.PlatformClients.FacebookMessenger.SendAPIClient.Requests
 {
     public class SendRequest
     {
