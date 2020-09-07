@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using eru.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser.CancelSubscription;
@@ -9,13 +10,9 @@ using Microsoft.Extensions.Logging;
 
 namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser
 {
-    public class KnownUserMessageHandler : IKnownUserMessageHandler
+    public class KnownUserMessageHandler : MessageHandler<KnownUserMessageHandler>
     {
-        private readonly ICancelSubscriptionMessageHandler _cancelSubscriptionMessageHandler;
-        private readonly IUnsupportedCommandMessageHandler _unsupportedCommandMessageHandler;
-        private readonly ILogger<KnownUserMessageHandler> _logger;
-
-        public KnownUserMessageHandler(ICancelSubscriptionMessageHandler cancelSubscriptionMessageHandler, IUnsupportedCommandMessageHandler unsupportedCommandMessageHandler, ILogger<KnownUserMessageHandler> logger)
+        /*public KnownUserMessageHandler(ICancelSubscriptionMessageHandler cancelSubscriptionMessageHandler, IUnsupportedCommandMessageHandler unsupportedCommandMessageHandler, ILogger<KnownUserMessageHandler> logger)
         {
             _cancelSubscriptionMessageHandler = cancelSubscriptionMessageHandler;
             _unsupportedCommandMessageHandler = unsupportedCommandMessageHandler;
@@ -47,6 +44,15 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser
 
             _logger.LogTrace($"eru.PlatformClient.FacebookMessenger: KnownUserMessageHandler.Handle redirected request to UnsupportedCommandMessageHandler.Handle");
             await _unsupportedCommandMessageHandler.Handle(uid);
+        }*/
+        public KnownUserMessageHandler(IServiceProvider provider, ILogger<KnownUserMessageHandler> logger) : base(logger)
+        {
+            
+        }
+
+        protected override async Task Base(Messaging message)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

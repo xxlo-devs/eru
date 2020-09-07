@@ -1,47 +1,47 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using eru.Application.Common.Interfaces;
 using eru.PlatformClients.FacebookMessenger.Models.SendApi;
+using eru.PlatformClients.FacebookMessenger.Models.Webhook.Messages;
 using eru.PlatformClients.FacebookMessenger.RegistrationDb.DbContext;
 using eru.PlatformClients.FacebookMessenger.RegistrationDb.Entities;
 using eru.PlatformClients.FacebookMessenger.Selector;
 using eru.PlatformClients.FacebookMessenger.SendAPIClient;
 using Hangfire.Logging;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Message = eru.PlatformClients.FacebookMessenger.Models.SendApi.Message;
 
 namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.UnknownUser
 {
-    public class StartRegistrationMessageHandler : IUnkownUserMessageHandler
+    public class StartRegistrationMessageHandler : MessageHandler<StartRegistrationMessageHandler>
     {
         private readonly IRegistrationDbContext _dbContext;
         private readonly ISendApiClient _client;
         private readonly IConfiguration _configuration;
         private readonly ISelector _selector;
         private readonly ITranslator<FacebookMessengerPlatformClient> _translator;
-        private readonly ILogger<StartRegistrationMessageHandler> _logger;
-            
-        public StartRegistrationMessageHandler(IRegistrationDbContext dbContext, ISendApiClient client, IConfiguration configuration, ISelector selector, ITranslator<FacebookMessengerPlatformClient> translator, ILogger<StartRegistrationMessageHandler> logger)
+
+        public StartRegistrationMessageHandler(IServiceProvider provider, ILogger<StartRegistrationMessageHandler> logger) : base(logger)
         {
-            _dbContext = dbContext;
-            _client = client;
-            _configuration = configuration;
-            _selector = selector;
-            _translator = translator;
-            _logger = logger;
+            _dbContext = provider.GetService<IRegistrationDbContext>();
+            _client = provider.GetService<ISendApiClient>();
+            _configuration = provider.GetService<IConfiguration>();
+            _selector = provider.GetService<ISelector>();
+            _translator = provider.GetService<ITranslator<FacebookMessengerPlatformClient>>();
         }
-        
-        public async Task Handle(string uid)
+
+        protected override async Task Base(Messaging message)
         {
-            _logger.LogTrace($"eru.PlatformClients.FacebookMessenger: StartRegistrationMessageHandler.Handle got a message (uid: {uid})");
-            var incompleteUser = new IncompleteUser(uid);
+            var incompleteUser = new IncompleteUser(message.Sender.Id);
 
             await _dbContext.IncompleteUsers.AddAsync(incompleteUser);
             await _dbContext.SaveChangesAsync(CancellationToken.None);
             
-            var response = new SendRequest(uid, new Message(await _translator.TranslateString("greeting", _configuration["CultureSettings:DefaultCulture"]), await _selector.GetLangSelector(0)));
+            var response = new SendRequest(message.Sender.Id, new Message(await _translator.TranslateString("greeting", _configuration["CultureSettings:DefaultCulture"]), await _selector.GetLangSelector(0)));
             await _client.Send(response);
-            _logger.LogInformation($"eru.PlatformClients.FacebookMessenger: StartRegistrationMessageHandler.Handle successfully started registration of new user (uid: {uid})");
         }
     }
 }

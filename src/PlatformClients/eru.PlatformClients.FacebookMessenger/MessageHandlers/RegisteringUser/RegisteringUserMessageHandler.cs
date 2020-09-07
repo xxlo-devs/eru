@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.CancelRegistration;
@@ -14,9 +15,9 @@ using Microsoft.Extensions.Logging;
 
 namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser
 {
-    public class RegisteringUserMessageHandler : IRegisteringUserMessageHandler
+    public class RegisteringUserMessageHandler : MessageHandler<RegisteringUserMessageHandler>
     {
-        private readonly ICancelRegistrationMessageHandler _cancelHandler;
+        /*private readonly ICancelRegistrationMessageHandler _cancelHandler;
         private readonly IConfirmSubscriptionMessageHandler _confirmHandler;
         private readonly IGatherClassMessageHandler _classHandler;
         private readonly IGatherLanguageMessageHandler _langHandler;
@@ -89,6 +90,14 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser
                     break;
                 }
             }
+        }*/
+        public RegisteringUserMessageHandler(IServiceProvider provider, ILogger<RegisteringUserMessageHandler> logger) : base(logger)
+        {
+        }
+
+        protected override async Task Base(Messaging message)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

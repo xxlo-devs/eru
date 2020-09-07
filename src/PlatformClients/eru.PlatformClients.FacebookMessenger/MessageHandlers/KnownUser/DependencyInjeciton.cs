@@ -8,9 +8,9 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser
     {
         public static IServiceCollection AddKnownUserMessageHandling(this IServiceCollection services)
         {
-            services.AddTransient<ICancelSubscriptionMessageHandler, CancelSubscriptionMessageHandler>();
-            services.AddTransient<IUnsupportedCommandMessageHandler, UnsupportedCommandMessageHandler>();
-            services.AddTransient<IKnownUserMessageHandler, KnownUserMessageHandler>();
+            services.AddTransient<MessageHandler<CancelSubscriptionMessageHandler>, CancelSubscriptionMessageHandler>();
+            services.AddTransient<MessageHandler<UnsupportedCommandMessageHandler>, UnsupportedCommandMessageHandler>();
+            services.AddTransient<MessageHandler<KnownUserMessageHandler>, KnownUserMessageHandler>();
             
             return services;
         }

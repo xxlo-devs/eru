@@ -16,7 +16,7 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser
             services.AddTransient<IGatherClassMessageHandler, GatherClassMessageHandler>();
             services.AddTransient<IGatherLanguageMessageHandler, GatherLanguageMessageHandler>();
             services.AddTransient<IGatherYearMessageHandler, GatherYearMessageHandler>();
-            services.AddTransient<IRegisteringUserMessageHandler, RegisteringUserMessageHandler>();
+            services.AddTransient<MessageHandler<RegisteringUserMessageHandler>, RegisteringUserMessageHandler>();
 
             return services;
         }

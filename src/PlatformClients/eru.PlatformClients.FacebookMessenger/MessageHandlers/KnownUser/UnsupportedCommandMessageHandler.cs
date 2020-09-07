@@ -2,6 +2,7 @@
 using eru.Application.Common.Interfaces;
 using eru.Application.Subscriptions.Queries.GetSubscriber;
 using eru.PlatformClients.FacebookMessenger.Models.SendApi;
+using eru.PlatformClients.FacebookMessenger.Models.Webhook.Messages;
 using eru.PlatformClients.FacebookMessenger.Selector;
 using eru.PlatformClients.FacebookMessenger.SendAPIClient;
 using MediatR;
@@ -9,15 +10,9 @@ using Microsoft.Extensions.Logging;
 
 namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser.UnsupportedCommand
 {
-    public class UnsupportedCommandMessageHandler : IUnsupportedCommandMessageHandler
+    public class UnsupportedCommandMessageHandler : MessageHandler<UnsupportedCommandMessageHandler>
     {
-        private readonly ISendApiClient _apiClient;
-        private readonly ITranslator<FacebookMessengerPlatformClient> _translator;
-        private readonly IMediator _mediator;
-        private readonly ISelector _selector;
-        private readonly ILogger<UnsupportedCommandMessageHandler> _logger;
-        
-        public UnsupportedCommandMessageHandler(ISendApiClient apiClient, ITranslator<FacebookMessengerPlatformClient> translator, IMediator mediator, ISelector selector, ILogger<UnsupportedCommandMessageHandler> logger)
+        /*public UnsupportedCommandMessageHandler(ISendApiClient apiClient, ITranslator<FacebookMessengerPlatformClient> translator, IMediator mediator, ISelector selector, ILogger<UnsupportedCommandMessageHandler> logger)
         {
             _apiClient = apiClient;
             _translator = translator;
@@ -35,6 +30,14 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser.Unsupp
             await _apiClient.Send(response);
             _logger.LogInformation($"eru.PlatformClients.FacebookMessenger: UnsupportedCommandMessageHandler.UnsupportedCommand has processed a request from user (uid: {uid})");
 
+        }*/
+        public UnsupportedCommandMessageHandler(ILogger<UnsupportedCommandMessageHandler> logger) : base(logger)
+        {
+        }
+
+        protected override async Task Base(Messaging message)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
