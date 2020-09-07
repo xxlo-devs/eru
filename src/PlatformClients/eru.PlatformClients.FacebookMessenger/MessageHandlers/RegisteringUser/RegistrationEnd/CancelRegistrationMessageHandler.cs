@@ -5,15 +5,12 @@ using eru.Application.Common.Interfaces;
 using eru.PlatformClients.FacebookMessenger.Models.SendApi;
 using eru.PlatformClients.FacebookMessenger.Models.Webhook.Messages;
 using eru.PlatformClients.FacebookMessenger.RegistrationDb.DbContext;
-using eru.PlatformClients.FacebookMessenger.RegistrationDb.Entities;
 using eru.PlatformClients.FacebookMessenger.SendAPIClient;
-using Hangfire.Logging;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Message = eru.PlatformClients.FacebookMessenger.Models.SendApi.Message;
 
-namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.CancelRegistration
+namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.RegistrationEnd
 {
     public class CancelRegistrationMessageHandler : MessageHandler<CancelRegistrationMessageHandler>
     {

@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using eru.Application.Common.Interfaces;
 using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser;
-using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.GatherLanguage;
+using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.RegistrationSteps;
 using eru.PlatformClients.FacebookMessenger.Models.SendApi;
 using eru.PlatformClients.FacebookMessenger.Models.Webhook.Messages;
 using eru.PlatformClients.FacebookMessenger.RegistrationDb.DbContext;
@@ -20,18 +20,12 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.UnknownUser
     public class StartRegistrationMessageHandler : MessageHandler<StartRegistrationMessageHandler>
     {
         private readonly IRegistrationDbContext _dbContext;
-        private readonly ISendApiClient _client;
-        private readonly IConfiguration _configuration;
-        private readonly ITranslator<FacebookMessengerPlatformClient> _translator;
-        private readonly RegistrationMessageHandler<GatherLanguageMessageHandler> _langHandler;
+        private readonly RegistrationStepsMessageHandler<GatherLanguageMessageHandler> _langHandler;
         
-        public StartRegistrationMessageHandler(IServiceProvider provider, ILogger<StartRegistrationMessageHandler> logger) : base(logger)
+        public StartRegistrationMessageHandler(IRegistrationDbContext dbContext, RegistrationStepsMessageHandler<GatherLanguageMessageHandler> langHandler , ILogger<StartRegistrationMessageHandler> logger) : base(logger)
         {
-            _dbContext = provider.GetService<IRegistrationDbContext>();
-            _client = provider.GetService<ISendApiClient>();
-            _configuration = provider.GetService<IConfiguration>();
-            _translator = provider.GetService<ITranslator<FacebookMessengerPlatformClient>>();
-            _langHandler = provider.GetService<RegistrationMessageHandler<GatherLanguageMessageHandler>>();
+            _dbContext = dbContext;
+            _langHandler = langHandler;
         }
 
         protected override async Task Base(Messaging message)

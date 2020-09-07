@@ -2,37 +2,34 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using eru.Application.Common.Interfaces;
-using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.GatherYear;
 using eru.PlatformClients.FacebookMessenger.Models.SendApi;
 using eru.PlatformClients.FacebookMessenger.RegistrationDb.DbContext;
 using eru.PlatformClients.FacebookMessenger.RegistrationDb.Entities;
-using eru.PlatformClients.FacebookMessenger.RegistrationDb.Enums;
 using eru.PlatformClients.FacebookMessenger.ReplyPayload;
 using eru.PlatformClients.FacebookMessenger.SendAPIClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.GatherLanguage
+namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.RegistrationSteps
 {
-    public class GatherLanguageMessageHandler : RegistrationMessageHandler<GatherLanguageMessageHandler>
+    public class GatherLanguageMessageHandler : RegistrationStepsMessageHandler<GatherLanguageMessageHandler>
     {
+        private readonly IConfiguration _configuration;
         private readonly ISendApiClient _apiClient;
         private readonly ITranslator<FacebookMessengerPlatformClient> _translator;
-        private readonly IConfiguration _configuration;
-        private readonly RegistrationMessageHandler<GatherYearMessageHandler> _yearHandler;
+        private readonly RegistrationStepsMessageHandler<GatherYearMessageHandler> _yearHandler;
         
-        public GatherLanguageMessageHandler(IServiceProvider provider, ILogger<GatherLanguageMessageHandler> logger, ITranslator<FacebookMessengerPlatformClient> translator) : base(translator)
+        public GatherLanguageMessageHandler(IConfiguration configuration, ISendApiClient apiClient, ITranslator<FacebookMessengerPlatformClient> translator, RegistrationStepsMessageHandler<GatherYearMessageHandler> yearHandler, IRegistrationDbContext dbContext, ILogger<GatherLanguageMessageHandler> logger) : base(dbContext, translator, logger)
         {
-            _apiClient = provider.GetService<ISendApiClient>();
-            _configuration = provider.GetService<IConfiguration>();
+            _configuration = configuration;
+            _apiClient = apiClient;
             _translator = translator;
-            _yearHandler = provider.GetService<RegistrationMessageHandler<GatherYearMessageHandler>>();
+            _yearHandler = yearHandler;
         }
-        protected override async Task<IncompleteUser> GatherBase(IncompleteUser user, string data)
+        protected override async Task<IncompleteUser> UpdateUserBase(IncompleteUser user, string data)
         {
             user.PreferredLanguage = data;
             await _yearHandler.ShowInstruction(user, 0);
@@ -46,7 +43,7 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
             await _apiClient.Send(response);
         }
 
-        protected override async Task ShowUnsupportedCommandBase(IncompleteUser user)
+        protected override async Task UnsupportedCommandBase(IncompleteUser user)
         {
             var response = new SendRequest(user.Id, 
                 new Message(await _translator.TranslateString("unsupported-command", _configuration["CultureSettings:DefaultCulture"]), await GetLangSelector(user.LastPage)));

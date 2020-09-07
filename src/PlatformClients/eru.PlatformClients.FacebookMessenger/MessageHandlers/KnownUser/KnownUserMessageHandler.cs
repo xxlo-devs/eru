@@ -2,8 +2,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using eru.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser.CancelSubscription;
-using eru.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser.UnsupportedCommand;
 using eru.PlatformClients.FacebookMessenger.Models.Webhook.Messages;
 using eru.PlatformClients.FacebookMessenger.ReplyPayload;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,10 +14,10 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser
         private readonly MessageHandler<CancelSubscriptionMessageHandler> _cancelHandler;
         private readonly MessageHandler<UnsupportedCommandMessageHandler> _unsupportedHandler;
         
-        public KnownUserMessageHandler(IServiceProvider provider, ILogger<KnownUserMessageHandler> logger) : base(logger)
+        public KnownUserMessageHandler(MessageHandler<CancelSubscriptionMessageHandler> cancelHandler, MessageHandler<UnsupportedCommandMessageHandler> unsupportedHandler, ILogger<KnownUserMessageHandler> logger) : base(logger)
         {
-            _cancelHandler = provider.GetService<MessageHandler<CancelSubscriptionMessageHandler>>();
-            _unsupportedHandler = provider.GetService<MessageHandler<UnsupportedCommandMessageHandler>>();
+            _cancelHandler = cancelHandler;
+            _unsupportedHandler = unsupportedHandler;
         }
 
         protected override async Task Base(Messaging message)

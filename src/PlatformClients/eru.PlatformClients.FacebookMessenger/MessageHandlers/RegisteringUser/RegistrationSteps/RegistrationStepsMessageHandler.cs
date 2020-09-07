@@ -1,47 +1,36 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using eru.Application.Common.Interfaces;
 using eru.PlatformClients.FacebookMessenger.Models.SendApi;
-using eru.PlatformClients.FacebookMessenger.Models.Webhook.Messages;
+using eru.PlatformClients.FacebookMessenger.RegistrationDb.DbContext;
 using eru.PlatformClients.FacebookMessenger.RegistrationDb.Entities;
 using eru.PlatformClients.FacebookMessenger.ReplyPayload;
 using Microsoft.Extensions.Logging;
 
-namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser
+namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.RegistrationSteps
 {
-    public abstract class RegistrationMessageHandler {}
+    public abstract class RegistrationStepsMessageHandler {}
     
-    public abstract class RegistrationMessageHandler<T> : RegistrationMessageHandler where T : RegistrationMessageHandler
+    public abstract class RegistrationStepsMessageHandler<T> : RegistrationStepsMessageHandler where T : RegistrationStepsMessageHandler
     {
+        private readonly IRegistrationDbContext _dbContext;
         private readonly ITranslator<FacebookMessengerPlatformClient> _translator;
-
-        protected RegistrationMessageHandler(ITranslator<FacebookMessengerPlatformClient> translator)
+        private readonly ILogger<T> _logger;
+        
+        protected RegistrationStepsMessageHandler(IRegistrationDbContext dbContext, ITranslator<FacebookMessengerPlatformClient> translator, ILogger<T> logger)
         {
+            _dbContext = dbContext;
             _translator = translator;
-        }
-
-        private async Task Gather(IncompleteUser user, string data)
-        {
-            //common Gather() code
-            await GatherBase(user, data);
+            _logger = logger;
         }
         
-        public async Task ShowInstruction(IncompleteUser user, int page)
-        {
-            await ShowInstructionBase(user, page);
-        }
-
-        private async Task UnsupportedCommand(IncompleteUser user)
-        {
-            await ShowUnsupportedCommandBase(user);
-        }
-
         public async Task Handle(IncompleteUser user, Payload payload)
         {
             if (payload?.Id != null)
             {
-                await Gather(user, payload.Id);
+                await UpdateUser(user, payload.Id);
                 return;
             }
 
@@ -53,11 +42,31 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser
 
             await UnsupportedCommand(user);
         }
+        
+        public async Task ShowInstruction(IncompleteUser user, int page)
+        {
+            await ShowInstructionBase(user, page);
+            user.LastPage = page;
 
-        protected abstract Task<IncompleteUser> GatherBase(IncompleteUser user, string data);
-        protected abstract Task ShowInstructionBase(IncompleteUser user, int page);
-        protected abstract Task ShowUnsupportedCommandBase(IncompleteUser user);
+            _dbContext.IncompleteUsers.Update(user);
+            await _dbContext.SaveChangesAsync(CancellationToken.None);
+        }
 
+        private async Task UpdateUser(IncompleteUser user, string data)
+        {
+            user = await UpdateUserBase(user, data);
+            user.LastPage = 0;
+            user.Stage++;
+            
+            _dbContext.IncompleteUsers.Update(user);
+            await _dbContext.SaveChangesAsync(CancellationToken.None);
+        }
+        
+        private async Task UnsupportedCommand(IncompleteUser user)
+        {
+            await UnsupportedCommandBase(user);
+        }
+        
         protected async Task<IEnumerable<QuickReply>> GetSelector(Dictionary<string, string> items, int page, PayloadType payloadType, string displayCulture)
         {
             var offset = page * 10;
@@ -80,5 +89,9 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser
 
             return replies;
         } 
+        
+        protected abstract Task<IncompleteUser> UpdateUserBase(IncompleteUser user, string data);
+        protected abstract Task ShowInstructionBase(IncompleteUser user, int page);
+        protected abstract Task UnsupportedCommandBase(IncompleteUser user);
     }
 }

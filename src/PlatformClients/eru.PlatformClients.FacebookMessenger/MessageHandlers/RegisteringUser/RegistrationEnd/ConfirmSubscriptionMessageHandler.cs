@@ -2,7 +2,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using eru.Application.Common.Interfaces;
-using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.RegistrationEnd;
 using eru.PlatformClients.FacebookMessenger.Models.SendApi;
 using eru.PlatformClients.FacebookMessenger.Models.Webhook.Messages;
 using eru.PlatformClients.FacebookMessenger.RegistrationDb.DbContext;
@@ -14,21 +13,21 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Message = eru.PlatformClients.FacebookMessenger.Models.SendApi.Message;
 
-namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.ConfirmSubscription
+namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.RegistrationEnd
 {
     public class ConfirmSubscriptionMessageHandler : RegistrationEndMessageHandler<ConfirmSubscriptionMessageHandler>
     {
         private readonly IRegistrationDbContext _dbContext;
-        private readonly ISendApiClient _apiClient;
         private readonly IMediator _mediator;
+        private readonly ISendApiClient _apiClient;
         private readonly ITranslator<FacebookMessengerPlatformClient> _translator;
         
-        public ConfirmSubscriptionMessageHandler(IServiceProvider provider, ILogger<ConfirmSubscriptionMessageHandler> logger, ITranslator<FacebookMessengerPlatformClient> translator)
+        public ConfirmSubscriptionMessageHandler(IRegistrationDbContext dbContext, IMediator mediator, ISendApiClient apiClient, ITranslator<FacebookMessengerPlatformClient> translator, ILogger<ConfirmSubscriptionMessageHandler> logger) : base(logger)
         {
-            _dbContext = provider.GetService<IRegistrationDbContext>();
-            _apiClient = provider.GetService<ISendApiClient>();
-            _mediator = provider.GetService<IMediator>();
-            _translator = provider.GetService<ITranslator<FacebookMessengerPlatformClient>>();
+            _dbContext = dbContext;
+            _mediator = mediator;
+            _apiClient = apiClient;
+            _translator = translator;
         }
         protected override async Task EndRegistration(Messaging message)
         {

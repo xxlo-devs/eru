@@ -11,19 +11,19 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Message = eru.PlatformClients.FacebookMessenger.Models.SendApi.Message;
 
-namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser.UnsupportedCommand
+namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser
 {
     public class UnsupportedCommandMessageHandler : MessageHandler<UnsupportedCommandMessageHandler>
     {
         private readonly IMediator _mediator;
-        private readonly ITranslator<FacebookMessengerPlatformClient> _translator;
         private readonly ISendApiClient _apiClient;
-        
-        public UnsupportedCommandMessageHandler(IServiceProvider provider, ILogger<UnsupportedCommandMessageHandler> logger) : base(logger)
+        private readonly ITranslator<FacebookMessengerPlatformClient> _translator;
+
+        public UnsupportedCommandMessageHandler(IMediator mediator, ISendApiClient apiClient, ITranslator<FacebookMessengerPlatformClient> translator, ILogger<UnsupportedCommandMessageHandler> logger) : base(logger)
         {
-            _mediator = provider.GetService<IMediator>();
-            _translator = provider.GetService<ITranslator<FacebookMessengerPlatformClient>>();
-            _apiClient = provider.GetService<ISendApiClient>();
+            _mediator = mediator;
+            _apiClient = apiClient;
+            _translator = translator;
         }
 
         protected override async Task Base(Messaging message)

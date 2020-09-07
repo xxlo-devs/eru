@@ -1,6 +1,4 @@
-﻿using eru.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser.CancelSubscription;
-using eru.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser.UnsupportedCommand;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 
 namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser
 {

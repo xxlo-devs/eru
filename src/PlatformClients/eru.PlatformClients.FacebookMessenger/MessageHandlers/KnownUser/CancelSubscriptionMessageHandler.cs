@@ -11,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Message = eru.PlatformClients.FacebookMessenger.Models.SendApi.Message;
 
-namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser.CancelSubscription
+namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser
 {
     public class CancelSubscriptionMessageHandler : MessageHandler<CancelSubscriptionMessageHandler>
     {
@@ -19,11 +19,11 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser.Cancel
         private readonly ISendApiClient _apiClient;
         private readonly ITranslator<FacebookMessengerPlatformClient> _translator;
         
-        public CancelSubscriptionMessageHandler(IServiceProvider provider, ILogger<CancelSubscriptionMessageHandler> logger) : base(logger)
+        public CancelSubscriptionMessageHandler(IMediator mediator, ISendApiClient apiClient, ITranslator<FacebookMessengerPlatformClient> translator, ILogger<CancelSubscriptionMessageHandler> logger) : base(logger)
         {
-            _mediator = provider.GetService<IMediator>();
-            _translator = provider.GetService<ITranslator<FacebookMessengerPlatformClient>>();
-            _apiClient = provider.GetService<ISendApiClient>();
+            _mediator = mediator;
+            _apiClient = apiClient;
+            _translator = translator;
         }
 
         protected override async Task Base(Messaging message)

@@ -2,12 +2,8 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.CancelRegistration;
-using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.ConfirmSubscription;
-using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.GatherClass;
-using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.GatherLanguage;
-using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.GatherYear;
 using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.RegistrationEnd;
+using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.RegistrationSteps;
 using eru.PlatformClients.FacebookMessenger.Models.Webhook.Messages;
 using eru.PlatformClients.FacebookMessenger.RegistrationDb.DbContext;
 using eru.PlatformClients.FacebookMessenger.RegistrationDb.Enums;
@@ -50,19 +46,19 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser
             {
                 case Stage.Created:
                 {
-                    await _provider.GetService<RegistrationMessageHandler<GatherLanguageMessageHandler>>().Handle(user, payload);
+                    await _provider.GetService<RegistrationStepsMessageHandler<GatherLanguageMessageHandler>>().Handle(user, payload);
                     break;
                 }
 
                 case Stage.GatheredLanguage:
                 {
-                    await _provider.GetService<RegistrationMessageHandler<GatherYearMessageHandler>>().Handle(user, payload);
+                    await _provider.GetService<RegistrationStepsMessageHandler<GatherYearMessageHandler>>().Handle(user, payload);
                     break;
                 }
 
                 case Stage.GatheredYear:
                 {
-                    await _provider.GetService<RegistrationMessageHandler<GatherClassMessageHandler>>().Handle(user, payload);
+                    await _provider.GetService<RegistrationStepsMessageHandler<GatherClassMessageHandler>>().Handle(user, payload);
                     break;
                 }
 

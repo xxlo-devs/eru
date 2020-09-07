@@ -1,41 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using eru.Application.Classes.Queries.GetClasses;
 using eru.Application.Common.Interfaces;
-using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.ConfirmSubscription;
 using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.RegistrationEnd;
 using eru.PlatformClients.FacebookMessenger.Models.SendApi;
 using eru.PlatformClients.FacebookMessenger.RegistrationDb.DbContext;
 using eru.PlatformClients.FacebookMessenger.RegistrationDb.Entities;
-using eru.PlatformClients.FacebookMessenger.RegistrationDb.Enums;
 using eru.PlatformClients.FacebookMessenger.ReplyPayload;
 using eru.PlatformClients.FacebookMessenger.SendAPIClient;
 using MediatR;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.GatherClass
+namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.RegistrationSteps
 {
-    public class GatherClassMessageHandler : RegistrationMessageHandler<GatherClassMessageHandler>
+    public class GatherClassMessageHandler : RegistrationStepsMessageHandler<GatherClassMessageHandler>
     {
+        private readonly IMediator _mediator;
         private readonly ISendApiClient _apiClient;
         private readonly ITranslator<FacebookMessengerPlatformClient> _translator;
-        private readonly IMediator _mediator;
         private readonly RegistrationEndMessageHandler<ConfirmSubscriptionMessageHandler> _confirmHandler;
         
-        public GatherClassMessageHandler(IServiceProvider provider, ILogger<GatherClassMessageHandler> logger, ITranslator<FacebookMessengerPlatformClient> translator) : base(translator)
+        public GatherClassMessageHandler(IMediator mediator, ISendApiClient apiClient, ITranslator<FacebookMessengerPlatformClient> translator, RegistrationEndMessageHandler<ConfirmSubscriptionMessageHandler> confirmHandler, IRegistrationDbContext dbContext, ILogger<GatherClassMessageHandler> logger) : base(dbContext, translator, logger)
         {
-            _apiClient = provider.GetService<ISendApiClient>();
-            _mediator = provider.GetService<IMediator>();
+            _mediator = mediator;
+            _apiClient = apiClient;
             _translator = translator;
-            _confirmHandler = provider.GetService<RegistrationEndMessageHandler<ConfirmSubscriptionMessageHandler>>();
+            _confirmHandler = confirmHandler;
         }
 
-        protected override async Task<IncompleteUser> GatherBase(IncompleteUser user, string data)
+        protected override async Task<IncompleteUser> UpdateUserBase(IncompleteUser user, string data)
         {
             user.ClassId = data;
             await _confirmHandler.ShowInstruction(user);
@@ -49,7 +45,7 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
             await _apiClient.Send(response);
         }
 
-        protected override async Task ShowUnsupportedCommandBase(IncompleteUser user)
+        protected override async Task UnsupportedCommandBase(IncompleteUser user)
         {
             var response = new SendRequest(user.Id, new Message(await _translator.TranslateString("unsupported-command", user.PreferredLanguage), await GetClassSelector(user.Year, user.LastPage, user.PreferredLanguage)));
             await _apiClient.Send(response);
