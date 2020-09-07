@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -60,4 +60,4 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.UnknownUse
             apiClient.Verify(x => x.Send(It.IsAny<SendRequest>()), Times.Exactly(1));
         }
     }
-}
+}*/

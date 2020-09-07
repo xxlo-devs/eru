@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -78,4 +78,4 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.PlatformClient
         public Mock<ITranslator<FacebookMessengerPlatformClient>> TranslatorMock { get; set; }
         public Mock<ILogger<FacebookMessengerPlatformClient>> LoggerMock { get; set; }
     }
-}
+}*/

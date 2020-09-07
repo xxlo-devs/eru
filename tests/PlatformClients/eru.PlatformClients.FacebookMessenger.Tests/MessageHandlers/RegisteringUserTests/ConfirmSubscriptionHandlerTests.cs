@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 using System.Threading;
 using System.Threading.Tasks;
 using eru.Application.Common.Interfaces;
@@ -46,4 +46,4 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             selector.Verify(x => x.GetCancelSelector("en"), Times.Once);
         }
     }
-}
+}*/

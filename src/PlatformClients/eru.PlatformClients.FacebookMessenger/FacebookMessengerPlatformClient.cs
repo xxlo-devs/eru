@@ -5,7 +5,7 @@ using eru.Application.Subscriptions.Queries.GetSubscriber;
 using eru.Domain.Entity;
 using eru.PlatformClients.FacebookMessenger.Models.SendApi;
 using eru.PlatformClients.FacebookMessenger.Models.SendApi.Static;
-using eru.PlatformClients.FacebookMessenger.Selector;
+using eru.PlatformClients.FacebookMessenger.ReplyPayload;
 using eru.PlatformClients.FacebookMessenger.SendAPIClient;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -19,15 +19,13 @@ namespace eru.PlatformClients.FacebookMessenger
 
         private readonly ISendApiClient _apiClient;
         private readonly IMediator _mediator;
-        private readonly ISelector _selector;
         private readonly ITranslator<FacebookMessengerPlatformClient> _translator;
         private readonly ILogger<FacebookMessengerPlatformClient> _logger;
 
-        public FacebookMessengerPlatformClient(ISendApiClient apiClient, IMediator mediator, ISelector selector, ITranslator<FacebookMessengerPlatformClient> translator, ILogger<FacebookMessengerPlatformClient> logger)
+        public FacebookMessengerPlatformClient(ISendApiClient apiClient, IMediator mediator, ITranslator<FacebookMessengerPlatformClient> translator, ILogger<FacebookMessengerPlatformClient> logger)
         {
             _apiClient = apiClient;
             _mediator = mediator;
-            _selector = selector;
             _translator = translator;
             _logger = logger;
         }
@@ -35,7 +33,11 @@ namespace eru.PlatformClients.FacebookMessenger
         public async Task SendMessage(string id, string content)
         {
             var user = await _mediator.Send(new GetSubscriberQuery(id, PlatformId));
-            var message = new SendRequest(id, new Message(content, await _selector.GetCancelSelector(user.PreferredLanguage)), MessageTags.AccountUpdate);
+            var message = new SendRequest(id, new Message(content, new[]
+            {
+                new QuickReply(await _translator.TranslateString("cancel-button", user.PreferredLanguage),
+                    new Payload(PayloadType.Cancel).ToJson())
+            }), MessageTags.AccountUpdate);
 
             await _apiClient.Send(message);
             _logger.LogInformation($"eru.PlatformClients.FacebookMessenger: FacebookMessengerPlatformClient.SendMessage sent a generic message (uid: {id}, content: {content})");
@@ -66,7 +68,11 @@ namespace eru.PlatformClients.FacebookMessenger
                 }
             }
 
-            req = new SendRequest(id, new Message(await _translator.TranslateString("closing-substitutions", user.PreferredLanguage), await _selector.GetCancelSelector(user.PreferredLanguage)), MessageTags.ConfirmedEventUpdate);
+            req = new SendRequest(id, new Message(await _translator.TranslateString("closing-substitutions", user.PreferredLanguage), new[]
+            {
+                new QuickReply(await _translator.TranslateString("cancel-button", user.PreferredLanguage),
+                    new Payload(PayloadType.Cancel).ToJson())
+            }), MessageTags.ConfirmedEventUpdate);
             await _apiClient.Send(req);
             
             _logger.LogInformation($"eru.PlatformClients.FacebookMessenger: FacebookMessengerPlatformClient.SendMessage sent substitutions to user (uid: {id}");

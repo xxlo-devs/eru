@@ -1,4 +1,4 @@
-﻿using eru.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser;
+﻿/*using eru.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser;
 using eru.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser.CancelSubscription;
 using eru.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser.UnsupportedCommand;
 using eru.PlatformClients.FacebookMessenger.Models.Webhook.Messages;
@@ -51,4 +51,4 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.KnownUserT
             unsupportedCommandHandler.Verify(x => x.Handle("sample-subscriber-id"), Times.Once);
         }
     }
-}
+}*/

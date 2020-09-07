@@ -27,6 +27,7 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser
 
         protected override async Task Base(Messaging message)
         {
+            var user = await _provider.GetService<IRegistrationDbContext>().IncompleteUsers.FindAsync(message.Sender.Id);
             var payload = new Payload();
             
             if (message.Message.QuickReply.Payload != null)
@@ -39,36 +40,34 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser
                 
                 if (payload.Type == PayloadType.Cancel)
                 {
-                    await _provider.GetService<RegistrationMessageHandler<CancelRegistrationMessageHandler>>().Handle(message.Sender.Id, payload);
+                    await _provider.GetService<MessageHandler<CancelRegistrationMessageHandler>>().Handle(message);
                     return;
                 }
             }
-
-            var user = await _provider.GetService<IRegistrationDbContext>().IncompleteUsers.FindAsync(message.Sender.Id, payload);
             
             switch (user.Stage)
             {
                 case Stage.Created:
                 {
-                    await _provider.GetService<RegistrationMessageHandler<GatherLanguageMessageHandler>>().Handle(message.Sender.Id, payload);
+                    await _provider.GetService<RegistrationMessageHandler<GatherLanguageMessageHandler>>().Handle(user, payload);
                     break;
                 }
 
                 case Stage.GatheredLanguage:
                 {
-                    await _provider.GetService<RegistrationMessageHandler<GatherYearMessageHandler>>().Handle(message.Sender.Id, payload);
+                    await _provider.GetService<RegistrationMessageHandler<GatherYearMessageHandler>>().Handle(user, payload);
                     break;
                 }
 
                 case Stage.GatheredYear:
                 {
-                    await _provider.GetService<RegistrationMessageHandler<GatherClassMessageHandler>>().Handle(message.Sender.Id, payload);
+                    await _provider.GetService<RegistrationMessageHandler<GatherClassMessageHandler>>().Handle(user, payload);
                     break;
                 }
 
                 case Stage.GatheredClass:
                 {
-                    await _provider.GetService<RegistrationMessageHandler<ConfirmSubscriptionMessageHandler>>().Handle(message.Sender.Id, payload);
+                    await _provider.GetService<RegistrationMessageHandler<ConfirmSubscriptionMessageHandler>>().Handle(user, payload);
                     break;
                 }
             }

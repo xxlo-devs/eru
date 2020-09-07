@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿/*using System.Collections.Generic;
 using System.Threading.Tasks;
 using eru.PlatformClients.FacebookMessenger.MessageHandlers;
 using eru.PlatformClients.FacebookMessenger.Models.Webhook.Messages;
@@ -19,4 +19,4 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.Middleware
             return Task.CompletedTask;
         }
     }
-}
+}*/

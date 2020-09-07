@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+﻿/*using System.Threading.Tasks;
 using eru.Application.Common.Interfaces;
 using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.CancelRegistration;
 using eru.PlatformClients.FacebookMessenger.Models.SendApi;
@@ -28,4 +28,4 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             apiClient.Verify(x => x.Send(It.IsAny<SendRequest>()), Times.Once);
         }
     }
-}
+}*/

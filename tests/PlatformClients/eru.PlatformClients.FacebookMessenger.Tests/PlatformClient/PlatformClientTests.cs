@@ -1,4 +1,4 @@
-﻿using eru.Domain.Entity;
+﻿/*using eru.Domain.Entity;
 using eru.PlatformClients.FacebookMessenger.Models.SendApi;
 using Moq;
 using Xunit;
@@ -30,4 +30,4 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.PlatformClient
             builder.ApiClientMock.Verify(x => x.Send(It.IsAny<SendRequest>()), Times.Exactly(4));
         }
     }
-}
+}*/

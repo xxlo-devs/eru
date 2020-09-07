@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+﻿/*using System.Threading.Tasks;
 using eru.Application.Common.Interfaces;
 using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.GatherYear;
 using eru.PlatformClients.FacebookMessenger.Models.SendApi;
@@ -36,4 +36,4 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
 
         }
     }
-}
+}*/

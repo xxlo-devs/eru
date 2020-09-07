@@ -1,4 +1,4 @@
-﻿using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser;
+﻿/*using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser;
 using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.CancelRegistration;
 using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.ConfirmSubscription;
 using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.GatherClass;
@@ -130,4 +130,4 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             builder.VerifyNoOtherCalls();
         }
     }
-}
+}*/

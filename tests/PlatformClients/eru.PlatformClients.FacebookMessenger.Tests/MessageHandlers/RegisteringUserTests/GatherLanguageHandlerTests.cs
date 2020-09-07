@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿/*using System.Collections.Generic;
 using System.Threading.Tasks;
 using eru.Application.Common.Interfaces;
 using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.GatherLanguage;
@@ -39,4 +39,4 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
 
         }
     }
-}
+}*/

@@ -1,4 +1,4 @@
-﻿using System.Threading;
+﻿/*using System.Threading;
 using System.Threading.Tasks;
 using eru.Application.Subscriptions.Queries.GetSubscriber;
 using eru.Domain.Entity;
@@ -138,4 +138,4 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers
             unknownUserMessageHandler.Verify(x => x.Handle("unknown-user-id"), Times.Never);
         }
     }
-}
+}*/

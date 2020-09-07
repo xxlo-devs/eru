@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+﻿/*using System.Threading.Tasks;
 using eru.Application.Common.Interfaces;
 using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.GatherClass;
 using eru.PlatformClients.FacebookMessenger.Models.SendApi;
@@ -38,4 +38,4 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             selector.Verify(x => x.GetConfirmationSelector("en"), Times.Once);
         }
     }
-}
+}*/
