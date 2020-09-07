@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using eru.Application.Classes.Queries.GetClasses;
 using eru.Application.Common.Interfaces;
 using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.ConfirmSubscription;
+using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.RegistrationEnd;
 using eru.PlatformClients.FacebookMessenger.Models.SendApi;
 using eru.PlatformClients.FacebookMessenger.RegistrationDb.DbContext;
 using eru.PlatformClients.FacebookMessenger.RegistrationDb.Entities;
@@ -24,20 +25,22 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
         private readonly ISendApiClient _apiClient;
         private readonly ITranslator<FacebookMessengerPlatformClient> _translator;
         private readonly IMediator _mediator;
-        private readonly RegistrationMessageHandler<ConfirmSubscriptionMessageHandler> _confirmHandler;
+        private readonly RegistrationEndMessageHandler<ConfirmSubscriptionMessageHandler> _confirmHandler;
         
         public GatherClassMessageHandler(IServiceProvider provider, ILogger<GatherClassMessageHandler> logger, ITranslator<FacebookMessengerPlatformClient> translator) : base(translator)
         {
             _apiClient = provider.GetService<ISendApiClient>();
             _mediator = provider.GetService<IMediator>();
             _translator = translator;
-            _confirmHandler = provider.GetService<RegistrationMessageHandler<ConfirmSubscriptionMessageHandler>>();
+            _confirmHandler = provider.GetService<RegistrationEndMessageHandler<ConfirmSubscriptionMessageHandler>>();
         }
 
-        protected override async Task GatherBase(IncompleteUser user, string data)
+        protected override async Task<IncompleteUser> GatherBase(IncompleteUser user, string data)
         {
             user.ClassId = data;
-            await _confirmHandler.ShowInstruction(user, 0);
+            await _confirmHandler.ShowInstruction(user);
+            
+            return user;
         }
 
         protected override async Task ShowInstructionBase(IncompleteUser user, int page)

@@ -29,13 +29,11 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser
         
         public async Task ShowInstruction(IncompleteUser user, int page)
         {
-            //common ShowInstruction() code
             await ShowInstructionBase(user, page);
         }
 
         private async Task UnsupportedCommand(IncompleteUser user)
         {
-            //common UnsupportedCommand() code
             await ShowUnsupportedCommandBase(user);
         }
 
@@ -56,7 +54,7 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser
             await UnsupportedCommand(user);
         }
 
-        protected abstract Task GatherBase(IncompleteUser user, string data);
+        protected abstract Task<IncompleteUser> GatherBase(IncompleteUser user, string data);
         protected abstract Task ShowInstructionBase(IncompleteUser user, int page);
         protected abstract Task ShowUnsupportedCommandBase(IncompleteUser user);
 

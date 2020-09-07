@@ -7,6 +7,7 @@ using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.Conf
 using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.GatherClass;
 using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.GatherLanguage;
 using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.GatherYear;
+using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.RegistrationEnd;
 using eru.PlatformClients.FacebookMessenger.Models.Webhook.Messages;
 using eru.PlatformClients.FacebookMessenger.RegistrationDb.DbContext;
 using eru.PlatformClients.FacebookMessenger.RegistrationDb.Enums;
@@ -67,7 +68,7 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser
 
                 case Stage.GatheredClass:
                 {
-                    await _provider.GetService<RegistrationMessageHandler<ConfirmSubscriptionMessageHandler>>().Handle(user, payload);
+                    await _provider.GetService<RegistrationEndMessageHandler<ConfirmSubscriptionMessageHandler>>().Handle(message);
                     break;
                 }
             }

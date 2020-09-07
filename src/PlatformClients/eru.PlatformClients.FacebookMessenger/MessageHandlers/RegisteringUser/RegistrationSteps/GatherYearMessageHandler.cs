@@ -33,10 +33,12 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
             _classHandler = provider.GetService<RegistrationMessageHandler<GatherClassMessageHandler>>();
             _mediator = provider.GetService<IMediator>();
         }
-        protected override async Task GatherBase(IncompleteUser user, string data)
+        protected override async Task<IncompleteUser> GatherBase(IncompleteUser user, string data)
         {
             user.Year = int.Parse(data);
             await _classHandler.ShowInstruction(user, 0);
+            
+            return user;
         }
 
         protected override async Task ShowInstructionBase(IncompleteUser user, int page)

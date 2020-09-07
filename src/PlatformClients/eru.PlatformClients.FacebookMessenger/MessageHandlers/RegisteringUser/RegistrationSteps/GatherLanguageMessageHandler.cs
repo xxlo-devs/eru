@@ -32,10 +32,12 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
             _translator = translator;
             _yearHandler = provider.GetService<RegistrationMessageHandler<GatherYearMessageHandler>>();
         }
-        protected override async Task GatherBase(IncompleteUser user, string data)
+        protected override async Task<IncompleteUser> GatherBase(IncompleteUser user, string data)
         {
             user.PreferredLanguage = data;
             await _yearHandler.ShowInstruction(user, 0);
+
+            return user;
         }
 
         protected override async Task ShowInstructionBase(IncompleteUser user, int page)
