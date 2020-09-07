@@ -19,9 +19,9 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers
         
         public virtual async Task Handle(Messaging message)
         {
-            _logger.LogTrace($"tracelog");
+            _logger.LogTrace($"MessageHandler {typeof(T).Name} got a request (userid: {message.Sender.Id}, payload: {message.Message.QuickReply.Payload}");
             await Base(message);
-            _logger.LogInformation($"infolog");
+            _logger.LogInformation($"MessageHandler {typeof(T).Name} successfully handled request from user {message.Sender.Id}");
         }
     }
 }
