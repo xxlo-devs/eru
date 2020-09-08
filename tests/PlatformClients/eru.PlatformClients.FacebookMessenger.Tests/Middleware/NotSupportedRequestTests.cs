@@ -1,8 +1,9 @@
-﻿/*using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using eru.PlatformClients.FacebookMessenger.MessageHandlers;
+using eru.PlatformClients.FacebookMessenger.Middleware;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -24,7 +25,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.Middleware
             var context = httpContext.Object;
             
             var config = new ConfigurationBuilder().AddInMemoryCollection(new[] {new KeyValuePair<string, string>("PlatformClients:FacebookMessenger:VerifyToken", "sample-verify-token")}).Build();
-            var messageHandler = new Mock<IMessageHandler>();
+            var messageHandler = new Mock<MessageHandler<IncomingMessageHandler>>(new Mock<ILogger<IncomingMessageHandler>>().Object);
             var logger = new Mock<ILogger<FbMiddleware>>();
             var middleware = new FbMiddleware(config, messageHandler.Object, logger.Object);
             
@@ -36,4 +37,4 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.Middleware
             content.Should().BeEmpty();
         }
     }
-}*/
+}

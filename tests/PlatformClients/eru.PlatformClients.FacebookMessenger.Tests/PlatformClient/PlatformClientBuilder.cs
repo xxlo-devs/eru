@@ -1,13 +1,10 @@
-﻿/*using System;
-using System.Linq;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
 using eru.Application.Common.Interfaces;
 using eru.Application.Subscriptions.Queries.GetSubscriber;
 using eru.Domain.Entity;
-using eru.PlatformClients.FacebookMessenger.Models.SendApi;
 using eru.PlatformClients.FacebookMessenger.ReplyPayload;
-using eru.PlatformClients.FacebookMessenger.Selector;
 using eru.PlatformClients.FacebookMessenger.SendAPIClient;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -20,12 +17,11 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.PlatformClient
         public PlatformClientBuilder()
         {
             SetupMediator();
-            SetupSelector();
             SetupTranslator();
             SetupApiClient();
             SetupLogger();
             
-            PlatformClient = new FacebookMessengerPlatformClient(ApiClientMock.Object, MediatorMock.Object, SelectorMock.Object, TranslatorMock.Object, LoggerMock.Object);
+            PlatformClient = new FacebookMessengerPlatformClient(ApiClientMock.Object, MediatorMock.Object, TranslatorMock.Object, LoggerMock.Object);
         }
 
         private void SetupMediator()
@@ -43,12 +39,6 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.PlatformClient
                         throw new Exception();
                     }
                 });
-        }
-
-        private void SetupSelector()
-        {
-            SelectorMock = new Mock<ISelector>(); 
-            SelectorMock.Setup(x => x.GetCancelSelector("en")).Returns(Task.FromResult(new[] {new QuickReply("Cancel", new Payload(PayloadType.Cancel).ToJson())}.AsEnumerable()));
         }
 
         private void SetupTranslator()
@@ -74,8 +64,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.PlatformClient
         public FacebookMessengerPlatformClient PlatformClient { get; set; }
         public Mock<IMediator> MediatorMock { get; set; }
         public Mock<ISendApiClient> ApiClientMock { get; set; }
-        public Mock<ISelector> SelectorMock { get; set; }
         public Mock<ITranslator<FacebookMessengerPlatformClient>> TranslatorMock { get; set; }
         public Mock<ILogger<FacebookMessengerPlatformClient>> LoggerMock { get; set; }
     }
-}*/
+}
