@@ -30,14 +30,13 @@ jobs:
     runs-on: ubuntu-latest
     needs: test
     steps:
-      steps:
-        - name: Checkout master
-          uses: actions/checkout@v1
-        - name: Push docker image to GHCR.io
-          uses: docker/build-push-action@master
-          with:
-            registry: ghcr.io
-            repository: xxlo-devs/eru
-            username: ${{ secrets.GHCR_USERNAME }}
-            password: ${{ secrets.GHCR_PASSWORD }}
-            tag_with_ref: true
+      - name: Checkout master
+        uses: actions/checkout@v1
+      - name: Push docker image to GHCR.io
+        uses: docker/build-push-action@master
+        with:
+          registry: ghcr.io
+          repository: xxlo-devs/eru
+          username: ${{ secrets.GHCR_USERNAME }}
+          password: ${{ secrets.GHCR_PASSWORD }}
+          tag_with_ref: true
