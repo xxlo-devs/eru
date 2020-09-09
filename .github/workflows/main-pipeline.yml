@@ -36,7 +36,7 @@ jobs:
         uses: elgohr/Publish-Docker-Github-Action@master
         with:
           registry: ghcr.io
-          repository: xxlo-devs/eru
+          name: xxlo-devs/eru
           username: ${{ secrets.GHCR_USERNAME }}
           password: ${{ secrets.GHCR_PASSWORD }}
-          tag_with_ref: true
+          tag_names: true
