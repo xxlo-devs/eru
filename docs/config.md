@@ -58,7 +58,7 @@ When AutomaticallyMigrate is set to true the database will be set up during the 
 | --- | ---|
 | InMemory | No connection string is required! |
 | Sqlite | Data Source=eru.db |
-| Postgres | Host=myserver;Username=mylogin;Password=mypass;Database=mydatabase |
+| Postgresql | Host=myserver;Username=mylogin;Password=mypass;Database=mydatabase |
 
 ## Upload Key
 

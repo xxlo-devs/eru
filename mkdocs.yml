@@ -5,4 +5,5 @@ nav:
    - Home: index.md
    - Setup: setup.md
    - Config: config.md
+   - Docker: docker.md
    - Contribution: contribution.md

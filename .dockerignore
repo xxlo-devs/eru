@@ -1,0 +1,10 @@
+﻿.github
+.git
+.idea
+docs
+.gitignore
+LICENSE
+mkdocs.yml
+README.md
+bin/
+obj/
