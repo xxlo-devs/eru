@@ -22,7 +22,7 @@ namespace eru.Application.Classes.Commands.CreateClass
 
             RuleFor(x => x.Section)
                 .NotEmpty().WithMessage("Section cannot be empty.")
-                .MaximumLength(255).WithMessage("Section must have length up to 255 characters");
+                .MaximumLength(255).WithMessage("Section must have length up to 255 characters.");
         }
 
         private async Task<bool> IsUnique(CreateClassCommand command, CancellationToken cancellationToken) 
