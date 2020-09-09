@@ -33,7 +33,7 @@ jobs:
       - name: Checkout master
         uses: actions/checkout@v1
       - name: Push docker image to GHCR.io
-        uses: docker/build-push-action@master
+        uses: elgohr/Publish-Docker-Github-Action@master
         with:
           registry: ghcr.io
           repository: xxlo-devs/eru
