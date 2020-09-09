@@ -35,7 +35,7 @@ services:
     nginx:
         image: nginx
         restart: unless-stopped
-        expose:
+        ports:
             - 80:80
             - 443:443
         volumes: 
@@ -46,19 +46,19 @@ services:
         restart: unless-stopped
         environment: 
             ACCEPT_EULA: Y
-        ports:
-            - 80:80
+        expose:
+          - 80
         volumes: 
             - seq:/data
     eru:
         image: ghcr.io/xxlo-devs/eru:feature-docker
         restart: unless-stopped
         expose: 
-            - 5001:80
+            - 80
         environment: 
             Serilog__WriteTo__1__Args__path: /logs/log.txt
             Serilog__WriteTo__2__Name: Seq
-            Serilog__WriteTo__2__Args__serverUrl: http://seq:5341
+            Serilog__WriteTo__2__Args__serverUrl: http://seq
             Database__Type: postgresql
             Database__ConnectionString: Host=database;Username=eru;Password=s@mpl3P@ssword;Database=eru
             UploadKey: V3ryS3cureUpl0adK3y
@@ -67,8 +67,13 @@ services:
             Admins__0__Password: s@mpl3P@ssword
         volumes: 
             - logs:/logs
+        depends_on:
+            - database
+            - nginx 
+            - seq
 volumes: 
-    database:
-    seq:
-    logs:
-```
+    database: 
+    seq: 
+    logs: 
+    nginx: 
+    letsencrypt: 
