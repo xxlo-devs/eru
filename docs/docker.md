@@ -51,7 +51,7 @@ services:
         volumes: 
             - seq:/data
     eru:
-        image: ghcr.io/xxlo-devs/eru:feature-docker
+        image: ghcr.io/xxlo-devs/eru
         restart: unless-stopped
         expose: 
             - 80
