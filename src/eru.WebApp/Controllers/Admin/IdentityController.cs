@@ -13,7 +13,7 @@ namespace eru.WebApp.Controllers.Admin
         public async Task<IActionResult> Logout()
         {
             await HttpContext.RequestServices.GetService<SignInManager<User>>().SignOutAsync();
-            return RedirectPermanent("/login");
+            return RedirectPermanent("login");
         }
     }
 }
