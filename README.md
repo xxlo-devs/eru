@@ -1,9 +1,9 @@
 # eru
 
-![License](https://img.shields.io/github/license/xxlo-devs/eru?style=for-the-badge)
-![Coverage](https://img.shields.io/codecov/c/gh/xxlo-devs/eru?style=for-the-badge)
-![GitHub issues](https://img.shields.io/github/issues/xxlo-devs/eru?style=for-the-badge)
-![GitHub pull requests](https://img.shields.io/github/issues-pr/xxlo-devs/eru?style=for-the-badge)
+[![License](https://img.shields.io/github/license/xxlo-devs/eru?style=for-the-badge)](https://github.com/xxlo-devs/eru/blob/master/LICENSE)
+[![Coverage](https://img.shields.io/codecov/c/gh/xxlo-devs/eru?style=for-the-badge)](https://codecov.io/gh/xxlo-devs/eru)
+[![GitHub issues](https://img.shields.io/github/issues/xxlo-devs/eru?style=for-the-badge)](https://github.com/xxlo-devs/eru/issues)
+[![GitHub pull requests](https://img.shields.io/github/issues-pr/xxlo-devs/eru?style=for-the-badge)](https://github.com/xxlo-devs/eru/pulls)
 
 [![forthebadge](https://forthebadge.com/images/badges/check-it-out.svg)](https://forthebadge.com)
 [![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com)

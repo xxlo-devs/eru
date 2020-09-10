@@ -2,8 +2,9 @@ site_name: eru
 theme:
    name: readthedocs
 nav:
-   - Home: index.md
-   - Setup: setup.md
-   - Config: config.md
-   - Docker: docker.md
-   - Contribution: contribution.md
+   - 'Home': index.md
+   - 'Contribution': contribution.md
+   - 'Config': config.md
+   - 'Deployment': 
+      - 'Build from source': build-from-source.md
+      - 'Docker': docker.md
