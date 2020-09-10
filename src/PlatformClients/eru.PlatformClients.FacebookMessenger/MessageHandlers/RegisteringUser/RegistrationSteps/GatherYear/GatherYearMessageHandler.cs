@@ -1,21 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using eru.Application.Classes.Queries.GetClasses;
 using eru.Application.Common.Interfaces;
+using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.RegistrationSteps.GatherClass;
 using eru.PlatformClients.FacebookMessenger.RegistrationDb.DbContext;
 using eru.PlatformClients.FacebookMessenger.RegistrationDb.Entities;
 using eru.PlatformClients.FacebookMessenger.ReplyPayload;
 using eru.PlatformClients.FacebookMessenger.SendAPIClient;
 using eru.PlatformClients.FacebookMessenger.SendAPIClient.Requests;
 using MediatR;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.RegistrationSteps
+namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.RegistrationSteps.GatherYear
 {
-    public class GatherYearMessageHandler : RegistrationStepsMessageHandler<GatherYearMessageHandler>
+    public class GatherYearMessageHandler : RegistrationStepsMessageHandler<GatherYearMessageHandler>, IGatherYearMessageHandler
     {
         private readonly IMediator _mediator;
         private readonly ISendApiClient _apiClient;

@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using eru.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser.CancelSubscription;
+using eru.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser.UnsupportedCommand;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser
 {
@@ -8,7 +10,7 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser
         {
             services.AddTransient<MessageHandler<CancelSubscriptionMessageHandler>, CancelSubscriptionMessageHandler>();
             services.AddTransient<MessageHandler<UnsupportedCommandMessageHandler>, UnsupportedCommandMessageHandler>();
-            services.AddTransient<MessageHandler<KnownUserMessageHandler>, KnownUserMessageHandler>();
+            services.AddTransient<MessageHandler<KnownUserMessageMessageHandler>, KnownUserMessageMessageHandler>();
             
             return services;
         }

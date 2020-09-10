@@ -12,7 +12,7 @@ using Microsoft.Extensions.Logging;
 
 namespace eru.PlatformClients.FacebookMessenger.MessageHandlers
 {
-    public class IncomingMessageHandler : MessageHandler<IncomingMessageHandler>
+    public class IncomingMessageHandler : MessageHandler<IncomingMessageHandler>, IMessageHandler
     {
         private readonly IServiceProvider _provider;
 
@@ -25,7 +25,7 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers
         {
             if (await _provider.GetService<IMediator>().Send(new GetSubscriberQuery(message.Sender.Id, FacebookMessengerPlatformClient.PId)) != null)
             {
-                await _provider.GetService<MessageHandler<KnownUserMessageHandler>>().Handle(message);
+                await _provider.GetService<MessageHandler<KnownUserMessageMessageHandler>>().Handle(message);
                 return;
             }
 

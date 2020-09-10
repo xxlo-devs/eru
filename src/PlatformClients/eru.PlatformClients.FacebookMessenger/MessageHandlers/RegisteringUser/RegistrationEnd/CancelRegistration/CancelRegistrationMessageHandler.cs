@@ -10,9 +10,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Message = eru.PlatformClients.FacebookMessenger.SendAPIClient.Requests.Message;
 
-namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.RegistrationEnd
+namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.RegistrationEnd.CancelRegistration
 {
-    public class CancelRegistrationMessageHandler : MessageHandler<CancelRegistrationMessageHandler>
+    public class CancelRegistrationMessageHandler : MessageHandler<CancelRegistrationMessageHandler>, ICancelRegistrationMessageHandler
     {
         private readonly IRegistrationDbContext _dbContext;
         private readonly ISendApiClient _apiClient;

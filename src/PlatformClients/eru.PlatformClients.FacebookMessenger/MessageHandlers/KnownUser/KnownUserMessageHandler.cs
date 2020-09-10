@@ -2,6 +2,8 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using eru.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser.CancelSubscription;
+using eru.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser.UnsupportedCommand;
 using eru.PlatformClients.FacebookMessenger.Middleware.Webhook.Messages;
 using eru.PlatformClients.FacebookMessenger.ReplyPayload;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,12 +11,12 @@ using Microsoft.Extensions.Logging;
 
 namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser
 {
-    public class KnownUserMessageHandler : MessageHandler<KnownUserMessageHandler>
+    public class KnownUserMessageMessageHandler : MessageHandler<KnownUserMessageMessageHandler>, IKnownUserMessageHandler
     {
         private readonly MessageHandler<CancelSubscriptionMessageHandler> _cancelHandler;
         private readonly MessageHandler<UnsupportedCommandMessageHandler> _unsupportedHandler;
         
-        public KnownUserMessageHandler(MessageHandler<CancelSubscriptionMessageHandler> cancelHandler, MessageHandler<UnsupportedCommandMessageHandler> unsupportedHandler, ILogger<KnownUserMessageHandler> logger) : base(logger)
+        public KnownUserMessageMessageHandler(MessageHandler<CancelSubscriptionMessageHandler> cancelHandler, MessageHandler<UnsupportedCommandMessageHandler> unsupportedHandler, ILogger<KnownUserMessageMessageHandler> logger) : base(logger)
         {
             _cancelHandler = cancelHandler;
             _unsupportedHandler = unsupportedHandler;

@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.RegistrationSteps;
+using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.RegistrationSteps.GatherLanguage;
 using eru.PlatformClients.FacebookMessenger.Middleware.Webhook.Messages;
 using eru.PlatformClients.FacebookMessenger.RegistrationDb.DbContext;
 using eru.PlatformClients.FacebookMessenger.RegistrationDb.Entities;
@@ -9,7 +10,7 @@ using Microsoft.Extensions.Logging;
 
 namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.UnknownUser
 {
-    public class StartRegistrationMessageHandler : MessageHandler<StartRegistrationMessageHandler>
+    public class StartRegistrationMessageHandler : MessageHandler<StartRegistrationMessageHandler>, IStartRegistrationMessageHandler
     {
         private readonly IRegistrationDbContext _dbContext;
         private readonly IConfiguration _configuration;
