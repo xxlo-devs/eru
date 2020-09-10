@@ -65,6 +65,8 @@ services:
             CultureSettings__DefaultCulture: pl
             Admins__0__Username: admin
             Admins__0__Password: s@mpl3P@ssword
+            Paths__WebAppPathBase: /
+            Paths__SeqUiPath: /seq
         volumes: 
             - logs:/logs
         depends_on:

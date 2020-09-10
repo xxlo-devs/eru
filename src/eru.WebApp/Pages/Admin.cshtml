@@ -7,11 +7,11 @@
 @{
     ViewData["title"] = Localizer["title"];
     Layout = "Layouts/BaseLayout";
-    var seqServer = Configuration.GetSection("Serilog:WriteTo")?.GetChildren()?.Skip(2).FirstOrDefault()?.GetSection("Args:serverUrl")?.Value;
+    var seqServer = Configuration["Paths:SeqUiPath"];
 }
 @section AddToHead
 {
-    <link rel="stylesheet" href="~/dist/css/dashboard.min.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="dist/css/dashboard.min.css" asp-append-version="true"/>
 }
 @section AddToScripts
 {
@@ -23,12 +23,12 @@
         window.seconds = '@Localizer["seconds"]';
         window.notification_send_confirmation = '@Localizer["notification_send_confirmation"]';
     </script>
-    <script src="~/dist/js/dashboard.min.js" asp-append-version="true"></script>
+    <script src="dist/js/dashboard.min.js" asp-append-version="true"></script>
 }
 <div id="wrapper">
     <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
-            <a class="navbar-item has-text-weight-bold" href="/admin">ERU</a>
+            <a class="navbar-item has-text-weight-bold" href="admin">ERU</a>
     
             <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbar">
                 <span aria-hidden="true"></span>
@@ -39,7 +39,7 @@
     
         <div id="navbar" class="navbar-menu">
             <div class="navbar-start">
-                <a class="navbar-item" href="/jobs">
+                <a class="navbar-item" href="jobs">
                     Hangfire
                 </a>
                 @if (!string.IsNullOrEmpty(seqServer))
@@ -50,7 +50,7 @@
                 }
             </div>
             <div class="navbar-end">
-                <a class="navbar-item" href="/logout">
+                <a class="navbar-item" href="logout">
                     @Localizer["logout"]
                 </a>
             </div>
