@@ -39,9 +39,9 @@ namespace eru.WebApp
                 .UseInfrastructure();
         }
         
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IConfiguration configuration)
         {
-            app.UsePathBase("/eru");
+            app.UsePathBase(configuration["Paths:WebAppPathBase"]);
 
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {

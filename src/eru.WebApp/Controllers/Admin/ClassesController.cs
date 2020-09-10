@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace eru.WebApp.Controllers.Admin
 {
     [Authorize]
-    [Route("/admin/class")]
+    [Route("admin/class")]
     public class ClassesController : Controller
     {
         private readonly IMediator _mediator;

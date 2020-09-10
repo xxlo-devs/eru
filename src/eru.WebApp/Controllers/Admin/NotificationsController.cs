@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace eru.WebApp.Controllers.Admin
 {
     [Authorize]
-    [Route("/admin/notification")]
+    [Route("admin/notification")]
     public class NotificationsController : Controller
     {
         private readonly IMediator _mediator;

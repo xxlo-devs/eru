@@ -7,7 +7,7 @@
 @{
     ViewData["title"] = Localizer["title"];
     Layout = "Layouts/BaseLayout";
-    var seqServer = Configuration.GetSection("Serilog:WriteTo")?.GetChildren()?.Skip(2).FirstOrDefault()?.GetSection("Args:serverUrl")?.Value;
+    var seqServer = Configuration["Paths:SeqUiPath"];
 }
 @section AddToHead
 {
