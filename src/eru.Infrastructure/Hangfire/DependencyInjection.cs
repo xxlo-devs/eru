@@ -41,7 +41,7 @@ namespace eru.Infrastructure.Hangfire
             app.UseHangfireDashboard("/jobs", new DashboardOptions
             {
                 Authorization = new [] {new AuthorizationFilter()},
-                AppPath = "/admin"
+                AppPath = "admin"
             });
             
             return app;

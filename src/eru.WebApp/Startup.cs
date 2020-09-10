@@ -71,7 +71,7 @@ namespace eru.WebApp
             {
                 endpoints.MapControllers();
                 endpoints.MapRazorPages();
-                endpoints.MapHealthChecks("/health");
+                endpoints.MapHealthChecks("health");
             });
         }
     }
