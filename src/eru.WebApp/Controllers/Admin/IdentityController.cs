@@ -9,11 +9,11 @@ namespace eru.WebApp.Controllers.Admin
     public class IdentityController : Controller
     {
         [HttpGet]
-        [Route("/logout")]
+        [Route("logout")]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.RequestServices.GetService<SignInManager<User>>().SignOutAsync();
-            return RedirectPermanent("/login");
+            return RedirectPermanent("login");
         }
     }
 }

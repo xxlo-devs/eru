@@ -27,7 +27,7 @@ function submit() {
         reader.readAsText(file, 'CP1250');
         reader.onload = async function(evt) {
             const data = evt.target.result.replace(/[\w\W]+?\n+?/, "");
-            await fetch('/substitutions', {
+            await fetch('substitutions', {
                 method: 'POST',
                 body: data,
                 headers: {

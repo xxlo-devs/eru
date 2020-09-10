@@ -1,7 +1,6 @@
-﻿# Setup
+﻿# Build from source
 
-Currently you do not provide any way to easily deploy our application so,
-if you want one you'll need to get your hands dirty and deploy from source code :/
+If you don't want to use docker, you unfortunately need to deploy from source code. 
 
 ## Download source code
 
@@ -10,7 +9,7 @@ or by running `git clone https://github.com/xxlo-dev/eru` in your system (instal
 
 ## Obtain Dotnet Core SDK
 
-Download Dotnet Core SDK 3.1.302 from [here](https://dotnet.microsoft.com/download/dotnet-core/3.1) and install it.
+Download Dotnet Core SDK 3.1 from [here](https://dotnet.microsoft.com/download/dotnet-core/3.1) and install it.
 
 ## Configure your application
 

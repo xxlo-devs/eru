@@ -10,7 +10,7 @@ if (window.remove_class_button === undefined ||
 
 async function refreshData (force = false) {
     if (window.localStorage.getItem('auto-refresh') === 'true' || force) {
-        await window.fetch('/admin/status')
+        await window.fetch('admin/status')
             .then(res => {
                 if (res.ok) {
                     res.json().then(json => {
@@ -44,7 +44,7 @@ async function createClass () {
     const year = document.querySelector('#year-input').value
     const section = document.querySelector('#section-input').value
     if (year && section) {
-        await window.fetch(`/admin/class?year=${year}&section=${section}`, {
+        await window.fetch(`admin/class?year=${year}&section=${section}`, {
             method: 'POST'
         }).then(res => {
             if (res.ok) {
@@ -57,7 +57,7 @@ async function createClass () {
 }
 async function removeClass (id) {
     if (id) {
-        await window.fetch(`/admin/class?id=${id}`, {
+        await window.fetch(`admin/class?id=${id}`, {
             method: 'DELETE'
         }).then(res => {
             if (res.ok) {
@@ -83,7 +83,7 @@ function clearNotificationSender() {
 async function sendNotification() {
     const content = document.querySelector('#notification-content').value;
     if(content && confirm(window.notification_send_confirmation + content)) {
-        await fetch('/admin/notification', {
+        await fetch('admin/notification', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

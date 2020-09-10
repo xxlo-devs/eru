@@ -33,10 +33,12 @@ Most common way to do it is via appsettings.json file available in src/eru.WebAp
       "Username" : "admin",
       "Password" : "s@mpl3P@ssword"
     }
-  ]
+  ],
+  "Paths": {
+    "WebAppPathBase": "/",
+    "SeqUiPath": "http://localhost:5341/"
+  }
 }
-
-
 ```
 
 ## Serilog
@@ -58,7 +60,7 @@ When AutomaticallyMigrate is set to true the database will be set up during the 
 | --- | ---|
 | InMemory | No connection string is required! |
 | Sqlite | Data Source=eru.db |
-| Postgres | Host=myserver;Username=mylogin;Password=mypass;Database=mydatabase |
+| Postgresql | Host=myserver;Username=mylogin;Password=mypass;Database=mydatabase |
 
 ## Upload Key
 
@@ -74,4 +76,10 @@ DefaultCulture can be set to on of AvailableCultures.
 
 ## Admins
 
-All provided here accounts will be able to access hangfire and admindashboard.
+All provided here accounts will be able to access hangfire and admin dashboard.
+
+## Paths
+
+WebAppBasePath sets the base path for the application. Read more [here](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.builder.usepathbaseextensions.usepathbase?view=aspnetcore-3.1). NOTE: WebAppBasePath SHOULD MATCH reverse proxy path on proxy server (for instance, http://myproxyserver/eru should be a proxy to http://myeruserver/eru). If you're not using reverse proxy, you probably can leave it as in sample config. 
+
+SeqUiPath is used by admin dashboard to provide easy access to logs. You should set it to address accessible outside the local network. 

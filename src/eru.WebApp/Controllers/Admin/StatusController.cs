@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace eru.WebApp.Controllers.Admin
 {
     [Authorize]
-    [Route("/admin/status")]
+    [Route("admin/status")]
     public class StatusController : Controller
     {
         private readonly IMediator _mediator;

@@ -46,7 +46,7 @@ namespace eru.WebApp.Pages
                         return Redirect(redirect[0]);
                 }
 
-                return RedirectPermanent("/admin");   
+                return RedirectPermanent("admin");   
             }
             else
             {

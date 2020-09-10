@@ -66,7 +66,7 @@ namespace eru.Application.Substitutions.Commands
             }
             await _context.SaveChangesAsync(cancellationToken);
             
-            var temp = _context.Classes.ToDictionary(x => x.Id, x=>new HashSet<Substitution>());
+            var temp = _context.Classes.ToDictionary(x => x.Id, x => new HashSet<Substitution>());
             foreach (var substitution in data)
             {
                 foreach (var @class in substitution.Classes)
@@ -74,10 +74,13 @@ namespace eru.Application.Substitutions.Commands
                     temp[@class.Id].Add(substitution);
                 }
             }
+            
             foreach (var client in _clients)
             {
                 foreach (var @class in temp.Keys)
                 {
+                    if (!temp[@class].Any()) continue;
+                    
                     var ids = _context
                         .Subscribers
                         .Where(x => x.Platform == client.PlatformId && x.Class == @class.ToString());
@@ -88,6 +91,7 @@ namespace eru.Application.Substitutions.Commands
                     }
                 }
             }
+            
             return Unit.Value;
         }
     }
