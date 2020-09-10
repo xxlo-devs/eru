@@ -3,8 +3,7 @@ using eru.PlatformClients.FacebookMessenger.Middleware.Webhook.Messages;
 
 namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser
 {
-    public interface IKnownUserMessageHandler
+    public interface IKnownUserMessageHandler : IMessageHandler
     {
-        public Task Handle(Messaging message);
     }
 }

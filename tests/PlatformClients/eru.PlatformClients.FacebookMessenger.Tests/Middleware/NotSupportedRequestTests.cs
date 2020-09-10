@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Net.Http;
 using eru.PlatformClients.FacebookMessenger.MessageHandlers;
 using eru.PlatformClients.FacebookMessenger.Middleware;
 using FluentAssertions;

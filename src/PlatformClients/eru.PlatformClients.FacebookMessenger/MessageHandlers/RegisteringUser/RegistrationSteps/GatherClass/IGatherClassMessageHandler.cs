@@ -4,9 +4,7 @@ using eru.PlatformClients.FacebookMessenger.ReplyPayload;
 
 namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.RegistrationSteps.GatherClass
 {
-    public interface IGatherClassMessageHandler
+    public interface IGatherClassMessageHandler : IRegistrationMessageHandler
     {
-        public Task Handle(IncompleteUser user, Payload payload);
-        public Task ShowInstruction(IncompleteUser user, int page = 0);
     }
 }

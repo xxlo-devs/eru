@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -15,9 +16,9 @@ namespace eru.PlatformClients.FacebookMessenger.SendAPIClient
         private readonly IConfiguration _configuration;
         private readonly ILogger<SendApiClient> _logger;
 
-        public SendApiClient(IConfiguration configuration, ILogger<SendApiClient> logger)
+        public SendApiClient(IHttpClientFactory factory, IConfiguration configuration, ILogger<SendApiClient> logger)
         {
-            _client = new HttpClient();
+            _client = factory.CreateClient();
             _configuration = configuration;
             _logger = logger;
         }
