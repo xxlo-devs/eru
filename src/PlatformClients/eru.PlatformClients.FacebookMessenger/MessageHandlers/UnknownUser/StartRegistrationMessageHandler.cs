@@ -10,13 +10,13 @@ using Microsoft.Extensions.Logging;
 
 namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.UnknownUser
 {
-    public class StartRegistrationMessageHandler : MessageHandler<StartRegistrationMessageHandler>, IStartRegistrationMessageHandler
+    public class UnknownUserMessageHandler : MessageHandler<UnknownUserMessageHandler>, IUnknownUserMessageHandler
     {
         private readonly IRegistrationDbContext _dbContext;
         private readonly IConfiguration _configuration;
-        private readonly RegistrationStepsMessageHandler<GatherLanguageMessageHandler> _langHandler;
+        private readonly IGatherLanguageMessageHandler _langHandler;
         
-        public StartRegistrationMessageHandler(IRegistrationDbContext dbContext, IConfiguration configuration, RegistrationStepsMessageHandler<GatherLanguageMessageHandler> langHandler , ILogger<StartRegistrationMessageHandler> logger) : base(logger)
+        public UnknownUserMessageHandler(IRegistrationDbContext dbContext, IConfiguration configuration, IGatherLanguageMessageHandler langHandler , ILogger<UnknownUserMessageHandler> logger) : base(logger)
         {
             _dbContext = dbContext;
             _langHandler = langHandler;

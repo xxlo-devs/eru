@@ -12,7 +12,7 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers
             services.AddKnownUserMessageHandling();
             services.AddRegisteringUserMessageHandling();
             services.AddUnknownUserMessageHandling();
-            services.AddTransient<MessageHandler<IncomingMessageHandler>, IncomingMessageHandler>();
+            services.AddTransient<IMessageHandler, IncomingMessageHandler>();
             return services;
         }
     }

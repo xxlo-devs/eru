@@ -25,17 +25,17 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers
         {
             if (await _provider.GetService<IMediator>().Send(new GetSubscriberQuery(message.Sender.Id, FacebookMessengerPlatformClient.PId)) != null)
             {
-                await _provider.GetService<MessageHandler<KnownUserMessageMessageHandler>>().Handle(message);
+                await _provider.GetService<IKnownUserMessageHandler>().Handle(message);
                 return;
             }
 
             if (await _provider.GetService<IRegistrationDbContext>().IncompleteUsers.FindAsync(message.Sender.Id) != null)
             {
-                await _provider.GetService<MessageHandler<RegisteringUserMessageHandler>>().Handle(message);
+                await _provider.GetService<IRegisteringUserMessageHandler>().Handle(message);
                 return;
             }
 
-            await _provider.GetService<MessageHandler<StartRegistrationMessageHandler>>().Handle(message);        
+            await _provider.GetService<IUnknownUserMessageHandler>().Handle(message);        
         }
     }
 }

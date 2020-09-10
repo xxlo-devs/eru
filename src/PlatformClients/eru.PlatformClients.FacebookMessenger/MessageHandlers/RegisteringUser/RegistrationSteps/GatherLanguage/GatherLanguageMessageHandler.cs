@@ -19,9 +19,9 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
         private readonly IConfiguration _configuration;
         private readonly ISendApiClient _apiClient;
         private readonly ITranslator<FacebookMessengerPlatformClient> _translator;
-        private readonly RegistrationStepsMessageHandler<GatherYearMessageHandler> _yearHandler;
+        private readonly IGatherYearMessageHandler _yearHandler;
         
-        public GatherLanguageMessageHandler(IConfiguration configuration, ISendApiClient apiClient, ITranslator<FacebookMessengerPlatformClient> translator, RegistrationStepsMessageHandler<GatherYearMessageHandler> yearHandler, IRegistrationDbContext dbContext, ILogger<GatherLanguageMessageHandler> logger) : base(dbContext, translator, logger)
+        public GatherLanguageMessageHandler(IConfiguration configuration, ISendApiClient apiClient, ITranslator<FacebookMessengerPlatformClient> translator, IGatherYearMessageHandler yearHandler, IRegistrationDbContext dbContext, ILogger<GatherLanguageMessageHandler> logger) : base(dbContext, translator, logger)
         {
             _configuration = configuration;
             _apiClient = apiClient;

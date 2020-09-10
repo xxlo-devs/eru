@@ -53,7 +53,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.Middleware
         public async void CanVerifyWebhook()
         {
             var logger = new Mock<ILogger<FbMiddleware>>();
-            var messageHandler = new Mock<MessageHandler<IncomingMessageHandler>>(new Mock<ILogger<IncomingMessageHandler>>().Object);
+            var messageHandler = new Mock<IMessageHandler>();
             var middleware = new FbMiddleware(_configuration, messageHandler.Object, logger.Object);
             var context = BuildHttpContext(new Dictionary<string, StringValues>
             {
@@ -73,7 +73,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.Middleware
         public async void CannotVerifyWebhookWithInvalidMode()
         {
             var logger = new Mock<ILogger<FbMiddleware>>();
-            var messageHandler = new Mock<MessageHandler<IncomingMessageHandler>>(new Mock<ILogger<IncomingMessageHandler>>().Object);
+            var messageHandler = new Mock<IMessageHandler>();
             var middleware = new FbMiddleware(_configuration, messageHandler.Object, logger.Object);
             var context = BuildHttpContext(new Dictionary<string, StringValues>
             {
@@ -93,7 +93,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.Middleware
         public async void CannotVerifyWebhookWithInvalidToken()
         {
             var logger = new Mock<ILogger<FbMiddleware>>();
-            var messageHandler = new Mock<MessageHandler<IncomingMessageHandler>>(new Mock<ILogger<IncomingMessageHandler>>().Object);
+            var messageHandler = new Mock<IMessageHandler>();
             var middleware = new FbMiddleware(_configuration, messageHandler.Object, logger.Object);
             var context = BuildHttpContext(new Dictionary<string, StringValues>
             {
@@ -113,7 +113,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.Middleware
         public async void CannotVerifyWebhookWithoutChallenge()
         {
             var logger = new Mock<ILogger<FbMiddleware>>();
-            var messageHandler = new Mock<MessageHandler<IncomingMessageHandler>>(new Mock<ILogger<IncomingMessageHandler>>().Object);
+            var messageHandler = new Mock<IMessageHandler>();
             var middleware = new FbMiddleware(_configuration, messageHandler.Object, logger.Object);
             var context = BuildHttpContext(new Dictionary<string, StringValues>
             {

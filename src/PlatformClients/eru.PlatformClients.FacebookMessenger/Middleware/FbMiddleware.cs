@@ -14,10 +14,10 @@ namespace eru.PlatformClients.FacebookMessenger.Middleware
     public class FbMiddleware : IMiddleware
     {
         private readonly IConfiguration _configuration;
-        private readonly MessageHandler<IncomingMessageHandler> _messageHandler;
+        private readonly IMessageHandler _messageHandler;
         private readonly ILogger<FbMiddleware> _logger;
 
-        public FbMiddleware(IConfiguration configuration, MessageHandler<IncomingMessageHandler> messageHandler, ILogger<FbMiddleware> logger)
+        public FbMiddleware(IConfiguration configuration, IMessageHandler messageHandler, ILogger<FbMiddleware> logger)
         {
             _configuration = configuration;
             _messageHandler = messageHandler;

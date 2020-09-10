@@ -25,7 +25,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.Middleware
             var context = httpContext.Object;
             
             var config = new ConfigurationBuilder().AddInMemoryCollection(new[] {new KeyValuePair<string, string>("PlatformClients:FacebookMessenger:VerifyToken", "sample-verify-token")}).Build();
-            var messageHandler = new Mock<MessageHandler<IncomingMessageHandler>>(new Mock<ILogger<IncomingMessageHandler>>().Object);
+            var messageHandler = new Mock<IMessageHandler>();
             var logger = new Mock<ILogger<FbMiddleware>>();
             var middleware = new FbMiddleware(config, messageHandler.Object, logger.Object);
             

@@ -42,7 +42,7 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser
                 
                 if (payload.Type == PayloadType.Cancel)
                 {
-                    await _provider.GetService<MessageHandler<CancelRegistrationMessageHandler>>().Handle(message);
+                    await _provider.GetService<ICancelRegistrationMessageHandler>().Handle(message);
                     return;
                 }
             }
@@ -51,25 +51,25 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser
             {
                 case Stage.Created:
                 {
-                    await _provider.GetService<RegistrationStepsMessageHandler<GatherLanguageMessageHandler>>().Handle(user, payload);
+                    await _provider.GetService<IGatherLanguageMessageHandler>().Handle(user, payload);
                     break;
                 }
 
                 case Stage.GatheredLanguage:
                 {
-                    await _provider.GetService<RegistrationStepsMessageHandler<GatherYearMessageHandler>>().Handle(user, payload);
+                    await _provider.GetService<IGatherYearMessageHandler>().Handle(user, payload);
                     break;
                 }
 
                 case Stage.GatheredYear:
                 {
-                    await _provider.GetService<RegistrationStepsMessageHandler<GatherClassMessageHandler>>().Handle(user, payload);
+                    await _provider.GetService<IGatherClassMessageHandler>().Handle(user, payload);
                     break;
                 }
 
                 case Stage.GatheredClass:
                 {
-                    await _provider.GetService<RegistrationEndMessageHandler<ConfirmSubscriptionMessageHandler>>().Handle(message);
+                    await _provider.GetService<IConfirmSubscriptionMessageHandler>().Handle(message);
                     break;
                 }
             }

@@ -7,5 +7,6 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
     public interface IGatherLanguageMessageHandler
     {
         public Task Handle(IncompleteUser user, Payload payload);
+        public Task ShowInstruction(IncompleteUser user, int page = 0);
     }
 }

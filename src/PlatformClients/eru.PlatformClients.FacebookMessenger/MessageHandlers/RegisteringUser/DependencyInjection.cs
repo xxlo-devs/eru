@@ -13,12 +13,12 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser
     {
         public static IServiceCollection AddRegisteringUserMessageHandling(this IServiceCollection services)
         {
-            services.AddTransient<MessageHandler<CancelRegistrationMessageHandler>, CancelRegistrationMessageHandler>();
-            services.AddTransient<RegistrationEndMessageHandler<ConfirmSubscriptionMessageHandler>, ConfirmSubscriptionMessageHandler>();
-            services.AddTransient<RegistrationStepsMessageHandler<GatherClassMessageHandler>, GatherClassMessageHandler>();
-            services.AddTransient<RegistrationStepsMessageHandler<GatherLanguageMessageHandler>, GatherLanguageMessageHandler>();
-            services.AddTransient<RegistrationStepsMessageHandler<GatherYearMessageHandler>, GatherYearMessageHandler>();
-            services.AddTransient<MessageHandler<RegisteringUserMessageHandler>, RegisteringUserMessageHandler>();
+            services.AddTransient<ICancelRegistrationMessageHandler, CancelRegistrationMessageHandler>();
+            services.AddTransient<IConfirmSubscriptionMessageHandler, ConfirmSubscriptionMessageHandler>();
+            services.AddTransient<IGatherClassMessageHandler, GatherClassMessageHandler>();
+            services.AddTransient<IGatherLanguageMessageHandler, GatherLanguageMessageHandler>();
+            services.AddTransient<IGatherYearMessageHandler, GatherYearMessageHandler>();
+            services.AddTransient<IRegisteringUserMessageHandler, RegisteringUserMessageHandler>();
 
             return services;
         }

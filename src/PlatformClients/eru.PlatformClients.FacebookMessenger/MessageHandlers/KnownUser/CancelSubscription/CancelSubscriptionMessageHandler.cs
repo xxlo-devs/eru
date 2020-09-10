@@ -11,7 +11,7 @@ using Message = eru.PlatformClients.FacebookMessenger.SendAPIClient.Requests.Mes
 
 namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser.CancelSubscription
 {
-    public class CancelSubscriptionMessageHandler : MessageHandler<CancelSubscriptionMessageHandler>
+    public class CancelSubscriptionMessageHandler : MessageHandler<CancelSubscriptionMessageHandler>, ICancelSubscriptionMessageHandler
     {
         private readonly IMediator _mediator;
         private readonly ISendApiClient _apiClient;

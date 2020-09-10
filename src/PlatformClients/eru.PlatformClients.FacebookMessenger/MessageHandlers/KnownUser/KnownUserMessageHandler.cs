@@ -13,10 +13,10 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser
 {
     public class KnownUserMessageMessageHandler : MessageHandler<KnownUserMessageMessageHandler>, IKnownUserMessageHandler
     {
-        private readonly MessageHandler<CancelSubscriptionMessageHandler> _cancelHandler;
-        private readonly MessageHandler<UnsupportedCommandMessageHandler> _unsupportedHandler;
+        private readonly ICancelSubscriptionMessageHandler _cancelHandler;
+        private readonly IUnsupportedCommandMessageHandler _unsupportedHandler;
         
-        public KnownUserMessageMessageHandler(MessageHandler<CancelSubscriptionMessageHandler> cancelHandler, MessageHandler<UnsupportedCommandMessageHandler> unsupportedHandler, ILogger<KnownUserMessageMessageHandler> logger) : base(logger)
+        public KnownUserMessageMessageHandler(ICancelSubscriptionMessageHandler cancelHandler, IUnsupportedCommandMessageHandler unsupportedHandler, ILogger<KnownUserMessageMessageHandler> logger) : base(logger)
         {
             _cancelHandler = cancelHandler;
             _unsupportedHandler = unsupportedHandler;
