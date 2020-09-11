@@ -2,6 +2,7 @@
 using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.RegistrationEnd.ConfirmSubscription;
 using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.RegistrationSteps.GatherClass;
 using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.RegistrationSteps.GatherYear;
+using eru.PlatformClients.FacebookMessenger.RegistrationDb.Entities;
 using eru.PlatformClients.FacebookMessenger.RegistrationDb.Enums;
 using eru.PlatformClients.FacebookMessenger.ReplyPayload;
 using eru.PlatformClients.FacebookMessenger.SendAPIClient;
@@ -30,18 +31,56 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             context.IncompleteUsers.Should().ContainSingle(x =>
                 x.Id == "sample-registering-user-with-lang" && x.PreferredLanguage == "en" && x.Year == 1 &&
                 x.LastPage == 0 && x.Stage == Stage.GatheredYear);
+            
+            confirmHandler.Verify(x => x.ShowInstruction(It.Is<IncompleteUser>(y => y.Id == "sample-registering-user-with-lang"), 0), Times.Once);
+            confirmHandler.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async void ShouldShowListPageCorrectly()
+        {
+            var context = new FakeRegistrationDb();
+            var mediator = new Mock<IMediator>();
+            var client = new Mock<ISendApiClient>();
+            var translator = new Mock<ITranslator<FacebookMessengerPlatformClient>>();
+            var confirmHandler = new Mock<IGatherClassMessageHandler>();
+
+            var handler = new GatherYearMessageHandler(mediator.Object, client.Object, translator.Object, confirmHandler.Object, context, new Mock<ILogger<GatherYearMessageHandler>>().Object);
+            await handler.Handle(await context.IncompleteUsers.FindAsync("sample-registering-user-with-lang"), new Payload(PayloadType.Year, 1));
         }
 
         [Fact]
         public async void ShouldShowInstructionCorrectly()
         {
+            var context = new FakeRegistrationDb();
+            var mediator = new Mock<IMediator>();
+            var client = new Mock<ISendApiClient>();
+            var translator = new Mock<ITranslator<FacebookMessengerPlatformClient>>();
+            var confirmHandler = new Mock<IGatherClassMessageHandler>();
+
+            var handler = new GatherYearMessageHandler(mediator.Object, client.Object, translator.Object, confirmHandler.Object, context, new Mock<ILogger<GatherYearMessageHandler>>().Object);
+            await handler.ShowInstruction(await context.IncompleteUsers.FindAsync("sample-registering-user-with-lang"));
             
+            context.IncompleteUsers.Should().ContainSingle(x =>
+                x.Id == "sample-registering-user-with-lang" && x.PreferredLanguage == "en" &&
+                x.LastPage == 0 && x.Stage == Stage.GatheredLanguage);
         }
 
         [Fact]
         public async void ShouldHandleUnsupportedCommandCorrectly()
         {
+            var context = new FakeRegistrationDb();
+            var mediator = new Mock<IMediator>();
+            var client = new Mock<ISendApiClient>();
+            var translator = new Mock<ITranslator<FacebookMessengerPlatformClient>>();
+            var confirmHandler = new Mock<IGatherClassMessageHandler>();
+
+            var handler = new GatherYearMessageHandler(mediator.Object, client.Object, translator.Object, confirmHandler.Object, context, new Mock<ILogger<GatherYearMessageHandler>>().Object);
+            await handler.Handle(await context.IncompleteUsers.FindAsync("sample-registering-user-with-lang"), new Payload());
             
+            context.IncompleteUsers.Should().ContainSingle(x =>
+                x.Id == "sample-registering-user-with-lang" && x.PreferredLanguage == "en" &&
+                x.LastPage == 0 && x.Stage == Stage.GatheredLanguage);
         }
     }
 }

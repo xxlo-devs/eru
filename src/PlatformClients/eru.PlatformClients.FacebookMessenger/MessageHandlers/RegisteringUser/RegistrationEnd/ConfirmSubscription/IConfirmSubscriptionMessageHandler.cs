@@ -9,6 +9,5 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
     {
         public Task Handle(IncompleteUser user, Payload payload);
         public Task ShowInstruction(IncompleteUser user);
-        public Task UnsupportedCommand(IncompleteUser user);
     }
 }

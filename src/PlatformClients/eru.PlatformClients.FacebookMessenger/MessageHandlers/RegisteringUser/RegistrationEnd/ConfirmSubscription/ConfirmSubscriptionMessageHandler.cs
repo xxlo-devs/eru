@@ -53,7 +53,7 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
             await _apiClient.Send(response);
         }
 
-        public override async Task UnsupportedCommand(IncompleteUser user)
+        protected override async Task UnsupportedCommand(IncompleteUser user)
         {
             var response = new SendRequest(user.Id, new Message(await _translator.TranslateString("unsupported-command", user.PreferredLanguage), new[]
             {
