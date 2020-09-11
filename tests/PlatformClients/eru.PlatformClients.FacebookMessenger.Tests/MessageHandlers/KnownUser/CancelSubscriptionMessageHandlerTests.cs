@@ -1,7 +1,65 @@
-﻿namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.KnownUser
+﻿using System.Threading;
+using System.Threading.Tasks;
+using eru.Application.Common.Interfaces;
+using eru.Application.Subscriptions.Commands.CancelSubscription;
+using eru.Application.Subscriptions.Queries.GetSubscriber;
+using eru.Domain.Entity;
+using eru.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser.CancelSubscription;
+using eru.PlatformClients.FacebookMessenger.Middleware.Webhook.Messages;
+using eru.PlatformClients.FacebookMessenger.Middleware.Webhook.Messages.Properties;
+using eru.PlatformClients.FacebookMessenger.ReplyPayload;
+using eru.PlatformClients.FacebookMessenger.SendAPIClient;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Moq;
+using Xunit;
+
+namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.KnownUser
 {
     public class CancelSubscriptionMessageHandlerTests
     {
-        
+        [Fact]
+        public async void ShouldCancelSubscriptionCorrectly()
+        {
+            var mediator = new Mock<IMediator>();
+
+            mediator.Setup(x => x.Send(It.IsAny<GetSubscriberQuery>(), It.IsAny<CancellationToken>())).Returns(
+                (GetSubscriberQuery query, CancellationToken cancellationToken) =>
+                {
+                    if (query.Id == "sample-subscriber" && query.Platform == FacebookMessengerPlatformClient.PId)
+                        return Task.FromResult(new Subscriber
+                        {
+                            Id = "sample-subscriber", Platform = FacebookMessengerPlatformClient.PId,
+                            PreferredLanguage = "en", Class = "sample-class"
+                        });
+                    else
+                        return Task.FromResult<Subscriber>(null);
+                });
+            
+            var apiClient = new Mock<ISendApiClient>();
+            var translator = new Mock<ITranslator<FacebookMessengerPlatformClient>>();
+            var logger = new Mock<ILogger<CancelSubscriptionMessageHandler>>();
+
+            var message = new Messaging
+            {
+                Sender = new Sender {Id = "sample-subscriber"},
+                Recipient = new Recipient {Id = "sample-page-id"},
+                Timestamp = 123456789,
+                Message = new Message
+                {
+                    Mid = "sample-message-id",
+                    Text = "Cancel",
+                    QuickReply = new QuickReply {Payload = new Payload(PayloadType.Cancel).ToJson()}
+                }
+            };
+            
+            var handler = new CancelSubscriptionMessageHandler(mediator.Object, apiClient.Object, translator.Object, logger.Object);
+            await handler.Handle(message);
+
+            mediator.Verify(x => x.Send(It.Is<GetSubscriberQuery>(y => y.Id == "sample-subscriber" && y.Platform == FacebookMessengerPlatformClient.PId), It.IsAny<CancellationToken>()), Times.Once);
+            mediator.Verify(x => x.Send(It.Is<CancelSubscriptionCommand>(y => y.Id == "sample-subscriber" && y.Platform == FacebookMessengerPlatformClient.PId), It.IsAny<CancellationToken>()), Times.Once);
+            mediator.VerifyNoOtherCalls();
+        }
     }
 }

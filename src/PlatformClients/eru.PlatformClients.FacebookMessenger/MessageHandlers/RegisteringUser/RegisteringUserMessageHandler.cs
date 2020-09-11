@@ -69,7 +69,7 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser
 
                 case Stage.GatheredClass:
                 {
-                    await _provider.GetService<IConfirmSubscriptionMessageHandler>().Handle(message);
+                    await _provider.GetService<IConfirmSubscriptionMessageHandler>().Handle(user, payload);
                     break;
                 }
             }

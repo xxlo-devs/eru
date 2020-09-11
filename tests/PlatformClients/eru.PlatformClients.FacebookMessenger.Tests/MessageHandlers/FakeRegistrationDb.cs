@@ -35,9 +35,9 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers
                 
                 x.HasData(
                     new IncompleteUser("sample-registering-user", "en"),
-                    new IncompleteUser("sample-registering-user-with-lang", "en") {PreferredLanguage = "en", Stage = Stage.GatheredLanguage},
-                    new IncompleteUser("sample-registering-user-with-year", "en") {PreferredLanguage = "en", Year = 1, Stage = Stage.GatheredYear},
-                    new IncompleteUser("sample-registering-user-with-class", "en") {PreferredLanguage = "en", Year = 1, ClassId = "sample-class", Stage = Stage.GatheredClass}
+                    new IncompleteUser("sample-registering-user-with-lang", "en") {Stage = Stage.GatheredLanguage},
+                    new IncompleteUser("sample-registering-user-with-year", "en") {Year = 1, Stage = Stage.GatheredYear},
+                    new IncompleteUser("sample-registering-user-with-class", "en") {Year = 1, ClassId = "sample-class", Stage = Stage.GatheredClass}
                 );
             });
             

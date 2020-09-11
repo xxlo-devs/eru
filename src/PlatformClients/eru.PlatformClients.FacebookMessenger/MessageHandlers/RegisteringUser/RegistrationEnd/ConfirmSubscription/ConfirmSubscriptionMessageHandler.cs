@@ -27,11 +27,8 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
             _apiClient = apiClient;
             _translator = translator;
         }
-        protected override async Task EndRegistration(Messaging message)
+        protected override async Task EndRegistration(IncompleteUser user)
         {
-            var uid = message.Sender.Id;
-            var user = await _dbContext.IncompleteUsers.FindAsync(uid);
-            
             await _mediator.Send(user.ToCreateSubscriptionCommand());
                  
             _dbContext.IncompleteUsers.Remove(user);
@@ -53,6 +50,17 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
                 new QuickReply(await _translator.TranslateString("subscribe-button", user.PreferredLanguage), new Payload(PayloadType.Subscribe).ToJson()), 
                 new QuickReply(await _translator.TranslateString("cancel-button", user.PreferredLanguage), new Payload(PayloadType.Cancel).ToJson())
             })); 
+            await _apiClient.Send(response);
+        }
+
+        public override async Task UnsupportedCommand(IncompleteUser user)
+        {
+            var response = new SendRequest(user.Id, new Message(await _translator.TranslateString("unsupported-command", user.PreferredLanguage), new[]
+            {
+                new QuickReply(await _translator.TranslateString("subscribe-button", user.PreferredLanguage), new Payload(PayloadType.Subscribe).ToJson()), 
+                new QuickReply(await _translator.TranslateString("cancel-button", user.PreferredLanguage), new Payload(PayloadType.Cancel).ToJson())
+            })); 
+            
             await _apiClient.Send(response);
         }
     }

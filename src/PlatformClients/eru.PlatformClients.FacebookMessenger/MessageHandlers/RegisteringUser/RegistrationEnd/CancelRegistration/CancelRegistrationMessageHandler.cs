@@ -18,11 +18,11 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
         private readonly ISendApiClient _apiClient;
         private readonly ITranslator<FacebookMessengerPlatformClient> _translator;
 
-        public CancelRegistrationMessageHandler(IServiceProvider provider, ILogger<CancelRegistrationMessageHandler> logger) : base(logger)
+        public CancelRegistrationMessageHandler(IRegistrationDbContext dbContext, ISendApiClient apiClient, ITranslator<FacebookMessengerPlatformClient> translator, ILogger<CancelRegistrationMessageHandler> logger) : base(logger)
         {
-            _dbContext = provider.GetService<IRegistrationDbContext>();
-            _apiClient = provider.GetService<ISendApiClient>();
-            _translator = provider.GetService<ITranslator<FacebookMessengerPlatformClient>>();
+            _dbContext = dbContext;
+            _apiClient = apiClient;
+            _translator = translator;
         }
 
         protected override async Task Base(Messaging message)

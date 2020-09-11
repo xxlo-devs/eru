@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using eru.PlatformClients.FacebookMessenger.Middleware.Webhook.Messages;
 using eru.PlatformClients.FacebookMessenger.RegistrationDb.Entities;
+using eru.PlatformClients.FacebookMessenger.ReplyPayload;
 using Microsoft.Extensions.Logging;
 using Message = eru.PlatformClients.FacebookMessenger.SendAPIClient.Requests.Message;
 
@@ -17,13 +18,20 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
             _logger = logger;
         }
         
-        public async Task Handle(Messaging message)
+        public async Task Handle(IncompleteUser user, Payload payload)
         {
-            _logger.LogTrace($"EndRegistrationHandler {typeof(T).Name} got a request (userid: {message.Sender.Id}, payload: {message.Message?.QuickReply?.Payload}");
-            await EndRegistration(message);
+            _logger.LogTrace($"EndRegistrationHandler {typeof(T).Name} got a request from user (id: {user.Id})");
+            if (payload.Type == PayloadType.Subscribe)
+            {
+                await EndRegistration(user);
+                return; 
+            }
+
+            await UnsupportedCommand(user);
         }
         
-        protected abstract Task EndRegistration(Messaging message);
+        protected abstract Task EndRegistration(IncompleteUser user);
         public abstract Task ShowInstruction(IncompleteUser user);
+        public abstract Task UnsupportedCommand(IncompleteUser user);
     }
 }
