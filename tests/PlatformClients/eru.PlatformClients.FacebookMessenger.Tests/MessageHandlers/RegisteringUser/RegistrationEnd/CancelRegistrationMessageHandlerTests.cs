@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using eru.Application.Common.Interfaces;
 using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.RegistrationEnd.CancelRegistration;
 using eru.PlatformClients.FacebookMessenger.Middleware.Webhook.Messages;
@@ -9,7 +8,6 @@ using eru.PlatformClients.FacebookMessenger.SendAPIClient;
 using eru.PlatformClients.FacebookMessenger.SendAPIClient.Requests;
 using eru.PlatformClients.FacebookMessenger.SendAPIClient.Requests.Static;
 using FluentAssertions;
-using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;

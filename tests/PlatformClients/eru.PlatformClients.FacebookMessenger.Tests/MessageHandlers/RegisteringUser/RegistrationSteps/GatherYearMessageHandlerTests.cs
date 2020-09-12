@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using eru.Application.Classes.Queries.GetClasses;
 using eru.Application.Common.Interfaces;
-using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.RegistrationEnd.ConfirmSubscription;
 using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.RegistrationSteps.GatherClass;
 using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.RegistrationSteps.GatherYear;
 using eru.PlatformClients.FacebookMessenger.RegistrationDb.Entities;

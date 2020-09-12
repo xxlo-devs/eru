@@ -1,4 +1,3 @@
-using System.Globalization;
 using eru.Application;
 using eru.Infrastructure;
 using eru.PlatformClients.FacebookMessenger;
@@ -27,7 +26,7 @@ namespace eru.WebApp
             services.AddApplication();
             services.AddInfrastructure(_configuration);
 
-            services.AddFacebookMessenger(_configuration);
+            services.AddFacebookMessenger();
             
             services.AddRazorPages(options =>
             {
@@ -71,7 +70,7 @@ namespace eru.WebApp
             
             app.UseInfrastructure(_configuration);
             
-            app.UseFacebookMessenger(_configuration);
+            app.UseFacebookMessenger();
             
             app.UseEndpoints(endpoints =>
             {

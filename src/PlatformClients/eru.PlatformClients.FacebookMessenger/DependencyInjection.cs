@@ -4,14 +4,13 @@ using eru.PlatformClients.FacebookMessenger.Middleware;
 using eru.PlatformClients.FacebookMessenger.RegistrationDb;
 using eru.PlatformClients.FacebookMessenger.SendAPIClient;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace eru.PlatformClients.FacebookMessenger
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddFacebookMessenger(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddFacebookMessenger(this IServiceCollection services)
         {
             services.AddFacebookMessengerRegistrationDatabase();
             services.AddMessageHandling();
@@ -22,7 +21,7 @@ namespace eru.PlatformClients.FacebookMessenger
             return services;
         }
 
-        public static IApplicationBuilder UseFacebookMessenger(this IApplicationBuilder app, IConfiguration configuration)
+        public static IApplicationBuilder UseFacebookMessenger(this IApplicationBuilder app)
         {
             app.Map("/fbwebhook", x => x.UseMiddleware<FbMiddleware>());
             

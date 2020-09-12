@@ -13,7 +13,6 @@ using eru.PlatformClients.FacebookMessenger.SendAPIClient.Requests;
 using eru.PlatformClients.FacebookMessenger.SendAPIClient.Requests.Static;
 using FluentAssertions;
 using MediatR;
-using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;

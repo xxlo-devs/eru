@@ -1,10 +1,8 @@
 ﻿using System.Linq;
 using eru.Domain.Entity;
-using eru.PlatformClients.FacebookMessenger.Middleware.Webhook.Messages;
 using eru.PlatformClients.FacebookMessenger.ReplyPayload;
 using eru.PlatformClients.FacebookMessenger.SendAPIClient.Requests;
 using eru.PlatformClients.FacebookMessenger.SendAPIClient.Requests.Static;
-using Microsoft.EntityFrameworkCore.Internal;
 using Moq;
 using Xunit;
 

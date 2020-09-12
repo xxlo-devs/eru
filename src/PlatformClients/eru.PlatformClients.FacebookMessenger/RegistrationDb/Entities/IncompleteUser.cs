@@ -5,9 +5,10 @@ namespace eru.PlatformClients.FacebookMessenger.RegistrationDb.Entities
 {
     public class IncompleteUser
     {
+        // ReSharper disable once UnusedMember.Local
         private IncompleteUser()
         {
-            
+            // Required by EF Core
         }
         
         public IncompleteUser(string id, string defaultLanguage)
@@ -17,7 +18,8 @@ namespace eru.PlatformClients.FacebookMessenger.RegistrationDb.Entities
             PreferredLanguage = defaultLanguage;
         }
         
-        public CreateSubscriptionCommand ToCreateSubscriptionCommand() => new CreateSubscriptionCommand(Id, FacebookMessengerPlatformClient.PId, PreferredLanguage, ClassId);
+        public CreateSubscriptionCommand ToCreateSubscriptionCommand() 
+            => new CreateSubscriptionCommand(Id, FacebookMessengerPlatformClient.PId, PreferredLanguage, ClassId);
 
         public string Id { get; set; } 
         public string PreferredLanguage { get; set; }

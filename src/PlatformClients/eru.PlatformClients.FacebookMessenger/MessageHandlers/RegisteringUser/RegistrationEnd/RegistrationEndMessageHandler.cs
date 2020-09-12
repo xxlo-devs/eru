@@ -1,9 +1,7 @@
 ﻿using System.Threading.Tasks;
-using eru.PlatformClients.FacebookMessenger.Middleware.Webhook.Messages;
 using eru.PlatformClients.FacebookMessenger.RegistrationDb.Entities;
 using eru.PlatformClients.FacebookMessenger.ReplyPayload;
 using Microsoft.Extensions.Logging;
-using Message = eru.PlatformClients.FacebookMessenger.SendAPIClient.Requests.Message;
 
 namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.RegistrationEnd
 {

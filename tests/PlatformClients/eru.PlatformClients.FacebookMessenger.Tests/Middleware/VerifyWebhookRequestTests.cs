@@ -62,7 +62,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.Middleware
                 {"hub.challenge", "sample-challenge"}
             });
             
-            await middleware.InvokeAsync(context, context => throw new NotImplementedException());
+            await middleware.InvokeAsync(context, requestDelegateContext => Task.CompletedTask);
             var content = await GetStringBody(context.Response.Body);
             
             context.Response.StatusCode.Should().Be((int) HttpStatusCode.OK);
@@ -82,7 +82,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.Middleware
                 {"hub.challenge", "sample-challenge"}
             });
             
-            await middleware.InvokeAsync(context, context => throw new NotImplementedException());
+            await middleware.InvokeAsync(context, requestDelegateContext => Task.CompletedTask);
             var content = await GetStringBody(context.Response.Body);
             
             context.Response.StatusCode.Should().Be((int) HttpStatusCode.Forbidden);
@@ -102,7 +102,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.Middleware
                 {"hub.challenge", "sample-challenge"}
             });
             
-            await middleware.InvokeAsync(context, context => throw new NotImplementedException());
+            await middleware.InvokeAsync(context, requestDelegateContext => Task.CompletedTask);
             var content = await GetStringBody(context.Response.Body);
             
             context.Response.StatusCode.Should().Be((int) HttpStatusCode.Forbidden);
@@ -121,7 +121,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.Middleware
                 {"hub.verify_token", "sample-verify-token"}
             });
             
-            await middleware.InvokeAsync(context, context => throw new NotImplementedException());
+            await middleware.InvokeAsync(context, requestDelegateContext => Task.CompletedTask);
             var content = await GetStringBody(context.Response.Body);
             
             context.Response.StatusCode.Should().Be((int) HttpStatusCode.BadRequest);

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
-using System.Net.Http;
+using System.Threading.Tasks;
 using eru.PlatformClients.FacebookMessenger.MessageHandlers;
 using eru.PlatformClients.FacebookMessenger.Middleware;
 using FluentAssertions;
@@ -30,7 +30,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.Middleware
             var logger = new Mock<ILogger<FbMiddleware>>();
             var middleware = new FbMiddleware(config, messageHandler.Object, logger.Object);
             
-            await middleware.InvokeAsync(context, context => throw new NotImplementedException());
+            await middleware.InvokeAsync(context, requestDelegateContext => Task.CompletedTask);
             
             context.Response.Body.Position = 0; StreamReader reader = new StreamReader(context.Response.Body); var content = await reader.ReadToEndAsync();
             

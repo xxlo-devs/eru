@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using eru.Application.Common.Interfaces;
 using eru.Application.Subscriptions.Queries.GetSubscriber;
 using eru.Domain.Entity;
-using eru.PlatformClients.FacebookMessenger.ReplyPayload;
 using eru.PlatformClients.FacebookMessenger.SendAPIClient;
 using MediatR;
 using Microsoft.Extensions.Logging;

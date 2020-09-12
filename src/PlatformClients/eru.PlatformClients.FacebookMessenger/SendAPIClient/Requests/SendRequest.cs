@@ -21,14 +21,6 @@ namespace eru.PlatformClients.FacebookMessenger.SendAPIClient.Requests
             Message = message;
         }
 
-        public SendRequest(string type, string tag, string uid, Message message)
-        {
-            Type = type;
-            Tag = tag;
-            Recipient = new Recipient(uid);
-            Message = message;
-        }
-
         [JsonPropertyName("messaging_type")]
         public string Type { get; set; }
 

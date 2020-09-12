@@ -3,7 +3,6 @@ using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.Regi
 using eru.PlatformClients.FacebookMessenger.MessageHandlers.UnknownUser;
 using eru.PlatformClients.FacebookMessenger.Middleware.Webhook.Messages;
 using eru.PlatformClients.FacebookMessenger.Middleware.Webhook.Messages.Properties;
-using eru.PlatformClients.FacebookMessenger.RegistrationDb.Entities;
 using eru.PlatformClients.FacebookMessenger.RegistrationDb.Enums;
 using FluentAssertions;
 using Hangfire;

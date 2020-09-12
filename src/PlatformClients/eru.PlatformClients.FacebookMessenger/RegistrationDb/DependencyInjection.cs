@@ -10,6 +10,7 @@ namespace eru.PlatformClients.FacebookMessenger.RegistrationDb
         {
             services.AddScoped<IRegistrationDbContext>(provider => provider.GetService<RegistrationDbContext>());
             services.AddDbContext<RegistrationDbContext>(options => { options.UseInMemoryDatabase($"eru.Infrastructure.PlatformClients.FacebookMessenger"); });
+            
             return services;
         }
     }

@@ -7,7 +7,7 @@ namespace eru.PlatformClients.FacebookMessenger.ReplyPayload
     {
         public Payload()
         {
-            
+            // Required by JSON Parser
         }
         public Payload(PayloadType type)
         {

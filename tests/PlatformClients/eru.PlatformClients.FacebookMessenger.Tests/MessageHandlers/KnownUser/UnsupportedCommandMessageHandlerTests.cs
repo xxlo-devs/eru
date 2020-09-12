@@ -6,17 +6,12 @@ using eru.Domain.Entity;
 using eru.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser.UnsupportedCommand;
 using eru.PlatformClients.FacebookMessenger.Middleware.Webhook.Messages;
 using eru.PlatformClients.FacebookMessenger.Middleware.Webhook.Messages.Properties;
-using eru.PlatformClients.FacebookMessenger.ReplyPayload;
 using eru.PlatformClients.FacebookMessenger.SendAPIClient;
-using eru.PlatformClients.FacebookMessenger.SendAPIClient.Requests;
-using eru.PlatformClients.FacebookMessenger.SendAPIClient.Requests.Static;
-using FluentAssertions;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 using Message = eru.PlatformClients.FacebookMessenger.Middleware.Webhook.Messages.Message;
-using QuickReply = eru.PlatformClients.FacebookMessenger.SendAPIClient.Requests.QuickReply;
 
 namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.KnownUser
 {

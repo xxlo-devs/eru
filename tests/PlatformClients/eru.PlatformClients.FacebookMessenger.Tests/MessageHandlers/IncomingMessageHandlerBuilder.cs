@@ -9,7 +9,6 @@ using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser;
 using eru.PlatformClients.FacebookMessenger.MessageHandlers.UnknownUser;
 using eru.PlatformClients.FacebookMessenger.RegistrationDb.DbContext;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq;
 

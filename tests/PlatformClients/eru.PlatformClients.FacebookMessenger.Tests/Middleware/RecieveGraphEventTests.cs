@@ -54,7 +54,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.Middleware
             var middleware = new FbMiddleware(_configuration, messageHandler.Object, logger.Object);
             var context = BuildHttpContext("{\"object\":\"page\",\"entry\":[{\"messaging\":[{\"sender\":{\"id\":\"<PSID>\"},\"recipient\":{\"id\":\"<PAGE_ID>\"},\"timestamp\":123456789,\"message\":{\"mid\":\"mid.1457764197618:41d102a3e1ae206a38\",\"text\":\"hello, world!\"}}]}]}");
             
-            await middleware.InvokeAsync(context, context => throw new NotImplementedException());
+            await middleware.InvokeAsync(context, requestDelegateContext => Task.CompletedTask);
             var content = await GetStringBody(context.Response.Body);
             
             context.Response.StatusCode.Should().Be((int) HttpStatusCode.OK);
@@ -69,7 +69,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.Middleware
             var middleware = new FbMiddleware(_configuration, messageHandler.Object, logger.Object);
             var context = BuildHttpContext("{\"object\":\"unknown\"}");
             
-            await middleware.InvokeAsync(context, context => throw new NotImplementedException());
+            await middleware.InvokeAsync(context, requestDelegateContext => Task.CompletedTask);
             var content = await GetStringBody(context.Response.Body);
                 
             context.Response.StatusCode.Should().Be((int) HttpStatusCode.NotFound);
@@ -84,7 +84,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.Middleware
             var middleware = new FbMiddleware(_configuration, messageHandler.Object, logger.Object);
             var context = BuildHttpContext("{\"object\": \"page\", \"entry\": [{\"messaging\": [{\"message\": \"TEST_MESSAGE\"}]}]}");
             
-            await middleware.InvokeAsync(context, context => throw new NotImplementedException());
+            await middleware.InvokeAsync(context, requestDelegateContext => Task.CompletedTask);
             var content = await GetStringBody(context.Response.Body);
             
             context.Response.StatusCode.Should().Be((int) HttpStatusCode.BadRequest);

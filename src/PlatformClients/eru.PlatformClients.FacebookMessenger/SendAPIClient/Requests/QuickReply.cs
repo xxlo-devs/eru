@@ -12,14 +12,6 @@ namespace eru.PlatformClients.FacebookMessenger.SendAPIClient.Requests
             Payload = payload;
         }
 
-        public QuickReply(string title, string payload, string imageUrl)
-        {
-            ContentType = QuickReplyContentTypes.Text;
-            Title = title;
-            Payload = payload;
-            ImageUrl = imageUrl;
-        }
-
         [JsonPropertyName("content_type")]
         public string ContentType { get; set; }
 
@@ -28,8 +20,5 @@ namespace eru.PlatformClients.FacebookMessenger.SendAPIClient.Requests
 
         [JsonPropertyName("payload")]
         public string Payload { get; set; }
-        
-        [JsonPropertyName("image_url")]
-        public string ImageUrl { get; set; }
     }
 }

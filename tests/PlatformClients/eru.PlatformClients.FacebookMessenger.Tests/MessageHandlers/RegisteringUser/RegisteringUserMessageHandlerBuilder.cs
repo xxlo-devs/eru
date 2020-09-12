@@ -6,7 +6,6 @@ using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.Regi
 using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.RegistrationSteps.GatherLanguage;
 using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.RegistrationSteps.GatherYear;
 using eru.PlatformClients.FacebookMessenger.RegistrationDb.DbContext;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Logging;
 using Moq;
 

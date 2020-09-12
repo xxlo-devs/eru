@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace eru.PlatformClients.FacebookMessenger.Tests
 {
-    public class FakeRegistrationDb : DbContext, IRegistrationDbContext
+    public sealed class FakeRegistrationDb : DbContext, IRegistrationDbContext
     {
         public FakeRegistrationDb()
         {

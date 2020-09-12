@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using eru.Application.Common.Interfaces;
 using eru.Application.Subscriptions.Queries.GetSubscriber;
@@ -34,13 +33,13 @@ namespace eru.PlatformClients.FacebookMessenger
         public async Task SendMessage(string id, string content)
         {
             var user = await _mediator.Send(new GetSubscriberQuery(id, PlatformId));
-            var message = new SendRequest(id, new Message(content, new[]
+
+            await _apiClient.Send(new SendRequest(id, new Message(content, new[]
             {
                 new QuickReply(await _translator.TranslateString("cancel-button", user.PreferredLanguage),
                     new Payload(PayloadType.Cancel).ToJson())
-            }), MessageTags.AccountUpdate);
-
-            await _apiClient.Send(message);
+            }), MessageTags.AccountUpdate));
+            
             _logger.LogInformation($"FacebookMessengerPlatformClient sent a generic message to user (uid: {id}) with content (content: {content})");
         }
 
@@ -48,33 +47,25 @@ namespace eru.PlatformClients.FacebookMessenger
         {
             var user = await _mediator.Send(new GetSubscriberQuery(id, this.PlatformId));
             
-            var req = new SendRequest(id, new Message(await _translator.TranslateString("new-substitutions", user.PreferredLanguage)), MessageTags.ConfirmedEventUpdate);
-            await _apiClient.Send(req);
+            await _apiClient.Send(new SendRequest(id, new Message(await _translator.TranslateString("new-substitutions", user.PreferredLanguage)), MessageTags.ConfirmedEventUpdate));
 
             foreach (var x in substitutions)
             {
-                if (x.Cancelled)
+                var substitution = x.Cancelled ? string.Format(await _translator.TranslateString("cancellation", user.PreferredLanguage), x.Lesson, x.Subject, x.Teacher, x.Room, x.Note)
+                    : string.Format(await _translator.TranslateString("substitution", user.PreferredLanguage), x.Teacher, x.Lesson, x.Subject, x.Substituting, x.Room, x.Note);
+                
+                await _apiClient.Send(new SendRequest(id, new Message(await _translator.TranslateString(substitution, user.PreferredLanguage), new[]
                 {
-                    var format = await _translator.TranslateString("cancellation", user.PreferredLanguage);
-                    var substitution = string.Format(format, x.Lesson, x.Subject, x.Teacher, x.Room, x.Note);
-                    req = new SendRequest(id, new Message(substitution), MessageTags.ConfirmedEventUpdate);
-                    await _apiClient.Send(req);
-                }
-                else
-                {
-                    var format = await _translator.TranslateString("substitution", user.PreferredLanguage);
-                    var substitution = string.Format(format, x.Teacher, x.Lesson, x.Subject, x.Substituting, x.Room, x.Note);
-                    req = new SendRequest(id, new Message(substitution), MessageTags.ConfirmedEventUpdate);
-                    await _apiClient.Send(req);
-                }
+                    new QuickReply(await _translator.TranslateString("cancel-button", user.PreferredLanguage),
+                        new Payload(PayloadType.Cancel).ToJson())
+                }), MessageTags.ConfirmedEventUpdate));
             }
-
-            req = new SendRequest(id, new Message(await _translator.TranslateString("closing-substitutions", user.PreferredLanguage), new[]
+            
+            await _apiClient.Send(new SendRequest(id, new Message(await _translator.TranslateString("closing-substitutions", user.PreferredLanguage), new[]
             {
                 new QuickReply(await _translator.TranslateString("cancel-button", user.PreferredLanguage),
                     new Payload(PayloadType.Cancel).ToJson())
-            }), MessageTags.ConfirmedEventUpdate);
-            await _apiClient.Send(req);
+            }), MessageTags.ConfirmedEventUpdate));
             
             _logger.LogInformation($"FacebookMessengerPlatformClient sent substitutions to user (uid: {id}");
         }
