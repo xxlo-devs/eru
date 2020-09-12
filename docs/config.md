@@ -19,9 +19,8 @@ Most common way to do it is via appsettings.json file available in src/eru.WebAp
   },
   "AllowedHosts": "*",
   "Database": {
-    "Type": "sqlite",
     "AutomaticallyMigrate": true,
-    "ConnectionString": "Data Source=eru.db"
+    "ConnectionString": "Host=myserver;Username=mylogin;Password=mypass;Database=mydatabase;"
   },
   "UploadKey": "V3ryS3cureUpl0adK3y",
   "CultureSettings": {
@@ -54,13 +53,9 @@ The host headers that are allowed to access the web pages. See [here](https://do
 
 ## Database
 
-When AutomaticallyMigrate is set to true the database will be set up during the boot of application. Otherwise database setup with `dotnet ef database update -p src/eru.Infrastrcuture -s src/eru.WebApp` from root folder is required.
+Application uses Postgresql as database provider. Configure your connection string accordingly.
 
-| Type | Sample connection string |
-| --- | ---|
-| InMemory | No connection string is required! |
-| Sqlite | Data Source=eru.db |
-| Postgresql | Host=myserver;Username=mylogin;Password=mypass;Database=mydatabase |
+When AutomaticallyMigrate is set to true the database will be set up during the boot of application. Otherwise database setup with `dotnet ef database update -p src/eru.Infrastrcuture -s src/eru.WebApp` from root folder is required.
 
 ## Upload Key
 

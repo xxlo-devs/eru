@@ -14,30 +14,6 @@ namespace eru.Infrastructure.Tests.Persistence
     public class DependencyInjectionTests
     {
         [Fact]
-        public async Task CanSqliteBeSelectedWithCorrectConnectionString()
-        {
-            var configuration = new ConfigurationBuilder()
-                .AddInMemoryCollection(new []
-                {
-                    new KeyValuePair<string, string>("Database:Type", "sqlite"), 
-                    new KeyValuePair<string, string>("Database:ConnectionString", "Data Source=eru.db"), 
-                })
-                .Build();
-            var serviceProvider = new ServiceCollection()
-                .AddInfrastructure(configuration)
-                .BuildServiceProvider();
-            
-            serviceProvider.GetService<IApplicationDbContext>().Should().NotBeNull();
-            
-            var dbContext = serviceProvider.GetService<ApplicationDbContext>();
-            dbContext.Should().NotBeNull();
-            
-            await dbContext.Database.EnsureCreatedAsync();
-            (await serviceProvider.GetService<ApplicationDbContext>().Database.CanConnectAsync()).Should().BeTrue();
-            await dbContext.Database.EnsureDeletedAsync();
-        }
-
-        [Fact]
         public Task ExceptionIsThrownUponNoSqliteConnectionString()
         {
             var configuration = new ConfigurationBuilder()
