@@ -6,6 +6,7 @@ using eru.PlatformClients.FacebookMessenger.Middleware.Webhook.Messages.Properti
 using eru.PlatformClients.FacebookMessenger.RegistrationDb.Entities;
 using eru.PlatformClients.FacebookMessenger.RegistrationDb.Enums;
 using FluentAssertions;
+using Hangfire;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -22,7 +23,8 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.UnknownUse
             var config = new ConfigurationBuilder()
                 .AddInMemoryCollection(new[] {new KeyValuePair<string, string>("CultureSettings:DefaultCulture", "en")}).Build();
             var langHandlerMock = new Mock<IGatherLanguageMessageHandler>();
-
+            var backgroundJobClientMock = new Mock<IBackgroundJobClient>();
+            
             var message = new Messaging
             {
                 Sender = new Sender{Id = "sample-unknown-user"},
@@ -35,7 +37,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.UnknownUse
                 }
             };
             
-            var handler = new StartRegistrationMessageHandler(context, config, langHandlerMock.Object, new Mock<ILogger<StartRegistrationMessageHandler>>().Object);
+            var handler = new StartRegistrationMessageHandler(context, config, langHandlerMock.Object, backgroundJobClientMock.Object, new Mock<ILogger<StartRegistrationMessageHandler>>().Object);
             await handler.Handle(message);
 
             context.IncompleteUsers.Should().ContainSingle(x =>

@@ -1,10 +1,14 @@
-﻿using System.Threading;
+﻿using System;
+using System.Globalization;
+using System.Threading;
 using System.Threading.Tasks;
+using eru.Domain.Entity;
 using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.RegistrationSteps;
 using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.RegistrationSteps.GatherLanguage;
 using eru.PlatformClients.FacebookMessenger.Middleware.Webhook.Messages;
 using eru.PlatformClients.FacebookMessenger.RegistrationDb.DbContext;
 using eru.PlatformClients.FacebookMessenger.RegistrationDb.Entities;
+using Hangfire;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
@@ -15,12 +19,14 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.UnknownUser
         private readonly IRegistrationDbContext _dbContext;
         private readonly IConfiguration _configuration;
         private readonly IGatherLanguageMessageHandler _langHandler;
+        private readonly IBackgroundJobClient _backgroundJobClient;
         
-        public StartRegistrationMessageHandler(IRegistrationDbContext dbContext, IConfiguration configuration, IGatherLanguageMessageHandler langHandler , ILogger<StartRegistrationMessageHandler> logger) : base(logger)
+        public StartRegistrationMessageHandler(IRegistrationDbContext dbContext, IConfiguration configuration, IGatherLanguageMessageHandler langHandler, IBackgroundJobClient backgroundJobClient, ILogger<StartRegistrationMessageHandler> logger) : base(logger)
         {
             _dbContext = dbContext;
             _langHandler = langHandler;
             _configuration = configuration;
+            _backgroundJobClient = backgroundJobClient;
         }
 
         protected override async Task Base(Messaging message)
@@ -31,6 +37,19 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.UnknownUser
             await _dbContext.SaveChangesAsync(CancellationToken.None);
 
             await _langHandler.ShowInstruction(incompleteUser);
+
+            _backgroundJobClient.Schedule(() => EnsureDeleted(message.Sender.Id), TimeSpan.FromMinutes(5));
+        }
+
+        public async Task EnsureDeleted(string uid)
+        {
+            var user = await _dbContext.IncompleteUsers.FindAsync(uid);
+            
+            if (user != null)
+            {
+                _dbContext.IncompleteUsers.Remove(user);
+                await _dbContext.SaveChangesAsync(CancellationToken.None);
+            }
         }
     }
 }
