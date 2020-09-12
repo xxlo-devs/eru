@@ -35,9 +35,11 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.UnknownUser
 
             await _langHandler.ShowInstruction(incompleteUser);
 
-            _backgroundJobClient.Schedule(() => EnsureDeleted(message.Sender.Id), TimeSpan.FromMinutes(5));
+            _backgroundJobClient.Schedule(() => EnsureDeleted(message.Sender.Id), TimeSpan.FromMinutes(15));
         }
 
+        // ReSharper disable once MemberCanBePrivate.Global
+        // Must be public because it's used by Hangfire
         public async Task EnsureDeleted(string uid)
         {
             var user = await _dbContext.IncompleteUsers.FindAsync(uid);

@@ -31,8 +31,7 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser.Cancel
             var user = await _mediator.Send(new GetSubscriberQuery(uid, FacebookMessengerPlatformClient.PId));
             await _mediator.Send(new CancelSubscriptionCommand(uid, FacebookMessengerPlatformClient.PId));
             
-            var response = new SendRequest(uid, new Message(await _translator.TranslateString("subscription-cancelled", user.PreferredLanguage)));
-            await _apiClient.Send(response);
+            await _apiClient.Send(new SendRequest(uid, new Message(await _translator.TranslateString("subscription-cancelled", user.PreferredLanguage))));
         }
     }
 }

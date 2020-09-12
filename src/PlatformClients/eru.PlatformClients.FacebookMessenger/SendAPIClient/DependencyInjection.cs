@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace eru.PlatformClients.FacebookMessenger.SendAPIClient
 {
@@ -6,7 +7,13 @@ namespace eru.PlatformClients.FacebookMessenger.SendAPIClient
     {
         public static IServiceCollection AddSendApiClient(this IServiceCollection services)
         {
-            services.AddHttpClient().AddTransient<ISendApiClient, SendApiClient>();
+            const string graphEndpoint = "https://graph.facebook.com/v8.0/me/messages";
+            services.AddHttpClient(FacebookMessengerPlatformClient.PId, c =>
+            {
+                c.BaseAddress = new Uri(graphEndpoint);
+            });
+            
+            services.AddTransient<ISendApiClient, SendApiClient>();
 
             return services;
         }

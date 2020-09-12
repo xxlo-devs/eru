@@ -4,9 +4,11 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using eru.PlatformClients.FacebookMessenger.MessageHandlers;
 using eru.PlatformClients.FacebookMessenger.Middleware.Webhook;
+using eru.PlatformClients.FacebookMessenger.Middleware.Webhook.Static;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using HttpMethods = eru.PlatformClients.FacebookMessenger.Middleware.Webhook.Static.HttpMethods;
 
 namespace eru.PlatformClients.FacebookMessenger.Middleware
 {
@@ -27,11 +29,11 @@ namespace eru.PlatformClients.FacebookMessenger.Middleware
         {
             switch (context.Request.Method)
             {
-                case "GET":
+                case HttpMethods.Get:
                     await VerifyWebhookRequest(context);
                     break;
 
-                case "POST":
+                case HttpMethods.Post:
                     await HandleWebhookEvent(context);
                     break;
 
@@ -44,13 +46,13 @@ namespace eru.PlatformClients.FacebookMessenger.Middleware
 
         private async Task VerifyWebhookRequest(HttpContext context)
         {
-            string mode = context.Request.Query["hub.mode"];
-            string token = context.Request.Query["hub.verify_token"];
-            string challenge = context.Request.Query["hub.challenge"];
+            string mode = context.Request.Query[VerificationParameters.Mode];
+            string token = context.Request.Query[VerificationParameters.Token];
+            string challenge = context.Request.Query[VerificationParameters.Challenge];
 
             if (mode != null && token != null && challenge != null)
             {
-                if (mode == "subscribe" && token == _configuration["PlatformClients:FacebookMessenger:VerifyToken"])
+                if (mode == VerificationMode.Subscribe && token == _configuration["PlatformClients:FacebookMessenger:VerifyToken"])
                 {
                     await context.SendOkResponse(challenge);
                     _logger.LogInformation("Facebook Messenger Webhook Middleware succesfully verified a webhook");
@@ -74,14 +76,14 @@ namespace eru.PlatformClients.FacebookMessenger.Middleware
             {
                 var webhook = await JsonSerializer.DeserializeAsync<Event>(context.Request.Body);
 
-                if (webhook.Subscription == "page")
+                if (webhook.Subscription == Subscriptions.PageSubscription)
                 {
                     foreach (var x in webhook.Entry)
                     {
                         await _messageHandler.Handle(x.Messaging.First());
                     }
                     
-                    await context.SendOkResponse("EVENT_RECEIVED");
+                    await context.SendOkResponse(Responses.EventRecieved);
                     _logger.LogInformation("Facebook Messenger Webhook Middleware successfully processed an event");
                 }
                 else

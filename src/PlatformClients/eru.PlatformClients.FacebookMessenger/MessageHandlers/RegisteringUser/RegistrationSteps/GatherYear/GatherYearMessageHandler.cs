@@ -30,22 +30,22 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
         }
         protected override async Task<IncompleteUser> UpdateUserBase(IncompleteUser user, string data)
         {
-            user.Year = int.Parse(data);
-            await _classHandler.ShowInstruction(user);
+            var usr = user; 
             
-            return user;
+            usr.Year = int.Parse(data);
+            await _classHandler.ShowInstruction(usr);
+            
+            return usr;
         }
 
         protected override async Task ShowInstructionBase(IncompleteUser user, int page)
         {
-            var response = new SendRequest(user.Id, new Message(await _translator.TranslateString("year-selection", user.PreferredLanguage), await GetYearSelector(page, user.PreferredLanguage)));
-            await _apiClient.Send(response);
+            await _apiClient.Send(new SendRequest(user.Id, new Message(await _translator.TranslateString("year-selection", user.PreferredLanguage), await GetYearSelector(page, user.PreferredLanguage))));
         }
 
         protected override async Task UnsupportedCommandBase(IncompleteUser user)
         {
-            var response = new SendRequest(user.Id, new Message(await _translator.TranslateString("unsupported-command", user.PreferredLanguage), await GetYearSelector(user.LastPage, user.PreferredLanguage)));
-            await _apiClient.Send(response);
+            await _apiClient.Send(new SendRequest(user.Id, new Message(await _translator.TranslateString("unsupported-command", user.PreferredLanguage), await GetYearSelector(user.LastPage, user.PreferredLanguage))));
         }
 
         private async Task<IEnumerable<QuickReply>> GetYearSelector(int page, string lang)

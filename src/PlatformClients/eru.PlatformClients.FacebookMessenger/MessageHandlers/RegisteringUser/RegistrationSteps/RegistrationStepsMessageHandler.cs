@@ -47,29 +47,30 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
         
         public async Task ShowInstruction(IncompleteUser user, int page = 0)
         {
-            await ShowInstructionBase(user, page);
+            var usr = user;
+            await ShowInstructionBase(usr, page);
             user.LastPage = page;
 
-            _dbContext.IncompleteUsers.Update(user);
+            _dbContext.IncompleteUsers.Update(usr);
             await _dbContext.SaveChangesAsync(CancellationToken.None);
-            _logger.LogInformation($"{typeof(T).Name} successfully sent page {page} for user {user.Id}");
+            _logger.LogInformation($"Facebook Messenger Message Handler {typeof(T).Name} successfully sent page {page} for user {user.Id}");
         }
 
         private async Task UpdateUser(IncompleteUser user, string data)
         {
-            user = await UpdateUserBase(user, data);
-            user.LastPage = 0;
-            user.Stage++;
+            var usr = await UpdateUserBase(user, data);
+            usr.LastPage = 0;
+            usr.Stage++;
             
-            _dbContext.IncompleteUsers.Update(user);
+            _dbContext.IncompleteUsers.Update(usr);
             await _dbContext.SaveChangesAsync(CancellationToken.None);
-            _logger.LogInformation($"{typeof(T).Name} successfully updated user {user.Id} with data {data}");
+            _logger.LogInformation($"Facebook Messenger Message Handler {typeof(T).Name} successfully updated user {user.Id} with data {data}");
         }
         
         private async Task UnsupportedCommand(IncompleteUser user)
         {
             await UnsupportedCommandBase(user);
-            _logger.LogInformation($"{typeof(T).Name} successfully send UnsupportedCommand response to user {user.Id}");
+            _logger.LogInformation($"Facebook Messenger Message Handler {typeof(T).Name} successfully sent UnsupportedCommand response to user {user.Id}");
         }
         
         protected async Task<IEnumerable<QuickReply>> GetSelector(Dictionary<string, string> items, int page, PayloadType payloadType, string displayCulture)

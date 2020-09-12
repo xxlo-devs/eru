@@ -30,23 +30,23 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
         }
         protected override async Task<IncompleteUser> UpdateUserBase(IncompleteUser user, string data)
         {
-            user.PreferredLanguage = data;
-            await _yearHandler.ShowInstruction(user);
+            var usr = user;
+            
+            usr.PreferredLanguage = data;
+            await _yearHandler.ShowInstruction(usr);
 
-            return user;
+            return usr;
         }
 
         protected override async Task ShowInstructionBase(IncompleteUser user, int page)
         {
-            var response = new SendRequest(user.Id, new Message(await _translator.TranslateString("greeting", user.PreferredLanguage), await GetLangSelector(page, user.PreferredLanguage)));
-            await _apiClient.Send(response);
+            await _apiClient.Send(new SendRequest(user.Id, new Message(await _translator.TranslateString("greeting", user.PreferredLanguage), await GetLangSelector(page, user.PreferredLanguage))));
         }
 
         protected override async Task UnsupportedCommandBase(IncompleteUser user)
         {
-            var response = new SendRequest(user.Id, 
-                new Message(await _translator.TranslateString("unsupported-command", user.PreferredLanguage), await GetLangSelector(user.LastPage, user.PreferredLanguage)));
-            await _apiClient.Send(response);
+            await _apiClient.Send(new SendRequest(user.Id, 
+                new Message(await _translator.TranslateString("unsupported-command", user.PreferredLanguage), await GetLangSelector(user.LastPage, user.PreferredLanguage))));
         }
 
         private async Task<IEnumerable<QuickReply>> GetLangSelector(int page, string displayCulture)

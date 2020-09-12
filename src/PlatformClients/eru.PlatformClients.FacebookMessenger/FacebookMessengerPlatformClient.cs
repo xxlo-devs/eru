@@ -33,12 +33,8 @@ namespace eru.PlatformClients.FacebookMessenger
         public async Task SendMessage(string id, string content)
         {
             var user = await _mediator.Send(new GetSubscriberQuery(id, PlatformId));
-
-            await _apiClient.Send(new SendRequest(id, new Message(content, new[]
-            {
-                new QuickReply(await _translator.TranslateString("cancel-button", user.PreferredLanguage),
-                    new Payload(PayloadType.Cancel).ToJson())
-            }), MessageTags.AccountUpdate));
+            
+            await _apiClient.Send(new SendRequest(id, new Message(content, await GetCancelButton(user.PreferredLanguage)), MessageTags.AccountUpdate));
             
             _logger.LogInformation($"FacebookMessengerPlatformClient sent a generic message to user (uid: {id}) with content (content: {content})");
         }
@@ -57,13 +53,16 @@ namespace eru.PlatformClients.FacebookMessenger
                 await _apiClient.Send(new SendRequest(id, new Message(substitution), MessageTags.ConfirmedEventUpdate));
             }
             
-            await _apiClient.Send(new SendRequest(id, new Message(await _translator.TranslateString("closing-substitutions", user.PreferredLanguage), new[]
-            {
-                new QuickReply(await _translator.TranslateString("cancel-button", user.PreferredLanguage),
-                    new Payload(PayloadType.Cancel).ToJson())
-            }), MessageTags.ConfirmedEventUpdate));
+            await _apiClient.Send(new SendRequest(id, new Message(await _translator.TranslateString("closing-substitutions", user.PreferredLanguage), await GetCancelButton(user.PreferredLanguage)), MessageTags.ConfirmedEventUpdate));
             
             _logger.LogInformation($"FacebookMessengerPlatformClient sent substitutions to user (uid: {id}");
         }
+
+        private async Task<IEnumerable<QuickReply>> GetCancelButton(string lang)
+            => new[]
+            {
+                new QuickReply(await _translator.TranslateString("cancel-button", lang),
+                    new Payload(PayloadType.Cancel).ToJson())
+            };
     }
 }

@@ -32,22 +32,22 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
 
         protected override async Task<IncompleteUser> UpdateUserBase(IncompleteUser user, string data)
         {
-            user.ClassId = data;
-            await _confirmHandler.ShowInstruction(user);
+            var usr = user;
             
-            return user;
+            usr.ClassId = data;
+            await _confirmHandler.ShowInstruction(usr);
+
+            return usr;
         }
 
         protected override async Task ShowInstructionBase(IncompleteUser user, int page)
         {
-            var response = new SendRequest(user.Id, new Message(await _translator.TranslateString("class-selection", user.PreferredLanguage), await GetClassSelector(user.Year, page, user.PreferredLanguage)));
-            await _apiClient.Send(response);
+            await _apiClient.Send(new SendRequest(user.Id, new Message(await _translator.TranslateString("class-selection", user.PreferredLanguage), await GetClassSelector(user.Year, page, user.PreferredLanguage))));
         }
 
         protected override async Task UnsupportedCommandBase(IncompleteUser user)
         {
-            var response = new SendRequest(user.Id, new Message(await _translator.TranslateString("unsupported-command", user.PreferredLanguage), await GetClassSelector(user.Year, user.LastPage, user.PreferredLanguage)));
-            await _apiClient.Send(response);
+            await _apiClient.Send(new SendRequest(user.Id, new Message(await _translator.TranslateString("unsupported-command", user.PreferredLanguage), await GetClassSelector(user.Year, user.LastPage, user.PreferredLanguage))));
         }
 
         private async Task<IEnumerable<QuickReply>> GetClassSelector(int year, int page, string lang)

@@ -31,8 +31,7 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
             _dbContext.IncompleteUsers.Remove(user);
             await _dbContext.SaveChangesAsync(CancellationToken.None);
             
-            var response = new SendRequest(uid, new Message(await _translator.TranslateString("subscription-cancelled", user.PreferredLanguage)));
-            await _apiClient.Send(response);
+            await _apiClient.Send(new SendRequest(uid, new Message(await _translator.TranslateString("subscription-cancelled", user.PreferredLanguage))));
         }
     }
 }

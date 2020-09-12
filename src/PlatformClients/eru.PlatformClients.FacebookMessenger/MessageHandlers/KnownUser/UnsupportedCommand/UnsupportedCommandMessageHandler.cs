@@ -29,12 +29,11 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser.Unsupp
             var uid = message.Sender.Id;
             var user = await _mediator.Send(new GetSubscriberQuery(uid, FacebookMessengerPlatformClient.PId));
             
-            var response = new SendRequest(uid, new Message(await _translator.TranslateString("unsupported-command", user.PreferredLanguage), new[]
+            await _apiClient.Send(new SendRequest(uid, new Message(await _translator.TranslateString("unsupported-command", user.PreferredLanguage), new[]
             {
                 new QuickReply(await _translator.TranslateString("cancel-button", user.PreferredLanguage),
                     new Payload(PayloadType.Cancel).ToJson())
-            }));
-            await _apiClient.Send(response);
+            })));
         }
     }
 }

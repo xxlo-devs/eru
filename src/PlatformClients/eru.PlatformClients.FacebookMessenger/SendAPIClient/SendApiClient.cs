@@ -17,22 +17,21 @@ namespace eru.PlatformClients.FacebookMessenger.SendAPIClient
 
         public SendApiClient(IHttpClientFactory factory, IConfiguration configuration, ILogger<SendApiClient> logger)
         {
-            _client = factory.CreateClient();
+            _client = factory.CreateClient(FacebookMessengerPlatformClient.PId);
             _configuration = configuration;
             _logger = logger;
         }
         
         public async Task Send(SendRequest request)
         {
-            const string graphEndpoint = "https://graph.facebook.com/v8.0/me/messages";
             var accessToken = $"?access_token={_configuration["PlatformClients:FacebookMessenger:AccessToken"]}";
             
             var json = JsonSerializer.Serialize(request, new JsonSerializerOptions {IgnoreNullValues = true});
             var content = new StringContent(json, Encoding.Default, "application/json");
 
-            _logger.LogTrace($"FacebookMessenger Send API Client: trying to send a message (message: {json}) to URL: {graphEndpoint}{accessToken}");
+            _logger.LogTrace($"FacebookMessenger Send API Client: trying to send a message (message: {json}) to URL: {_client.BaseAddress}{accessToken}");
             
-            var httpRequest = await _client.PostAsync($"{graphEndpoint}{accessToken}", content);
+            var httpRequest = await _client.PostAsync(accessToken, content);
             var httpResponse = await httpRequest.Content.ReadAsStringAsync();
             
             if (!httpRequest.IsSuccessStatusCode)
