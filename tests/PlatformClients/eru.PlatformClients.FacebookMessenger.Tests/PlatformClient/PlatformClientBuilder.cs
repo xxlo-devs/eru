@@ -44,11 +44,11 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.PlatformClient
         private void SetupTranslator()
         {
             TranslatorMock = new Mock<ITranslator<FacebookMessengerPlatformClient>>();
-            TranslatorMock.Setup(x => x.TranslateString("closing-substitutions", "en")).Returns(Task.FromResult("If you want to stop getting these notifications, just click Cancel."));
-            TranslatorMock.Setup(x => x.TranslateString("new-substitutions", "en")).Returns(Task.FromResult("Here are substitutions for the next day!"));
-            TranslatorMock.Setup(x => x.TranslateString("substitution", "en")).Returns(Task.FromResult("Teacher {0} on {1} lesson (course: {2}) will be substituted by teacher {3} in {4} room. School notes: {5}."));
-            TranslatorMock.Setup(x => x.TranslateString("cancellation", "en")).Returns(Task.FromResult("Lesson {0} (subject: {1}, teacher: {2}, room: {3}) is cancelled. School note: {4}."));
-            TranslatorMock.Setup(x => x.TranslateString("cancel-button", "en")).Returns(Task.FromResult("Cancel"));
+            TranslatorMock.Setup(x => x.TranslateString("closing-substitutions", "en")).Returns(Task.FromResult("closing-substitution-text"));
+            TranslatorMock.Setup(x => x.TranslateString("new-substitutions", "en")).Returns(Task.FromResult("new-substitutions-text"));
+            TranslatorMock.Setup(x => x.TranslateString("substitution", "en")).Returns(Task.FromResult("SUBSTITUTION | {0} | {1} | {2} | {3} | {4} | {5}"));
+            TranslatorMock.Setup(x => x.TranslateString("cancellation", "en")).Returns(Task.FromResult("CANCELLATION | {0} | {1} | {2} | {3} | {4}"));
+            TranslatorMock.Setup(x => x.TranslateString("cancel-button", "en")).Returns(Task.FromResult("cancel-button-text"));
         }
 
         private void SetupApiClient()
