@@ -1,20 +1,11 @@
-﻿using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using eru.Application.Classes.Queries.GetClasses;
-using eru.Application.Common.Interfaces;
-using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.RegistrationSteps.GatherClass;
+﻿using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.RegistrationSteps.GatherClass;
 using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.RegistrationSteps.GatherYear;
 using eru.PlatformClients.FacebookMessenger.RegistrationDb.Entities;
 using eru.PlatformClients.FacebookMessenger.RegistrationDb.Enums;
 using eru.PlatformClients.FacebookMessenger.ReplyPayload;
 using eru.PlatformClients.FacebookMessenger.SendAPIClient;
 using eru.PlatformClients.FacebookMessenger.SendAPIClient.Requests;
-using eru.PlatformClients.FacebookMessenger.SendAPIClient.Requests.Static;
 using FluentAssertions;
-using FluentAssertions.Common;
-using MediatR;
-using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -37,7 +28,8 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
                 x.Id == "sample-registering-user-with-lang" && x.PreferredLanguage == "en" && x.Year == 1 &&
                 x.LastPage == 0 && x.Stage == Stage.GatheredYear);
             
-            confirmHandler.Verify(x => x.ShowInstruction(It.Is<IncompleteUser>(y => y.Id == "sample-registering-user-with-lang"), 0), Times.Once);
+            confirmHandler.Verify(x => x.ShowInstruction(
+                    It.Is<IncompleteUser>(y => y.Id == "sample-registering-user-with-lang"), 0), Times.Once);
             confirmHandler.VerifyNoOtherCalls();
         }
 
@@ -52,19 +44,17 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             var handler = new GatherYearMessageHandler(mediator.Object, client.Object, MockBuilder.BuildFakeTranslator(), confirmHandler.Object, context, MockBuilder.BuildFakeLogger<GatherYearMessageHandler>());
             await handler.Handle(await context.IncompleteUsers.FindAsync("sample-registering-user-with-lang"), new Payload(PayloadType.Year, 1));
                         
-            var expectedMessage = new SendRequest("sample-registering-user-with-lang", new Message(
-                "year-selection-text", new[]
-                {
-                    new QuickReply("11", new Payload(PayloadType.Year, "11").ToJson()),
-                    new QuickReply("12", new Payload(PayloadType.Year, "12").ToJson()),
-                    new QuickReply("cancel-button-text", new Payload(PayloadType.Cancel).ToJson()),
-                    new QuickReply("<-", new Payload(PayloadType.Year, 0).ToJson())
-                }));
+            var expectedMessage = new SendRequest("sample-registering-user-with-lang", new Message("year-selection-text", new[] 
+            {
+                new QuickReply("11", new Payload(PayloadType.Year, "11").ToJson()),
+                new QuickReply("12", new Payload(PayloadType.Year, "12").ToJson()),
+                new QuickReply("cancel-button-text", new Payload(PayloadType.Cancel).ToJson()),
+                new QuickReply("<-", new Payload(PayloadType.Year, 0).ToJson())
+            }));
             
-            client.Verify(x => x.Send(It.Is<SendRequest>(
-                    y => y.IsEquivalentTo(expectedMessage))
-                )
-            );
+            client.Verify(x => x.Send(
+                It.Is<SendRequest>(y => y.IsEquivalentTo(expectedMessage))
+                ));
             client.VerifyNoOtherCalls();
         }
 
@@ -83,27 +73,26 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
                 x.Id == "sample-registering-user-with-lang" && x.PreferredLanguage == "en" &&
                 x.LastPage == 0 && x.Stage == Stage.GatheredLanguage);
             
-            var expectedMessage = new SendRequest("sample-registering-user-with-lang", new Message(
-                "year-selection-text", new[]
-                {
-                    new QuickReply("1", new Payload(PayloadType.Year, "1").ToJson()),
-                    new QuickReply("2", new Payload(PayloadType.Year, "2").ToJson()),
-                    new QuickReply("3", new Payload(PayloadType.Year, "3").ToJson()),
-                    new QuickReply("4", new Payload(PayloadType.Year, "4").ToJson()),
-                    new QuickReply("5", new Payload(PayloadType.Year, "5").ToJson()),
-                    new QuickReply("6", new Payload(PayloadType.Year, "6").ToJson()),
-                    new QuickReply("7", new Payload(PayloadType.Year, "7").ToJson()),
-                    new QuickReply("8", new Payload(PayloadType.Year, "8").ToJson()),
-                    new QuickReply("9", new Payload(PayloadType.Year, "9").ToJson()),
-                    new QuickReply("10", new Payload(PayloadType.Year, "10").ToJson()),
-                    new QuickReply("cancel-button-text", new Payload(PayloadType.Cancel).ToJson()),
-                    new QuickReply("->", new Payload(PayloadType.Year, 1).ToJson())
-                }));
+            var expectedMessage = new SendRequest("sample-registering-user-with-lang", new Message("year-selection-text", new[] 
+            {
+                new QuickReply("1", new Payload(PayloadType.Year, "1").ToJson()),
+                new QuickReply("2", new Payload(PayloadType.Year, "2").ToJson()),
+                new QuickReply("3", new Payload(PayloadType.Year, "3").ToJson()),
+                new QuickReply("4", new Payload(PayloadType.Year, "4").ToJson()),
+                new QuickReply("5", new Payload(PayloadType.Year, "5").ToJson()),
+                new QuickReply("6", new Payload(PayloadType.Year, "6").ToJson()),
+                new QuickReply("7", new Payload(PayloadType.Year, "7").ToJson()),
+                new QuickReply("8", new Payload(PayloadType.Year, "8").ToJson()),
+                new QuickReply("9", new Payload(PayloadType.Year, "9").ToJson()),
+                new QuickReply("10", new Payload(PayloadType.Year, "10").ToJson()),
+                new QuickReply("cancel-button-text", new Payload(PayloadType.Cancel).ToJson()),
+                new QuickReply("->", new Payload(PayloadType.Year, 1).ToJson())
+                
+            }));
             
-            client.Verify(x => x.Send(It.Is<SendRequest>(
-                    y => y.IsEquivalentTo(expectedMessage))
-                )
-            );
+            client.Verify(x => x.Send(
+                    It.Is<SendRequest>(y => y.IsEquivalentTo(expectedMessage))
+                    ));
             client.VerifyNoOtherCalls();
         }
 
@@ -122,27 +111,25 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
                 x.Id == "sample-registering-user-with-lang" && x.PreferredLanguage == "en" &&
                 x.LastPage == 0 && x.Stage == Stage.GatheredLanguage);
 
-            var expectedMessage = new SendRequest("sample-registering-user-with-lang", new Message(
-                "unsupported-command-text", new[]
-                {
-                    new QuickReply("1", new Payload(PayloadType.Year, "1").ToJson()),
-                    new QuickReply("2", new Payload(PayloadType.Year, "2").ToJson()),
-                    new QuickReply("3", new Payload(PayloadType.Year, "3").ToJson()),
-                    new QuickReply("4", new Payload(PayloadType.Year, "4").ToJson()),
-                    new QuickReply("5", new Payload(PayloadType.Year, "5").ToJson()),
-                    new QuickReply("6", new Payload(PayloadType.Year, "6").ToJson()),
-                    new QuickReply("7", new Payload(PayloadType.Year, "7").ToJson()),
-                    new QuickReply("8", new Payload(PayloadType.Year, "8").ToJson()),
-                    new QuickReply("9", new Payload(PayloadType.Year, "9").ToJson()),
-                    new QuickReply("10", new Payload(PayloadType.Year, "10").ToJson()),
-                    new QuickReply("cancel-button-text", new Payload(PayloadType.Cancel).ToJson()),
-                    new QuickReply("->", new Payload(PayloadType.Year, 1).ToJson())
-                }));
+            var expectedMessage = new SendRequest("sample-registering-user-with-lang", new Message("unsupported-command-text", new[] 
+            {
+                new QuickReply("1", new Payload(PayloadType.Year, "1").ToJson()),
+                new QuickReply("2", new Payload(PayloadType.Year, "2").ToJson()),
+                new QuickReply("3", new Payload(PayloadType.Year, "3").ToJson()),
+                new QuickReply("4", new Payload(PayloadType.Year, "4").ToJson()),
+                new QuickReply("5", new Payload(PayloadType.Year, "5").ToJson()),
+                new QuickReply("6", new Payload(PayloadType.Year, "6").ToJson()),
+                new QuickReply("7", new Payload(PayloadType.Year, "7").ToJson()),
+                new QuickReply("8", new Payload(PayloadType.Year, "8").ToJson()),
+                new QuickReply("9", new Payload(PayloadType.Year, "9").ToJson()),
+                new QuickReply("10", new Payload(PayloadType.Year, "10").ToJson()),
+                new QuickReply("cancel-button-text", new Payload(PayloadType.Cancel).ToJson()),
+                new QuickReply("->", new Payload(PayloadType.Year, 1).ToJson())
+            }));
             
-            client.Verify(x => x.Send(It.Is<SendRequest>(
-                y => y.IsEquivalentTo(expectedMessage))
-                )
-            );
+            client.Verify(x => x.Send(
+                It.Is<SendRequest>(y => y.IsEquivalentTo(expectedMessage))
+                ));
             client.VerifyNoOtherCalls();
         }
     }

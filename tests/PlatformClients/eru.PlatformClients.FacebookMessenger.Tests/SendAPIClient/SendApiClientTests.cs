@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
@@ -8,8 +7,6 @@ using eru.Application.Common.Exceptions;
 using eru.PlatformClients.FacebookMessenger.SendAPIClient;
 using eru.PlatformClients.FacebookMessenger.SendAPIClient.Requests;
 using FluentAssertions;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using Moq;
 using Moq.Protected;
 using Xunit;
@@ -18,7 +15,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.SendAPIClient
 {
     public class SendApiClientTests
     {
-        private IHttpClientFactory SetupHttpClientFactory(HttpStatusCode responseCode, string responseBody, string expectedRequestBody)
+        private static IHttpClientFactory SetupHttpClientFactory(HttpStatusCode responseCode, string responseBody, string expectedRequestBody)
         {
             var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
             handlerMock.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(),

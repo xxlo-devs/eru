@@ -10,8 +10,6 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers
         [Fact]
         public async void ShouldRouteMessageFromKnownUserCorrectly()
         {
-            var builder = new IncomingMessageHandlerBuilder();
-
             var message = new Messaging
             {
                 Sender = new Sender{Id = "sample-subscriber"},
@@ -24,6 +22,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers
                 }
             };
             
+            var builder = new IncomingMessageHandlerBuilder();
             await builder.IncomingMessageHandler.Handle(message);
             
             builder.KnownUserMessageHandlerMock.Verify(x => x.Handle(message), Times.Once);
@@ -33,8 +32,6 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers
         [Fact]
         public async void ShouldRouteMessageFromRegisteringUserCorrectly()
         {
-            var builder = new IncomingMessageHandlerBuilder();
-
             var message = new Messaging
             {
                 Sender = new Sender{Id = "sample-registering-user"},
@@ -47,6 +44,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers
                 }
             };
             
+            var builder = new IncomingMessageHandlerBuilder();
             await builder.IncomingMessageHandler.Handle(message);
             
             builder.RegisteringUserMessageHandlerMock.Verify(x => x.Handle(message), Times.Once);
@@ -56,8 +54,6 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers
         [Fact]
         public async void ShouldRouteMessageFromUnknownUserCorrectly()
         {
-            var builder = new IncomingMessageHandlerBuilder();
-
             var message = new Messaging
             {
                 Sender = new Sender{Id = "sample-unknown-user"},
@@ -69,7 +65,8 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers
                     Text = "sample-message-text"
                 }
             };
-            
+         
+            var builder = new IncomingMessageHandlerBuilder();
             await builder.IncomingMessageHandler.Handle(message);
             
             builder.UnknownUserMessageHandlerMock.Verify(x => x.Handle(message), Times.Once);

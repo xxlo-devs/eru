@@ -1,13 +1,10 @@
-﻿using System.Collections.Generic;
-using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.RegistrationSteps.GatherLanguage;
+﻿using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.RegistrationSteps.GatherLanguage;
 using eru.PlatformClients.FacebookMessenger.MessageHandlers.UnknownUser;
 using eru.PlatformClients.FacebookMessenger.Middleware.Webhook.Messages;
 using eru.PlatformClients.FacebookMessenger.Middleware.Webhook.Messages.Properties;
 using eru.PlatformClients.FacebookMessenger.RegistrationDb.Enums;
 using FluentAssertions;
 using Hangfire;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 

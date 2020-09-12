@@ -4,7 +4,6 @@ using eru.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser.Unsupporte
 using eru.PlatformClients.FacebookMessenger.Middleware.Webhook.Messages;
 using eru.PlatformClients.FacebookMessenger.Middleware.Webhook.Messages.Properties;
 using eru.PlatformClients.FacebookMessenger.ReplyPayload;
-using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 

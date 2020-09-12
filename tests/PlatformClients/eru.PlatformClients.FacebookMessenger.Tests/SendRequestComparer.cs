@@ -1,14 +1,9 @@
 ﻿using System.Linq;
-using eru.PlatformClients.FacebookMessenger.ReplyPayload;
-using eru.PlatformClients.FacebookMessenger.SendAPIClient;
 using eru.PlatformClients.FacebookMessenger.SendAPIClient.Requests;
-using eru.PlatformClients.FacebookMessenger.SendAPIClient.Requests.Static;
-using FluentAssertions.Common;
-using Moq;
 
 namespace eru.PlatformClients.FacebookMessenger.Tests
 {
-    public static class MockSendApiClientExtensions
+    public static class SendRequestComparer
     {
         public static bool IsEquivalentTo(this SendRequest actual, SendRequest expected)
         {

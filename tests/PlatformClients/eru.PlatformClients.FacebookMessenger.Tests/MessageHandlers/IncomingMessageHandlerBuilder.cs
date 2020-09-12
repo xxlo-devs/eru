@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using eru.Application.Subscriptions.Queries.GetSubscriber;
-using eru.Domain.Entity;
 using eru.PlatformClients.FacebookMessenger.MessageHandlers;
 using eru.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser;
 using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser;
@@ -55,15 +51,15 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers
         }
         
         public IMessageHandler IncomingMessageHandler { get; set; }
-        public Mock<IServiceProvider> ServiceProviderMock { get; set; }
-        public ILogger<IncomingMessageHandler> FakeLogger { get; set; }
-        
-        public Mock<IMediator> MediatorMock { get; set; }
-        public IRegistrationDbContext FakeRegistrationDb { get; set; }
         
         public Mock<IKnownUserMessageHandler> KnownUserMessageHandlerMock { get; set; }
         public Mock<IRegisteringUserMessageHandler> RegisteringUserMessageHandlerMock { get; set; }
         public Mock<IUnknownUserMessageHandler> UnknownUserMessageHandlerMock { get; set; }
+        
+        private Mock<IServiceProvider> ServiceProviderMock { get; set; }
+        private ILogger<IncomingMessageHandler> FakeLogger { get; set; }
+        private Mock<IMediator> MediatorMock { get; set; }
+        private IRegistrationDbContext FakeRegistrationDb { get; set; }
     }
     
 }

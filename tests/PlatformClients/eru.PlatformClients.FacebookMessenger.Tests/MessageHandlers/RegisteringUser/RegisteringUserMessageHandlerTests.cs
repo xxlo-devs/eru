@@ -11,7 +11,6 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
         [Fact]
         public async void ShouldRouteCancellationRequestCorrectly()
         {
-            var builder = new RegisteringUserMessageHandlerBuilder();
             var message = new Messaging
             {
                 Sender = new Sender{Id = "sample-registering-user"},
@@ -25,6 +24,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
                 }
             };
 
+            var builder = new RegisteringUserMessageHandlerBuilder();
             await builder.RegisteringUserMessageHandler.Handle(message);
             
             builder.CancelRegistrationMessageHandlerMock.Verify(x => x.Handle(message), Times.Once);
@@ -34,7 +34,6 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
         [Fact]
         public async void ShouldRouteRequestFromCreatedUserCorrectly()
         {
-            var builder = new RegisteringUserMessageHandlerBuilder();
             var message = new Messaging
             {
                 Sender = new Sender{Id = "sample-registering-user"},
@@ -48,6 +47,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
                 }
             };
 
+            var builder = new RegisteringUserMessageHandlerBuilder();
             await builder.RegisteringUserMessageHandler.Handle(message);
 
             var user = await builder.FakeRegistrationDb.IncompleteUsers.FindAsync("sample-registering-user");
@@ -59,7 +59,6 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
         [Fact]
         public async void ShouldRouteRequestFromUserWithGatheredLanguageCorrectly()
         {
-            var builder = new RegisteringUserMessageHandlerBuilder();
             var message = new Messaging
             {
                 Sender = new Sender{Id = "sample-registering-user-with-lang"},
@@ -73,6 +72,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
                 }
             };
 
+            var builder = new RegisteringUserMessageHandlerBuilder();
             await builder.RegisteringUserMessageHandler.Handle(message);
 
             var user = await builder.FakeRegistrationDb.IncompleteUsers.FindAsync("sample-registering-user-with-lang");
@@ -84,7 +84,6 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
         [Fact]
         public async void ShouldRouteRequestFromUserWithGatheredYearCorrectly()
         {
-            var builder = new RegisteringUserMessageHandlerBuilder();
             var message = new Messaging
             {
                 Sender = new Sender{Id = "sample-registering-user-with-year"},
@@ -98,6 +97,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
                 }
             };
             
+            var builder = new RegisteringUserMessageHandlerBuilder();
             await builder.RegisteringUserMessageHandler.Handle(message);
             
             var user = await builder.FakeRegistrationDb.IncompleteUsers.FindAsync("sample-registering-user-with-year");
@@ -109,8 +109,6 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
         [Fact]
         public async void ShouldRouteRequestFromUserWithGatheredClassCorrectly()
         {
-            var builder = new RegisteringUserMessageHandlerBuilder();
-            
             var message = new Messaging
             {
                 Sender = new Sender{Id = "sample-registering-user-with-class"},
@@ -124,6 +122,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
                 }
             };
 
+            var builder = new RegisteringUserMessageHandlerBuilder();
             await builder.RegisteringUserMessageHandler.Handle(message);
             
             var user = await builder.FakeRegistrationDb.IncompleteUsers.FindAsync("sample-registering-user-with-class"); 

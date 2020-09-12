@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
-using eru.Application.Common.Interfaces;
+﻿using System.Globalization;
 using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.RegistrationSteps.GatherLanguage;
 using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.RegistrationSteps.GatherYear;
 using eru.PlatformClients.FacebookMessenger.RegistrationDb.Entities;
@@ -10,10 +6,7 @@ using eru.PlatformClients.FacebookMessenger.RegistrationDb.Enums;
 using eru.PlatformClients.FacebookMessenger.ReplyPayload;
 using eru.PlatformClients.FacebookMessenger.SendAPIClient;
 using eru.PlatformClients.FacebookMessenger.SendAPIClient.Requests;
-using eru.PlatformClients.FacebookMessenger.SendAPIClient.Requests.Static;
 using FluentAssertions;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -35,7 +28,8 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
                 x.Id == "sample-registering-user" && x.PreferredLanguage == "pl" && x.LastPage == 0 &&
                 x.Stage == Stage.GatheredLanguage);
             
-            yearHandler.Verify(x => x.ShowInstruction(It.Is<IncompleteUser>(y => y.Id == "sample-registering-user"), 0), Times.Once);
+            yearHandler.Verify(x 
+                => x.ShowInstruction(It.Is<IncompleteUser>(y => y.Id == "sample-registering-user"), 0), Times.Once);
             yearHandler.VerifyNoOtherCalls();
         }
 
@@ -49,18 +43,16 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             var handler = new GatherLanguageMessageHandler(MockBuilder.BuildFakeConfiguration(), client.Object, MockBuilder.BuildFakeTranslator(), yearHandler.Object, context, MockBuilder.BuildFakeLogger<GatherLanguageMessageHandler>());
             await handler.Handle(await context.IncompleteUsers.FindAsync("sample-registering-user"), new Payload(PayloadType.Lang, 0));
             
-            var expectedMessage = new SendRequest("sample-registering-user", new Message(
-                "greeting-text", new[]
-                {
-                    new QuickReply(new CultureInfo("en").DisplayName, new Payload(PayloadType.Lang, "en").ToJson()),
-                    new QuickReply(new CultureInfo("pl").DisplayName, new Payload(PayloadType.Lang, "pl").ToJson()),
-                    new QuickReply("cancel-button-text", new Payload(PayloadType.Cancel).ToJson())
-                }));
+            var expectedMessage = new SendRequest("sample-registering-user", new Message("greeting-text", new[] 
+            {
+                new QuickReply(new CultureInfo("en").DisplayName, new Payload(PayloadType.Lang, "en").ToJson()), 
+                new QuickReply(new CultureInfo("pl").DisplayName, new Payload(PayloadType.Lang, "pl").ToJson()), 
+                new QuickReply("cancel-button-text", new Payload(PayloadType.Cancel).ToJson())
+            }));
             
-            client.Verify(x => x.Send(It.Is<SendRequest>(
-                    y => y.IsEquivalentTo(expectedMessage))
-                )
-            );
+            client.Verify(x => x.Send(
+                It.Is<SendRequest>(y => y.IsEquivalentTo(expectedMessage))
+                ));
             client.VerifyNoOtherCalls();
         }
 
@@ -74,18 +66,16 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             var handler = new GatherLanguageMessageHandler(MockBuilder.BuildFakeConfiguration(), client.Object, MockBuilder.BuildFakeTranslator(), yearHandler.Object, context, MockBuilder.BuildFakeLogger<GatherLanguageMessageHandler>());
             await handler.ShowInstruction(await context.IncompleteUsers.FindAsync("sample-registering-user"));
 
-            var expectedMessage = new SendRequest("sample-registering-user", new Message(
-                "greeting-text", new[]
-                {
-                    new QuickReply(new CultureInfo("en").DisplayName, new Payload(PayloadType.Lang, "en").ToJson()),
-                    new QuickReply(new CultureInfo("pl").DisplayName, new Payload(PayloadType.Lang, "pl").ToJson()),
-                    new QuickReply("cancel-button-text", new Payload(PayloadType.Cancel).ToJson())
-                }));
+            var expectedMessage = new SendRequest("sample-registering-user", new Message("greeting-text", new[] 
+            {
+                new QuickReply(new CultureInfo("en").DisplayName, new Payload(PayloadType.Lang, "en").ToJson()),
+                new QuickReply(new CultureInfo("pl").DisplayName, new Payload(PayloadType.Lang, "pl").ToJson()),
+                new QuickReply("cancel-button-text", new Payload(PayloadType.Cancel).ToJson())
+            }));
             
-            client.Verify(x => x.Send(It.Is<SendRequest>(
-                    y => y.IsEquivalentTo(expectedMessage))
-                )
-            );
+            client.Verify(x => x.Send(
+                It.Is<SendRequest>(y => y.IsEquivalentTo(expectedMessage))
+                ));
             client.VerifyNoOtherCalls();
         }
 
@@ -107,10 +97,9 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
                     new QuickReply("cancel-button-text", new Payload(PayloadType.Cancel).ToJson())
                 }));
             
-            client.Verify(x => x.Send(It.Is<SendRequest>(
-                    y => y.IsEquivalentTo(expectedMessage))
-                )
-            );
+            client.Verify(x => x.Send(
+                It.Is<SendRequest>(y => y.IsEquivalentTo(expectedMessage))
+                ));
             client.VerifyNoOtherCalls();
         }
     }

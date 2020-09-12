@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,19 +6,18 @@ using eru.PlatformClients.FacebookMessenger.MessageHandlers;
 using eru.PlatformClients.FacebookMessenger.Middleware;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
+using HttpMethods = eru.PlatformClients.FacebookMessenger.Middleware.Webhook.Static.HttpMethods;
 
 namespace eru.PlatformClients.FacebookMessenger.Tests.Middleware
 {
     public class RecieveGraphEventTests
     {
-        private HttpContext BuildHttpContext(string request)
+        private static HttpContext BuildHttpContext(string request)
         {
             var httpContext = new Mock<HttpContext>();
-            httpContext.Setup(x => x.Request.Method).Returns("POST");
+            httpContext.Setup(x => x.Request.Method).Returns(HttpMethods.Post);
             httpContext.SetupProperty(x => x.Request.Body, new MemoryStream(Encoding.UTF8.GetBytes(request)));
             httpContext.SetupProperty(x => x.Response.Body, new MemoryStream());
             httpContext.SetupProperty(x => x.Response.StatusCode);
@@ -28,10 +25,10 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.Middleware
             return httpContext.Object;
         }
         
-        private async Task<string> GetStringBody(Stream str)
+        private static async Task<string> GetStringBody(Stream str)
         {
             str.Position = 0;
-            StreamReader reader = new StreamReader(str);
+            var reader = new StreamReader(str);
             return await reader.ReadToEndAsync();
         }
             
@@ -40,6 +37,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.Middleware
         {
             var messageHandler = new Mock<IMessageHandler>();
             var middleware = new FbMiddleware(MockBuilder.BuildFakeConfiguration(), messageHandler.Object, MockBuilder.BuildFakeLogger<FbMiddleware>());
+            
             var context = BuildHttpContext("{\"object\":\"page\",\"entry\":[{\"messaging\":[{\"sender\":{\"id\":\"<PSID>\"},\"recipient\":{\"id\":\"<PAGE_ID>\"},\"timestamp\":123456789,\"message\":{\"mid\":\"mid.1457764197618:41d102a3e1ae206a38\",\"text\":\"hello, world!\"}}]}]}");
             
             await middleware.InvokeAsync(context, requestDelegateContext => Task.CompletedTask);
@@ -54,6 +52,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.Middleware
         {
             var messageHandler = new Mock<IMessageHandler>();
             var middleware = new FbMiddleware(MockBuilder.BuildFakeConfiguration(), messageHandler.Object, MockBuilder.BuildFakeLogger<FbMiddleware>());
+            
             var context = BuildHttpContext("{\"object\":\"unknown\"}");
             
             await middleware.InvokeAsync(context, requestDelegateContext => Task.CompletedTask);
@@ -68,6 +67,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.Middleware
         {
             var messageHandler = new Mock<IMessageHandler>();
             var middleware = new FbMiddleware(MockBuilder.BuildFakeConfiguration(), messageHandler.Object, MockBuilder.BuildFakeLogger<FbMiddleware>());
+            
             var context = BuildHttpContext("{\"object\": \"page\", \"entry\": [{\"messaging\": [{\"message\": \"TEST_MESSAGE\"}]}]}");
             
             await middleware.InvokeAsync(context, requestDelegateContext => Task.CompletedTask);

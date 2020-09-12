@@ -1,12 +1,9 @@
-﻿using System.Threading.Tasks;
-using eru.Application.Common.Interfaces;
-using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.RegistrationEnd.CancelRegistration;
+﻿using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.RegistrationEnd.CancelRegistration;
 using eru.PlatformClients.FacebookMessenger.Middleware.Webhook.Messages;
 using eru.PlatformClients.FacebookMessenger.Middleware.Webhook.Messages.Properties;
 using eru.PlatformClients.FacebookMessenger.ReplyPayload;
 using eru.PlatformClients.FacebookMessenger.SendAPIClient;
 using eru.PlatformClients.FacebookMessenger.SendAPIClient.Requests;
-using eru.PlatformClients.FacebookMessenger.SendAPIClient.Requests.Static;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -43,10 +40,9 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             context.IncompleteUsers.Should().NotContain(x => x.Id == "sample-registering-user");
             
             var expectedMessage = new SendRequest("sample-registering-user", new FacebookMessenger.SendAPIClient.Requests.Message("subscription-cancelled-text"));
-            apiClient.Verify(x => x.Send(It.Is<SendRequest>(
-                    y => y.IsEquivalentTo(expectedMessage))
-                )
-            );
+            apiClient.Verify(x => x.Send(
+                It.Is<SendRequest>(y => y.IsEquivalentTo(expectedMessage))
+                ));
             apiClient.VerifyNoOtherCalls();
         }
     }

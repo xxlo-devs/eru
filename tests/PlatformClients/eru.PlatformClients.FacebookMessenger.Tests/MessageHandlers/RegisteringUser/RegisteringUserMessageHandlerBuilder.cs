@@ -56,9 +56,6 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
         
         public IRegisteringUserMessageHandler RegisteringUserMessageHandler { get; set; }
         
-        public Mock<IServiceProvider> ServiceProviderMock { get; set; }
-        public ILogger<RegisteringUserMessageHandler> FakeLogger { get; set; } 
-        
         public IRegistrationDbContext FakeRegistrationDb { get; set; }
         
         public Mock<ICancelRegistrationMessageHandler> CancelRegistrationMessageHandlerMock { get; set; } 
@@ -66,5 +63,9 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
         public Mock<IGatherLanguageMessageHandler> GatherLanguageMessageHandlerMock { get; set; }
         public Mock<IGatherYearMessageHandler> GatherYearMessageHandlerMock { get; set; }
         public Mock<IGatherClassMessageHandler> GatherClassMessageHandler { get; set; }
+        
+        private Mock<IServiceProvider> ServiceProviderMock { get; set; }
+        private ILogger<RegisteringUserMessageHandler> FakeLogger { get; set; } 
+
     }
 }
