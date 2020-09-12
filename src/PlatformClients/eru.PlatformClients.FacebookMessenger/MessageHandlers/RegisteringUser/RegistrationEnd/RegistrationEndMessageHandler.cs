@@ -24,10 +24,12 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
             if (payload.Type == PayloadType.Subscribe)
             {
                 await EndRegistration(user);
+                _logger.LogInformation($"EndRegistrationHandler {typeof(T).Name} successfully registered user {user.Id}");
                 return; 
             }
 
             await UnsupportedCommand(user);
+            _logger.LogInformation($"EndRegistrationHandler {typeof(T).Name} successfully sent UnsupportedCommand response to user {user.Id}");
         }
         
         protected abstract Task EndRegistration(IncompleteUser user);

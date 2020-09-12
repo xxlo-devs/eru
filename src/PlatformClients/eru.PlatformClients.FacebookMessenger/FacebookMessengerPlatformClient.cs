@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using eru.Application.Common.Interfaces;
 using eru.Application.Subscriptions.Queries.GetSubscriber;
@@ -15,7 +16,7 @@ namespace eru.PlatformClients.FacebookMessenger
     public class FacebookMessengerPlatformClient : IPlatformClient
     {
         public static string PId { get; } = "FacebookMessenger";
-        public string PlatformId { get; } = PId;
+        public string PlatformId => PId;
 
         private readonly ISendApiClient _apiClient;
         private readonly IMediator _mediator;
@@ -40,7 +41,7 @@ namespace eru.PlatformClients.FacebookMessenger
             }), MessageTags.AccountUpdate);
 
             await _apiClient.Send(message);
-            _logger.LogInformation($"eru.PlatformClients.FacebookMessenger: FacebookMessengerPlatformClient.SendMessage sent a generic message (uid: {id}, content: {content})");
+            _logger.LogInformation($"FacebookMessengerPlatformClient sent a generic message to user (uid: {id}) with content (content: {content})");
         }
 
         public async Task SendMessage(string id, IEnumerable<Substitution> substitutions)
@@ -75,7 +76,7 @@ namespace eru.PlatformClients.FacebookMessenger
             }), MessageTags.ConfirmedEventUpdate);
             await _apiClient.Send(req);
             
-            _logger.LogInformation($"eru.PlatformClients.FacebookMessenger: FacebookMessengerPlatformClient.SendMessage sent substitutions to user (uid: {id}");
+            _logger.LogInformation($"FacebookMessengerPlatformClient sent substitutions to user (uid: {id}");
         }
     }
 }

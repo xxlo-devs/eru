@@ -28,7 +28,7 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
         
         public async Task Handle(IncompleteUser user, Payload payload)
         {
-            _logger.LogTrace($"RegistrationMessageHandler {typeof(T).Name} got a request from user (id: {user.Id}) with payload: type - {payload.Type.ToString()}, id - {payload.Id}, page - {payload.Page.ToString()}");
+            _logger.LogTrace($"RegistrationMessageHandler {typeof(T).Name} got a request from user (id: {user.Id}) with payload (type - {payload.Type.ToString()}, id - {payload.Id}, page - {payload.Page.ToString()})");
             
             if (payload?.Id != null)
             {
@@ -52,7 +52,7 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
 
             _dbContext.IncompleteUsers.Update(user);
             await _dbContext.SaveChangesAsync(CancellationToken.None);
-            _logger.LogInformation($"{typeof(T).Name} successfully rendered page {page} for user {user.Id}");
+            _logger.LogInformation($"{typeof(T).Name} successfully sent page {page} for user {user.Id}");
         }
 
         private async Task UpdateUser(IncompleteUser user, string data)
@@ -69,7 +69,7 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
         private async Task UnsupportedCommand(IncompleteUser user)
         {
             await UnsupportedCommandBase(user);
-            _logger.LogInformation($"{typeof(T).Name} successfully rendered UnsupportedCommand for {user.Id}");
+            _logger.LogInformation($"{typeof(T).Name} successfully send UnsupportedCommand response to user {user.Id}");
         }
         
         protected async Task<IEnumerable<QuickReply>> GetSelector(Dictionary<string, string> items, int page, PayloadType payloadType, string displayCulture)
