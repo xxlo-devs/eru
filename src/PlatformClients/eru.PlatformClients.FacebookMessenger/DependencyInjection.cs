@@ -13,9 +13,9 @@ namespace eru.PlatformClients.FacebookMessenger
         public static IServiceCollection AddFacebookMessenger(this IServiceCollection services)
         {
             services.AddFacebookMessengerRegistrationDatabase();
-            services.AddMessageHandling();
             services.AddSendApiClient();
-            services.AddTransient<FbMiddleware>();
+            services.AddMessageHandling();
+            services.AddFbMiddleware();
             services.AddTransient<IPlatformClient, FacebookMessengerPlatformClient>();
             
             return services;
@@ -23,7 +23,7 @@ namespace eru.PlatformClients.FacebookMessenger
 
         public static IApplicationBuilder UseFacebookMessenger(this IApplicationBuilder app)
         {
-            app.Map("/fbwebhook", x => x.UseMiddleware<FbMiddleware>());
+            app.UseFbMiddleware();
             
             return app;
         }
