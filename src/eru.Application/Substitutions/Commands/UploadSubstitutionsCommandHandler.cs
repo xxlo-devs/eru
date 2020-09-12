@@ -64,6 +64,14 @@ namespace eru.Application.Substitutions.Commands
                     Teacher = substitution.Absent
                 });
             }
+
+            await _context.SubstitutionsRecords.AddAsync(new SubstitutionsRecord
+            {
+                Substitutions = data,
+                SubstitutionsDate = request.SubstitutionsDate,
+                UploadDateTime = request.UploadDateTime
+            }, cancellationToken);
+            
             await _context.SaveChangesAsync(cancellationToken);
             
             var temp = _context.Classes.ToDictionary(x => x.Id, x => new HashSet<Substitution>());
