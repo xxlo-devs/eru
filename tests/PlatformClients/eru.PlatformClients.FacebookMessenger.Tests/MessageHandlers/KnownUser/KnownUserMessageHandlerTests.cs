@@ -17,8 +17,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.KnownUser
         {
             var cancelHandler = new Mock<ICancelSubscriptionMessageHandler>();
             var unsupportedHandler = new Mock<IUnsupportedCommandMessageHandler>();
-            var logger = new Mock<ILogger<KnownUserMessageMessageHandler>>();
-
+            
             var message = new Messaging
             {
                 Sender = new Sender {Id = "sample-subscriber"},
@@ -32,7 +31,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.KnownUser
                 }
             };
             
-            var handler = new KnownUserMessageMessageHandler(cancelHandler.Object, unsupportedHandler.Object, logger.Object);
+            var handler = new KnownUserMessageMessageHandler(cancelHandler.Object, unsupportedHandler.Object, MockBuilder.BuildFakeLogger<KnownUserMessageMessageHandler>());
             await handler.Handle(message);
             
             cancelHandler.Verify(x => x.Handle(message));
@@ -45,7 +44,6 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.KnownUser
         {
             var cancelHandler = new Mock<ICancelSubscriptionMessageHandler>();
             var unsupportedHandler = new Mock<IUnsupportedCommandMessageHandler>();
-            var logger = new Mock<ILogger<KnownUserMessageMessageHandler>>();
 
             var message = new Messaging
             {
@@ -59,7 +57,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.KnownUser
                 }
             };
             
-            var handler = new KnownUserMessageMessageHandler(cancelHandler.Object, unsupportedHandler.Object, logger.Object);
+            var handler = new KnownUserMessageMessageHandler(cancelHandler.Object, unsupportedHandler.Object, MockBuilder.BuildFakeLogger<KnownUserMessageMessageHandler>());
             await handler.Handle(message);
             
             unsupportedHandler.Verify(x => x.Handle(message));

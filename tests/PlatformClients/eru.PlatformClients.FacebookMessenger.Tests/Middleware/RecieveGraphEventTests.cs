@@ -17,17 +17,6 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.Middleware
 {
     public class RecieveGraphEventTests
     {
-        private readonly IConfiguration _configuration;
-
-        public RecieveGraphEventTests()
-        {
-            _configuration = new ConfigurationBuilder().AddInMemoryCollection(new[]
-            {
-                new KeyValuePair<string, string>("PlatformClients:FacebookMessenger:VerifyToken", "sample-verify-token")
-            })
-                .Build();
-        }
-        
         private HttpContext BuildHttpContext(string request)
         {
             var httpContext = new Mock<HttpContext>();
@@ -50,8 +39,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.Middleware
         public async void CanRecieveGraphEvent()
         {
             var messageHandler = new Mock<IMessageHandler>();
-            var logger = new Mock<ILogger<FbMiddleware>>();
-            var middleware = new FbMiddleware(_configuration, messageHandler.Object, logger.Object);
+            var middleware = new FbMiddleware(MockBuilder.BuildFakeConfiguration(), messageHandler.Object, MockBuilder.BuildFakeLogger<FbMiddleware>());
             var context = BuildHttpContext("{\"object\":\"page\",\"entry\":[{\"messaging\":[{\"sender\":{\"id\":\"<PSID>\"},\"recipient\":{\"id\":\"<PAGE_ID>\"},\"timestamp\":123456789,\"message\":{\"mid\":\"mid.1457764197618:41d102a3e1ae206a38\",\"text\":\"hello, world!\"}}]}]}");
             
             await middleware.InvokeAsync(context, requestDelegateContext => Task.CompletedTask);
@@ -64,9 +52,8 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.Middleware
         [Fact]
         public async void DoesWebhookReturnNotFoundWhenSubscriptionTargetIsUnknown()
         {
-            var logger = new Mock<ILogger<FbMiddleware>>();
             var messageHandler = new Mock<IMessageHandler>();
-            var middleware = new FbMiddleware(_configuration, messageHandler.Object, logger.Object);
+            var middleware = new FbMiddleware(MockBuilder.BuildFakeConfiguration(), messageHandler.Object, MockBuilder.BuildFakeLogger<FbMiddleware>());
             var context = BuildHttpContext("{\"object\":\"unknown\"}");
             
             await middleware.InvokeAsync(context, requestDelegateContext => Task.CompletedTask);
@@ -79,9 +66,8 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.Middleware
         [Fact]
         public async void DoesWebhookReturnBadRequestWhenRequestIsInvalid()
         {
-            var logger = new Mock<ILogger<FbMiddleware>>();
             var messageHandler = new Mock<IMessageHandler>();
-            var middleware = new FbMiddleware(_configuration, messageHandler.Object, logger.Object);
+            var middleware = new FbMiddleware(MockBuilder.BuildFakeConfiguration(), messageHandler.Object, MockBuilder.BuildFakeLogger<FbMiddleware>());
             var context = BuildHttpContext("{\"object\": \"page\", \"entry\": [{\"messaging\": [{\"message\": \"TEST_MESSAGE\"}]}]}");
             
             await middleware.InvokeAsync(context, requestDelegateContext => Task.CompletedTask);

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
@@ -34,14 +35,14 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.SendAPIClient
                     };
                 });
 
+            var clientMock = new HttpClient(handlerMock.Object) {BaseAddress = new Uri("https://example.com")};
             var factoryMock = new Mock<IHttpClientFactory>();
-            factoryMock.Setup(x => x.CreateClient(string.Empty)).Returns(new HttpClient(handlerMock.Object));
+            factoryMock.Setup(x => x.CreateClient(FacebookMessengerPlatformClient.PId)).Returns(clientMock);
             
-            var config = new ConfigurationBuilder().AddInMemoryCollection(new[] {new KeyValuePair<string, string>("PlatformClients:FacebookMessenger:AccessToken", "sample-access-token")}).Build();
             
             var request = new SendRequest("sample-subscriber", new Message("hello, world!"));
             
-            var apiClient = new SendApiClient(factoryMock.Object, config, new Mock<ILogger<SendApiClient>>().Object);
+            var apiClient = new SendApiClient(factoryMock.Object, MockBuilder.BuildFakeConfiguration(), MockBuilder.BuildFakeLogger<SendApiClient>());
             await apiClient.Send(request);
         }
 
@@ -62,14 +63,13 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.SendAPIClient
                     };
                 });
 
+            var clientMock = new HttpClient(handlerMock.Object) {BaseAddress = new Uri("https://example.com")};
             var factoryMock = new Mock<IHttpClientFactory>();
-            factoryMock.Setup(x => x.CreateClient(string.Empty)).Returns(new HttpClient(handlerMock.Object));
-            
-            var config = new ConfigurationBuilder().AddInMemoryCollection(new[] {new KeyValuePair<string, string>("PlatformClients:FacebookMessenger:AccessToken", "sample-access-token")}).Build();
+            factoryMock.Setup(x => x.CreateClient(FacebookMessengerPlatformClient.PId)).Returns(clientMock);
             
             var request = new SendRequest("sample-subscriber", new Message("hello, world!"));
             
-            var apiClient = new SendApiClient(factoryMock.Object, config, new Mock<ILogger<SendApiClient>>().Object);
+            var apiClient = new SendApiClient(factoryMock.Object, MockBuilder.BuildFakeConfiguration(), MockBuilder.BuildFakeLogger<SendApiClient>());
 
             try
             {

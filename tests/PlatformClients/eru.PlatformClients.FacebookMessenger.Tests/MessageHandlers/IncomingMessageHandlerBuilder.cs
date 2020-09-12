@@ -19,9 +19,9 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers
         public IncomingMessageHandlerBuilder()
         {
             BuildServiceProvider();
-            SetupLogger();
+            FakeLogger = MockBuilder.BuildFakeLogger<IncomingMessageHandler>();
             
-            IncomingMessageHandler = new IncomingMessageHandler(ServiceProviderMock.Object, LoggerMock.Object);
+            IncomingMessageHandler = new IncomingMessageHandler(ServiceProviderMock.Object, FakeLogger);
         }
 
         public void VerifyNoOtherCalls()
@@ -33,8 +33,9 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers
 
         private void BuildServiceProvider()
         {
-            SetupMediatorMock();
-            SetupFakeRegistrationDb();
+            MediatorMock = MockBuilder.BuildMediatorMock();
+            FakeRegistrationDb = new FakeRegistrationDb();
+            
             SetupMessageHandler();
             
             ServiceProviderMock = new Mock<IServiceProvider>();
@@ -45,34 +46,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers
             ServiceProviderMock.Setup(x => x.GetService(typeof(IRegisteringUserMessageHandler))).Returns(RegisteringUserMessageHandlerMock.Object);
             ServiceProviderMock.Setup(x => x.GetService(typeof(IUnknownUserMessageHandler))).Returns(UnknownUserMessageHandlerMock.Object);
         }
-
-        private void SetupLogger()
-        {
-            LoggerMock = new Mock<ILogger<IncomingMessageHandler>>();
-        }
         
-        private void SetupMediatorMock()
-        {
-            MediatorMock = new Mock<IMediator>();
-            MediatorMock.Setup(x => x.Send(It.IsAny<GetSubscriberQuery>(), It.IsAny<CancellationToken>())).Returns(
-                (GetSubscriberQuery query, CancellationToken cancellationToken) =>
-                {
-                    if (query.Id == "sample-subscriber" && query.Platform == FacebookMessengerPlatformClient.PId)
-                        return Task.FromResult(new Subscriber
-                        {
-                            Id = "sample-subscriber", Platform = FacebookMessengerPlatformClient.PId,
-                            PreferredLanguage = "en", Class = "sample-class"
-                        });
-                    else
-                        return Task.FromResult<Subscriber>(null);
-                });
-        }
-        
-        private void SetupFakeRegistrationDb()
-        {
-            FakeRegistrationDb = new FakeRegistrationDb();
-        }
-
         private void SetupMessageHandler()
         {
             KnownUserMessageHandlerMock = new Mock<IKnownUserMessageHandler>();
@@ -82,7 +56,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers
         
         public IMessageHandler IncomingMessageHandler { get; set; }
         public Mock<IServiceProvider> ServiceProviderMock { get; set; }
-        public Mock<ILogger<IncomingMessageHandler>> LoggerMock { get; set; }
+        public ILogger<IncomingMessageHandler> FakeLogger { get; set; }
         
         public Mock<IMediator> MediatorMock { get; set; }
         public IRegistrationDbContext FakeRegistrationDb { get; set; }

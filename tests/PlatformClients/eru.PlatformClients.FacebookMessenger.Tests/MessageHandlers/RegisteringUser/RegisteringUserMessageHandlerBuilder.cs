@@ -16,9 +16,9 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
         public RegisteringUserMessageHandlerBuilder()
         {
             BuildServiceProvider();
-            SetupLogger();
+            FakeLogger = MockBuilder.BuildFakeLogger<RegisteringUserMessageHandler>();
             
-            RegisteringUserMessageHandler = new RegisteringUserMessageHandler(ServiceProviderMock.Object, LoggerMock.Object);
+            RegisteringUserMessageHandler = new RegisteringUserMessageHandler(ServiceProviderMock.Object, FakeLogger);
         }
 
         public void VerifyNoOtherCalls()
@@ -32,7 +32,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
         
         private void BuildServiceProvider()
         {
-            SetupRegistrationDb();
+            FakeRegistrationDb = new FakeRegistrationDb();
             SetupMessageHandling();
             
             ServiceProviderMock = new Mock<IServiceProvider>();
@@ -43,16 +43,6 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             ServiceProviderMock.Setup(x => x.GetService(typeof(IGatherLanguageMessageHandler))).Returns(GatherLanguageMessageHandlerMock.Object);
             ServiceProviderMock.Setup(x => x.GetService(typeof(IGatherYearMessageHandler))).Returns(GatherYearMessageHandlerMock.Object);
             ServiceProviderMock.Setup(x => x.GetService(typeof(IGatherClassMessageHandler))).Returns(GatherClassMessageHandler.Object);
-        }
-
-        private void SetupLogger()
-        {
-            LoggerMock = new Mock<ILogger<RegisteringUserMessageHandler>>();
-        }
-
-        private void SetupRegistrationDb()
-        {
-            FakeRegistrationDb = new FakeRegistrationDb();
         }
         
         private void SetupMessageHandling()
@@ -67,7 +57,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
         public IRegisteringUserMessageHandler RegisteringUserMessageHandler { get; set; }
         
         public Mock<IServiceProvider> ServiceProviderMock { get; set; }
-        public Mock<ILogger<RegisteringUserMessageHandler>> LoggerMock { get; set; } 
+        public ILogger<RegisteringUserMessageHandler> FakeLogger { get; set; } 
         
         public IRegistrationDbContext FakeRegistrationDb { get; set; }
         

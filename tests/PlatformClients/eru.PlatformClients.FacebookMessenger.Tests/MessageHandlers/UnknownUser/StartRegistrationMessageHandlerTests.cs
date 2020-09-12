@@ -19,8 +19,6 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.UnknownUse
         public async void ShouldStartRegistrationCorrectly()
         {
             var context = new FakeRegistrationDb();
-            var config = new ConfigurationBuilder()
-                .AddInMemoryCollection(new[] {new KeyValuePair<string, string>("CultureSettings:DefaultCulture", "en")}).Build();
             var langHandlerMock = new Mock<IGatherLanguageMessageHandler>();
             var backgroundJobClientMock = new Mock<IBackgroundJobClient>();
             
@@ -36,7 +34,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.UnknownUse
                 }
             };
             
-            var handler = new StartRegistrationMessageHandler(context, config, langHandlerMock.Object, backgroundJobClientMock.Object, new Mock<ILogger<StartRegistrationMessageHandler>>().Object);
+            var handler = new StartRegistrationMessageHandler(context, MockBuilder.BuildFakeConfiguration(), langHandlerMock.Object, backgroundJobClientMock.Object, MockBuilder.BuildFakeLogger<StartRegistrationMessageHandler>());
             await handler.Handle(message);
 
             context.IncompleteUsers.Should().ContainSingle(x =>

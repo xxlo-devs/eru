@@ -37,7 +37,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
                 }
             };
             
-            var handler = new CancelRegistrationMessageHandler(context, apiClient.Object, BuildFakeTranslator(), new Mock<ILogger<CancelRegistrationMessageHandler>>().Object);
+            var handler = new CancelRegistrationMessageHandler(context, apiClient.Object, MockBuilder.BuildFakeTranslator(), new Mock<ILogger<CancelRegistrationMessageHandler>>().Object);
             await handler.Handle(message);
             
             context.IncompleteUsers.Should().NotContain(x => x.Id == "sample-registering-user");
@@ -49,13 +49,6 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
                      && y.Message.QuickReplies == null
             )));
             apiClient.VerifyNoOtherCalls();
-        }
-
-        private ITranslator<FacebookMessengerPlatformClient> BuildFakeTranslator()
-        {
-            var translator = new Mock<ITranslator<FacebookMessengerPlatformClient>>();
-            translator.Setup(x => x.TranslateString("subscription-cancelled", "en")).Returns(Task.FromResult("subscription-cancelled-text"));
-            return translator.Object;
         }
     }
 }

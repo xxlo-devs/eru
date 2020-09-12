@@ -25,7 +25,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.KnownUser
         [Fact]
         public async void ShouldCancelSubscriptionCorrectly()
         {
-            var mediator = BuildMediatorMock();
+            var mediator = MockBuilder.BuildMediatorMock();
             var apiClient = new Mock<ISendApiClient>();
 
             var message = new Messaging
@@ -41,7 +41,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.KnownUser
                 }
             };
             
-            var handler = new CancelSubscriptionMessageHandler(mediator.Object, apiClient.Object, BuildFakeTranslator(), new Mock<ILogger<CancelSubscriptionMessageHandler>>().Object);
+            var handler = new CancelSubscriptionMessageHandler(mediator.Object, apiClient.Object, MockBuilder.BuildFakeTranslator(), MockBuilder.BuildFakeLogger<CancelSubscriptionMessageHandler>());
             await handler.Handle(message);
 
             mediator.Verify(x => x.Send(It.Is<GetSubscriberQuery>(y => y.Id == "sample-subscriber" && y.Platform == FacebookMessengerPlatformClient.PId), It.IsAny<CancellationToken>()), Times.Once);
@@ -55,33 +55,6 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.KnownUser
                      && y.Message.QuickReplies == null
             )));
             apiClient.VerifyNoOtherCalls();
-        }
-
-        private Mock<IMediator> BuildMediatorMock()
-        {
-            var mediator = new Mock<IMediator>();
-
-            mediator.Setup(x => x.Send(It.IsAny<GetSubscriberQuery>(), It.IsAny<CancellationToken>())).Returns(
-                (GetSubscriberQuery query, CancellationToken cancellationToken) =>
-                {
-                    if (query.Id == "sample-subscriber" && query.Platform == FacebookMessengerPlatformClient.PId)
-                        return Task.FromResult(new Subscriber
-                        {
-                            Id = "sample-subscriber", Platform = FacebookMessengerPlatformClient.PId,
-                            PreferredLanguage = "en", Class = "sample-class"
-                        });
-                    else
-                        return Task.FromResult<Subscriber>(null);
-                });
-
-            return mediator;
-        }
-        
-        private ITranslator<FacebookMessengerPlatformClient> BuildFakeTranslator()
-        {
-            var translator = new Mock<ITranslator<FacebookMessengerPlatformClient>>();
-            translator.Setup(x => x.TranslateString("subscription-cancelled", "en")).Returns(Task.FromResult("subscription-cancelled-text"));
-            return translator.Object;
         }
     }
 }

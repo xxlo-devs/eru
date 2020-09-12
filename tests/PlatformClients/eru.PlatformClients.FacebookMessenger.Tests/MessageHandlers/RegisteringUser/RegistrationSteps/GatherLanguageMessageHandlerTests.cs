@@ -28,7 +28,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             var client = new Mock<ISendApiClient>();
             var yearHandler = new Mock<IGatherYearMessageHandler>();
 
-            var handler = new GatherLanguageMessageHandler(BuildFakeConfiguration(), client.Object, BuildFakeTranslator(), yearHandler.Object, context, new Mock<ILogger<GatherLanguageMessageHandler>>().Object);
+            var handler = new GatherLanguageMessageHandler(MockBuilder.BuildFakeConfiguration(), client.Object, MockBuilder.BuildFakeTranslator(), yearHandler.Object, context, MockBuilder.BuildFakeLogger<GatherLanguageMessageHandler>());
             await handler.Handle(await context.IncompleteUsers.FindAsync("sample-registering-user"), new Payload(PayloadType.Lang, "pl"));
 
             context.IncompleteUsers.Should().ContainSingle(x =>
@@ -46,7 +46,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             var client = new Mock<ISendApiClient>();
             var yearHandler = new Mock<IGatherYearMessageHandler>();
 
-            var handler = new GatherLanguageMessageHandler(BuildFakeConfiguration(), client.Object, BuildFakeTranslator(), yearHandler.Object, context, new Mock<ILogger<GatherLanguageMessageHandler>>().Object);
+            var handler = new GatherLanguageMessageHandler(MockBuilder.BuildFakeConfiguration(), client.Object, MockBuilder.BuildFakeTranslator(), yearHandler.Object, context, MockBuilder.BuildFakeLogger<GatherLanguageMessageHandler>());
             await handler.Handle(await context.IncompleteUsers.FindAsync("sample-registering-user"), new Payload(PayloadType.Lang, 0));
             
             client.Verify(x => x.Send(It.Is<SendRequest>(
@@ -68,7 +68,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             var client = new Mock<ISendApiClient>();
             var yearHandler = new Mock<IGatherYearMessageHandler>();
 
-            var handler = new GatherLanguageMessageHandler(BuildFakeConfiguration(), client.Object, BuildFakeTranslator(), yearHandler.Object, context, new Mock<ILogger<GatherLanguageMessageHandler>>().Object);
+            var handler = new GatherLanguageMessageHandler(MockBuilder.BuildFakeConfiguration(), client.Object, MockBuilder.BuildFakeTranslator(), yearHandler.Object, context, MockBuilder.BuildFakeLogger<GatherLanguageMessageHandler>());
             await handler.ShowInstruction(await context.IncompleteUsers.FindAsync("sample-registering-user"));
 
             client.Verify(x => x.Send(It.Is<SendRequest>(
@@ -90,7 +90,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             var client = new Mock<ISendApiClient>();
             var yearHandler = new Mock<IGatherYearMessageHandler>();
 
-            var handler = new GatherLanguageMessageHandler(BuildFakeConfiguration(), client.Object, BuildFakeTranslator(), yearHandler.Object, context, new Mock<ILogger<GatherLanguageMessageHandler>>().Object);
+            var handler = new GatherLanguageMessageHandler(MockBuilder.BuildFakeConfiguration(), client.Object, MockBuilder.BuildFakeTranslator(), yearHandler.Object, context, MockBuilder.BuildFakeLogger<GatherLanguageMessageHandler>());
             await handler.Handle(await context.IncompleteUsers.FindAsync("sample-registering-user"), new Payload());
             
             client.Verify(x => x.Send(It.Is<SendRequest>(
@@ -103,29 +103,6 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
                      && y.Message.QuickReplies.Any(z => z.ContentType == QuickReplyContentTypes.Text && z.Title == new CultureInfo("pl").DisplayName && z.Payload == new Payload(PayloadType.Lang, "pl").ToJson())
             )));
             client.VerifyNoOtherCalls();
-        }
-
-        private IConfiguration BuildFakeConfiguration()
-        {
-            return new ConfigurationBuilder().AddInMemoryCollection(new[]
-            {
-                new KeyValuePair<string, string>("CultureSettings:DefaultCulture", "en"),
-                new KeyValuePair<string, string>("CultureSettings:AvailableCultures:0", "en"),
-                new KeyValuePair<string, string>("CultureSettings:AvailableCultures:1", "pl")
-            }).Build();
-        }
-        
-        private ITranslator<FacebookMessengerPlatformClient> BuildFakeTranslator()
-        {
-            var translator = new Mock<ITranslator<FacebookMessengerPlatformClient>>();
-            
-            translator.Setup(x => x.TranslateString("next-page", "en")).Returns(Task.FromResult("->"));
-            translator.Setup(x => x.TranslateString("previous-page", "en")).Returns(Task.FromResult("<-"));
-            translator.Setup(x => x.TranslateString("cancel-button", "en")).Returns(Task.FromResult("cancel-button-text"));
-            translator.Setup(x => x.TranslateString("unsupported-command", "en")).Returns(Task.FromResult("unsupported-command-text"));
-            translator.Setup(x => x.TranslateString("greeting", "en")).Returns(Task.FromResult("greeting-text"));
-
-            return translator.Object;
         }
     }
 }

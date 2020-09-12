@@ -17,18 +17,7 @@ using Xunit;
 namespace eru.PlatformClients.FacebookMessenger.Tests.Middleware
 {
     public class VerifyWebhookRequestTests
-    {
-        private readonly IConfiguration _configuration;
-
-        public VerifyWebhookRequestTests()
-        {
-            _configuration = new ConfigurationBuilder().AddInMemoryCollection(new[]
-            {
-                new KeyValuePair<string, string>("PlatformClients:FacebookMessenger:VerifyToken", "sample-verify-token")
-            })
-                .Build();
-        }
-        
+    { 
         private HttpContext BuildHttpContext(Dictionary<string, StringValues> queries)
         {
             var httpContext = new Mock<HttpContext>();
@@ -52,9 +41,8 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.Middleware
         [Fact]
         public async void CanVerifyWebhook()
         {
-            var logger = new Mock<ILogger<FbMiddleware>>();
             var messageHandler = new Mock<IMessageHandler>();
-            var middleware = new FbMiddleware(_configuration, messageHandler.Object, logger.Object);
+            var middleware = new FbMiddleware(MockBuilder.BuildFakeConfiguration(), messageHandler.Object, MockBuilder.BuildFakeLogger<FbMiddleware>());
             var context = BuildHttpContext(new Dictionary<string, StringValues>
             {
                 {"hub.mode", "subscribe"}, 
@@ -72,9 +60,8 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.Middleware
         [Fact]
         public async void CannotVerifyWebhookWithInvalidMode()
         {
-            var logger = new Mock<ILogger<FbMiddleware>>();
             var messageHandler = new Mock<IMessageHandler>();
-            var middleware = new FbMiddleware(_configuration, messageHandler.Object, logger.Object);
+            var middleware = new FbMiddleware(MockBuilder.BuildFakeConfiguration(), messageHandler.Object, MockBuilder.BuildFakeLogger<FbMiddleware>());
             var context = BuildHttpContext(new Dictionary<string, StringValues>
             {
                 {"hub.mode", "invalid-mode"}, 
@@ -92,9 +79,9 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.Middleware
         [Fact]
         public async void CannotVerifyWebhookWithInvalidToken()
         {
-            var logger = new Mock<ILogger<FbMiddleware>>();
+
             var messageHandler = new Mock<IMessageHandler>();
-            var middleware = new FbMiddleware(_configuration, messageHandler.Object, logger.Object);
+            var middleware = new FbMiddleware(MockBuilder.BuildFakeConfiguration(), messageHandler.Object, MockBuilder.BuildFakeLogger<FbMiddleware>());
             var context = BuildHttpContext(new Dictionary<string, StringValues>
             {
                 {"hub.mode", "subscribe"}, 
@@ -112,9 +99,8 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.Middleware
         [Fact]
         public async void CannotVerifyWebhookWithoutChallenge()
         {
-            var logger = new Mock<ILogger<FbMiddleware>>();
             var messageHandler = new Mock<IMessageHandler>();
-            var middleware = new FbMiddleware(_configuration, messageHandler.Object, logger.Object);
+            var middleware = new FbMiddleware(MockBuilder.BuildFakeConfiguration(), messageHandler.Object, MockBuilder.BuildFakeLogger<FbMiddleware>());
             var context = BuildHttpContext(new Dictionary<string, StringValues>
             {
                 {"hub.mode", "subscribe"}, 
