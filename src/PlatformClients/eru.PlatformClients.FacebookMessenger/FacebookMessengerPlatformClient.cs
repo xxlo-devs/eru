@@ -53,12 +53,8 @@ namespace eru.PlatformClients.FacebookMessenger
             {
                 var substitution = x.Cancelled ? string.Format(await _translator.TranslateString("cancellation", user.PreferredLanguage), x.Lesson, x.Subject, x.Teacher, x.Room, x.Note)
                     : string.Format(await _translator.TranslateString("substitution", user.PreferredLanguage), x.Teacher, x.Lesson, x.Subject, x.Substituting, x.Room, x.Note);
-                
-                await _apiClient.Send(new SendRequest(id, new Message(await _translator.TranslateString(substitution, user.PreferredLanguage), new[]
-                {
-                    new QuickReply(await _translator.TranslateString("cancel-button", user.PreferredLanguage),
-                        new Payload(PayloadType.Cancel).ToJson())
-                }), MessageTags.ConfirmedEventUpdate));
+
+                await _apiClient.Send(new SendRequest(id, new Message(substitution), MessageTags.ConfirmedEventUpdate));
             }
             
             await _apiClient.Send(new SendRequest(id, new Message(await _translator.TranslateString("closing-substitutions", user.PreferredLanguage), new[]

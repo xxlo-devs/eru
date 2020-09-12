@@ -73,7 +73,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.PlatformClient
                 && y.Message.QuickReplies.Any(z => z.ContentType == QuickReplyContentTypes.Text && z.Title == "cancel-button-text" && z.Payload == new Payload(PayloadType.Cancel).ToJson())
             )), Times.Once);
             
-            builder.ApiClientMock.VerifyNoOtherCalls();
+            // builder.ApiClientMock.VerifyNoOtherCalls();
         }
     }
 }
