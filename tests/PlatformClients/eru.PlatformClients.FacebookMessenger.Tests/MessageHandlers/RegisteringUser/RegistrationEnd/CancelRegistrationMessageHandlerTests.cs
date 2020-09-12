@@ -25,11 +25,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
         {
             var context = new FakeRegistrationDb();
             var apiClient = new Mock<ISendApiClient>();
-            var translator = new Mock<ITranslator<FacebookMessengerPlatformClient>>();
-            translator.Setup(x => x.TranslateString("subscription-cancelled", "en")).Returns(Task.FromResult("subscription-cancelled-text"));
-            var logger = new Mock<ILogger<CancelRegistrationMessageHandler>>();
-            
-            var handler = new CancelRegistrationMessageHandler(context, apiClient.Object, translator.Object, logger.Object);
+
             var message = new Messaging
             {
                 Sender = new Sender {Id = "sample-registering-user"},
@@ -42,8 +38,10 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
                     QuickReply = new QuickReply{Payload = new Payload(PayloadType.Cancel).ToJson()}
                 }
             };
-
+            
+            var handler = new CancelRegistrationMessageHandler(context, apiClient.Object, BuildFakeTranslator(), new Mock<ILogger<CancelRegistrationMessageHandler>>().Object);
             await handler.Handle(message);
+            
             context.IncompleteUsers.Should().NotContain(x => x.Id == "sample-registering-user");
             
             apiClient.Verify(x => x.Send(It.Is<SendRequest>(
@@ -53,6 +51,13 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
                      && y.Message.QuickReplies == null
             )));
             apiClient.VerifyNoOtherCalls();
+        }
+
+        private ITranslator<FacebookMessengerPlatformClient> BuildFakeTranslator()
+        {
+            var translator = new Mock<ITranslator<FacebookMessengerPlatformClient>>();
+            translator.Setup(x => x.TranslateString("subscription-cancelled", "en")).Returns(Task.FromResult("subscription-cancelled-text"));
+            return translator.Object;
         }
     }
 }

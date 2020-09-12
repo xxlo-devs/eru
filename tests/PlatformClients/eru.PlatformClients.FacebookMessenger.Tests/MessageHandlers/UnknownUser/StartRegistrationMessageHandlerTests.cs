@@ -19,9 +19,9 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.UnknownUse
         public async void ShouldStartRegistrationCorrectly()
         {
             var context = new FakeRegistrationDb();
-            var config = new ConfigurationBuilder().AddInMemoryCollection(new[] {new KeyValuePair<string, string>("CultureSettings:DefaultCulture", "en")}).Build();
+            var config = new ConfigurationBuilder()
+                .AddInMemoryCollection(new[] {new KeyValuePair<string, string>("CultureSettings:DefaultCulture", "en")}).Build();
             var langHandlerMock = new Mock<IGatherLanguageMessageHandler>();
-            var loggerMock = new Mock<ILogger<StartRegistrationMessageHandler>>();
 
             var message = new Messaging
             {
@@ -35,14 +35,15 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.UnknownUse
                 }
             };
             
-            var handler = new StartRegistrationMessageHandler(context, config, langHandlerMock.Object, loggerMock.Object);
+            var handler = new StartRegistrationMessageHandler(context, config, langHandlerMock.Object, new Mock<ILogger<StartRegistrationMessageHandler>>().Object);
             await handler.Handle(message);
 
             context.IncompleteUsers.Should().ContainSingle(x =>
                 x.Id == "sample-unknown-user" && x.PreferredLanguage == "en" && x.Year == 0 && x.ClassId == null &&
                 x.Stage == Stage.Created && x.LastPage == 0);
-            var contextUser = await context.IncompleteUsers.FindAsync("sample-unknown-user");
-            langHandlerMock.Verify(x => x.ShowInstruction(contextUser, 0));
+            
+            var user = await context.IncompleteUsers.FindAsync("sample-unknown-user");
+            langHandlerMock.Verify(x => x.ShowInstruction(user, 0));
             langHandlerMock.VerifyNoOtherCalls();
         }
     }

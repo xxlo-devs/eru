@@ -97,8 +97,9 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
                     QuickReply = new QuickReply{Payload = new Payload(PayloadType.Class).ToJson()}
                 }
             };
-
+            
             await builder.RegisteringUserMessageHandler.Handle(message);
+            
             var user = await builder.FakeRegistrationDb.IncompleteUsers.FindAsync("sample-registering-user-with-year");
             
             builder.GatherClassMessageHandler.Verify(x => x.Handle(user, It.Is<Payload>(y => y.Type == PayloadType.Class)));
@@ -109,6 +110,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
         public async void ShouldRouteRequestFromUserWithGatheredClassCorrectly()
         {
             var builder = new RegisteringUserMessageHandlerBuilder();
+            
             var message = new Messaging
             {
                 Sender = new Sender{Id = "sample-registering-user-with-class"},
@@ -123,7 +125,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             };
 
             await builder.RegisteringUserMessageHandler.Handle(message);
-
+            
             var user = await builder.FakeRegistrationDb.IncompleteUsers.FindAsync("sample-registering-user-with-class"); 
             
             builder.ConfirmSubscriptionMessageHandlerMock.Verify(x => x.Handle(user, It.Is<Payload>(y => y.Type == PayloadType.Subscribe)));

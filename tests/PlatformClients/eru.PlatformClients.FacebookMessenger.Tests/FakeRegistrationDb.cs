@@ -4,7 +4,7 @@ using eru.PlatformClients.FacebookMessenger.RegistrationDb.Entities;
 using eru.PlatformClients.FacebookMessenger.RegistrationDb.Enums;
 using Microsoft.EntityFrameworkCore;
 
-namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers
+namespace eru.PlatformClients.FacebookMessenger.Tests
 {
     public class FakeRegistrationDb : DbContext, IRegistrationDbContext
     {

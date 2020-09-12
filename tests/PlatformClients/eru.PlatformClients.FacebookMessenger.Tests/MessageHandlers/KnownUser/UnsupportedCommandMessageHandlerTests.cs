@@ -25,28 +25,10 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.KnownUser
         [Fact]
         public async void ShouldHandleRequestWithUnsupportedCommandCorrectly()
         {
-            var mediator = new Mock<IMediator>();
-            mediator.Setup(x => x.Send(It.IsAny<GetSubscriberQuery>(), It.IsAny<CancellationToken>())).Returns(
-                (GetSubscriberQuery query, CancellationToken cancellationToken) =>
-                {
-                    if (query.Id == "sample-subscriber" && query.Platform == FacebookMessengerPlatformClient.PId)
-                        return Task.FromResult(new Subscriber
-                        {
-                            Id = "sample-subscriber", Platform = FacebookMessengerPlatformClient.PId,
-                            PreferredLanguage = "en", Class = "sample-class"
-                        });
-                    else
-                    {
-                        return Task.FromResult<Subscriber>(null);
-                    }
-                });
+            var mediator = BuildMediatorMock();
             var apiClient = new Mock<ISendApiClient>();
-            var translator = new Mock<ITranslator<FacebookMessengerPlatformClient>>();
-            translator.Setup(x => x.TranslateString("unsupported-command", "en")).Returns(Task.FromResult("unsupported-command-text"));
-            translator.Setup(x => x.TranslateString("cancel-button", "en")).Returns(Task.FromResult("cancel-button-text"));
-            var logger = new Mock<ILogger<UnsupportedCommandMessageHandler>>();
             
-            var handler = new UnsupportedCommandMessageHandler(mediator.Object, apiClient.Object, translator.Object, logger.Object);
+            var handler = new UnsupportedCommandMessageHandler(mediator.Object, apiClient.Object, BuildFakeTranslator(), new Mock<ILogger<UnsupportedCommandMessageHandler>>().Object);
             var message = new Messaging
             {
                 Sender = new Sender {Id = "sample-subscriber"},
@@ -63,6 +45,33 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.KnownUser
             
             mediator.Verify(x => x.Send(It.Is<GetSubscriberQuery>(y => y.Id == "sample-subscriber" && y.Platform == FacebookMessengerPlatformClient.PId), It.IsAny<CancellationToken>()), Times.Once);
             mediator.VerifyNoOtherCalls();
+        }
+
+        private Mock<IMediator> BuildMediatorMock()
+        {
+            var mediator = new Mock<IMediator>();
+            mediator.Setup(x => x.Send(It.IsAny<GetSubscriberQuery>(), It.IsAny<CancellationToken>())).Returns(
+                (GetSubscriberQuery query, CancellationToken cancellationToken) =>
+                {
+                    if (query.Id == "sample-subscriber" && query.Platform == FacebookMessengerPlatformClient.PId)
+                        return Task.FromResult(new Subscriber
+                        {
+                            Id = "sample-subscriber", Platform = FacebookMessengerPlatformClient.PId,
+                            PreferredLanguage = "en", Class = "sample-class"
+                        });
+                    else
+                    {
+                        return Task.FromResult<Subscriber>(null);
+                    }
+                });
+            return mediator;
+        }
+        private ITranslator<FacebookMessengerPlatformClient> BuildFakeTranslator()
+        {
+            var translator = new Mock<ITranslator<FacebookMessengerPlatformClient>>();
+            translator.Setup(x => x.TranslateString("unsupported-command", "en")).Returns(Task.FromResult("unsupported-command-text"));
+            translator.Setup(x => x.TranslateString("cancel-button", "en")).Returns(Task.FromResult("cancel-button-text"));
+            return translator.Object;
         }
     }
 }

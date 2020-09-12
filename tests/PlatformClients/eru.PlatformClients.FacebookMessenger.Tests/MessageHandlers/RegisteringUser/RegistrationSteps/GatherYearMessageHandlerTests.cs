@@ -28,10 +28,9 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             var context = new FakeRegistrationDb();
             var mediator = new Mock<IMediator>();
             var client = new Mock<ISendApiClient>();
-            var translator = new Mock<ITranslator<FacebookMessengerPlatformClient>>();
             var confirmHandler = new Mock<IGatherClassMessageHandler>();
 
-            var handler = new GatherYearMessageHandler(mediator.Object, client.Object, translator.Object, confirmHandler.Object, context, new Mock<ILogger<GatherYearMessageHandler>>().Object);
+            var handler = new GatherYearMessageHandler(mediator.Object, client.Object, BuildFakeTranslator(), confirmHandler.Object, context, new Mock<ILogger<GatherYearMessageHandler>>().Object);
             await handler.Handle(await context.IncompleteUsers.FindAsync("sample-registering-user-with-lang"), new Payload(PayloadType.Year, "1"));
 
             context.IncompleteUsers.Should().ContainSingle(x =>
@@ -48,10 +47,9 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             var context = new FakeRegistrationDb();
             var mediator = BuildFakeMediator();
             var client = new Mock<ISendApiClient>();
-            var translator = BuildFakeTranslator();
             var confirmHandler = new Mock<IGatherClassMessageHandler>();
 
-            var handler = new GatherYearMessageHandler(mediator.Object, client.Object, translator.Object, confirmHandler.Object, context, new Mock<ILogger<GatherYearMessageHandler>>().Object);
+            var handler = new GatherYearMessageHandler(mediator.Object, client.Object, BuildFakeTranslator(), confirmHandler.Object, context, new Mock<ILogger<GatherYearMessageHandler>>().Object);
             await handler.Handle(await context.IncompleteUsers.FindAsync("sample-registering-user-with-lang"), new Payload(PayloadType.Year, 1));
                         
             client.Verify(x => x.Send(It.Is<SendRequest>(
@@ -73,10 +71,9 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             var context = new FakeRegistrationDb();
             var mediator = BuildFakeMediator();
             var client = new Mock<ISendApiClient>();
-            var translator = BuildFakeTranslator();
             var confirmHandler = new Mock<IGatherClassMessageHandler>();
 
-            var handler = new GatherYearMessageHandler(mediator.Object, client.Object, translator.Object, confirmHandler.Object, context, new Mock<ILogger<GatherYearMessageHandler>>().Object);
+            var handler = new GatherYearMessageHandler(mediator.Object, client.Object, BuildFakeTranslator(), confirmHandler.Object, context, new Mock<ILogger<GatherYearMessageHandler>>().Object);
             await handler.ShowInstruction(await context.IncompleteUsers.FindAsync("sample-registering-user-with-lang"));
             
             context.IncompleteUsers.Should().ContainSingle(x =>
@@ -110,10 +107,9 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             var context = new FakeRegistrationDb();
             var mediator = BuildFakeMediator();
             var client = new Mock<ISendApiClient>();
-            var translator = BuildFakeTranslator();
             var confirmHandler = new Mock<IGatherClassMessageHandler>();
 
-            var handler = new GatherYearMessageHandler(mediator.Object, client.Object, translator.Object, confirmHandler.Object, context, new Mock<ILogger<GatherYearMessageHandler>>().Object);
+            var handler = new GatherYearMessageHandler(mediator.Object, client.Object, BuildFakeTranslator(), confirmHandler.Object, context, new Mock<ILogger<GatherYearMessageHandler>>().Object);
             await handler.Handle(await context.IncompleteUsers.FindAsync("sample-registering-user-with-lang"), new Payload());
             
             context.IncompleteUsers.Should().ContainSingle(x =>
@@ -163,7 +159,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             return mediator;
         }
 
-        private Mock<ITranslator<FacebookMessengerPlatformClient>> BuildFakeTranslator()
+        private ITranslator<FacebookMessengerPlatformClient> BuildFakeTranslator()
         {
             var translator = new Mock<ITranslator<FacebookMessengerPlatformClient>>();
             
@@ -172,8 +168,8 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             translator.Setup(x => x.TranslateString("cancel-button", "en")).Returns(Task.FromResult("cancel-button-text"));
             translator.Setup(x => x.TranslateString("unsupported-command", "en")).Returns(Task.FromResult("unsupported-command-text"));
             translator.Setup(x => x.TranslateString("year-selection", "en")).Returns(Task.FromResult("year-selection-text"));
-            
-            return translator;
+
+            return translator.Object;
         }
     }
 }
