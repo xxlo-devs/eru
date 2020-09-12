@@ -24,7 +24,7 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser
         {
             if (message?.Message?.QuickReply?.Payload != null)
             {
-                var payload = JsonSerializer.Deserialize<Payload>(message?.Message?.QuickReply?.Payload,
+                var payload = JsonSerializer.Deserialize<Payload>(message.Message?.QuickReply?.Payload,
                     new JsonSerializerOptions
                     {
                         IgnoreNullValues = true,

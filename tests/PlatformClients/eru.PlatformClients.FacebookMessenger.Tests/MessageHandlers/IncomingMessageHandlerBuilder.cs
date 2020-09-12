@@ -14,10 +14,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers
     {
         public IncomingMessageHandlerBuilder()
         {
-            BuildServiceProvider();
-            FakeLogger = MockBuilder.BuildFakeLogger<IncomingMessageHandler>();
-            
-            IncomingMessageHandler = new IncomingMessageHandler(ServiceProviderMock.Object, FakeLogger);
+            IncomingMessageHandler = new IncomingMessageHandler(BuildServiceProvider(), MockBuilder.BuildFakeLogger<IncomingMessageHandler>());
         }
 
         public void VerifyNoOtherCalls()
@@ -27,23 +24,22 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers
             UnknownUserMessageHandlerMock.VerifyNoOtherCalls();
         }
 
-        private void BuildServiceProvider()
+        private IServiceProvider BuildServiceProvider()
         {
-            MediatorMock = MockBuilder.BuildMediatorMock();
-            FakeRegistrationDb = new FakeRegistrationDb();
+            SetupMessageHandling();
             
-            SetupMessageHandler();
+            var serviceProviderMock = new Mock<IServiceProvider>();
             
-            ServiceProviderMock = new Mock<IServiceProvider>();
-            
-            ServiceProviderMock.Setup(x => x.GetService(typeof(IMediator))).Returns(MediatorMock.Object);
-            ServiceProviderMock.Setup(x => x.GetService(typeof(IRegistrationDbContext))).Returns(FakeRegistrationDb);
-            ServiceProviderMock.Setup(x => x.GetService(typeof(IKnownUserMessageHandler))).Returns(KnownUserMessageHandlerMock.Object);
-            ServiceProviderMock.Setup(x => x.GetService(typeof(IRegisteringUserMessageHandler))).Returns(RegisteringUserMessageHandlerMock.Object);
-            ServiceProviderMock.Setup(x => x.GetService(typeof(IUnknownUserMessageHandler))).Returns(UnknownUserMessageHandlerMock.Object);
+            serviceProviderMock.Setup(x => x.GetService(typeof(IMediator))).Returns(MockBuilder.BuildMediatorMock().Object);
+            serviceProviderMock.Setup(x => x.GetService(typeof(IRegistrationDbContext))).Returns(new FakeRegistrationDb());
+            serviceProviderMock.Setup(x => x.GetService(typeof(IKnownUserMessageHandler))).Returns(KnownUserMessageHandlerMock.Object);
+            serviceProviderMock.Setup(x => x.GetService(typeof(IRegisteringUserMessageHandler))).Returns(RegisteringUserMessageHandlerMock.Object);
+            serviceProviderMock.Setup(x => x.GetService(typeof(IUnknownUserMessageHandler))).Returns(UnknownUserMessageHandlerMock.Object);
+
+            return serviceProviderMock.Object;
         }
         
-        private void SetupMessageHandler()
+        private void SetupMessageHandling()
         {
             KnownUserMessageHandlerMock = new Mock<IKnownUserMessageHandler>();
             RegisteringUserMessageHandlerMock = new Mock<IRegisteringUserMessageHandler>();
@@ -55,11 +51,6 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers
         public Mock<IKnownUserMessageHandler> KnownUserMessageHandlerMock { get; set; }
         public Mock<IRegisteringUserMessageHandler> RegisteringUserMessageHandlerMock { get; set; }
         public Mock<IUnknownUserMessageHandler> UnknownUserMessageHandlerMock { get; set; }
-        
-        private Mock<IServiceProvider> ServiceProviderMock { get; set; }
-        private ILogger<IncomingMessageHandler> FakeLogger { get; set; }
-        private Mock<IMediator> MediatorMock { get; set; }
-        private IRegistrationDbContext FakeRegistrationDb { get; set; }
     }
     
 }

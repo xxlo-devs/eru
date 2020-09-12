@@ -35,7 +35,11 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.KnownUser
 
             await handler.Handle(message);
             
-            mediator.Verify(x => x.Send(It.Is<GetSubscriberQuery>(y => y.Id == "sample-subscriber" && y.Platform == FacebookMessengerPlatformClient.PId), It.IsAny<CancellationToken>()), Times.Once);
+            mediator.Verify(
+                x => x.Send(
+                    It.Is<GetSubscriberQuery>(y =>
+                        y.Id == "sample-subscriber" && y.Platform == FacebookMessengerPlatformClient.PId),
+                    It.IsAny<CancellationToken>()), Times.Once);
             mediator.VerifyNoOtherCalls();
             
             var expectedMessage = new SendRequest("sample-subscriber", new FacebookMessenger.SendAPIClient.Requests.Message("unsupported-command-text", new[]

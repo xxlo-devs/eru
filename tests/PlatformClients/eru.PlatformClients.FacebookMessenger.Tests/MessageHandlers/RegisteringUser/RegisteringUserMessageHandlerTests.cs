@@ -52,7 +52,8 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
 
             var user = await builder.FakeRegistrationDb.IncompleteUsers.FindAsync("sample-registering-user");
             
-            builder.GatherLanguageMessageHandlerMock.Verify(x => x.Handle(user, It.Is<Payload>(y => y.Type == PayloadType.Lang)));
+            builder.GatherLanguageMessageHandlerMock.Verify(x =>
+                x.Handle(user, It.Is<Payload>(y => y.Type == PayloadType.Lang)));
             builder.VerifyNoOtherCalls();
         }
 
@@ -77,7 +78,8 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
 
             var user = await builder.FakeRegistrationDb.IncompleteUsers.FindAsync("sample-registering-user-with-lang");
             
-            builder.GatherYearMessageHandlerMock.Verify(x => x.Handle(user, It.Is<Payload>(y => y.Type == PayloadType.Year)));
+            builder.GatherYearMessageHandlerMock.Verify(x =>
+                x.Handle(user, It.Is<Payload>(y => y.Type == PayloadType.Year)));
             builder.VerifyNoOtherCalls();
         }
 
@@ -102,7 +104,8 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             
             var user = await builder.FakeRegistrationDb.IncompleteUsers.FindAsync("sample-registering-user-with-year");
             
-            builder.GatherClassMessageHandler.Verify(x => x.Handle(user, It.Is<Payload>(y => y.Type == PayloadType.Class)));
+            builder.GatherClassMessageHandler.Verify(x =>
+                x.Handle(user, It.Is<Payload>(y => y.Type == PayloadType.Class)));
             builder.VerifyNoOtherCalls();
         }
 
@@ -127,7 +130,8 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             
             var user = await builder.FakeRegistrationDb.IncompleteUsers.FindAsync("sample-registering-user-with-class"); 
             
-            builder.ConfirmSubscriptionMessageHandlerMock.Verify(x => x.Handle(user, It.Is<Payload>(y => y.Type == PayloadType.Subscribe)));
+            builder.ConfirmSubscriptionMessageHandlerMock.Verify(x =>
+                x.Handle(user, It.Is<Payload>(y => y.Type == PayloadType.Subscribe)));
             builder.VerifyNoOtherCalls();
         }
     }

@@ -20,13 +20,16 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             var confirmHandler = new Mock<IConfirmSubscriptionMessageHandler>();
 
             var handler = new GatherClassMessageHandler(MockBuilder.BuildMediatorMock().Object, new Mock<ISendApiClient>().Object, MockBuilder.BuildFakeTranslator(), confirmHandler.Object, context, MockBuilder.BuildFakeLogger<GatherClassMessageHandler>());
-            await handler.Handle(await context.IncompleteUsers.FindAsync("sample-registering-user-with-year"), new Payload(PayloadType.Class, "sample-class-1a"));
+            await handler.Handle(await context.IncompleteUsers.FindAsync("sample-registering-user-with-year"),
+                new Payload(PayloadType.Class, "sample-class-1a"));
 
             context.IncompleteUsers.Should().ContainSingle(x =>
                 x.Id == "sample-registering-user-with-year" && x.PreferredLanguage == "en" && x.Year == 1 &&
                 x.ClassId == "sample-class-1a" && x.LastPage == 0 && x.Stage == Stage.GatheredClass);
             
-            confirmHandler.Verify(x => x.ShowInstruction(It.Is<IncompleteUser>(y => y.Id == "sample-registering-user-with-year")), Times.Once);
+            confirmHandler.Verify(
+                x => x.ShowInstruction(It.Is<IncompleteUser>(y => y.Id == "sample-registering-user-with-year")),
+                Times.Once);
             confirmHandler.VerifyNoOtherCalls();
         }
 
@@ -39,7 +42,8 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             var confirmHandler = new Mock<IConfirmSubscriptionMessageHandler>();
 
             var handler = new GatherClassMessageHandler(mediator.Object, client.Object, MockBuilder.BuildFakeTranslator(), confirmHandler.Object, context, MockBuilder.BuildFakeLogger<GatherClassMessageHandler>());
-            await handler.Handle(await context.IncompleteUsers.FindAsync("sample-registering-user-with-year"), new Payload(PayloadType.Class, 1));
+            await handler.Handle(await context.IncompleteUsers.FindAsync("sample-registering-user-with-year"),
+                new Payload(PayloadType.Class, 1));
             
             var expectedMessage = new SendRequest("sample-registering-user-with-year", new Message("class-selection-text", new[] 
             {

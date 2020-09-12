@@ -36,24 +36,26 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.PlatformClient
                 new Substitution{Teacher = "sample-teacher-2", Lesson = 2, Subject = "sample-subject-2", Classes = new[] {new Class(1, "a")}, Groups = "sample-group-2", Note = "sample-note-2", Room = "sample-room-2", Substituting = "sample-teacher-3"}
             });
             
-            builder.ApiClientMock.Verify(x => x.Send(It.Is<SendRequest>(y => y.IsEquivalentTo(
-                new SendRequest("sample-subscriber", new Message("new-substitutions-text"), MessageTags.ConfirmedEventUpdate)
-                ))), Times.Once);
+            builder.ApiClientMock.Verify(
+                x => x.Send(It.Is<SendRequest>(y => y.IsEquivalentTo(new SendRequest("sample-subscriber",
+                    new Message("new-substitutions-text"), MessageTags.ConfirmedEventUpdate)))), Times.Once);
             
-            builder.ApiClientMock.Verify(x => x.Send(It.Is<SendRequest>(y => y.IsEquivalentTo(
-                    new SendRequest("sample-subscriber", new Message("CANCELLATION | 1 | sample-subject | sample-teacher | sample-room | sample-note"), MessageTags.ConfirmedEventUpdate)
-                ))), Times.Once);
+            builder.ApiClientMock.Verify(
+                x => x.Send(It.Is<SendRequest>(y => y.IsEquivalentTo(new SendRequest("sample-subscriber",
+                    new Message("CANCELLATION | 1 | sample-subject | sample-teacher | sample-room | sample-note"),
+                    MessageTags.ConfirmedEventUpdate)))), Times.Once);
             
-            builder.ApiClientMock.Verify(x => x.Send(It.Is<SendRequest>(y => y.IsEquivalentTo(
-                new SendRequest("sample-subscriber", new Message("SUBSTITUTION | sample-teacher-2 | 2 | sample-subject-2 | sample-teacher-3 | sample-room-2 | sample-note-2"), MessageTags.ConfirmedEventUpdate)
-            ))), Times.Once);
+            builder.ApiClientMock.Verify(
+                x => x.Send(It.Is<SendRequest>(y => y.IsEquivalentTo(new SendRequest("sample-subscriber",
+                    new Message(
+                        "SUBSTITUTION | sample-teacher-2 | 2 | sample-subject-2 | sample-teacher-3 | sample-room-2 | sample-note-2"),
+                    MessageTags.ConfirmedEventUpdate)))), Times.Once);
             
-            builder.ApiClientMock.Verify(x => x.Send(It.Is<SendRequest>(y => y.IsEquivalentTo(
-                new SendRequest("sample-subscriber", new Message("closing-substitutions-text", new[]
-                {
-                    new QuickReply("cancel-button-text", new Payload(PayloadType.Cancel).ToJson()) 
-                }), MessageTags.ConfirmedEventUpdate)
-            ))), Times.Once);
+            builder.ApiClientMock.Verify(
+                x => x.Send(It.Is<SendRequest>(y => y.IsEquivalentTo(new SendRequest("sample-subscriber",
+                    new Message("closing-substitutions-text",
+                        new[] {new QuickReply("cancel-button-text", new Payload(PayloadType.Cancel).ToJson())}),
+                    MessageTags.ConfirmedEventUpdate)))), Times.Once);
             
             builder.ApiClientMock.VerifyNoOtherCalls();
         }

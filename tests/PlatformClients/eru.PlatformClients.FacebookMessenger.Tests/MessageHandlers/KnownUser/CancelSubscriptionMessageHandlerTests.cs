@@ -43,11 +43,13 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.KnownUser
                     It.Is<GetSubscriberQuery>(y =>
                         y.Id == "sample-subscriber" && y.Platform == FacebookMessengerPlatformClient.PId),
                     It.IsAny<CancellationToken>()), Times.Once);
+            
             mediator.Verify(
                 x => x.Send(
                     It.Is<CancelSubscriptionCommand>(y =>
                         y.Id == "sample-subscriber" && y.Platform == FacebookMessengerPlatformClient.PId),
                     It.IsAny<CancellationToken>()), Times.Once);
+            
             mediator.VerifyNoOtherCalls();
 
             var expectedMessage = new SendRequest("sample-subscriber", new FacebookMessenger.SendAPIClient.Requests.Message("subscription-cancelled-text"));

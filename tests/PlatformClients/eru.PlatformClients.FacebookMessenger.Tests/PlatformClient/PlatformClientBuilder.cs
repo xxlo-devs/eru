@@ -9,16 +9,14 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.PlatformClient
     {
         public PlatformClientBuilder()
         {
-            MediatorMock = MockBuilder.BuildMediatorMock();
             ApiClientMock = new Mock<ISendApiClient>();
-            FakeLogger = MockBuilder.BuildFakeLogger<FacebookMessengerPlatformClient>();
 
-            PlatformClient = new FacebookMessengerPlatformClient(ApiClientMock.Object, MediatorMock.Object, MockBuilder.BuildFakeTranslator(), FakeLogger);
+            PlatformClient = new FacebookMessengerPlatformClient(ApiClientMock.Object,
+                MockBuilder.BuildMediatorMock().Object, MockBuilder.BuildFakeTranslator(),
+                MockBuilder.BuildFakeLogger<FacebookMessengerPlatformClient>());
         }
         
         public FacebookMessengerPlatformClient PlatformClient { get; set; }
         public Mock<ISendApiClient> ApiClientMock { get; set; }
-        private Mock<IMediator> MediatorMock { get; set; }
-        private ILogger<FacebookMessengerPlatformClient> FakeLogger { get; set; }
     }
 }
