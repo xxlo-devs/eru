@@ -67,6 +67,8 @@ services:
             Admins__0__Password: s@mpl3P@ssword
             Paths__WebAppPathBase: /
             Paths__SeqUiPath: /seq
+            PlatformClients__FacebookMessenger__VerifyToken: "sample-verify-token"
+            PlatformClients__FacebookMessenger__AccessToken: "sample-access-token"
         volumes: 
             - logs:/logs
         depends_on:
