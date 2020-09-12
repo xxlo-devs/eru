@@ -18,16 +18,16 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
         
         public async Task Handle(IncompleteUser user, Payload payload)
         {
-            _logger.LogTrace($"EndRegistrationHandler {typeof(T).Name} got a request from user (id: {user.Id})");
+            _logger.LogTrace($"Facebook Messenger Message Handler {typeof(T).Name} got a request from user (id: {user.Id})");
             if (payload.Type == PayloadType.Subscribe)
             {
                 await EndRegistration(user);
-                _logger.LogInformation($"EndRegistrationHandler {typeof(T).Name} successfully registered user {user.Id}");
+                _logger.LogInformation($"Facebook Messenger Message Handler {typeof(T).Name} successfully registered user {user.Id}");
                 return; 
             }
 
             await UnsupportedCommand(user);
-            _logger.LogInformation($"EndRegistrationHandler {typeof(T).Name} successfully sent UnsupportedCommand response to user {user.Id}");
+            _logger.LogInformation($"Facebook Messenger Message Handler {typeof(T).Name} successfully sent UnsupportedCommand response to user {user.Id}");
         }
         
         protected abstract Task EndRegistration(IncompleteUser user);
