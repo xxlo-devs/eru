@@ -9,6 +9,7 @@ namespace eru.PlatformClients.FacebookMessenger.RegistrationDb.DbContext
         {
             
         }
+        
         public DbSet<IncompleteUser> IncompleteUsers { get; set; }
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)

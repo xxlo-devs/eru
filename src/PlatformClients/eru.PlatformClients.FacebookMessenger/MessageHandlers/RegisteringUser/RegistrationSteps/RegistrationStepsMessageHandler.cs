@@ -28,7 +28,7 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
         
         public async Task Handle(IncompleteUser user, Payload payload)
         {
-            _logger.LogTrace($"Facebook Messenger Message Handler {typeof(T).Name} got a request from user (id: {user.Id}) with payload (type - {payload.Type.ToString()}, id - {payload.Id}, page - {payload.Page.ToString()})");
+            _logger.LogTrace($"Facebook Messenger Message Handler {typeof(T).Name} got a request from user (id: {user.Id}) with payload (type - {payload?.Type.ToString()}, id - {payload?.Id}, page - {payload?.Page.ToString()})");
             
             if (payload?.Id != null)
             {

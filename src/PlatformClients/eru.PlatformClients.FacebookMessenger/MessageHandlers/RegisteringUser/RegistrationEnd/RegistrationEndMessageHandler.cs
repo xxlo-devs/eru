@@ -19,7 +19,7 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
         public async Task Handle(IncompleteUser user, Payload payload)
         {
             _logger.LogTrace($"Facebook Messenger Message Handler {typeof(T).Name} got a request from user (id: {user.Id})");
-            if (payload.Type == PayloadType.Subscribe)
+            if (payload?.Type == PayloadType.Subscribe)
             {
                 await EndRegistration(user);
                 _logger.LogInformation($"Facebook Messenger Message Handler {typeof(T).Name} successfully registered user {user.Id}");

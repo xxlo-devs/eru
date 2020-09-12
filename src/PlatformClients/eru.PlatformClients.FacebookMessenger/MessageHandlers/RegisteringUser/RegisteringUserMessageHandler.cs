@@ -28,23 +28,19 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser
         protected override async Task Base(Messaging message)
         {
             var user = await _provider.GetService<IRegistrationDbContext>().IncompleteUsers.FindAsync(message.Sender.Id);
-            var payload = new Payload();
             
-            if (message.Message?.QuickReply?.Payload != null)
+            var payload = JsonSerializer.Deserialize<Payload>(message.Message?.QuickReply?.Payload ?? "{}", new JsonSerializerOptions
             {
-                payload = JsonSerializer.Deserialize<Payload>(message.Message?.QuickReply?.Payload, new JsonSerializerOptions
-                {
-                    IgnoreNullValues = true,
-                    Converters = { new JsonStringEnumConverter() }
-                });
+                IgnoreNullValues = true,
+                Converters = { new JsonStringEnumConverter() }
+            });
                 
-                if (payload.Type == PayloadType.Cancel)
-                {
-                    await _provider.GetService<ICancelRegistrationMessageHandler>().Handle(message);
-                    return;
-                }
+            if (payload.Type == PayloadType.Cancel)
+            {
+                await _provider.GetService<ICancelRegistrationMessageHandler>().Handle(message);
+                return;
             }
-            
+
             switch (user.Stage)
             {
                 case Stage.Created:
@@ -69,6 +65,11 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser
                 {
                     await _provider.GetService<IConfirmSubscriptionMessageHandler>().Handle(user, payload);
                     break;
+                }
+
+                default:
+                {
+                    throw new ArgumentOutOfRangeException();
                 }
             }
         }

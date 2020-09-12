@@ -40,19 +40,24 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
 
         protected override async Task ShowInstructionBase(IncompleteUser user, int page)
         {
-            await _apiClient.Send(new SendRequest(user.Id, new Message(await _translator.TranslateString("greeting", user.PreferredLanguage), await GetLangSelector(page, user.PreferredLanguage))));
+            await _apiClient.Send(new SendRequest(user.Id,
+                new Message(await _translator.TranslateString("greeting", user.PreferredLanguage),
+                    await GetLangSelector(page, user.PreferredLanguage))));
         }
 
         protected override async Task UnsupportedCommandBase(IncompleteUser user)
         {
-            await _apiClient.Send(new SendRequest(user.Id, 
-                new Message(await _translator.TranslateString("unsupported-command", user.PreferredLanguage), await GetLangSelector(user.LastPage, user.PreferredLanguage))));
+            await _apiClient.Send(new SendRequest(user.Id,
+                new Message(await _translator.TranslateString("unsupported-command", user.PreferredLanguage),
+                    await GetLangSelector(user.LastPage, user.PreferredLanguage))));
         }
 
         private async Task<IEnumerable<QuickReply>> GetLangSelector(int page, string displayCulture)
         {
-            var supportedCultures = _configuration.GetSection("CultureSettings:AvailableCultures").AsEnumerable().Select(x => x.Value).Skip(1);
-            var cultures = supportedCultures.ToDictionary(x => new CultureInfo(x).DisplayName, x => new Payload(PayloadType.Lang, x).ToJson());
+            var supportedCultures = _configuration.GetSection("CultureSettings:AvailableCultures").AsEnumerable()
+                .Select(x => x.Value).Skip(1);
+            var cultures = supportedCultures.ToDictionary(x => new CultureInfo(x).DisplayName,
+                x => new Payload(PayloadType.Lang, x).ToJson());
 
             return await GetSelector(cultures, page, PayloadType.Lang, displayCulture);
         }

@@ -42,18 +42,23 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
 
         protected override async Task ShowInstructionBase(IncompleteUser user, int page)
         {
-            await _apiClient.Send(new SendRequest(user.Id, new Message(await _translator.TranslateString("class-selection", user.PreferredLanguage), await GetClassSelector(user.Year, page, user.PreferredLanguage))));
+            await _apiClient.Send(new SendRequest(user.Id,
+                new Message(await _translator.TranslateString("class-selection", user.PreferredLanguage),
+                    await GetClassSelector(user.Year, page, user.PreferredLanguage))));
         }
 
         protected override async Task UnsupportedCommandBase(IncompleteUser user)
         {
-            await _apiClient.Send(new SendRequest(user.Id, new Message(await _translator.TranslateString("unsupported-command", user.PreferredLanguage), await GetClassSelector(user.Year, user.LastPage, user.PreferredLanguage))));
+            await _apiClient.Send(new SendRequest(user.Id,
+                new Message(await _translator.TranslateString("unsupported-command", user.PreferredLanguage),
+                    await GetClassSelector(user.Year, user.LastPage, user.PreferredLanguage))));
         }
 
         private async Task<IEnumerable<QuickReply>> GetClassSelector(int year, int page, string lang)
         {
             var classesFromDb = await _mediator.Send(new GetClassesQuery());
-            var classes = classesFromDb.Where(x => x.Year == year).OrderBy(x => x.Section).ToDictionary(x => x.ToString(), x => new Payload(PayloadType.Class, x.Id).ToJson());
+            var classes = classesFromDb.Where(x => x.Year == year).OrderBy(x => x.Section)
+                .ToDictionary(x => x.ToString(), x => new Payload(PayloadType.Class, x.Id).ToJson());
 
             return await GetSelector(classes, page, PayloadType.Class, lang);
         }

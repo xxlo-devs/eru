@@ -40,18 +40,23 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
 
         protected override async Task ShowInstructionBase(IncompleteUser user, int page)
         {
-            await _apiClient.Send(new SendRequest(user.Id, new Message(await _translator.TranslateString("year-selection", user.PreferredLanguage), await GetYearSelector(page, user.PreferredLanguage))));
+            await _apiClient.Send(new SendRequest(user.Id,
+                new Message(await _translator.TranslateString("year-selection", user.PreferredLanguage),
+                    await GetYearSelector(page, user.PreferredLanguage))));
         }
 
         protected override async Task UnsupportedCommandBase(IncompleteUser user)
         {
-            await _apiClient.Send(new SendRequest(user.Id, new Message(await _translator.TranslateString("unsupported-command", user.PreferredLanguage), await GetYearSelector(user.LastPage, user.PreferredLanguage))));
+            await _apiClient.Send(new SendRequest(user.Id,
+                new Message(await _translator.TranslateString("unsupported-command", user.PreferredLanguage),
+                    await GetYearSelector(user.LastPage, user.PreferredLanguage))));
         }
 
         private async Task<IEnumerable<QuickReply>> GetYearSelector(int page, string lang)
         {
             var classes = await _mediator.Send(new GetClassesQuery());
-            var years = new SortedSet<int>(classes.Select(x => x.Year)).ToDictionary(x => x.ToString(), x => new Payload(PayloadType.Year, x.ToString()).ToJson());
+            var years = new SortedSet<int>(classes.Select(x => x.Year)).ToDictionary(i => i.ToString(),
+                i => new Payload(PayloadType.Year, i.ToString()).ToJson());
 
             return await GetSelector(years, page, PayloadType.Year, lang);
         }

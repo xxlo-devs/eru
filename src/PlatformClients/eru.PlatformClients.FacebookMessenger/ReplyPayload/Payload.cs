@@ -24,6 +24,7 @@ namespace eru.PlatformClients.FacebookMessenger.ReplyPayload
             Type = type;
             Page = page;
         }
+        
         public PayloadType Type { get; set; }
         public int? Page { get; set; }
         public string Id { get; set; }

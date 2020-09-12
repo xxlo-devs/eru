@@ -31,8 +31,7 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser.Unsupp
             
             await _apiClient.Send(new SendRequest(uid, new Message(await _translator.TranslateString("unsupported-command", user.PreferredLanguage), new[]
             {
-                new QuickReply(await _translator.TranslateString("cancel-button", user.PreferredLanguage),
-                    new Payload(PayloadType.Cancel).ToJson())
+                new QuickReply(await _translator.TranslateString("cancel-button", user.PreferredLanguage), new Payload(PayloadType.Cancel).ToJson())
             })));
         }
     }

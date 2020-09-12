@@ -34,22 +34,24 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
             _dbContext.IncompleteUsers.Remove(user);
             await _dbContext.SaveChangesAsync(CancellationToken.None);
             
-            await _apiClient.Send(new SendRequest(user.Id, new Message(
-                await _translator.TranslateString("congratulations", user.PreferredLanguage), new[]
-                {
-                    new QuickReply(await _translator.TranslateString("cancel-button", user.PreferredLanguage),
-                        new Payload(PayloadType.Cancel).ToJson())
-                })));
+            await _apiClient.Send(new SendRequest(user.Id, new Message(await _translator.TranslateString("congratulations", user.PreferredLanguage), new[]
+            {
+                new QuickReply(await _translator.TranslateString("cancel-button", user.PreferredLanguage), new Payload(PayloadType.Cancel).ToJson())
+            })));
         }
 
         public override async Task ShowInstruction(IncompleteUser user)
         {
-            await _apiClient.Send(new SendRequest(user.Id, new Message(await _translator.TranslateString("confirmation", user.PreferredLanguage), await GetConfirmationButtons(user.PreferredLanguage))));
+            await _apiClient.Send(new SendRequest(user.Id,
+                new Message(await _translator.TranslateString("confirmation", user.PreferredLanguage),
+                    await GetConfirmationButtons(user.PreferredLanguage))));
         }
 
         protected override async Task UnsupportedCommand(IncompleteUser user)
         {
-            await _apiClient.Send(new SendRequest(user.Id, new Message(await _translator.TranslateString("unsupported-command", user.PreferredLanguage), await GetConfirmationButtons(user.PreferredLanguage))));
+            await _apiClient.Send(new SendRequest(user.Id,
+                new Message(await _translator.TranslateString("unsupported-command", user.PreferredLanguage),
+                    await GetConfirmationButtons(user.PreferredLanguage))));
         }
 
         private async Task<IEnumerable<QuickReply>> GetConfirmationButtons(string lang)
