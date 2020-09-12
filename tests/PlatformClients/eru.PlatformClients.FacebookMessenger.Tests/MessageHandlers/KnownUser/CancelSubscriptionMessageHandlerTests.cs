@@ -47,14 +47,12 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.KnownUser
             mediator.Verify(x => x.Send(It.Is<GetSubscriberQuery>(y => y.Id == "sample-subscriber" && y.Platform == FacebookMessengerPlatformClient.PId), It.IsAny<CancellationToken>()), Times.Once);
             mediator.Verify(x => x.Send(It.Is<CancelSubscriptionCommand>(y => y.Id == "sample-subscriber" && y.Platform == FacebookMessengerPlatformClient.PId), It.IsAny<CancellationToken>()), Times.Once);
             mediator.VerifyNoOtherCalls();
-            
+
+            var expectedMessage = new SendRequest("sample-subscriber", new FacebookMessenger.SendAPIClient.Requests.Message("subscription-cancelled-text"));
             apiClient.Verify(x => x.Send(It.Is<SendRequest>(
-                y => y.Type == MessagingTypes.Response 
-                     && y.Recipient.Id == "sample-subscriber"
-                     && y.Message.Text == "subscription-cancelled-text"
-                     && y.Message.QuickReplies == null
-            )));
-            apiClient.VerifyNoOtherCalls();
+                    y => y.IsEquivalentTo(expectedMessage))
+                )
+            );
         }
     }
 }

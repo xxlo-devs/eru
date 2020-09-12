@@ -49,15 +49,18 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             var handler = new GatherLanguageMessageHandler(MockBuilder.BuildFakeConfiguration(), client.Object, MockBuilder.BuildFakeTranslator(), yearHandler.Object, context, MockBuilder.BuildFakeLogger<GatherLanguageMessageHandler>());
             await handler.Handle(await context.IncompleteUsers.FindAsync("sample-registering-user"), new Payload(PayloadType.Lang, 0));
             
+            var expectedMessage = new SendRequest("sample-registering-user", new Message(
+                "greeting-text", new[]
+                {
+                    new QuickReply(new CultureInfo("en").DisplayName, new Payload(PayloadType.Lang, "en").ToJson()),
+                    new QuickReply(new CultureInfo("pl").DisplayName, new Payload(PayloadType.Lang, "pl").ToJson()),
+                    new QuickReply("cancel-button-text", new Payload(PayloadType.Cancel).ToJson())
+                }));
+            
             client.Verify(x => x.Send(It.Is<SendRequest>(
-                y => y.Type == MessagingTypes.Response 
-                     && y.Recipient.Id == "sample-registering-user"
-                     && y.Message.Text == "greeting-text"
-                     && y.Message.QuickReplies.Count() == 3
-                     && y.Message.QuickReplies.Any(z => z.ContentType == QuickReplyContentTypes.Text && z.Title == "cancel-button-text" && z.Payload == new Payload(PayloadType.Cancel).ToJson())
-                     && y.Message.QuickReplies.Any(z => z.ContentType == QuickReplyContentTypes.Text && z.Title == new CultureInfo("en").DisplayName && z.Payload == new Payload(PayloadType.Lang, "en").ToJson())
-                     && y.Message.QuickReplies.Any(z => z.ContentType == QuickReplyContentTypes.Text && z.Title == new CultureInfo("pl").DisplayName && z.Payload == new Payload(PayloadType.Lang, "pl").ToJson())
-            )));
+                    y => y.IsEquivalentTo(expectedMessage))
+                )
+            );
             client.VerifyNoOtherCalls();
         }
 
@@ -71,15 +74,18 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             var handler = new GatherLanguageMessageHandler(MockBuilder.BuildFakeConfiguration(), client.Object, MockBuilder.BuildFakeTranslator(), yearHandler.Object, context, MockBuilder.BuildFakeLogger<GatherLanguageMessageHandler>());
             await handler.ShowInstruction(await context.IncompleteUsers.FindAsync("sample-registering-user"));
 
+            var expectedMessage = new SendRequest("sample-registering-user", new Message(
+                "greeting-text", new[]
+                {
+                    new QuickReply(new CultureInfo("en").DisplayName, new Payload(PayloadType.Lang, "en").ToJson()),
+                    new QuickReply(new CultureInfo("pl").DisplayName, new Payload(PayloadType.Lang, "pl").ToJson()),
+                    new QuickReply("cancel-button-text", new Payload(PayloadType.Cancel).ToJson())
+                }));
+            
             client.Verify(x => x.Send(It.Is<SendRequest>(
-                y => y.Type == MessagingTypes.Response 
-                     && y.Recipient.Id == "sample-registering-user"
-                     && y.Message.Text == "greeting-text"
-                     && y.Message.QuickReplies.Count() == 3
-                     && y.Message.QuickReplies.Any(z => z.ContentType == QuickReplyContentTypes.Text && z.Title == "cancel-button-text" && z.Payload == new Payload(PayloadType.Cancel).ToJson())
-                     && y.Message.QuickReplies.Any(z => z.ContentType == QuickReplyContentTypes.Text && z.Title == new CultureInfo("en").DisplayName && z.Payload == new Payload(PayloadType.Lang, "en").ToJson())
-                     && y.Message.QuickReplies.Any(z => z.ContentType == QuickReplyContentTypes.Text && z.Title == new CultureInfo("pl").DisplayName && z.Payload == new Payload(PayloadType.Lang, "pl").ToJson())
-            )));
+                    y => y.IsEquivalentTo(expectedMessage))
+                )
+            );
             client.VerifyNoOtherCalls();
         }
 
@@ -93,15 +99,18 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             var handler = new GatherLanguageMessageHandler(MockBuilder.BuildFakeConfiguration(), client.Object, MockBuilder.BuildFakeTranslator(), yearHandler.Object, context, MockBuilder.BuildFakeLogger<GatherLanguageMessageHandler>());
             await handler.Handle(await context.IncompleteUsers.FindAsync("sample-registering-user"), new Payload());
             
+            var expectedMessage = new SendRequest("sample-registering-user", new Message(
+                "unsupported-command-text", new[]
+                {
+                    new QuickReply(new CultureInfo("en").DisplayName, new Payload(PayloadType.Lang, "en").ToJson()),
+                    new QuickReply(new CultureInfo("pl").DisplayName, new Payload(PayloadType.Lang, "pl").ToJson()),
+                    new QuickReply("cancel-button-text", new Payload(PayloadType.Cancel).ToJson())
+                }));
+            
             client.Verify(x => x.Send(It.Is<SendRequest>(
-                y => y.Type == MessagingTypes.Response 
-                     && y.Recipient.Id == "sample-registering-user"
-                     && y.Message.Text == "unsupported-command-text"
-                     && y.Message.QuickReplies.Count() == 3
-                     && y.Message.QuickReplies.Any(z => z.ContentType == QuickReplyContentTypes.Text && z.Title == "cancel-button-text" && z.Payload == new Payload(PayloadType.Cancel).ToJson())
-                     && y.Message.QuickReplies.Any(z => z.ContentType == QuickReplyContentTypes.Text && z.Title == new CultureInfo("en").DisplayName && z.Payload == new Payload(PayloadType.Lang, "en").ToJson())
-                     && y.Message.QuickReplies.Any(z => z.ContentType == QuickReplyContentTypes.Text && z.Title == new CultureInfo("pl").DisplayName && z.Payload == new Payload(PayloadType.Lang, "pl").ToJson())
-            )));
+                    y => y.IsEquivalentTo(expectedMessage))
+                )
+            );
             client.VerifyNoOtherCalls();
         }
     }

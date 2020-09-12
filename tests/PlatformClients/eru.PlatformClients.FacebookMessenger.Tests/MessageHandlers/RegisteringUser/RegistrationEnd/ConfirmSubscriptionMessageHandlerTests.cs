@@ -33,14 +33,14 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             mediator.Verify(x => x.Send(It.Is<CreateSubscriptionCommand>(y => y.Id == "sample-registering-user-with-class" && y.Platform == FacebookMessengerPlatformClient.PId && y.PreferredLanguage == "en" && y.Class == "sample-class"), It.IsAny<CancellationToken>()), Times.Once);
             mediator.VerifyNoOtherCalls();
 
+            var expectedMessage = new SendRequest("sample-registering-user-with-class", new Message("congratulations-text", new[]
+            {
+                new QuickReply("cancel-button-text", new Payload(PayloadType.Cancel).ToJson())
+            }));
             client.Verify(x => x.Send(It.Is<SendRequest>(
-                y => y.Type == MessagingTypes.Response 
-                     && y.Recipient.Id == "sample-registering-user-with-class"
-                     && y.Message.Text == "congratulations-text"
-                     && y.Message.QuickReplies.Count() == 1
-                     && y.Message.QuickReplies.Any(z => z.ContentType == QuickReplyContentTypes.Text && z.Title == "cancel-button-text" && z.Payload == "{\"Type\":\"Cancel\"}")
-                     )));
-            client.VerifyNoOtherCalls();
+                    y => y.IsEquivalentTo(expectedMessage))
+                )
+            );
         }
 
         [Fact]
@@ -54,14 +54,15 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             var handler = new ConfirmSubscriptionMessageHandler(context, mediator.Object, client.Object, MockBuilder.BuildFakeTranslator(), new Mock<ILogger<ConfirmSubscriptionMessageHandler>>().Object);
             await handler.ShowInstruction(await context.IncompleteUsers.FindAsync("sample-registering-user-with-class"));
 
-            client.Verify(x => x.Send(It.Is<SendRequest>(y => 
-                y.Type == MessagingTypes.Response
-                && y.Recipient.Id == "sample-registering-user-with-class"
-                && y.Message.Text == "confirmation-text"
-                && y.Message.QuickReplies.Count() == 2
-                && y.Message.QuickReplies.Any(z => z.ContentType == QuickReplyContentTypes.Text && z.Title == "subscribe-button-text" && z.Payload == new Payload(PayloadType.Subscribe).ToJson())
-                && y.Message.QuickReplies.Any(z => z.ContentType == QuickReplyContentTypes.Text && z.Title == "cancel-button-text" && z.Payload == new Payload(PayloadType.Cancel).ToJson())
-                )));
+            var expectedMessage = new SendRequest("sample-registering-user-with-class", new Message("confirmation-text", new[]
+            {
+                new QuickReply("cancel-button-text", new Payload(PayloadType.Cancel).ToJson()),
+                new QuickReply("subscribe-button-text", new Payload(PayloadType.Subscribe).ToJson()) 
+            }));
+            client.Verify(x => x.Send(It.Is<SendRequest>(
+                    y => y.IsEquivalentTo(expectedMessage))
+                )
+            );
             client.VerifyNoOtherCalls();
         }
 
@@ -76,14 +77,15 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             var handler = new ConfirmSubscriptionMessageHandler(context, mediator.Object, client.Object, MockBuilder.BuildFakeTranslator(), new Mock<ILogger<ConfirmSubscriptionMessageHandler>>().Object);
             await handler.Handle(await context.IncompleteUsers.FindAsync("sample-registering-user-with-class"), new Payload());
             
-            client.Verify(x => x.Send(It.Is<SendRequest>(y => 
-                y.Type == MessagingTypes.Response
-                && y.Recipient.Id == "sample-registering-user-with-class"
-                && y.Message.Text == "unsupported-command-text"
-                && y.Message.QuickReplies.Count() == 2
-                && y.Message.QuickReplies.Any(z => z.ContentType == QuickReplyContentTypes.Text && z.Title == "subscribe-button-text" && z.Payload == new Payload(PayloadType.Subscribe).ToJson())
-                && y.Message.QuickReplies.Any(z => z.ContentType == QuickReplyContentTypes.Text && z.Title == "cancel-button-text" && z.Payload == new Payload(PayloadType.Cancel).ToJson())
-            )));
+            var expectedMessage = new SendRequest("sample-registering-user-with-class", new Message("unsupported-command-text", new[]
+            {
+                new QuickReply("cancel-button-text", new Payload(PayloadType.Cancel).ToJson()),
+                new QuickReply("subscribe-button-text", new Payload(PayloadType.Subscribe).ToJson()) 
+            }));
+            client.Verify(x => x.Send(It.Is<SendRequest>(
+                    y => y.IsEquivalentTo(expectedMessage))
+                )
+            );
             client.VerifyNoOtherCalls();
         }
     }

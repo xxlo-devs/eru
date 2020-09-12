@@ -18,8 +18,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.SendAPIClient
 {
     public class SendApiClientTests
     {
-        [Fact]
-        public async void ShouldSendRequestToFacebookCorrectly()
+        private IHttpClientFactory SetupHttpClientFactory(HttpStatusCode responseCode, string responseBody, string expectedRequestBody)
         {
             var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
             handlerMock.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(),
@@ -27,49 +26,46 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.SendAPIClient
                 .Returns(async (HttpRequestMessage message, CancellationToken cancellationToken) =>
                 {
                     var content = await message.Content.ReadAsStringAsync();
-                    content.Should().BeEquivalentTo("{\"messaging_type\":\"RESPONSE\",\"recipient\":{\"id\":\"sample-subscriber\"},\"message\":{\"text\":\"hello, world!\"}}");
+                    content.Should().BeEquivalentTo(expectedRequestBody);
                     
-                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    return new HttpResponseMessage(responseCode)
                     {
-                        Content = new StringContent("{\"recipient_id\":\"sample-subscriber\",\"message_id\":\"sample-message-id\"}")
+                        Content = new StringContent(responseBody)
                     };
                 });
 
             var clientMock = new HttpClient(handlerMock.Object) {BaseAddress = new Uri("https://example.com")};
             var factoryMock = new Mock<IHttpClientFactory>();
             factoryMock.Setup(x => x.CreateClient(FacebookMessengerPlatformClient.PId)).Returns(clientMock);
-            
+
+            return factoryMock.Object;
+        }
+        
+        [Fact]
+        public async void ShouldSendRequestToFacebookCorrectly()
+        {
+            var factory = SetupHttpClientFactory(HttpStatusCode.OK,
+                "{\"recipient_id\":\"sample-subscriber\",\"message_id\":\"sample-message-id\"}",
+                "{\"messaging_type\":\"RESPONSE\",\"recipient\":{\"id\":\"sample-subscriber\"},\"message\":{\"text\":\"hello, world!\"}}"
+            );
             
             var request = new SendRequest("sample-subscriber", new Message("hello, world!"));
             
-            var apiClient = new SendApiClient(factoryMock.Object, MockBuilder.BuildFakeConfiguration(), MockBuilder.BuildFakeLogger<SendApiClient>());
+            var apiClient = new SendApiClient(factory, MockBuilder.BuildFakeConfiguration(), MockBuilder.BuildFakeLogger<SendApiClient>());
             await apiClient.Send(request);
         }
 
         [Fact]
         public async void ShouldHandleErrorWhileSendingRequestToFacebookCorrectly()
         {
-            var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
-            handlerMock.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(),
-                    ItExpr.IsAny<CancellationToken>())
-                .Returns(async (HttpRequestMessage message, CancellationToken cancellationToken) =>
-                {
-                    var content = await message.Content.ReadAsStringAsync();
-                    content.Should().BeEquivalentTo("{\"messaging_type\":\"RESPONSE\",\"recipient\":{\"id\":\"sample-subscriber\"},\"message\":{\"text\":\"hello, world!\"}}");
-                    
-                    return new HttpResponseMessage(HttpStatusCode.BadRequest)
-                    {
-                        Content = new StringContent("{\"error\":{\"message\":\"Invalid OAuth access token.\",\"type\":\"OAuthException\",\"code\":190,\"error_subcode\":1234567,\"fbtrace_id\":\"traceid\"}}")
-                    };
-                });
-
-            var clientMock = new HttpClient(handlerMock.Object) {BaseAddress = new Uri("https://example.com")};
-            var factoryMock = new Mock<IHttpClientFactory>();
-            factoryMock.Setup(x => x.CreateClient(FacebookMessengerPlatformClient.PId)).Returns(clientMock);
+            var factory = SetupHttpClientFactory(HttpStatusCode.BadRequest,
+                "{\"error\":{\"message\":\"Invalid OAuth access token.\",\"type\":\"OAuthException\",\"code\":190,\"error_subcode\":1234567,\"fbtrace_id\":\"traceid\"}}",
+                "{\"messaging_type\":\"RESPONSE\",\"recipient\":{\"id\":\"sample-subscriber\"},\"message\":{\"text\":\"hello, world!\"}}"
+                );
             
             var request = new SendRequest("sample-subscriber", new Message("hello, world!"));
             
-            var apiClient = new SendApiClient(factoryMock.Object, MockBuilder.BuildFakeConfiguration(), MockBuilder.BuildFakeLogger<SendApiClient>());
+            var apiClient = new SendApiClient(factory, MockBuilder.BuildFakeConfiguration(), MockBuilder.BuildFakeLogger<SendApiClient>());
 
             try
             {

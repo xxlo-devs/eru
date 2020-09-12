@@ -42,12 +42,11 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             
             context.IncompleteUsers.Should().NotContain(x => x.Id == "sample-registering-user");
             
+            var expectedMessage = new SendRequest("sample-registering-user", new FacebookMessenger.SendAPIClient.Requests.Message("subscription-cancelled-text"));
             apiClient.Verify(x => x.Send(It.Is<SendRequest>(
-                y => y.Type == MessagingTypes.Response 
-                     && y.Recipient.Id == "sample-registering-user"
-                     && y.Message.Text == "subscription-cancelled-text"
-                     && y.Message.QuickReplies == null
-            )));
+                    y => y.IsEquivalentTo(expectedMessage))
+                )
+            );
             apiClient.VerifyNoOtherCalls();
         }
     }

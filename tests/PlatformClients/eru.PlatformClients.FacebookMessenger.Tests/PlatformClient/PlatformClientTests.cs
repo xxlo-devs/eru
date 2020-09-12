@@ -17,14 +17,12 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.PlatformClient
 
             await builder.PlatformClient.SendMessage("sample-subscriber", "A test message.");
 
-            builder.ApiClientMock.Verify(x => x.Send(It.Is<SendRequest>(y =>
-                y.Type == MessagingTypes.MessageTag
-                && y.Tag == MessageTags.AccountUpdate
-                && y.Recipient.Id == "sample-subscriber"
-                && y.Message.Text == "A test message."
-                && y.Message.QuickReplies.Count() == 1
-                && y.Message.QuickReplies.Any(z => z.ContentType == QuickReplyContentTypes.Text && z.Title == "cancel-button-text" && z.Payload == new Payload(PayloadType.Cancel).ToJson())
-            )));
+            builder.ApiClientMock.Verify(x => x.Send(It.Is<SendRequest>(y => y.IsEquivalentTo(
+                new SendRequest("sample-subscriber", new Message("A test message.", new[]
+                {
+                    new QuickReply("cancel-button-text", new Payload(PayloadType.Cancel).ToJson()) 
+                }), MessageTags.AccountUpdate)
+            ))));
 
             builder.ApiClientMock.VerifyNoOtherCalls();
         }
@@ -40,38 +38,24 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.PlatformClient
                 new Substitution{Teacher = "sample-teacher-2", Lesson = 2, Subject = "sample-subject-2", Classes = new[] {new Class(1, "a")}, Groups = "sample-group-2", Note = "sample-note-2", Room = "sample-room-2", Substituting = "sample-teacher-3"}
             });
             
-            builder.ApiClientMock.Verify(x => x.Send(It.Is<SendRequest>(y =>
-                y.Type == MessagingTypes.MessageTag
-                && y.Tag == MessageTags.ConfirmedEventUpdate
-                && y.Recipient.Id == "sample-subscriber"
-                && y.Message.Text == "new-substitutions-text"
-                && y.Message.QuickReplies == null
-            )), Times.Once);
+            builder.ApiClientMock.Verify(x => x.Send(It.Is<SendRequest>(y => y.IsEquivalentTo(
+                new SendRequest("sample-subscriber", new Message("new-substitutions-text"), MessageTags.ConfirmedEventUpdate)
+                ))));
             
-            builder.ApiClientMock.Verify(x => x.Send(It.Is<SendRequest>(y =>
-                y.Type == MessagingTypes.MessageTag
-                && y.Tag == MessageTags.ConfirmedEventUpdate
-                && y.Recipient.Id == "sample-subscriber"
-                && y.Message.Text == "CANCELLATION | 1 | sample-subject | sample-teacher | sample-room | sample-note"
-                && y.Message.QuickReplies == null
-            )), Times.Once);
+            builder.ApiClientMock.Verify(x => x.Send(It.Is<SendRequest>(y => y.IsEquivalentTo(
+                    new SendRequest("sample-subscriber", new Message("CANCELLATION | 1 | sample-subject | sample-teacher | sample-room | sample-note"), MessageTags.ConfirmedEventUpdate)
+                ))));
             
-            builder.ApiClientMock.Verify(x => x.Send(It.Is<SendRequest>(y =>
-                y.Type == MessagingTypes.MessageTag
-                && y.Tag == MessageTags.ConfirmedEventUpdate
-                && y.Recipient.Id == "sample-subscriber"
-                && y.Message.Text == "SUBSTITUTION | sample-teacher-2 | 2 | sample-subject-2 | sample-teacher-3 | sample-room-2 | sample-note-2"
-                && y.Message.QuickReplies == null
-            )), Times.Once);
+            builder.ApiClientMock.Verify(x => x.Send(It.Is<SendRequest>(y => y.IsEquivalentTo(
+                new SendRequest("sample-subscriber", new Message("SUBSTITUTION | sample-teacher-2 | 2 | sample-subject-2 | sample-teacher-3 | sample-room-2 | sample-note-2"), MessageTags.ConfirmedEventUpdate)
+            ))));
             
-            builder.ApiClientMock.Verify(x => x.Send(It.Is<SendRequest>(y =>
-                y.Type == MessagingTypes.MessageTag
-                && y.Tag == MessageTags.ConfirmedEventUpdate
-                && y.Recipient.Id == "sample-subscriber"
-                && y.Message.Text == "closing-substitution-text"
-                && y.Message.QuickReplies.Count() == 1
-                && y.Message.QuickReplies.Any(z => z.ContentType == QuickReplyContentTypes.Text && z.Title == "cancel-button-text" && z.Payload == new Payload(PayloadType.Cancel).ToJson())
-            )), Times.Once);
+            builder.ApiClientMock.Verify(x => x.Send(It.Is<SendRequest>(y => y.IsEquivalentTo(
+                new SendRequest("sample-subscriber", new Message("closing-substitutions-text", new[]
+                {
+                    new QuickReply("cancel-button-text", new Payload(PayloadType.Cancel).ToJson()) 
+                }), MessageTags.ConfirmedEventUpdate)
+            ))));
             
             builder.ApiClientMock.VerifyNoOtherCalls();
         }

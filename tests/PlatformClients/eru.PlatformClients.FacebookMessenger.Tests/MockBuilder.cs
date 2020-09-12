@@ -97,7 +97,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests
             translatorMock.Setup(x => x.TranslateString("new-substitutions", "en")).Returns(Task.FromResult("new-substitutions-text"));
             translatorMock.Setup(x => x.TranslateString("substitution", "en")).Returns(Task.FromResult("SUBSTITUTION | {0} | {1} | {2} | {3} | {4} | {5}"));
             translatorMock.Setup(x => x.TranslateString("cancellation", "en")).Returns(Task.FromResult("CANCELLATION | {0} | {1} | {2} | {3} | {4}"));
-            translatorMock.Setup(x => x.TranslateString("closing-substitutions", "en")).Returns(Task.FromResult("closing-substitution-text"));
+            translatorMock.Setup(x => x.TranslateString("closing-substitutions", "en")).Returns(Task.FromResult("closing-substitutions-text"));
             
             return translatorMock.Object;
         }

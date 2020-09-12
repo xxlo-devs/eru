@@ -12,6 +12,7 @@ using eru.PlatformClients.FacebookMessenger.SendAPIClient;
 using eru.PlatformClients.FacebookMessenger.SendAPIClient.Requests;
 using eru.PlatformClients.FacebookMessenger.SendAPIClient.Requests.Static;
 using FluentAssertions;
+using FluentAssertions.Common;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -51,16 +52,19 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             var handler = new GatherYearMessageHandler(mediator.Object, client.Object, MockBuilder.BuildFakeTranslator(), confirmHandler.Object, context, MockBuilder.BuildFakeLogger<GatherYearMessageHandler>());
             await handler.Handle(await context.IncompleteUsers.FindAsync("sample-registering-user-with-lang"), new Payload(PayloadType.Year, 1));
                         
+            var expectedMessage = new SendRequest("sample-registering-user-with-lang", new Message(
+                "year-selection-text", new[]
+                {
+                    new QuickReply("11", new Payload(PayloadType.Year, "11").ToJson()),
+                    new QuickReply("12", new Payload(PayloadType.Year, "12").ToJson()),
+                    new QuickReply("cancel-button-text", new Payload(PayloadType.Cancel).ToJson()),
+                    new QuickReply("<-", new Payload(PayloadType.Year, 0).ToJson())
+                }));
+            
             client.Verify(x => x.Send(It.Is<SendRequest>(
-                y => y.Type == MessagingTypes.Response 
-                     && y.Recipient.Id == "sample-registering-user-with-lang"
-                     && y.Message.Text == "year-selection-text"
-                     && y.Message.QuickReplies.Count() == 4
-                     && y.Message.QuickReplies.Any(z => z.ContentType == QuickReplyContentTypes.Text && z.Title == "cancel-button-text" && z.Payload == new Payload(PayloadType.Cancel).ToJson())
-                     && y.Message.QuickReplies.Any(z => z.ContentType == QuickReplyContentTypes.Text && z.Title == "<-" && z.Payload == new Payload(PayloadType.Year, 0).ToJson())
-                     && y.Message.QuickReplies.Any(z => z.ContentType == QuickReplyContentTypes.Text && z.Title == "11" && z.Payload == new Payload(PayloadType.Year, "11").ToJson())
-                     && y.Message.QuickReplies.Any(z => z.ContentType == QuickReplyContentTypes.Text && z.Title == "12" && z.Payload == new Payload(PayloadType.Year, "12").ToJson())
-            )));
+                    y => y.IsEquivalentTo(expectedMessage))
+                )
+            );
             client.VerifyNoOtherCalls();
         }
 
@@ -79,24 +83,27 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
                 x.Id == "sample-registering-user-with-lang" && x.PreferredLanguage == "en" &&
                 x.LastPage == 0 && x.Stage == Stage.GatheredLanguage);
             
+            var expectedMessage = new SendRequest("sample-registering-user-with-lang", new Message(
+                "year-selection-text", new[]
+                {
+                    new QuickReply("1", new Payload(PayloadType.Year, "1").ToJson()),
+                    new QuickReply("2", new Payload(PayloadType.Year, "2").ToJson()),
+                    new QuickReply("3", new Payload(PayloadType.Year, "3").ToJson()),
+                    new QuickReply("4", new Payload(PayloadType.Year, "4").ToJson()),
+                    new QuickReply("5", new Payload(PayloadType.Year, "5").ToJson()),
+                    new QuickReply("6", new Payload(PayloadType.Year, "6").ToJson()),
+                    new QuickReply("7", new Payload(PayloadType.Year, "7").ToJson()),
+                    new QuickReply("8", new Payload(PayloadType.Year, "8").ToJson()),
+                    new QuickReply("9", new Payload(PayloadType.Year, "9").ToJson()),
+                    new QuickReply("10", new Payload(PayloadType.Year, "10").ToJson()),
+                    new QuickReply("cancel-button-text", new Payload(PayloadType.Cancel).ToJson()),
+                    new QuickReply("->", new Payload(PayloadType.Year, 1).ToJson())
+                }));
+            
             client.Verify(x => x.Send(It.Is<SendRequest>(
-                y => y.Type == MessagingTypes.Response 
-                     && y.Recipient.Id == "sample-registering-user-with-lang"
-                     && y.Message.Text == "year-selection-text"
-                     && y.Message.QuickReplies.Count() == 12
-                     && y.Message.QuickReplies.Any(z => z.ContentType == QuickReplyContentTypes.Text && z.Title == "cancel-button-text" && z.Payload == new Payload(PayloadType.Cancel).ToJson())
-                     && y.Message.QuickReplies.Any(z => z.ContentType == QuickReplyContentTypes.Text && z.Title == "->" && z.Payload == new Payload(PayloadType.Year, 1).ToJson())
-                     && y.Message.QuickReplies.Any(z => z.ContentType == QuickReplyContentTypes.Text && z.Title == "1" && z.Payload == new Payload(PayloadType.Year, "1").ToJson())
-                     && y.Message.QuickReplies.Any(z => z.ContentType == QuickReplyContentTypes.Text && z.Title == "2" && z.Payload == new Payload(PayloadType.Year, "2").ToJson())
-                     && y.Message.QuickReplies.Any(z => z.ContentType == QuickReplyContentTypes.Text && z.Title == "3" && z.Payload == new Payload(PayloadType.Year, "3").ToJson())
-                     && y.Message.QuickReplies.Any(z => z.ContentType == QuickReplyContentTypes.Text && z.Title == "4" && z.Payload == new Payload(PayloadType.Year, "4").ToJson())
-                     && y.Message.QuickReplies.Any(z => z.ContentType == QuickReplyContentTypes.Text && z.Title == "5" && z.Payload == new Payload(PayloadType.Year, "5").ToJson())
-                     && y.Message.QuickReplies.Any(z => z.ContentType == QuickReplyContentTypes.Text && z.Title == "6" && z.Payload == new Payload(PayloadType.Year, "6").ToJson())
-                     && y.Message.QuickReplies.Any(z => z.ContentType == QuickReplyContentTypes.Text && z.Title == "7" && z.Payload == new Payload(PayloadType.Year, "7").ToJson())
-                     && y.Message.QuickReplies.Any(z => z.ContentType == QuickReplyContentTypes.Text && z.Title == "8" && z.Payload == new Payload(PayloadType.Year, "8").ToJson())
-                     && y.Message.QuickReplies.Any(z => z.ContentType == QuickReplyContentTypes.Text && z.Title == "9" && z.Payload == new Payload(PayloadType.Year, "9").ToJson())
-                     && y.Message.QuickReplies.Any(z => z.ContentType == QuickReplyContentTypes.Text && z.Title == "10" && z.Payload == new Payload(PayloadType.Year, "10").ToJson())
-            )));
+                    y => y.IsEquivalentTo(expectedMessage))
+                )
+            );
             client.VerifyNoOtherCalls();
         }
 
@@ -114,28 +121,29 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             context.IncompleteUsers.Should().ContainSingle(x =>
                 x.Id == "sample-registering-user-with-lang" && x.PreferredLanguage == "en" &&
                 x.LastPage == 0 && x.Stage == Stage.GatheredLanguage);
+
+            var expectedMessage = new SendRequest("sample-registering-user-with-lang", new Message(
+                "unsupported-command-text", new[]
+                {
+                    new QuickReply("1", new Payload(PayloadType.Year, "1").ToJson()),
+                    new QuickReply("2", new Payload(PayloadType.Year, "2").ToJson()),
+                    new QuickReply("3", new Payload(PayloadType.Year, "3").ToJson()),
+                    new QuickReply("4", new Payload(PayloadType.Year, "4").ToJson()),
+                    new QuickReply("5", new Payload(PayloadType.Year, "5").ToJson()),
+                    new QuickReply("6", new Payload(PayloadType.Year, "6").ToJson()),
+                    new QuickReply("7", new Payload(PayloadType.Year, "7").ToJson()),
+                    new QuickReply("8", new Payload(PayloadType.Year, "8").ToJson()),
+                    new QuickReply("9", new Payload(PayloadType.Year, "9").ToJson()),
+                    new QuickReply("10", new Payload(PayloadType.Year, "10").ToJson()),
+                    new QuickReply("cancel-button-text", new Payload(PayloadType.Cancel).ToJson()),
+                    new QuickReply("->", new Payload(PayloadType.Year, 1).ToJson())
+                }));
             
             client.Verify(x => x.Send(It.Is<SendRequest>(
-                y => y.Type == MessagingTypes.Response 
-                     && y.Recipient.Id == "sample-registering-user-with-lang"
-                     && y.Message.Text == "unsupported-command-text"
-                     && y.Message.QuickReplies.Count() == 12
-                     && y.Message.QuickReplies.Any(z => z.ContentType == QuickReplyContentTypes.Text && z.Title == "cancel-button-text" && z.Payload == new Payload(PayloadType.Cancel).ToJson())
-                     && y.Message.QuickReplies.Any(z => z.ContentType == QuickReplyContentTypes.Text && z.Title == "->" && z.Payload == new Payload(PayloadType.Year, 1).ToJson())
-                     && y.Message.QuickReplies.Any(z => z.ContentType == QuickReplyContentTypes.Text && z.Title == "1" && z.Payload == new Payload(PayloadType.Year, "1").ToJson())
-                     && y.Message.QuickReplies.Any(z => z.ContentType == QuickReplyContentTypes.Text && z.Title == "2" && z.Payload == new Payload(PayloadType.Year, "2").ToJson())
-                     && y.Message.QuickReplies.Any(z => z.ContentType == QuickReplyContentTypes.Text && z.Title == "3" && z.Payload == new Payload(PayloadType.Year, "3").ToJson())
-                     && y.Message.QuickReplies.Any(z => z.ContentType == QuickReplyContentTypes.Text && z.Title == "4" && z.Payload == new Payload(PayloadType.Year, "4").ToJson())
-                     && y.Message.QuickReplies.Any(z => z.ContentType == QuickReplyContentTypes.Text && z.Title == "5" && z.Payload == new Payload(PayloadType.Year, "5").ToJson())
-                     && y.Message.QuickReplies.Any(z => z.ContentType == QuickReplyContentTypes.Text && z.Title == "6" && z.Payload == new Payload(PayloadType.Year, "6").ToJson())
-                     && y.Message.QuickReplies.Any(z => z.ContentType == QuickReplyContentTypes.Text && z.Title == "7" && z.Payload == new Payload(PayloadType.Year, "7").ToJson())
-                     && y.Message.QuickReplies.Any(z => z.ContentType == QuickReplyContentTypes.Text && z.Title == "8" && z.Payload == new Payload(PayloadType.Year, "8").ToJson())
-                     && y.Message.QuickReplies.Any(z => z.ContentType == QuickReplyContentTypes.Text && z.Title == "9" && z.Payload == new Payload(PayloadType.Year, "9").ToJson())
-                     && y.Message.QuickReplies.Any(z => z.ContentType == QuickReplyContentTypes.Text && z.Title == "10" && z.Payload == new Payload(PayloadType.Year, "10").ToJson())
-            )));
+                y => y.IsEquivalentTo(expectedMessage))
+                )
+            );
             client.VerifyNoOtherCalls();
         }
-        
-        
     }
 }
