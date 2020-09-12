@@ -24,21 +24,21 @@ namespace eru.Application.Substitutions.Queries.GetLatestSubstitution
 
         public async Task<SubstitutionsRecord> Handle(GetLatestSubstitution request, CancellationToken cancellationToken)
         {
-            return await _context
+            var substitution = await _context
                 .SubstitutionsRecords
-                .OrderBy(x => x.UploadDateTime)
+                .OrderByDescending(x => x.UploadDateTime)
                 .Take(1)
-                .Include(x=>x.Substitutions)
-                    .ThenInclude(x=>x.Classes)
-                .Select(x => new SubstitutionsRecord
-                {
-                    SubstitutionsDate = x.SubstitutionsDate,
-                    UploadDateTime = x.UploadDateTime,
-                    Substitutions = x.Substitutions
-                        .OrderBy(y=>y.Lesson)
-                        .ThenBy(y=>y.Subject)
-                })
                 .FirstOrDefaultAsync(cancellationToken);
+            if (substitution is null)
+                return null;
+            return new SubstitutionsRecord
+            {
+                SubstitutionsDate = substitution.SubstitutionsDate,
+                UploadDateTime = substitution.UploadDateTime,
+                Substitutions = substitution.Substitutions
+                    .OrderBy(y=>y.Lesson)
+                    .ThenBy(y=>y.Subject)
+            };
         }
     }
 }

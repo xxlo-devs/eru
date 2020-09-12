@@ -5,6 +5,7 @@
 
 @{
     Layout = "Layouts/BaseLayout";
+    ViewData["title"] = @Localizer["title"];
 }
 @section AddToHead
 {
@@ -14,28 +15,42 @@
     <h1 class="title">@Localizer["title"]</h1>
     <h3 class="subtitle">@Localizer["uploaded-on"] @Model.SubstitutionsRecord.UploadDateTime.ToShortDateString()</h3>
     <h3 class="subtitle">@Localizer["for-date"] @Model.SubstitutionsRecord.SubstitutionsDate.ToShortDateString()</h3>
-    
-    <table class="table">
-        <thead>
-        <tr>
-            <th>@Localizer["lesson"]</th>
-            <th>@Localizer["classes"]</th>
-            <th>@Localizer["subject"]</th>
-            <th>@Localizer["teacher"]</th>
-            <th>@Localizer["groups"]</th>
-            <th>@Localizer["room"]</th>
-            <th>@Localizer["details"]</th>
-            <th>@Localizer["note"]</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var substitution in Model.SubstitutionsRecord.Substitutions)
-        {
-            <tr>
-                <td>@substitution.Lesson</td>
-                <td>@string.Join(';',substitution.Classes)</td>
-            </tr>
-        }
-        </tbody>
-    </table>
+    <div class="table-container">
+        <table class="table is-bordered is-striped is-fullwidth">
+                <thead>
+                <tr>
+                    <th>@Localizer["lesson"]</th>
+                    <th>@Localizer["classes"]</th>
+                    <th>@Localizer["subject"]</th>
+                    <th>@Localizer["teacher"]</th>
+                    <th>@Localizer["groups"]</th>
+                    <th>@Localizer["room"]</th>
+                    <th>@Localizer["details"]</th>
+                    <th>@Localizer["note"]</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var substitution in Model.SubstitutionsRecord.Substitutions)
+                {
+                    <tr>
+                        <td>@substitution.Lesson</td>
+                        <td>@string.Join(';',substitution.Classes)</td>
+                        <td>@substitution.Subject</td>
+                        <td>@substitution.Teacher</td>
+                        <td>@substitution.Groups</td>
+                        <td>@substitution.Room</td>
+                        @if (substitution.Cancelled)
+                        {
+                            <td>@Localizer["canceled"]</td>
+                        }
+                        else
+                        {
+                            <td>@substitution.Substituting</td>
+                        }
+                        <td>@substitution.Note</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+    </div>
 </div>
