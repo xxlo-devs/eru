@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Linq;
 using System.Net;
 using eru.Application.Common.Interfaces;
-using eru.Domain.Entity;
 using FluentValidation;
 using Microsoft.Extensions.Configuration;
 
-namespace eru.Application.Substitutions.Commands
+namespace eru.Application.Substitutions.Commands.UploadSubstitutions
 {
     public class UploadSubstitutionsCommandValidator : AbstractValidator<UploadSubstitutionsCommand>
     {

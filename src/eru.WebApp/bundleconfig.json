@@ -21,6 +21,13 @@
     ]
   },
   {
+    "outputFileName": "wwwroot/dist/css/substitutions.min.css",
+    "inputFiles": [
+      "wwwroot/css/common.css",
+      "wwwroot/css/substitutions.css"
+    ]
+  },
+  {
     "outputFileName": "wwwroot/dist/js/dashboard.min.js",
     "inputFiles": [
       "wwwroot/js/dashboard.js"

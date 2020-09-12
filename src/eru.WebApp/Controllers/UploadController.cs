@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using eru.Application.Substitutions.Commands;
+using eru.Application.Substitutions.Commands.UploadSubstitutions;
 using eru.WebApp.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

@@ -1,0 +1,41 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@model eru.WebApp.Pages.Substitutions
+@inject IViewLocalizer Localizer
+
+@{
+    Layout = "Layouts/BaseLayout";
+}
+@section AddToHead
+{
+    <link href="dist/css/substitutions.min.css" type="text/css" rel="stylesheet"/>
+}
+<div id="wrapper" class="has-text-centered">
+    <h1 class="title">@Localizer["title"]</h1>
+    <h3 class="subtitle">@Localizer["uploaded-on"] @Model.SubstitutionsRecord.UploadDateTime.ToShortDateString()</h3>
+    <h3 class="subtitle">@Localizer["for-date"] @Model.SubstitutionsRecord.SubstitutionsDate.ToShortDateString()</h3>
+    
+    <table class="table">
+        <thead>
+        <tr>
+            <th>@Localizer["lesson"]</th>
+            <th>@Localizer["classes"]</th>
+            <th>@Localizer["subject"]</th>
+            <th>@Localizer["teacher"]</th>
+            <th>@Localizer["groups"]</th>
+            <th>@Localizer["room"]</th>
+            <th>@Localizer["details"]</th>
+            <th>@Localizer["note"]</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var substitution in Model.SubstitutionsRecord.Substitutions)
+        {
+            <tr>
+                <td>@substitution.Lesson</td>
+                <td>@string.Join(';',substitution.Classes)</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

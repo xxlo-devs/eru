@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using MediatR;
 
-namespace eru.Application.Substitutions.Commands
+namespace eru.Application.Substitutions.Commands.UploadSubstitutions
 {
     public class UploadSubstitutionsCommand : IRequest
     {

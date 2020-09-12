@@ -8,7 +8,7 @@ using Hangfire;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace eru.Application.Substitutions.Commands
+namespace eru.Application.Substitutions.Commands.UploadSubstitutions
 {
     public class UploadSubstitutionsCommandHandler : IRequestHandler<UploadSubstitutionsCommand, Unit>
     {
