@@ -12,8 +12,8 @@ using eru.Infrastructure.Persistence;
 namespace eru.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200912132811_RemoveSubstitutionTypeFromFluentApi")]
-    partial class RemoveSubstitutionTypeFromFluentApi
+    [Migration("20200913071719_AddSubstitutionsHistory")]
+    partial class AddSubstitutionsHistory
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
