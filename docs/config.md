@@ -9,7 +9,9 @@ Most common way to do it is via appsettings.json file available in src/eru.WebAp
 {
   "Serilog" : {
     "Using" : ["Serilog.Sinks.Console", "Serilog.Sinks.File", "Serilog.Sinks.Seq"],
-    "MinimumLevel" : "Information",
+    "MinimumLevel" : {
+      "Default": "Information"
+    },
     "WriteTo": [
       {"Name" :  "Console"},
       {"Name" :  "File", "Args" :  {"path" :  "../Logs/log.txt", "rollingInterval" :  "Day"}},
@@ -36,6 +38,12 @@ Most common way to do it is via appsettings.json file available in src/eru.WebAp
   "Paths": {
     "WebAppPathBase": "/",
     "SeqUiPath": "http://localhost:5341/"
+  },
+  "PlatformClients": {
+    "FacebookMessenger": {
+      "VerifyToken": "sample-verify-token",
+      "AccessToken": "sample-access-token"
+    }
   }
 }
 ```
@@ -82,3 +90,13 @@ All provided here accounts will be able to access hangfire and admin dashboard.
 WebAppBasePath sets the base path for the application. Read more [here](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.builder.usepathbaseextensions.usepathbase?view=aspnetcore-3.1). NOTE: WebAppBasePath SHOULD MATCH reverse proxy path on proxy server (for instance, http://myproxyserver/eru should be a proxy to http://myeruserver/eru). If you're not using reverse proxy, you probably can leave it as in sample config. 
 
 SeqUiPath is used by admin dashboard to provide easy access to logs. You should set it to address accessible outside the local network. 
+
+## PlatformClients
+
+Store for data used by Platform Clients. 
+
+### Facebook Messenger
+
+VerifyToken sets the verify token used by the Facebook Messenger Platform to verify a webhook. See more [here](https://developers.facebook.com/docs/messenger-platform/webhook).
+
+AccessToken is the authorization token used by the Facebook API and can be obtained in application panel. See how [here](https://developers.facebook.com/docs/messenger-platform/getting-started/quick-start). 

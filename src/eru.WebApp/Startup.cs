@@ -1,6 +1,6 @@
-using System.Globalization;
 using eru.Application;
 using eru.Infrastructure;
+using eru.PlatformClients.FacebookMessenger;
 using eru.WebApp.Filters;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -25,6 +25,9 @@ namespace eru.WebApp
         {
             services.AddApplication();
             services.AddInfrastructure(_configuration);
+
+            services.AddFacebookMessenger();
+            
             services.AddRazorPages(options =>
             {
                 options.Conventions.AuthorizePage("/admin");
@@ -64,9 +67,11 @@ namespace eru.WebApp
             app.UseRouting();
             
             app.UseStaticFiles();
-
+            
             app.UseInfrastructure(_configuration);
-
+            
+            app.UseFacebookMessenger();
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

@@ -2,6 +2,10 @@
 using eru.Infrastructure.Hangfire;
 using eru.Infrastructure.Identity;
 using eru.Infrastructure.Persistence;
+using Hangfire;
+using Hangfire.Dashboard.BasicAuthorization;
+using Hangfire.MemoryStorage;
+using MediatR;
 using eru.Infrastructure.Translation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -27,10 +31,12 @@ namespace eru.Infrastructure
             services.AddTransient<IClassesParser, ClassesParser.ClassesParser>();
             services.AddHealthChecks()
                 .AddDbContextCheck<ApplicationDbContext>();
+
             return services;
         }
 
-        public static IApplicationBuilder UseInfrastructure(this IApplicationBuilder app, IConfiguration configuration) =>
+        public static IApplicationBuilder
+            UseInfrastructure(this IApplicationBuilder app, IConfiguration configuration) =>
             app
                 .UseDatabase()
                 .UseTranslator()
