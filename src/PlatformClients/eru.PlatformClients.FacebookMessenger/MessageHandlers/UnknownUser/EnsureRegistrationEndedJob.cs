@@ -11,9 +11,9 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.UnknownUser
     {
         private readonly IRegistrationDbContext _dbContext;
 
-        public EnsureRegistrationEndedJob()
+        public EnsureRegistrationEndedJob(IRegistrationDbContext dbContext)
         {
-            _dbContext = new RegistrationDbContext(new DbContextOptions<RegistrationDbContext>());
+            _dbContext = dbContext;
         }
         
         public async Task EnsureRegistrationEnded(string uid)

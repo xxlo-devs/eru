@@ -39,7 +39,7 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.UnknownUser
 
             _backgroundJobClient.Schedule<EnsureRegistrationEndedJob>(
                 x => x.EnsureRegistrationEnded(incompleteUser.Id),
-                TimeSpan.FromMinutes(5)
+                TimeSpan.FromMinutes(15)
                 );
         }
     }
