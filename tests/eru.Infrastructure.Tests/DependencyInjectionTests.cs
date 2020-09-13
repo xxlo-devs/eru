@@ -20,7 +20,10 @@ namespace eru.Infrastructure.Tests
         public Task IsAnyIStopwatchImplementationAvailable()
         {
             var configuration = new ConfigurationBuilder()
-                .AddInMemoryCollection()
+                .AddInMemoryCollection(new []
+                {
+                    new KeyValuePair<string, string>("Database:Type", "unit-testing"), 
+                })
                 .Build();
             var serviceProvider = new ServiceCollection()
                 .AddInfrastructure(configuration)

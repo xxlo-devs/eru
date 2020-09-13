@@ -62,4 +62,8 @@
         <value>Have you experienced any bug? Do you have any idea for a feature that might be useful? Reach out to us! Simply create a new issue on &lt;a target="_blank" href="https://github.com/xxlo-devs/eru"&gt;GitHub&lt;/a&gt; or write to us by email &lt;a href="mailto:eru@2137420.xyz"&gt;eru@2137420.xyz&lt;/a&gt;!</value>
         <comment>help-details</comment>
     </data>
+    <data name="online-page" xml:space="preserve">
+        <value>Online page with most recent substitutions.</value>
+        <comment>online-page</comment>
+    </data>
 </root>

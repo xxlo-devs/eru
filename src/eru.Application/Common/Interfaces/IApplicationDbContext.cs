@@ -9,6 +9,7 @@ namespace eru.Application.Common.Interfaces
     {
         DbSet<Class> Classes { get; set; }
         DbSet<Subscriber> Subscribers { get; set; }
+        DbSet<SubstitutionsRecord> SubstitutionsRecords { get; set; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
 }

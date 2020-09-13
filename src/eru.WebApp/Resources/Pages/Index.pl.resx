@@ -62,4 +62,8 @@
         <value>Znalazłeś jakiś błąd? Masz pomysł na nową, przydatną funkcję? Zgłoś się do nas! Możesz stworzyć tzw. issue na platformie &lt;a target="_blank" href="https://github.com/xxlo-devs/eru"&gt;GitHub&lt;/a&gt; lub napisać na naszego maila &lt;a href="mailto:eru@2137420.xyz"&gt;eru@2137420.xyz&lt;/a&gt;!</value>
         <comment>help-details</comment>
     </data>
+    <data name="online-page" xml:space="preserve">
+        <value>Strona internetowa z najnowszymi zastępstwami.</value>
+        <comment>online-page</comment>
+    </data>
 </root>

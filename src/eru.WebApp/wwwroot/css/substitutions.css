@@ -1,0 +1,12 @@
+﻿@media (prefers-color-scheme: dark) {
+    .title {
+        color: white;
+    }
+    .subtitle {
+        color: white;
+    }
+}
+.table {
+    margin-left: auto;
+    margin-right: auto;
+}

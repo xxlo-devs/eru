@@ -8,7 +8,7 @@ using Hangfire;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace eru.Application.Substitutions.Commands
+namespace eru.Application.Substitutions.Commands.UploadSubstitutions
 {
     public class UploadSubstitutionsCommandHandler : IRequestHandler<UploadSubstitutionsCommand, Unit>
     {
@@ -35,8 +35,8 @@ namespace eru.Application.Substitutions.Commands
                 var trackedClasses = new List<Class>();
                 foreach (var @class in classes)
                 {
-                    var tmpClass = await _context.Classes.FirstOrDefaultAsync(x => x.Year == @class.Year && x.Section == @class.Section, cancellationToken);
-                    if (tmpClass == null)
+                    var dbClass = await _context.Classes.FirstOrDefaultAsync(x => x.Year == @class.Year && x.Section == @class.Section, cancellationToken);
+                    if (dbClass == null)
                     {
                         if (!newClasses.Any(x=>x.Year == @class.Year && x.Section == @class.Section))
                         {
@@ -47,7 +47,7 @@ namespace eru.Application.Substitutions.Commands
                     }
                     else
                     {
-                        trackedClasses.Add(tmpClass);
+                        trackedClasses.Add(dbClass);
                     }
                 }
 
@@ -64,6 +64,14 @@ namespace eru.Application.Substitutions.Commands
                     Teacher = substitution.Absent
                 });
             }
+            
+            await _context.SubstitutionsRecords.AddAsync(new SubstitutionsRecord
+            {
+                Substitutions = data,
+                SubstitutionsDate = request.SubstitutionsDate,
+                UploadDateTime = request.UploadDateTime
+            }, cancellationToken);
+            
             await _context.SaveChangesAsync(cancellationToken);
             
             var temp = _context.Classes.ToDictionary(x => x.Id, x => new HashSet<Substitution>());

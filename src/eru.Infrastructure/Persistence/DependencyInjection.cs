@@ -10,21 +10,15 @@ namespace eru.Infrastructure.Persistence
     {
         public static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
         {
-            switch (configuration.GetValue<string>("Database:Type")?.ToLower() ?? "inmemory")
+            if (configuration.GetValue<string>("Database:Type")?.ToLower() == "unit-testing")
             {
-                case "inmemory":
-                    services.AddDbContext<ApplicationDbContext>(options => options.UseInMemoryDatabase("eru"));
-                    break;
-                case "sqlite":
-                    SetupSqliteDbContext(services, configuration);
-                    break;
-                case "postgresql":
-                    SetupPostgresDbContext(services, configuration);
-                    break;
-                default:
-                    throw new DatabaseSettingsException();
+                //Used whenever test requires a complete app built but does not require using db.
+                services.AddDbContext<ApplicationDbContext>(options => options.UseInMemoryDatabase("eru"));
             }
-
+            else
+            {
+                SetupPostgresDbContext(services, configuration);
+            }
             return services;
         }
 
@@ -39,23 +33,7 @@ namespace eru.Infrastructure.Persistence
             return app;
         }
 
-        private static void SetupSqliteDbContext(IServiceCollection services, IConfiguration configuration)
-        {
-            var connectionString = configuration.GetValue<string>("Database:ConnectionString");
-            if(string.IsNullOrEmpty(connectionString)) throw new DatabaseSettingsException();
-            var dbContextOptionsBuilder = new DbContextOptionsBuilder()
-                .UseSqlite(connectionString, y =>
-                {
-                    y.MigrationsAssembly("eru.Infrastructure");
-                });
-            using var dbContext = new DbContext(dbContextOptionsBuilder.Options);
-            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(connectionString, y =>
-            {
-                y.MigrationsAssembly("eru.Infrastructure");
-            }));
-        }
-        
-        
+
         private static void SetupPostgresDbContext(IServiceCollection services, IConfiguration configuration)
         {
             var connectionString = configuration.GetValue<string>("Database:ConnectionString");

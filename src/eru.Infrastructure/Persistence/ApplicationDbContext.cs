@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using eru.Application.Common.Interfaces;
+﻿using eru.Application.Common.Interfaces;
 using eru.Domain.Entity;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,7 +13,8 @@ namespace eru.Infrastructure.Persistence
         
         public DbSet<Class> Classes { get; set; }
 
-        public DbSet<Subscriber> Subscribers { get; set; } 
+        public DbSet<Subscriber> Subscribers { get; set; }
+        public DbSet<SubstitutionsRecord> SubstitutionsRecords { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -35,6 +35,13 @@ namespace eru.Infrastructure.Persistence
                 x.Property(y => y.Platform).HasMaxLength(255);
                 x.Property(y => y.Class).HasMaxLength(255);
                 x.Property(y => y.PreferredLanguage).HasMaxLength(255);
+            });
+
+            modelBuilder.Entity<SubstitutionsRecord>(x =>
+            {
+                x.HasKey(y => y.UploadDateTime);
+                x.Property(y => y.Substitutions)
+                    .HasColumnType("jsonb");
             });
         }
     }

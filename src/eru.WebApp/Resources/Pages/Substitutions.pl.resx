@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true">
+            
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="title" xml:space="preserve">
+        <value>eru - Najnowsze Zastępstwa</value>
+        <comment>title</comment>
+    </data>
+    <data name="uploaded-on" xml:space="preserve">
+        <value>Przesłane:</value>
+        <comment>uploaded-on</comment>
+    </data>
+    <data name="for-date" xml:space="preserve">
+        <value>Dla dnia: </value>
+        <comment>for-date</comment>
+    </data>
+    <data name="lesson" xml:space="preserve">
+        <value>Godzina Lekcyjna</value>
+        <comment>lesson</comment>
+    </data>
+    <data name="classes" xml:space="preserve">
+        <value>Klasy</value>
+        <comment>classes</comment>
+    </data>
+    <data name="subject" xml:space="preserve">
+        <value>Przedmiot</value>
+        <comment>subject</comment>
+    </data>
+    <data name="teacher" xml:space="preserve">
+        <value>Nauczyciel</value>
+        <comment>teacher</comment>
+    </data>
+    <data name="groups" xml:space="preserve">
+        <value>Grupy</value>
+        <comment>groups</comment>
+    </data>
+    <data name="room" xml:space="preserve">
+        <value>Sala Lekcyjna</value>
+        <comment>room</comment>
+    </data>
+    <data name="details" xml:space="preserve">
+        <value>Szczegóły</value>
+        <comment>details</comment>
+    </data>
+    <data name="note" xml:space="preserve">
+        <value>Notatka</value>
+        <comment>note</comment>
+    </data>
+    <data name="canceled" xml:space="preserve">
+        <value>Odwołane</value>
+        <comment>canceled</comment>
+    </data>
+    <data name="no-substitutions" xml:space="preserve">
+        <value>Do systemu nie trafiły jeszcze żadne zastępstwa.</value>
+        <comment>no-substitutions</comment>
+    </data>
+</root>
