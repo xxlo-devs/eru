@@ -17,6 +17,7 @@ using FluentValidation;
 using Hangfire;
 using Hangfire.Common;
 using Hangfire.States;
+using Microsoft.EntityFrameworkCore;
 using Xunit;
 
 namespace eru.Application.Tests.Substitutions.Commands
@@ -305,5 +306,76 @@ namespace eru.Application.Tests.Substitutions.Commands
                 });
         }
 
+        [Fact]
+        public async Task DoesUploadAddCorrectSubstitutionRecord()
+        {
+            var request = new UploadSubstitutionsCommand
+            {
+                IpAddress = MockData.CorrectIpAddress,
+                Key = MockData.CorrectUploadKey,
+                SubstitutionsDate = MockData.CorrectDate,
+                UploadDateTime = MockData.CorrectDate,
+                Substitutions = new[]
+                {
+                    new SubstitutionDto
+                    {
+                        Absent = "MockedAbsent1", Lesson = 1, Subject = "MockedSubject1",
+                        ClassesNames = new[] {"1b", "2a"}, Groups = "group1,group2", Note = "MockedNote",
+                        Cancelled = true, Room = "MockedRoom"
+                    },
+                    new SubstitutionDto
+                    {
+                        Absent = "MockedAbsent2", Lesson = 2, Subject = "MockedSubject2", ClassesNames = new[] {"1b"},
+                        Groups = "n/a", Note = "MockedNote2", Substituting = "MockedSubstituting", Room = "MockedRoom"
+                    }
+                }
+            };
+
+            var context = new FakeDbContext();
+            var clients = new IPlatformClient[0];
+            var hangfire = new Mock<IBackgroundJobClient>();
+            var classesParser = new Mock<IClassesParser>();
+            
+            classesParser
+                .Setup(x => x.Parse(new[] {"1b"}))
+                .Returns(new[] {new Class(1, "b")});
+            classesParser
+                .Setup(x => x.Parse(new[] {"1b", "2a"}))
+                .Returns(new[] {new Class(1, "b"), new Class(2, "a")});
+            
+            var handler = new UploadSubstitutionsCommandHandler(context, clients, hangfire.Object, classesParser.Object);
+            await handler.Handle(request, CancellationToken.None);
+            
+            var expected = new SubstitutionsRecord {
+                UploadDateTime = DateTime.UtcNow,
+                SubstitutionsDate = DateTime.UtcNow,
+                Substitutions = new[]
+                {
+                    new Substitution
+                    {
+                        Teacher = "MockedAbsent1", Lesson = 1, Subject = "MockedSubject1", Groups = "group1,group2",
+                        Note = "MockedNote", Cancelled = true, Room = "MockedRoom",
+                        Classes = new[]
+                        {
+                            await context.Classes.FirstOrDefaultAsync(x => x.Year == 1 && x.Section == "b"),
+                            await context.Classes.FirstOrDefaultAsync(x => x.Year == 2 && x.Section == "a")
+                        }
+                    },
+                    new Substitution
+                    {
+                        Teacher = "MockedAbsent2", Lesson = 2, Subject = "MockedSubject2", Groups = "n/a",
+                        Note = "MockedNote2", Substituting = "MockedSubstituting", Room = "MockedRoom",
+                        Classes = new[]
+                        {
+                            await context.Classes.FirstOrDefaultAsync(x => x.Year == 1 && x.Section == "b")
+                        }
+                    }
+                }
+            };
+
+            var actual = await context.SubstitutionsRecords.FirstOrDefaultAsync();
+            
+            actual.Should().BeEquivalentTo(expected);
+        }
     }
 }
