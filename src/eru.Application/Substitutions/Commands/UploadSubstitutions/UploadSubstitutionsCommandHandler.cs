@@ -7,6 +7,7 @@ using eru.Domain.Entity;
 using Hangfire;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace eru.Application.Substitutions.Commands.UploadSubstitutions
 {
@@ -43,6 +44,12 @@ namespace eru.Application.Substitutions.Commands.UploadSubstitutions
                             var entity = await _context.Classes.AddAsync(@class, cancellationToken);
                             newClasses.Add(entity.Entity);
                             trackedClasses.Add(entity.Entity);   
+                        }
+                        else
+                        {
+                            var entity = newClasses.First(x 
+                                => x.Year == @class.Year && x.Section == @class.Section);
+                            trackedClasses.Add(entity);
                         }
                     }
                     else

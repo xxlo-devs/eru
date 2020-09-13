@@ -347,8 +347,8 @@ namespace eru.Application.Tests.Substitutions.Commands
             await handler.Handle(request, CancellationToken.None);
             
             var expected = new SubstitutionsRecord {
-                UploadDateTime = DateTime.UtcNow,
-                SubstitutionsDate = DateTime.UtcNow,
+                UploadDateTime = MockData.CorrectDate,
+                SubstitutionsDate = MockData.CorrectDate,
                 Substitutions = new[]
                 {
                     new Substitution
