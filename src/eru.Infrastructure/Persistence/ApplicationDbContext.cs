@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using eru.Application.Common.Interfaces;
+﻿using eru.Application.Common.Interfaces;
 using eru.Domain.Entity;
 using Microsoft.EntityFrameworkCore;
 

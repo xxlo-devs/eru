@@ -66,4 +66,8 @@
         <value>Odwołane</value>
         <comment>canceled</comment>
     </data>
+    <data name="no-substitutions" xml:space="preserve">
+        <value>Do systemu nie trafiły jeszcze żadne zastępstwa.</value>
+        <comment>no-substitutions</comment>
+    </data>
 </root>

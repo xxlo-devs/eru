@@ -35,8 +35,8 @@ namespace eru.Application.Substitutions.Commands.UploadSubstitutions
                 var trackedClasses = new List<Class>();
                 foreach (var @class in classes)
                 {
-                    var tmpClass = await _context.Classes.FirstOrDefaultAsync(x => x.Year == @class.Year && x.Section == @class.Section, cancellationToken);
-                    if (tmpClass == null)
+                    var dbClass = await _context.Classes.FirstOrDefaultAsync(x => x.Year == @class.Year && x.Section == @class.Section, cancellationToken);
+                    if (dbClass == null)
                     {
                         if (!newClasses.Any(x=>x.Year == @class.Year && x.Section == @class.Section))
                         {
@@ -47,7 +47,7 @@ namespace eru.Application.Substitutions.Commands.UploadSubstitutions
                     }
                     else
                     {
-                        trackedClasses.Add(tmpClass);
+                        trackedClasses.Add(dbClass);
                     }
                 }
 
@@ -64,7 +64,7 @@ namespace eru.Application.Substitutions.Commands.UploadSubstitutions
                     Teacher = substitution.Absent
                 });
             }
-
+            
             await _context.SubstitutionsRecords.AddAsync(new SubstitutionsRecord
             {
                 Substitutions = data,

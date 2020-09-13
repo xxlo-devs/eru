@@ -66,4 +66,8 @@
         <value>Cancelled</value>
         <comment>canceled</comment>
     </data>
+    <data name="no-substitutions" xml:space="preserve">
+        <value>No substitutions has been delivered to system.</value>
+        <comment>no-substitutions</comment>
+    </data>
 </root>

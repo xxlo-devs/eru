@@ -21,7 +21,7 @@ namespace eru.WebApp.Pages
 
         public async Task OnGet()
         {
-            SubstitutionsRecord = (await _mediator.Send(new GetLatestSubstitution()));
+            SubstitutionsRecord = await _mediator.Send(new GetLatestSubstitution());
         }
     }
 }

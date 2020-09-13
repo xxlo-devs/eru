@@ -50,26 +50,6 @@ namespace eru.Application.Tests
                     new Subscriber { Id = "sample-subscriber", Platform = "DebugMessageService", Class = "sample-class-id", PreferredLanguage = "pl" }
                 );
             });
-            
-            modelBuilder.Entity<Substitution>(x =>
-            {
-                x.HasKey(y => y.Id);
-                x.Property(y => y.Groups)
-                    .HasMaxLength(255);
-                x.Property(y => y.Id)
-                    .HasMaxLength(255)
-                    .ValueGeneratedOnAdd();
-                x.Property(y => y.Note)
-                    .HasMaxLength(255);
-                x.Property(y => y.Room)
-                    .HasMaxLength(255);
-                x.Property(y => y.Subject)
-                    .HasMaxLength(255);
-                x.Property(y => y.Substituting)
-                    .HasMaxLength(255);
-                x.Property(y => y.Teacher)
-                    .HasMaxLength(255);
-            });
 
             modelBuilder.Entity<SubstitutionsRecord>(x =>
             {
