@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using FluentAssertions;
 using Hangfire;
 using Microsoft.Extensions.Configuration;
@@ -14,7 +15,10 @@ namespace eru.Infrastructure.Tests.Hangfire
         public Task IsHangfireCorrectlyConfigured()
         {
             var configuration = new ConfigurationBuilder()
-                .AddInMemoryCollection()
+                .AddInMemoryCollection(new[]
+                    {
+                        new KeyValuePair<string, string>("Database:Type", "unit-testing"),
+                    })
                 .Build();
             var serilog = new LoggerConfiguration().CreateLogger();
             var serviceProvider = new ServiceCollection()

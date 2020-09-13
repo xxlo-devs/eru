@@ -10,7 +10,15 @@ namespace eru.Infrastructure.Persistence
     {
         public static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
         {
-            SetupPostgresDbContext(services, configuration);
+            if (configuration.GetValue<string>("Database:Type")?.ToLower() == "unit-testing")
+            {
+                //Used whenever test requires a complete app built but does not require using db.
+                services.AddDbContext<ApplicationDbContext>(options => options.UseInMemoryDatabase("eru"));
+            }
+            else
+            {
+                SetupPostgresDbContext(services, configuration);
+            }
             return services;
         }
 
