@@ -38,7 +38,9 @@ namespace eru.PlatformClients.FacebookMessenger
             await _apiClient.Send(new SendRequest(id,
                 new Message(content, await GetCancelButton(user.PreferredLanguage)), MessageTags.AccountUpdate));
             
-            _logger.LogInformation($"FacebookMessengerPlatformClient sent a generic message to user (uid: {id}) with content (content: {content})");
+            _logger.LogInformation(
+                "Facebook Messenger Platform Client: sent a generic message to user (uid: {user}) with content (content: {content})",
+                user, content);
         }
 
         public async Task SendMessage(string id, IEnumerable<Substitution> substitutions)
@@ -64,7 +66,7 @@ namespace eru.PlatformClients.FacebookMessenger
                 new Message(await _translator.TranslateString("closing-substitutions", user.PreferredLanguage),
                     await GetCancelButton(user.PreferredLanguage)), MessageTags.ConfirmedEventUpdate));
             
-            _logger.LogInformation($"FacebookMessengerPlatformClient sent substitutions to user (uid: {id}");
+            _logger.LogInformation("Facebook Messenger Platform Client: sent substitutions to user {user}", user);
         }
 
         private async Task<IEnumerable<QuickReply>> GetCancelButton(string lang)

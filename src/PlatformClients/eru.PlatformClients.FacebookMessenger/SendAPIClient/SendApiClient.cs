@@ -29,19 +29,25 @@ namespace eru.PlatformClients.FacebookMessenger.SendAPIClient
             var json = JsonSerializer.Serialize(request, new JsonSerializerOptions {IgnoreNullValues = true});
             var content = new StringContent(json, Encoding.Default, "application/json");
 
-            _logger.LogTrace($"FacebookMessenger Send API Client: trying to send a message (message: {json}) to URL: {_client.BaseAddress}{accessToken}");
+            _logger.LogTrace(
+                "Facebook Messenger Send API Client: trying to send a message (message: {json}) to URL: {_client.BaseAddress}{accessToken}",
+                json, _client.BaseAddress, accessToken);
             
             var httpRequest = await _client.PostAsync(accessToken, content);
             var httpResponse = await httpRequest.Content.ReadAsStringAsync();
             
             if (!httpRequest.IsSuccessStatusCode)
             {
-                _logger.LogError($"FacebookMessenger Send API Client: there was an error while sending request to Facebook (status code: {httpRequest.StatusCode}, error body: {httpResponse})");
+                _logger.LogError(
+                    "Facebook Messenger Send API Client: there was an error while sending request to Facebook (request: {httpRequest}, error body: {httpResponse})",
+                    httpRequest, httpResponse);
                 throw new MessageSendingException("Facebook Messenger GraphQL Endpoint returned non-success HTTP Status Code");
             }
             else
             {
-                _logger.LogInformation($"FacebookMessenger Send API Client: successfully send a GraphQL Send API Request to Facebook (HTTP Status Code: {httpRequest.StatusCode}");
+                _logger.LogInformation(
+                    "FacebookMessenger Send API Client: successfully send a GraphQL Send API Request to Facebook (HTTP Request: {httpRequest})",
+                    httpRequest);
             }
         }
     }

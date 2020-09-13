@@ -38,7 +38,9 @@ namespace eru.PlatformClients.FacebookMessenger.Middleware
                     break;
 
                 default:
-                    _logger.LogWarning("Facebook Messenger Webhook Middleware got a request with not supported method");
+                    _logger.LogWarning(
+                        "Facebook Messenger Webhook Middleware: got a request with not supported method (HttpContext: {context})",
+                        context);
                     await context.SendResponse(HttpStatusCode.MethodNotAllowed);
                     break;
             }
@@ -55,18 +57,24 @@ namespace eru.PlatformClients.FacebookMessenger.Middleware
                 if (mode == VerificationMode.Subscribe && token == _configuration["PlatformClients:FacebookMessenger:VerifyToken"])
                 {
                     await context.SendOkResponse(challenge);
-                    _logger.LogInformation("Facebook Messenger Webhook Middleware successfully verified a webhook");
+                    _logger.LogInformation(
+                        "Facebook Messenger Webhook Middleware: successfully verified a webhook (hub.mode: {mode}, hub.verify_token: {token}, hub.challenge: {challenge})",
+                        mode, token, challenge);
                 }
                 else
                 {
                     await context.SendResponse(HttpStatusCode.Forbidden);
-                    _logger.LogWarning("Facebook Messenger Webhook Middleware got a verify requests with invalid token");
+                    _logger.LogWarning(
+                        "Facebook Messenger Webhook Middleware: got a verify requests with invalid token (hub.mode: {mode}, hub.verify_token: {token}, hub.challenge: {challenge})",
+                        mode, token, challenge);
                 }
             }
             else
             {
                 await context.SendResponse(HttpStatusCode.BadRequest);
-                _logger.LogWarning("Facebook Messenger Webhook Middleware got an invalid verify request");
+                _logger.LogWarning(
+                    "Facebook Messenger Webhook Middleware: got an invalid verify request (HttpContext: {context})",
+                    context);
             }
         }
 
@@ -84,18 +92,20 @@ namespace eru.PlatformClients.FacebookMessenger.Middleware
                     }
                     
                     await context.SendOkResponse(Responses.EventReceived);
-                    _logger.LogInformation("Facebook Messenger Webhook Middleware successfully processed an event");
+                    _logger.LogInformation("Facebook Messenger Webhook Middleware: successfully processed an event (event: {webhook})", webhook);
                 }
                 else
                 {
                     await context.SendResponse(HttpStatusCode.NotFound);
-                    _logger.LogWarning("Facebook Messenger Webhook Middleware got an unsupported event");
+                    _logger.LogWarning("Facebook Messenger Webhook Middleware: got an unsupported event (event: {webhook})", webhook);
                 }
             }
             catch
             {
                 await context.SendResponse(HttpStatusCode.BadRequest);
-                _logger.LogError("Facebook Messenger Webhook Middleware couldn't process event");
+                _logger.LogError(
+                    "Facebook Messenger Webhook Middleware: couldn't process event (HttpContext: {context})",
+                    context);
             }
         }
     }

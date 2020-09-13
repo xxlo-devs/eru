@@ -29,7 +29,9 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
         
         public async Task Handle(IncompleteUser user, Payload payload)
         {
-            _logger.LogTrace($"Facebook Messenger Message Handler {typeof(T).Name} got a request from user (id: {user.Id}) with payload (type - {payload?.Type.ToString()}, id - {payload?.Id}, page - {payload?.Page.ToString()})");
+            _logger.LogTrace(
+                "Facebook Messenger Message Handler {typeof(T).Name} got a request from user {user} with payload {payload}",
+                typeof(T).Name, user, payload);
             
             if (payload?.Id != null)
             {
@@ -54,7 +56,9 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
 
             _dbContext.IncompleteUsers.Update(usr);
             await _dbContext.SaveChangesAsync(CancellationToken.None);
-            _logger.LogInformation($"Facebook Messenger Message Handler {typeof(T).Name} successfully sent page {page} for user {user.Id}");
+            _logger.LogInformation(
+                "Facebook Messenger Message Handler {typeof(T).Name} successfully sent page {page} for user {user}",
+                typeof(T).Name, page, user);
         }
 
         private async Task UpdateUser(IncompleteUser user, string data)
@@ -65,13 +69,17 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
             
             _dbContext.IncompleteUsers.Update(usr);
             await _dbContext.SaveChangesAsync(CancellationToken.None);
-            _logger.LogInformation($"Facebook Messenger Message Handler {typeof(T).Name} successfully updated user {user.Id} with data {data}");
+            _logger.LogInformation(
+                "Facebook Messenger Message Handler {typeof(T).Name} successfully updated user {user} with data {data}",
+                typeof(T).Name, user, data);
         }
         
         private async Task UnsupportedCommand(IncompleteUser user)
         {
             await UnsupportedCommandBase(user);
-            _logger.LogInformation($"Facebook Messenger Message Handler {typeof(T).Name} successfully sent UnsupportedCommand response to user {user.Id}");
+            _logger.LogInformation(
+                "Facebook Messenger Message Handler {typeof(T).Name} successfully sent UnsupportedCommand response to user {user}",
+                typeof(T).Name, user);
         }
         
         protected async Task<IEnumerable<QuickReply>> GetSelector(Dictionary<string, string> items, int page, PayloadType payloadType, string displayCulture)
