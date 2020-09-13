@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using eru.Application.Common.Interfaces;
 using eru.Domain.Entity;
 using Microsoft.EntityFrameworkCore;
@@ -54,13 +57,10 @@ namespace eru.Application.Tests
             modelBuilder.Entity<SubstitutionsRecord>(x =>
             {
                 x.HasKey(y => y.UploadDateTime);
-            });
-
-            modelBuilder.Entity<Substitution>(x =>
-            {
-                x.HasKey(y => y.Id);
-                x.Property(y => y.Id)
-                    .ValueGeneratedOnAdd();
+                x.Property(y => y.Substitutions)
+                    .HasConversion(
+                        substitutions => JsonSerializer.Serialize(substitutions, null),
+                        json => JsonSerializer.Deserialize<IEnumerable<Substitution>>(json, null));
             });
 
             base.OnModelCreating(modelBuilder);

@@ -4,7 +4,6 @@ namespace eru.Domain.Entity
 {
     public class Substitution
     {
-        public string Id { get; set; }
         public string Teacher { get; set; }
         public int Lesson { get; set; }
         public string Subject { get; set; }
