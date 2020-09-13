@@ -9,7 +9,8 @@ using Microsoft.Extensions.Logging;
 
 namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser
 {
-    public class KnownUserMessageMessageHandler : MessageHandler<KnownUserMessageMessageHandler>, IKnownUserMessageHandler
+    public class KnownUserMessageMessageHandler : MessageHandler<KnownUserMessageMessageHandler>,
+        IKnownUserMessageHandler
     {
         private readonly ICancelSubscriptionMessageHandler _cancelHandler;
         private readonly IUnsupportedCommandMessageHandler _unsupportedHandler;

@@ -54,7 +54,8 @@ namespace eru.PlatformClients.FacebookMessenger.Middleware
 
             if (mode != null && token != null && challenge != null)
             {
-                if (mode == VerificationMode.Subscribe && token == _configuration["PlatformClients:FacebookMessenger:VerifyToken"])
+                if (mode == VerificationMode.Subscribe &&
+                    token == _configuration["PlatformClients:FacebookMessenger:VerifyToken"])
                 {
                     await context.SendOkResponse(challenge);
                     _logger.LogInformation(

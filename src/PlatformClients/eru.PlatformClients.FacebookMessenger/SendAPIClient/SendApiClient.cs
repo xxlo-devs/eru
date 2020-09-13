@@ -31,7 +31,7 @@ namespace eru.PlatformClients.FacebookMessenger.SendAPIClient
 
             _logger.LogTrace(
                 "Facebook Messenger Send API Client: trying to send a message (message: {json}) to URL: {_client.BaseAddress}{accessToken}",
-                json, _client.BaseAddress, accessToken);
+                json, _client, accessToken);
             
             var httpRequest = await _client.PostAsync(accessToken, content);
             var httpResponse = await httpRequest.Content.ReadAsStringAsync();
@@ -41,7 +41,8 @@ namespace eru.PlatformClients.FacebookMessenger.SendAPIClient
                 _logger.LogError(
                     "Facebook Messenger Send API Client: there was an error while sending request to Facebook (request: {httpRequest}, error body: {httpResponse})",
                     httpRequest, httpResponse);
-                throw new MessageSendingException("Facebook Messenger GraphQL Endpoint returned non-success HTTP Status Code");
+                throw new MessageSendingException(
+                    "Facebook Messenger GraphQL Endpoint returned non-success HTTP Status Code");
             }
             else
             {

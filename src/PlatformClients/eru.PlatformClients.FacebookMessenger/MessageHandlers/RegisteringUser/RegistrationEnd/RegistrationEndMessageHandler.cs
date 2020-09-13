@@ -7,7 +7,8 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
 {
     public class RegistrationEndMessageHandler { }
     
-    public abstract class RegistrationEndMessageHandler<T> : RegistrationEndMessageHandler where T : RegistrationEndMessageHandler
+    public abstract class RegistrationEndMessageHandler<T> : RegistrationEndMessageHandler
+        where T : RegistrationEndMessageHandler
     {
         private readonly ILogger<T> _logger;
 
@@ -18,23 +19,23 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
         
         public async Task Handle(IncompleteUser user, Payload payload)
         {
-            _logger.LogTrace("Facebook Messenger Message Handler {typeof(T).Name} got a request from user {user}",
-                typeof(T).Name, user);
+            _logger.LogTrace("Facebook Messenger Message Handler {typeof(T).Name} got a request from user {user.Id}",
+                typeof(T), user);
             
             if (payload?.Type == PayloadType.Subscribe)
             {
                 await EndRegistration(user);
                 _logger.LogInformation(
-                    "Facebook Messenger Message Handler {typeof(T).Name} successfully registered user {user}",
-                    typeof(T).Name, user);
+                    "Facebook Messenger Message Handler {typeof(T).Name} successfully registered user {user.Id}",
+                    typeof(T), user);
                 
                 return; 
             }
 
             await UnsupportedCommand(user);
             _logger.LogInformation(
-                "Facebook Messenger Message Handler {typeof(T).Name} successfully sent UnsupportedCommand response to user {user}",
-                typeof(T).Name, user);
+                "Facebook Messenger Message Handler {typeof(T).Name} successfully sent UnsupportedCommand response to user {user.Id}",
+                typeof(T), user);
         }
         
         protected abstract Task EndRegistration(IncompleteUser user);

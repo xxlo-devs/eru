@@ -20,11 +20,11 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers
         public async Task Handle(Messaging message)
         {
             _logger.LogTrace("Facebook Messenger Message Handler {typeof(T).Name} got a request (message: {message})",
-                typeof(T).Name, message);
+                typeof(T), message);
             await Base(message);
             _logger.LogInformation(
                 "Facebook Messenger Message Handler {typeof(T).Name} successfully handled request from user {message.Sender.Id}",
-                typeof(T).Name, message.Sender.Id);
+                typeof(T), message);
         }
     }
 }

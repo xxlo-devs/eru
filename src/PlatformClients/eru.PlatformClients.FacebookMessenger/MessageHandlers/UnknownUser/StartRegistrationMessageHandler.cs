@@ -11,7 +11,8 @@ using Microsoft.Extensions.Logging;
 
 namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.UnknownUser
 {
-    public class StartRegistrationMessageHandler : MessageHandler<StartRegistrationMessageHandler>, IUnknownUserMessageHandler
+    public class StartRegistrationMessageHandler : MessageHandler<StartRegistrationMessageHandler>,
+        IUnknownUserMessageHandler
     {
         private readonly IRegistrationDbContext _dbContext;
         private readonly IConfiguration _configuration;

@@ -11,7 +11,8 @@ using Message = eru.PlatformClients.FacebookMessenger.SendAPIClient.Requests.Mes
 
 namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser.UnsupportedCommand
 {
-    public class UnsupportedCommandMessageHandler : MessageHandler<UnsupportedCommandMessageHandler>, IUnsupportedCommandMessageHandler
+    public class UnsupportedCommandMessageHandler : MessageHandler<UnsupportedCommandMessageHandler>,
+        IUnsupportedCommandMessageHandler
     {
         private readonly IMediator _mediator;
         private readonly ISendApiClient _apiClient;
