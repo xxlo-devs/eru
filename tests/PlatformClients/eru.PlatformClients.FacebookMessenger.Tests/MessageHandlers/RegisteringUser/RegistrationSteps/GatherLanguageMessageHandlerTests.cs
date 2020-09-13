@@ -49,8 +49,8 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             
             var expectedMessage = new SendRequest("sample-registering-user", new Message("greeting-text", new[] 
             {
-                new QuickReply((char.ToUpper(new CultureInfo("en").NativeName[0]) + (new CultureInfo("en").NativeName).ToLower().Substring(1)), new Payload(PayloadType.Lang, "en").ToJson()), 
-                new QuickReply((char.ToUpper(new CultureInfo("pl").NativeName[0]) + (new CultureInfo("pl").NativeName).ToLower().Substring(1)), new Payload(PayloadType.Lang, "pl").ToJson()), 
+                new QuickReply("en", new Payload(PayloadType.Lang, "en").ToJson()), 
+                new QuickReply("pl", new Payload(PayloadType.Lang, "pl").ToJson()), 
                 new QuickReply("cancel-button-text", new Payload(PayloadType.Cancel).ToJson())
             }));
             
@@ -74,8 +74,8 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
 
             var expectedMessage = new SendRequest("sample-registering-user", new Message("greeting-text", new[] 
             {
-                new QuickReply((char.ToUpper(new CultureInfo("en").NativeName[0]) + (new CultureInfo("en").NativeName).ToLower().Substring(1)), new Payload(PayloadType.Lang, "en").ToJson()), 
-                new QuickReply((char.ToUpper(new CultureInfo("pl").NativeName[0]) + (new CultureInfo("pl").NativeName).ToLower().Substring(1)), new Payload(PayloadType.Lang, "pl").ToJson()), 
+                new QuickReply("en", new Payload(PayloadType.Lang, "en").ToJson()), 
+                new QuickReply("pl", new Payload(PayloadType.Lang, "pl").ToJson()), 
                 new QuickReply("cancel-button-text", new Payload(PayloadType.Cancel).ToJson())
             }));
             
@@ -100,8 +100,8 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             var expectedMessage = new SendRequest("sample-registering-user", new Message(
                 "unsupported-command-text", new[]
                 {
-                    new QuickReply((char.ToUpper(new CultureInfo("en").NativeName[0]) + (new CultureInfo("en").NativeName).ToLower().Substring(1)), new Payload(PayloadType.Lang, "en").ToJson()), 
-                    new QuickReply((char.ToUpper(new CultureInfo("pl").NativeName[0]) + (new CultureInfo("pl").NativeName).ToLower().Substring(1)), new Payload(PayloadType.Lang, "pl").ToJson()), 
+                    new QuickReply("en", new Payload(PayloadType.Lang, "en").ToJson()), 
+                    new QuickReply("pl", new Payload(PayloadType.Lang, "pl").ToJson()),  
                     new QuickReply("cancel-button-text", new Payload(PayloadType.Cancel).ToJson())
                 }));
             
