@@ -56,6 +56,13 @@ namespace eru.Application.Tests
                 x.HasKey(y => y.UploadDateTime);
             });
 
+            modelBuilder.Entity<Substitution>(x =>
+            {
+                x.HasKey(y => y.Id);
+                x.Property(y => y.Id)
+                    .ValueGeneratedOnAdd();
+            });
+
             base.OnModelCreating(modelBuilder);
         }
     }
