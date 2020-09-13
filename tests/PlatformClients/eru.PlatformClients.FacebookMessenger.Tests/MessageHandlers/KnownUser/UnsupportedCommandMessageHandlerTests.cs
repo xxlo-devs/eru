@@ -20,7 +20,8 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.KnownUser
             var mediator = MockBuilder.BuildMediatorMock();
             var apiClient = new Mock<ISendApiClient>();
             
-            var handler = new UnsupportedCommandMessageHandler(mediator.Object, apiClient.Object, MockBuilder.BuildFakeTranslator(), MockBuilder.BuildFakeLogger<UnsupportedCommandMessageHandler>());
+            var handler = new UnsupportedCommandMessageHandler(mediator.Object, apiClient.Object,
+                MockBuilder.BuildFakeTranslator(), MockBuilder.BuildFakeLogger<UnsupportedCommandMessageHandler>());
             var message = new Messaging
             {
                 Sender = new Sender {Id = "sample-subscriber"},
@@ -42,10 +43,13 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.KnownUser
                     It.IsAny<CancellationToken>()), Times.Once);
             mediator.VerifyNoOtherCalls();
             
-            var expectedMessage = new SendRequest("sample-subscriber", new FacebookMessenger.SendAPIClient.Requests.Message("unsupported-command-text", new[]
-            {
-                new FacebookMessenger.SendAPIClient.Requests.QuickReply("cancel-button-text", new Payload(PayloadType.Cancel).ToJson())
-            }));
+            var expectedMessage = new SendRequest(
+                "sample-subscriber",
+                new FacebookMessenger.SendAPIClient.Requests.Message("unsupported-command-text", new[]
+                {
+                    new FacebookMessenger.SendAPIClient.Requests.QuickReply("cancel-button-text", new Payload(PayloadType.Cancel).ToJson())
+                })
+                );
             apiClient.Verify(x => x.Send(
                 It.Is<SendRequest>(y => y.IsEquivalentTo(expectedMessage))
                 ));

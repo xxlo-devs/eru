@@ -19,7 +19,8 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
         private readonly ITranslator<FacebookMessengerPlatformClient> _translator;
         private readonly ILogger<T> _logger;
         
-        protected RegistrationStepsMessageHandler(IRegistrationDbContext dbContext, ITranslator<FacebookMessengerPlatformClient> translator, ILogger<T> logger)
+        protected RegistrationStepsMessageHandler(IRegistrationDbContext dbContext,
+            ITranslator<FacebookMessengerPlatformClient> translator, ILogger<T> logger)
         {
             _dbContext = dbContext;
             _translator = translator;
@@ -77,21 +78,28 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
         {
             var offset = page * 10;
 
-            var scope = items.Skip(offset).Take(10);
+            var scope = items
+                .Skip(offset)
+                .Take(10);
 
-            var replies = scope.Select(x => new QuickReply(x.Key, x.Value)).ToList();
+            var replies = scope
+                .Select(x => new QuickReply(x.Key, x.Value))
+                .ToList();
 
             if (page > 0)
             {
-                replies.Add(new QuickReply(await _translator.TranslateString("previous-page", displayCulture), new Payload(payloadType, page - 1).ToJson()));
+                replies.Add(new QuickReply(await _translator.TranslateString("previous-page", displayCulture),
+                    new Payload(payloadType, page - 1).ToJson()));
             }
 
             if (items.Count - offset - 10 > 0)
             {
-                replies.Add(new QuickReply(await _translator.TranslateString("next-page", displayCulture), new Payload(payloadType, page + 1).ToJson()));
+                replies.Add(new QuickReply(await _translator.TranslateString("next-page", displayCulture),
+                    new Payload(payloadType, page + 1).ToJson()));
             }
 
-            replies.Add(new QuickReply(await _translator.TranslateString("cancel-button", displayCulture), new Payload(PayloadType.Cancel).ToJson()));
+            replies.Add(new QuickReply(await _translator.TranslateString("cancel-button", displayCulture),
+                new Payload(PayloadType.Cancel).ToJson()));
 
             return replies;
         } 

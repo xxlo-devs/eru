@@ -70,7 +70,10 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.SendAPIClient
             }
             catch (MessageSendingException exception)
             {
-                exception.Message.Should().BeEquivalentTo("An exception was thrown while sending a message: Facebook Messenger GraphQL Endpoint returned non-success HTTP Status Code");
+                exception.Message.Should()
+                    .BeEquivalentTo(
+                        "An exception was thrown while sending a message: Facebook Messenger GraphQL Endpoint returned non-success HTTP Status Code"
+                        );
             }
         }
     }

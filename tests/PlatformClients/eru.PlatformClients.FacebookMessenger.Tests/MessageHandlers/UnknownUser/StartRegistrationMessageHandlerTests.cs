@@ -31,7 +31,9 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.UnknownUse
                 }
             };
             
-            var handler = new StartRegistrationMessageHandler(context, MockBuilder.BuildFakeConfiguration(), langHandlerMock.Object, backgroundJobClientMock.Object, MockBuilder.BuildFakeLogger<StartRegistrationMessageHandler>());
+            var handler = new StartRegistrationMessageHandler(context, MockBuilder.BuildFakeConfiguration(),
+                langHandlerMock.Object, backgroundJobClientMock.Object,
+                MockBuilder.BuildFakeLogger<StartRegistrationMessageHandler>());
             await handler.Handle(message);
 
             context.IncompleteUsers.Should().ContainSingle(x =>

@@ -31,7 +31,6 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
         }
         
         protected abstract Task EndRegistration(IncompleteUser user);
-        public abstract Task ShowInstruction(IncompleteUser user);
         protected abstract Task UnsupportedCommand(IncompleteUser user);
     }
 }

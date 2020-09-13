@@ -6,7 +6,6 @@ using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.Regi
 using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.RegistrationSteps.GatherLanguage;
 using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.RegistrationSteps.GatherYear;
 using eru.PlatformClients.FacebookMessenger.RegistrationDb.DbContext;
-using Microsoft.Extensions.Logging;
 using Moq;
 
 namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.RegisteringUser
@@ -15,7 +14,8 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
     {
         public RegisteringUserMessageHandlerBuilder()
         {
-            RegisteringUserMessageHandler = new RegisteringUserMessageHandler(BuildServiceProvider(), MockBuilder.BuildFakeLogger<RegisteringUserMessageHandler>());
+            RegisteringUserMessageHandler = new RegisteringUserMessageHandler(BuildServiceProvider(),
+                MockBuilder.BuildFakeLogger<RegisteringUserMessageHandler>());
         }
 
         public void VerifyNoOtherCalls()
@@ -34,12 +34,24 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             
             var serviceProviderMock = new Mock<IServiceProvider>();
 
-            serviceProviderMock.Setup(x => x.GetService(typeof(IRegistrationDbContext))).Returns(FakeRegistrationDb);
-            serviceProviderMock.Setup(x => x.GetService(typeof(ICancelRegistrationMessageHandler))).Returns(CancelRegistrationMessageHandlerMock.Object);
-            serviceProviderMock.Setup(x => x.GetService(typeof(IConfirmSubscriptionMessageHandler))).Returns(ConfirmSubscriptionMessageHandlerMock.Object);
-            serviceProviderMock.Setup(x => x.GetService(typeof(IGatherLanguageMessageHandler))).Returns(GatherLanguageMessageHandlerMock.Object);
-            serviceProviderMock.Setup(x => x.GetService(typeof(IGatherYearMessageHandler))).Returns(GatherYearMessageHandlerMock.Object);
-            serviceProviderMock.Setup(x => x.GetService(typeof(IGatherClassMessageHandler))).Returns(GatherClassMessageHandler.Object);
+            serviceProviderMock
+                .Setup(x => x.GetService(typeof(IRegistrationDbContext)))
+                .Returns(FakeRegistrationDb);
+            serviceProviderMock
+                .Setup(x => x.GetService(typeof(ICancelRegistrationMessageHandler)))
+                .Returns(CancelRegistrationMessageHandlerMock.Object);
+            serviceProviderMock
+                .Setup(x => x.GetService(typeof(IConfirmSubscriptionMessageHandler)))
+                .Returns(ConfirmSubscriptionMessageHandlerMock.Object);
+            serviceProviderMock
+                .Setup(x => x.GetService(typeof(IGatherLanguageMessageHandler)))
+                .Returns(GatherLanguageMessageHandlerMock.Object);
+            serviceProviderMock
+                .Setup(x => x.GetService(typeof(IGatherYearMessageHandler)))
+                .Returns(GatherYearMessageHandlerMock.Object);
+            serviceProviderMock
+                .Setup(x => x.GetService(typeof(IGatherClassMessageHandler)))
+                .Returns(GatherClassMessageHandler.Object);
 
             return serviceProviderMock.Object;
         }

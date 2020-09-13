@@ -20,8 +20,11 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             var context = new FakeRegistrationDb();
             var client = new Mock<ISendApiClient>();
 
-            var handler = new ConfirmSubscriptionMessageHandler(context, mediator.Object, client.Object, MockBuilder.BuildFakeTranslator(), new Mock<ILogger<ConfirmSubscriptionMessageHandler>>().Object);
-            await handler.Handle(await context.IncompleteUsers.FindAsync("sample-registering-user-with-class"), new Payload(PayloadType.Subscribe));
+            var handler = new ConfirmSubscriptionMessageHandler(context, mediator.Object, client.Object,
+                MockBuilder.BuildFakeTranslator(), new Mock<ILogger<ConfirmSubscriptionMessageHandler>>().Object);
+            await handler.Handle(await context.IncompleteUsers.FindAsync(
+                    "sample-registering-user-with-class"), 
+                new Payload(PayloadType.Subscribe));
 
             context.IncompleteUsers.Should().NotContain(x => x.Id == "sample-registering-user-with-class");
             
@@ -39,6 +42,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             client.Verify(x => x.Send(
                 It.Is<SendRequest>(y => y.IsEquivalentTo(expectedMessage))
                 ));
+            client.VerifyNoOtherCalls();
         }
 
         [Fact]
@@ -49,7 +53,8 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
 
             var client = new Mock<ISendApiClient>();
 
-            var handler = new ConfirmSubscriptionMessageHandler(context, mediator.Object, client.Object, MockBuilder.BuildFakeTranslator(), new Mock<ILogger<ConfirmSubscriptionMessageHandler>>().Object);
+            var handler = new ConfirmSubscriptionMessageHandler(context, mediator.Object, client.Object,
+                MockBuilder.BuildFakeTranslator(), new Mock<ILogger<ConfirmSubscriptionMessageHandler>>().Object);
             await handler.ShowInstruction(await context.IncompleteUsers.FindAsync("sample-registering-user-with-class"));
 
             var expectedMessage = new SendRequest("sample-registering-user-with-class", new Message("confirmation-text", new[]
@@ -72,7 +77,8 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
 
             var client = new Mock<ISendApiClient>();
 
-            var handler = new ConfirmSubscriptionMessageHandler(context, mediator.Object, client.Object, MockBuilder.BuildFakeTranslator(), new Mock<ILogger<ConfirmSubscriptionMessageHandler>>().Object);
+            var handler = new ConfirmSubscriptionMessageHandler(context, mediator.Object, client.Object,
+                MockBuilder.BuildFakeTranslator(), new Mock<ILogger<ConfirmSubscriptionMessageHandler>>().Object);
             await handler.Handle(await context.IncompleteUsers.FindAsync("sample-registering-user-with-class"), new Payload());
             
             var expectedMessage = new SendRequest("sample-registering-user-with-class", new Message("unsupported-command-text", new[]

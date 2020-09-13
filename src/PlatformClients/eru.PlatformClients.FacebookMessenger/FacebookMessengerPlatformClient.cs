@@ -22,7 +22,8 @@ namespace eru.PlatformClients.FacebookMessenger
         private readonly ITranslator<FacebookMessengerPlatformClient> _translator;
         private readonly ILogger<FacebookMessengerPlatformClient> _logger;
 
-        public FacebookMessengerPlatformClient(ISendApiClient apiClient, IMediator mediator, ITranslator<FacebookMessengerPlatformClient> translator, ILogger<FacebookMessengerPlatformClient> logger)
+        public FacebookMessengerPlatformClient(ISendApiClient apiClient, IMediator mediator,
+            ITranslator<FacebookMessengerPlatformClient> translator, ILogger<FacebookMessengerPlatformClient> logger)
         {
             _apiClient = apiClient;
             _mediator = mediator;
@@ -34,7 +35,7 @@ namespace eru.PlatformClients.FacebookMessenger
         {
             var user = await _mediator.Send(new GetSubscriberQuery(id, PlatformId));
             
-            await _apiClient.Send(new SendRequest(id, 
+            await _apiClient.Send(new SendRequest(id,
                 new Message(content, await GetCancelButton(user.PreferredLanguage)), MessageTags.AccountUpdate));
             
             _logger.LogInformation($"FacebookMessengerPlatformClient sent a generic message to user (uid: {id}) with content (content: {content})");
@@ -42,10 +43,11 @@ namespace eru.PlatformClients.FacebookMessenger
 
         public async Task SendMessage(string id, IEnumerable<Substitution> substitutions)
         {
-            var user = await _mediator.Send(new GetSubscriberQuery(id, this.PlatformId));
+            var user = await _mediator.Send(new GetSubscriberQuery(id, PlatformId));
             
-            await _apiClient.Send(new SendRequest(id, 
-                new Message(await _translator.TranslateString("new-substitutions", user.PreferredLanguage)), MessageTags.ConfirmedEventUpdate));
+            await _apiClient.Send(new SendRequest(id,
+                new Message(await _translator.TranslateString("new-substitutions", user.PreferredLanguage)),
+                MessageTags.ConfirmedEventUpdate));
 
             foreach (var x in substitutions)
             {
@@ -58,8 +60,9 @@ namespace eru.PlatformClients.FacebookMessenger
                 await _apiClient.Send(new SendRequest(id, new Message(substitution), MessageTags.ConfirmedEventUpdate));
             }
             
-            await _apiClient.Send(new SendRequest(id, new Message(await _translator.TranslateString("closing-substitutions", user.PreferredLanguage), 
-                await GetCancelButton(user.PreferredLanguage)), MessageTags.ConfirmedEventUpdate));
+            await _apiClient.Send(new SendRequest(id,
+                new Message(await _translator.TranslateString("closing-substitutions", user.PreferredLanguage),
+                    await GetCancelButton(user.PreferredLanguage)), MessageTags.ConfirmedEventUpdate));
             
             _logger.LogInformation($"FacebookMessengerPlatformClient sent substitutions to user (uid: {id}");
         }

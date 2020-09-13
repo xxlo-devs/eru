@@ -55,12 +55,12 @@ namespace eru.PlatformClients.FacebookMessenger.Middleware
                 if (mode == VerificationMode.Subscribe && token == _configuration["PlatformClients:FacebookMessenger:VerifyToken"])
                 {
                     await context.SendOkResponse(challenge);
-                    _logger.LogInformation("Facebook Messenger Webhook Middleware succesfully verified a webhook");
+                    _logger.LogInformation("Facebook Messenger Webhook Middleware successfully verified a webhook");
                 }
                 else
                 {
                     await context.SendResponse(HttpStatusCode.Forbidden);
-                    _logger.LogWarning("Facebook Messenger Webhook Middleware got a verify requets with invalid token");
+                    _logger.LogWarning("Facebook Messenger Webhook Middleware got a verify requests with invalid token");
                 }
             }
             else
@@ -83,7 +83,7 @@ namespace eru.PlatformClients.FacebookMessenger.Middleware
                         await _messageHandler.Handle(x.Messaging.First());
                     }
                     
-                    await context.SendOkResponse(Responses.EventRecieved);
+                    await context.SendOkResponse(Responses.EventReceived);
                     _logger.LogInformation("Facebook Messenger Webhook Middleware successfully processed an event");
                 }
                 else

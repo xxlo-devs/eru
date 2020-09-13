@@ -30,7 +30,8 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.KnownUser
                 }
             };
             
-            var handler = new KnownUserMessageMessageHandler(cancelHandler.Object, unsupportedHandler.Object, MockBuilder.BuildFakeLogger<KnownUserMessageMessageHandler>());
+            var handler = new KnownUserMessageMessageHandler(cancelHandler.Object, unsupportedHandler.Object,
+                MockBuilder.BuildFakeLogger<KnownUserMessageMessageHandler>());
             await handler.Handle(message);
             
             cancelHandler.Verify(x => x.Handle(message));
@@ -56,7 +57,8 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.KnownUser
                 }
             };
             
-            var handler = new KnownUserMessageMessageHandler(cancelHandler.Object, unsupportedHandler.Object, MockBuilder.BuildFakeLogger<KnownUserMessageMessageHandler>());
+            var handler = new KnownUserMessageMessageHandler(cancelHandler.Object, unsupportedHandler.Object,
+                MockBuilder.BuildFakeLogger<KnownUserMessageMessageHandler>());
             await handler.Handle(message);
             
             unsupportedHandler.Verify(x => x.Handle(message));

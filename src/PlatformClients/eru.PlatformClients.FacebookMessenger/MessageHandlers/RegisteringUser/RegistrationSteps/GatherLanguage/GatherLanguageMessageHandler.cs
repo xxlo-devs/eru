@@ -21,7 +21,10 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
         private readonly ITranslator<FacebookMessengerPlatformClient> _translator;
         private readonly IGatherYearMessageHandler _yearHandler;
         
-        public GatherLanguageMessageHandler(IConfiguration configuration, ISendApiClient apiClient, ITranslator<FacebookMessengerPlatformClient> translator, IGatherYearMessageHandler yearHandler, IRegistrationDbContext dbContext, ILogger<GatherLanguageMessageHandler> logger) : base(dbContext, translator, logger)
+        public GatherLanguageMessageHandler(IConfiguration configuration, ISendApiClient apiClient,
+            ITranslator<FacebookMessengerPlatformClient> translator, IGatherYearMessageHandler yearHandler,
+            IRegistrationDbContext dbContext, ILogger<GatherLanguageMessageHandler> logger) : base(dbContext,
+            translator, logger)
         {
             _configuration = configuration;
             _apiClient = apiClient;
@@ -55,9 +58,13 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
         private async Task<IEnumerable<QuickReply>> GetLangSelector(int page, string displayCulture)
         {
             var supportedCultures = _configuration.GetSection("CultureSettings:AvailableCultures").AsEnumerable()
-                .Select(x => x.Value).Skip(1);
-            var cultures = supportedCultures.ToDictionary(x => new CultureInfo(x).DisplayName,
-                x => new Payload(PayloadType.Lang, x).ToJson());
+                .Select(x => x.Value)
+                .Skip(1);
+            
+            var cultures = supportedCultures.ToDictionary(
+                x => new CultureInfo(x).DisplayName,
+                x => new Payload(PayloadType.Lang, x).ToJson()
+                );
 
             return await GetSelector(cultures, page, PayloadType.Lang, displayCulture);
         }

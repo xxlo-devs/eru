@@ -19,7 +19,9 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             var context = new FakeRegistrationDb();
             var confirmHandler = new Mock<IConfirmSubscriptionMessageHandler>();
 
-            var handler = new GatherClassMessageHandler(MockBuilder.BuildMediatorMock().Object, new Mock<ISendApiClient>().Object, MockBuilder.BuildFakeTranslator(), confirmHandler.Object, context, MockBuilder.BuildFakeLogger<GatherClassMessageHandler>());
+            var handler = new GatherClassMessageHandler(MockBuilder.BuildMediatorMock().Object,
+                new Mock<ISendApiClient>().Object, MockBuilder.BuildFakeTranslator(), confirmHandler.Object, context,
+                MockBuilder.BuildFakeLogger<GatherClassMessageHandler>());
             await handler.Handle(await context.IncompleteUsers.FindAsync("sample-registering-user-with-year"),
                 new Payload(PayloadType.Class, "sample-class-1a"));
 
@@ -28,8 +30,9 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
                 x.ClassId == "sample-class-1a" && x.LastPage == 0 && x.Stage == Stage.GatheredClass);
             
             confirmHandler.Verify(
-                x => x.ShowInstruction(It.Is<IncompleteUser>(y => y.Id == "sample-registering-user-with-year")),
-                Times.Once);
+                x => x.ShowInstruction(
+                    It.Is<IncompleteUser>(y => y.Id == "sample-registering-user-with-year")
+                    ), Times.Once);
             confirmHandler.VerifyNoOtherCalls();
         }
 
@@ -41,7 +44,9 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             var client = new Mock<ISendApiClient>();
             var confirmHandler = new Mock<IConfirmSubscriptionMessageHandler>();
 
-            var handler = new GatherClassMessageHandler(mediator.Object, client.Object, MockBuilder.BuildFakeTranslator(), confirmHandler.Object, context, MockBuilder.BuildFakeLogger<GatherClassMessageHandler>());
+            var handler = new GatherClassMessageHandler(mediator.Object, client.Object,
+                MockBuilder.BuildFakeTranslator(), confirmHandler.Object, context,
+                MockBuilder.BuildFakeLogger<GatherClassMessageHandler>());
             await handler.Handle(await context.IncompleteUsers.FindAsync("sample-registering-user-with-year"),
                 new Payload(PayloadType.Class, 1));
             
@@ -55,7 +60,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             
             client.Verify(x => x.Send(
                 It.Is<SendRequest>(y => y.IsEquivalentTo(expectedMessage))
-                ));
+                ), Times.Once);
             client.VerifyNoOtherCalls();
         }
 
@@ -67,7 +72,9 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             var client = new Mock<ISendApiClient>();
             var confirmHandler = new Mock<IConfirmSubscriptionMessageHandler>();
 
-            var handler = new GatherClassMessageHandler(mediator.Object, client.Object, MockBuilder.BuildFakeTranslator(), confirmHandler.Object, context, MockBuilder.BuildFakeLogger<GatherClassMessageHandler>());
+            var handler = new GatherClassMessageHandler(mediator.Object, client.Object,
+                MockBuilder.BuildFakeTranslator(), confirmHandler.Object, context,
+                MockBuilder.BuildFakeLogger<GatherClassMessageHandler>());
             await handler.ShowInstruction(await context.IncompleteUsers.FindAsync("sample-registering-user-with-year"));
 
             var expectedMessage = new SendRequest("sample-registering-user-with-year", new Message("class-selection-text", new[]
@@ -88,7 +95,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             
             client.Verify(x => x.Send(
                 It.Is<SendRequest>(y => y.IsEquivalentTo(expectedMessage))
-                ));
+                ), Times.Once);
             client.VerifyNoOtherCalls();
         }
 
@@ -100,7 +107,9 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             var client = new Mock<ISendApiClient>();
             var confirmHandler = new Mock<IConfirmSubscriptionMessageHandler>();
 
-            var handler = new GatherClassMessageHandler(mediator.Object, client.Object, MockBuilder.BuildFakeTranslator(), confirmHandler.Object, context, MockBuilder.BuildFakeLogger<GatherClassMessageHandler>());
+            var handler = new GatherClassMessageHandler(mediator.Object, client.Object,
+                MockBuilder.BuildFakeTranslator(), confirmHandler.Object, context,
+                MockBuilder.BuildFakeLogger<GatherClassMessageHandler>());
             await handler.Handle(await context.IncompleteUsers.FindAsync("sample-registering-user-with-year"), new Payload());
             
             var expectedMessage = new SendRequest("sample-registering-user-with-year", new Message("unsupported-command-text", new[]
@@ -121,7 +130,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             
             client.Verify(x => x.Send(It.Is<SendRequest>(
                     y => y.IsEquivalentTo(expectedMessage))
-                ));
+                ), Times.Once);
             client.VerifyNoOtherCalls();
         }
     }

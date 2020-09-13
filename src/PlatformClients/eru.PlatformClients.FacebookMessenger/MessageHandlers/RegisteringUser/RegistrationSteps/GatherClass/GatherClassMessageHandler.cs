@@ -22,7 +22,10 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
         private readonly ITranslator<FacebookMessengerPlatformClient> _translator;
         private readonly IConfirmSubscriptionMessageHandler _confirmHandler;
         
-        public GatherClassMessageHandler(IMediator mediator, ISendApiClient apiClient, ITranslator<FacebookMessengerPlatformClient> translator, IConfirmSubscriptionMessageHandler confirmHandler, IRegistrationDbContext dbContext, ILogger<GatherClassMessageHandler> logger) : base(dbContext, translator, logger)
+        public GatherClassMessageHandler(IMediator mediator, ISendApiClient apiClient,
+            ITranslator<FacebookMessengerPlatformClient> translator, IConfirmSubscriptionMessageHandler confirmHandler,
+            IRegistrationDbContext dbContext, ILogger<GatherClassMessageHandler> logger) : base(dbContext, translator,
+            logger)
         {
             _mediator = mediator;
             _apiClient = apiClient;
@@ -57,8 +60,11 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
         private async Task<IEnumerable<QuickReply>> GetClassSelector(int year, int page, string lang)
         {
             var classesFromDb = await _mediator.Send(new GetClassesQuery());
-            var classes = classesFromDb.Where(x => x.Year == year).OrderBy(x => x.Section)
-                .ToDictionary(x => x.ToString(), x => new Payload(PayloadType.Class, x.Id).ToJson());
+            var classes = classesFromDb
+                .Where(x => x.Year == year)
+                .OrderBy(x => x.Section)
+                .ToDictionary(x => x.ToString(), x 
+                    => new Payload(PayloadType.Class, x.Id).ToJson());
 
             return await GetSelector(classes, page, PayloadType.Class, lang);
         }

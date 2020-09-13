@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser
 {
-    public static class DependencyInjeciton
+    public static class DependencyInjection
     {
         public static IServiceCollection AddKnownUserMessageHandling(this IServiceCollection services)
         {

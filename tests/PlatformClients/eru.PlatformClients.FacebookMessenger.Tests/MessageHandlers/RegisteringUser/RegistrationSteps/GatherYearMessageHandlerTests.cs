@@ -21,8 +21,13 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             var client = new Mock<ISendApiClient>();
             var confirmHandler = new Mock<IGatherClassMessageHandler>();
 
-            var handler = new GatherYearMessageHandler(mediator.Object, client.Object, MockBuilder.BuildFakeTranslator(), confirmHandler.Object, context, MockBuilder.BuildFakeLogger<GatherYearMessageHandler>());
-            await handler.Handle(await context.IncompleteUsers.FindAsync("sample-registering-user-with-lang"), new Payload(PayloadType.Year, "1"));
+            var handler = new GatherYearMessageHandler(mediator.Object, client.Object,
+                MockBuilder.BuildFakeTranslator(), confirmHandler.Object, context,
+                MockBuilder.BuildFakeLogger<GatherYearMessageHandler>());
+            await handler.Handle(
+                await context.IncompleteUsers.FindAsync("sample-registering-user-with-lang"), 
+                new Payload(PayloadType.Year, "1")
+                );
 
             context.IncompleteUsers.Should().ContainSingle(x =>
                 x.Id == "sample-registering-user-with-lang" && x.PreferredLanguage == "en" && x.Year == 1 &&
@@ -41,8 +46,13 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             var client = new Mock<ISendApiClient>();
             var confirmHandler = new Mock<IGatherClassMessageHandler>();
 
-            var handler = new GatherYearMessageHandler(mediator.Object, client.Object, MockBuilder.BuildFakeTranslator(), confirmHandler.Object, context, MockBuilder.BuildFakeLogger<GatherYearMessageHandler>());
-            await handler.Handle(await context.IncompleteUsers.FindAsync("sample-registering-user-with-lang"), new Payload(PayloadType.Year, 1));
+            var handler = new GatherYearMessageHandler(mediator.Object, client.Object,
+                MockBuilder.BuildFakeTranslator(), confirmHandler.Object, context,
+                MockBuilder.BuildFakeLogger<GatherYearMessageHandler>());
+            await handler.Handle(
+                await context.IncompleteUsers.FindAsync("sample-registering-user-with-lang"),
+                new Payload(PayloadType.Year, 1)
+                );
                         
             var expectedMessage = new SendRequest("sample-registering-user-with-lang", new Message("year-selection-text", new[] 
             {
@@ -66,7 +76,9 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             var client = new Mock<ISendApiClient>();
             var confirmHandler = new Mock<IGatherClassMessageHandler>();
 
-            var handler = new GatherYearMessageHandler(mediator.Object, client.Object, MockBuilder.BuildFakeTranslator(), confirmHandler.Object, context, MockBuilder.BuildFakeLogger<GatherYearMessageHandler>());
+            var handler = new GatherYearMessageHandler(mediator.Object, client.Object,
+                MockBuilder.BuildFakeTranslator(), confirmHandler.Object, context,
+                MockBuilder.BuildFakeLogger<GatherYearMessageHandler>());
             await handler.ShowInstruction(await context.IncompleteUsers.FindAsync("sample-registering-user-with-lang"));
             
             context.IncompleteUsers.Should().ContainSingle(x =>
@@ -104,7 +116,9 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             var client = new Mock<ISendApiClient>();
             var confirmHandler = new Mock<IGatherClassMessageHandler>();
 
-            var handler = new GatherYearMessageHandler(mediator.Object, client.Object, MockBuilder.BuildFakeTranslator(), confirmHandler.Object, context, MockBuilder.BuildFakeLogger<GatherYearMessageHandler>());
+            var handler = new GatherYearMessageHandler(mediator.Object, client.Object,
+                MockBuilder.BuildFakeTranslator(), confirmHandler.Object, context,
+                MockBuilder.BuildFakeLogger<GatherYearMessageHandler>());
             await handler.Handle(await context.IncompleteUsers.FindAsync("sample-registering-user-with-lang"), new Payload());
             
             context.IncompleteUsers.Should().ContainSingle(x =>

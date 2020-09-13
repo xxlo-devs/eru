@@ -79,25 +79,55 @@ namespace eru.PlatformClients.FacebookMessenger.Tests
         {
             var translatorMock = new Mock<ITranslator<FacebookMessengerPlatformClient>>();
             
-            translatorMock.Setup(x => x.TranslateString("cancel-button", "en")).Returns(Task.FromResult("cancel-button-text"));
-            translatorMock.Setup(x => x.TranslateString("next-page", "en")).Returns(Task.FromResult("->"));
-            translatorMock.Setup(x => x.TranslateString("previous-page", "en")).Returns(Task.FromResult("<-"));
-            translatorMock.Setup(x => x.TranslateString("subscribe-button", "en")).Returns(Task.FromResult("subscribe-button-text"));
+            translatorMock
+                .Setup(x => x.TranslateString("cancel-button", "en"))
+                .Returns(Task.FromResult("cancel-button-text"));
+            translatorMock
+                .Setup(x => x.TranslateString("next-page", "en"))
+                .Returns(Task.FromResult("->"));
+            translatorMock
+                .Setup(x => x.TranslateString("previous-page", "en"))
+                .Returns(Task.FromResult("<-"));
+            translatorMock
+                .Setup(x => x.TranslateString("subscribe-button", "en"))
+                .Returns(Task.FromResult("subscribe-button-text"));
             
-            translatorMock.Setup(x => x.TranslateString("greeting", "en")).Returns(Task.FromResult("greeting-text"));
-            translatorMock.Setup(x => x.TranslateString("year-selection", "en")).Returns(Task.FromResult("year-selection-text"));
-            translatorMock.Setup(x => x.TranslateString("class-selection", "en")).Returns(Task.FromResult("class-selection-text"));
+            translatorMock
+                .Setup(x => x.TranslateString("greeting", "en"))
+                .Returns(Task.FromResult("greeting-text"));
+            translatorMock
+                .Setup(x => x.TranslateString("year-selection", "en"))
+                .Returns(Task.FromResult("year-selection-text"));
+            translatorMock
+                .Setup(x => x.TranslateString("class-selection", "en"))
+                .Returns(Task.FromResult("class-selection-text"));
             
-            translatorMock.Setup(x => x.TranslateString("confirmation", "en")).Returns(Task.FromResult("confirmation-text"));
-            translatorMock.Setup(x => x.TranslateString("congratulations", "en")).Returns(Task.FromResult("congratulations-text"));
+            translatorMock
+                .Setup(x => x.TranslateString("confirmation", "en"))
+                .Returns(Task.FromResult("confirmation-text"));
+            translatorMock
+                .Setup(x => x.TranslateString("congratulations", "en"))
+                .Returns(Task.FromResult("congratulations-text"));
             
-            translatorMock.Setup(x => x.TranslateString("subscription-cancelled", "en")).Returns(Task.FromResult("subscription-cancelled-text"));
-            translatorMock.Setup(x => x.TranslateString("unsupported-command", "en")).Returns(Task.FromResult("unsupported-command-text"));
+            translatorMock
+                .Setup(x => x.TranslateString("subscription-cancelled", "en"))
+                .Returns(Task.FromResult("subscription-cancelled-text"));
+            translatorMock
+                .Setup(x => x.TranslateString("unsupported-command", "en"))
+                .Returns(Task.FromResult("unsupported-command-text"));
 
-            translatorMock.Setup(x => x.TranslateString("new-substitutions", "en")).Returns(Task.FromResult("new-substitutions-text"));
-            translatorMock.Setup(x => x.TranslateString("substitution", "en")).Returns(Task.FromResult("SUBSTITUTION | {0} | {1} | {2} | {3} | {4} | {5}"));
-            translatorMock.Setup(x => x.TranslateString("cancellation", "en")).Returns(Task.FromResult("CANCELLATION | {0} | {1} | {2} | {3} | {4}"));
-            translatorMock.Setup(x => x.TranslateString("closing-substitutions", "en")).Returns(Task.FromResult("closing-substitutions-text"));
+            translatorMock
+                .Setup(x => x.TranslateString("new-substitutions", "en"))
+                .Returns(Task.FromResult("new-substitutions-text"));
+            translatorMock
+                .Setup(x => x.TranslateString("substitution", "en"))
+                .Returns(Task.FromResult("SUBSTITUTION | {0} | {1} | {2} | {3} | {4} | {5}"));
+            translatorMock.
+                Setup(x => x.TranslateString("cancellation", "en"))
+                .Returns(Task.FromResult("CANCELLATION | {0} | {1} | {2} | {3} | {4}"));
+            translatorMock
+                .Setup(x => x.TranslateString("closing-substitutions", "en"))
+                .Returns(Task.FromResult("closing-substitutions-text"));
             
             return translatorMock.Object;
         }

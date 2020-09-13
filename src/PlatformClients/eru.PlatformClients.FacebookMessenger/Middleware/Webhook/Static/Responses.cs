@@ -2,6 +2,6 @@
 {
     public static class Responses
     {
-        public const string EventRecieved = "EVENT_RECEIVED";
+        public const string EventReceived = "EVENT_RECEIVED";
     }
 }

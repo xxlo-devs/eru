@@ -18,7 +18,9 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.UnknownUser
         private readonly IGatherLanguageMessageHandler _langHandler;
         private readonly IBackgroundJobClient _backgroundJobClient;
         
-        public StartRegistrationMessageHandler(IRegistrationDbContext dbContext, IConfiguration configuration, IGatherLanguageMessageHandler langHandler, IBackgroundJobClient backgroundJobClient, ILogger<StartRegistrationMessageHandler> logger) : base(logger)
+        public StartRegistrationMessageHandler(IRegistrationDbContext dbContext, IConfiguration configuration,
+            IGatherLanguageMessageHandler langHandler, IBackgroundJobClient backgroundJobClient,
+            ILogger<StartRegistrationMessageHandler> logger) : base(logger)
         {
             _dbContext = dbContext;
             _langHandler = langHandler;
@@ -35,20 +37,10 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.UnknownUser
 
             await _langHandler.ShowInstruction(incompleteUser);
 
-            _backgroundJobClient.Schedule(() => EnsureDeleted(message.Sender.Id), TimeSpan.FromMinutes(15));
-        }
-
-        // ReSharper disable once MemberCanBePrivate.Global
-        // Must be public because it's used by Hangfire
-        public async Task EnsureDeleted(string uid)
-        {
-            var user = await _dbContext.IncompleteUsers.FindAsync(uid);
-            
-            if (user != null)
-            {
-                _dbContext.IncompleteUsers.Remove(user);
-                await _dbContext.SaveChangesAsync(CancellationToken.None);
-            }
+            _backgroundJobClient.Schedule<EnsureRegistrationEndedJob>(
+                x => x.EnsureRegistrationEnded(incompleteUser.Id),
+                TimeSpan.FromMinutes(5)
+                );
         }
     }
 }

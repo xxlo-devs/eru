@@ -1,6 +1,4 @@
 ﻿using eru.PlatformClients.FacebookMessenger.SendAPIClient;
-using MediatR;
-using Microsoft.Extensions.Logging;
 using Moq;
 
 namespace eru.PlatformClients.FacebookMessenger.Tests.PlatformClient

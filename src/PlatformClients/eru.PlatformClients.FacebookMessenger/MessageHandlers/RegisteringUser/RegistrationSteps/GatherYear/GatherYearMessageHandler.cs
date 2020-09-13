@@ -21,7 +21,10 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
         private readonly ITranslator<FacebookMessengerPlatformClient> _translator;
         private readonly IGatherClassMessageHandler _classHandler;
         
-        public GatherYearMessageHandler(IMediator mediator, ISendApiClient apiClient, ITranslator<FacebookMessengerPlatformClient> translator, IGatherClassMessageHandler classHandler, IRegistrationDbContext dbContext, ILogger<GatherYearMessageHandler> logger) : base(dbContext, translator, logger)
+        public GatherYearMessageHandler(IMediator mediator, ISendApiClient apiClient,
+            ITranslator<FacebookMessengerPlatformClient> translator, IGatherClassMessageHandler classHandler,
+            IRegistrationDbContext dbContext, ILogger<GatherYearMessageHandler> logger) : base(dbContext, translator,
+            logger)
         {
             _mediator = mediator;
             _apiClient = apiClient;
@@ -55,8 +58,11 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
         private async Task<IEnumerable<QuickReply>> GetYearSelector(int page, string lang)
         {
             var classes = await _mediator.Send(new GetClassesQuery());
-            var years = new SortedSet<int>(classes.Select(x => x.Year)).ToDictionary(i => i.ToString(),
-                i => new Payload(PayloadType.Year, i.ToString()).ToJson());
+            var years = new SortedSet<int>(classes.Select(x => x.Year))
+                .ToDictionary(
+                    i => i.ToString(), 
+                    i => new Payload(PayloadType.Year, i.ToString()).ToJson()
+                    );
 
             return await GetSelector(years, page, PayloadType.Year, lang);
         }

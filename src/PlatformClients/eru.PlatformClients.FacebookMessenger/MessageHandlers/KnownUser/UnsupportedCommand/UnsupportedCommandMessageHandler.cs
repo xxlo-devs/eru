@@ -17,7 +17,9 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser.Unsupp
         private readonly ISendApiClient _apiClient;
         private readonly ITranslator<FacebookMessengerPlatformClient> _translator;
 
-        public UnsupportedCommandMessageHandler(IMediator mediator, ISendApiClient apiClient, ITranslator<FacebookMessengerPlatformClient> translator, ILogger<UnsupportedCommandMessageHandler> logger) : base(logger)
+        public UnsupportedCommandMessageHandler(IMediator mediator, ISendApiClient apiClient,
+            ITranslator<FacebookMessengerPlatformClient> translator,
+            ILogger<UnsupportedCommandMessageHandler> logger) : base(logger)
         {
             _mediator = mediator;
             _apiClient = apiClient;
@@ -29,10 +31,13 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser.Unsupp
             var uid = message.Sender.Id;
             var user = await _mediator.Send(new GetSubscriberQuery(uid, FacebookMessengerPlatformClient.PId));
             
-            await _apiClient.Send(new SendRequest(uid, new Message(await _translator.TranslateString("unsupported-command", user.PreferredLanguage), new[]
-            {
-                new QuickReply(await _translator.TranslateString("cancel-button", user.PreferredLanguage), new Payload(PayloadType.Cancel).ToJson())
-            })));
+            await _apiClient.Send(new SendRequest(uid,
+                new Message(await _translator.TranslateString("unsupported-command", user.PreferredLanguage),
+                    new[]
+                    {
+                        new QuickReply(await _translator.TranslateString("cancel-button", user.PreferredLanguage),
+                            new Payload(PayloadType.Cancel).ToJson())
+                    })));
         }
     }
 }

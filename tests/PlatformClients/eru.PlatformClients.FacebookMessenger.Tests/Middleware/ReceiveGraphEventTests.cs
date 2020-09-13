@@ -12,7 +12,7 @@ using HttpMethods = eru.PlatformClients.FacebookMessenger.Middleware.Webhook.Sta
 
 namespace eru.PlatformClients.FacebookMessenger.Tests.Middleware
 {
-    public class RecieveGraphEventTests
+    public class ReceiveGraphEventTests
     {
         private static HttpContext BuildHttpContext(string request)
         {
@@ -33,12 +33,15 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.Middleware
         }
             
         [Fact]
-        public async void CanRecieveGraphEvent()
+        public async void CanReceiveGraphEvent()
         {
             var messageHandler = new Mock<IMessageHandler>();
             var middleware = new FbMiddleware(MockBuilder.BuildFakeConfiguration(), messageHandler.Object, MockBuilder.BuildFakeLogger<FbMiddleware>());
             
-            var context = BuildHttpContext("{\"object\":\"page\",\"entry\":[{\"messaging\":[{\"sender\":{\"id\":\"<PSID>\"},\"recipient\":{\"id\":\"<PAGE_ID>\"},\"timestamp\":123456789,\"message\":{\"mid\":\"mid.1457764197618:41d102a3e1ae206a38\",\"text\":\"hello, world!\"}}]}]}");
+            var context = BuildHttpContext(
+                "{\"object\":\"page\",\"entry\":[{\"messaging\":[{\"sender\":{\"id\":\"<PSID>\"},\"recipient\":{\"id\":\"<PAGE_ID>\"},\"timestamp\":123456789,\"message\":{\"mid\":\"mid.1457764197618:41d102a3e1ae206a38\",\"text\":\"hello, world!\"}}]}]}"
+                );
+            
             
             await middleware.InvokeAsync(context, requestDelegateContext => Task.CompletedTask);
             var content = await GetStringBody(context.Response.Body);
@@ -68,7 +71,9 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.Middleware
             var messageHandler = new Mock<IMessageHandler>();
             var middleware = new FbMiddleware(MockBuilder.BuildFakeConfiguration(), messageHandler.Object, MockBuilder.BuildFakeLogger<FbMiddleware>());
             
-            var context = BuildHttpContext("{\"object\": \"page\", \"entry\": [{\"messaging\": [{\"message\": \"TEST_MESSAGE\"}]}]}");
+            var context = BuildHttpContext(
+                "{\"object\": \"page\", \"entry\": [{\"messaging\": [{\"message\": \"TEST_MESSAGE\"}]}]}"
+                );
             
             await middleware.InvokeAsync(context, requestDelegateContext => Task.CompletedTask);
             var content = await GetStringBody(context.Response.Body);

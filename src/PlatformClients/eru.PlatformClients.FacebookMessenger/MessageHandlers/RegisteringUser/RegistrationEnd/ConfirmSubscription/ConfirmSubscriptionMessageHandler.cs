@@ -20,7 +20,9 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
         private readonly ISendApiClient _apiClient;
         private readonly ITranslator<FacebookMessengerPlatformClient> _translator;
         
-        public ConfirmSubscriptionMessageHandler(IRegistrationDbContext dbContext, IMediator mediator, ISendApiClient apiClient, ITranslator<FacebookMessengerPlatformClient> translator, ILogger<ConfirmSubscriptionMessageHandler> logger) : base(logger)
+        public ConfirmSubscriptionMessageHandler(IRegistrationDbContext dbContext, IMediator mediator,
+            ISendApiClient apiClient, ITranslator<FacebookMessengerPlatformClient> translator,
+            ILogger<ConfirmSubscriptionMessageHandler> logger) : base(logger)
         {
             _dbContext = dbContext;
             _mediator = mediator;
@@ -34,13 +36,15 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
             _dbContext.IncompleteUsers.Remove(user);
             await _dbContext.SaveChangesAsync(CancellationToken.None);
             
-            await _apiClient.Send(new SendRequest(user.Id, new Message(await _translator.TranslateString("congratulations", user.PreferredLanguage), new[]
+            await _apiClient.Send(new SendRequest(user.Id, new Message(
+                await _translator.TranslateString("congratulations", user.PreferredLanguage), new[]
             {
-                new QuickReply(await _translator.TranslateString("cancel-button", user.PreferredLanguage), new Payload(PayloadType.Cancel).ToJson())
+                new QuickReply(await _translator.TranslateString("cancel-button", user.PreferredLanguage),
+                    new Payload(PayloadType.Cancel).ToJson())
             })));
         }
 
-        public override async Task ShowInstruction(IncompleteUser user)
+        public async Task ShowInstruction(IncompleteUser user)
         {
             await _apiClient.Send(new SendRequest(user.Id,
                 new Message(await _translator.TranslateString("confirmation", user.PreferredLanguage),

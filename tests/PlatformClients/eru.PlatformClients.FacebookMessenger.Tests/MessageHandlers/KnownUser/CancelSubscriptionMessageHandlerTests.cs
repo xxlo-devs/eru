@@ -35,7 +35,8 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.KnownUser
                 }
             };
             
-            var handler = new CancelSubscriptionMessageHandler(mediator.Object, apiClient.Object, MockBuilder.BuildFakeTranslator(), MockBuilder.BuildFakeLogger<CancelSubscriptionMessageHandler>());
+            var handler = new CancelSubscriptionMessageHandler(mediator.Object, apiClient.Object,
+                MockBuilder.BuildFakeTranslator(), MockBuilder.BuildFakeLogger<CancelSubscriptionMessageHandler>());
             await handler.Handle(message);
 
             mediator.Verify(
@@ -52,10 +53,13 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.KnownUser
             
             mediator.VerifyNoOtherCalls();
 
-            var expectedMessage = new SendRequest("sample-subscriber", new FacebookMessenger.SendAPIClient.Requests.Message("subscription-cancelled-text"));
+            var expectedMessage = new SendRequest("sample-subscriber",
+                new FacebookMessenger.SendAPIClient.Requests.Message("subscription-cancelled-text")
+                );
             apiClient.Verify(x => x.Send(
                 It.Is<SendRequest>(y => y.IsEquivalentTo(expectedMessage))
                 ));
+            apiClient.VerifyNoOtherCalls();
         }
     }
 }

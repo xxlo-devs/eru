@@ -16,7 +16,9 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
         private readonly ISendApiClient _apiClient;
         private readonly ITranslator<FacebookMessengerPlatformClient> _translator;
 
-        public CancelRegistrationMessageHandler(IRegistrationDbContext dbContext, ISendApiClient apiClient, ITranslator<FacebookMessengerPlatformClient> translator, ILogger<CancelRegistrationMessageHandler> logger) : base(logger)
+        public CancelRegistrationMessageHandler(IRegistrationDbContext dbContext, ISendApiClient apiClient,
+            ITranslator<FacebookMessengerPlatformClient> translator,
+            ILogger<CancelRegistrationMessageHandler> logger) : base(logger)
         {
             _dbContext = dbContext;
             _apiClient = apiClient;
@@ -31,7 +33,8 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
             _dbContext.IncompleteUsers.Remove(user);
             await _dbContext.SaveChangesAsync(CancellationToken.None);
             
-            await _apiClient.Send(new SendRequest(uid, new Message(await _translator.TranslateString("subscription-cancelled", user.PreferredLanguage))));
+            await _apiClient.Send(new SendRequest(uid,
+                new Message(await _translator.TranslateString("subscription-cancelled", user.PreferredLanguage))));
         }
     }
 }
