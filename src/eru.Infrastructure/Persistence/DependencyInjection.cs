@@ -10,18 +10,7 @@ namespace eru.Infrastructure.Persistence
     {
         public static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
         {
-            switch (configuration.GetValue<string>("Database:Type")?.ToLower() ?? "inmemory")
-            {
-                case "inmemory":
-                    services.AddDbContext<ApplicationDbContext>(options => options.UseInMemoryDatabase("eru"));
-                    break;
-                case "postgresql":
-                    SetupPostgresDbContext(services, configuration);
-                    break;
-                default:
-                    throw new DatabaseSettingsException();
-            }
-
+            SetupPostgresDbContext(services, configuration);
             return services;
         }
 
