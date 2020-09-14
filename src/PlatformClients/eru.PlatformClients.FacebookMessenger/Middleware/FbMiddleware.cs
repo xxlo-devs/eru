@@ -101,7 +101,7 @@ namespace eru.PlatformClients.FacebookMessenger.Middleware
                     _logger.LogWarning("Facebook Messenger Webhook Middleware: got an unsupported event (event: {webhook})", webhook);
                 }
             }
-            catch(JsonException e)
+            catch(JsonException)
             {
                 await context.SendResponse(HttpStatusCode.BadRequest);
                 _logger.LogError(
