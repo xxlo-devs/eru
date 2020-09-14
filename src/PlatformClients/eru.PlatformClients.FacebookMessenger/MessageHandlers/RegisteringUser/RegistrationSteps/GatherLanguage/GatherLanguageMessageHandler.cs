@@ -60,13 +60,13 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
             var supportedCultures = _configuration.GetSection("CultureSettings:AvailableCultures").AsEnumerable()
                 .Select(x => x.Value)
                 .Skip(1);
-            
-            var cultures = supportedCultures.ToDictionary(
-                x => new CultureInfo(x).DisplayName,
-                x => new Payload(PayloadType.Lang, x).ToJson()
-                );
 
-            return await GetSelector(cultures, page, PayloadType.Lang, displayCulture);
+            var culturesDict = supportedCultures.ToDictionary(
+                x => x.ToUpper(),
+                x => new Payload(PayloadType.Lang, x).ToJson()
+            );
+            
+            return await GetSelector(culturesDict, page, PayloadType.Lang, displayCulture);
         }
     }
 }

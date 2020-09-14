@@ -2,6 +2,7 @@
 {
     public enum PayloadType
     {
+        Null,
         Cancel,
         Subscribe, 
         Lang,
