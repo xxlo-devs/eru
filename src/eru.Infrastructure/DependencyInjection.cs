@@ -17,6 +17,7 @@ namespace eru.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddApplicationCultures();
             services.AddTranslator(configuration);
             
             services.AddDatabase(configuration);

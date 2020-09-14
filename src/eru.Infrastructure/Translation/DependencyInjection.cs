@@ -12,23 +12,32 @@ namespace eru.Infrastructure.Translation
 {
     public static class DependencyInjection
     {
+        public static IServiceCollection AddApplicationCultures(this IServiceCollection services)
+        {
+            services.AddTransient<IApplicationCultures, ApplicationCultures>();
+
+            return services;
+        }
+        
         public static IServiceCollection AddTranslator(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddLocalization(options =>
             {
                 options.ResourcesPath = "Resources";
             });
+            
             services.Configure<RequestLocalizationOptions>(options =>
             {
-                var cultures = configuration
-                    .GetSection("CultureSettings:AvailableCultures")
-                    .GetChildren()
-                    .Select(x => new CultureInfo(x.Value))
+                var applicationCultures = new ApplicationCultures(configuration);
+                var cultures = applicationCultures.AvailableCultures
+                    .Select(x => x.Culture)
                     .ToList();
-                options.DefaultRequestCulture = new RequestCulture(configuration["CultureSettings:DefaultCulture"]);
+                
+                options.DefaultRequestCulture = new RequestCulture(applicationCultures.DefaultCulture.Culture);
                 options.SupportedCultures = cultures;
                 options.SupportedUICultures = cultures;
             });
+            
             services.AddTransient(typeof(ITranslator<>), typeof(Translator<>));
             
             return services;
