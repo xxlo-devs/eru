@@ -62,15 +62,10 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
                 .Skip(1);
 
             var culturesDict = supportedCultures.ToDictionary(
-                x => x,
+                x => x.ToUpper(),
                 x => new Payload(PayloadType.Lang, x).ToJson()
             );
             
-            // var culturesDict = supportedCultures.ToDictionary(
-            //     x => (char.ToUpper(new CultureInfo(x).NativeName[0]) + (new CultureInfo(x).NativeName).ToLower().Substring(1)),
-            //     x => new Payload(PayloadType.Lang, x).ToJson()
-            // );
-
             return await GetSelector(culturesDict, page, PayloadType.Lang, displayCulture);
         }
     }
