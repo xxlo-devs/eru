@@ -2,9 +2,23 @@
 
 ## How to participate & prerequisites
 
+### Our prerequisites 
+
 We are open for everybody who: 
 1. Attends XX LO (Gdansk, Poland)
 2. Is willing to report every bug to the project maintainers
+
+### Facebook prerequisites
+
+To register as a developer on Facebook you have to 'verify' your account. Facebook consider account as verified when (1) it has a valid & confirmed phone number or (2) it has a verified credit card. You can check whether you have a verified phone number [here](https://www.facebook.com/settings?tab=mobile).
+
+![verified-phone-number](images/facebook-messenger/developer/verified-phone-number.png)
+
+This is what you should see after visiting this link. 
+
+### How to participate? 
+
+Write to our maintainer and kindly ask for a tester invitation. Then, follow the instruction. We'll really appreciate everybody as a tester :)
 
 ## Create a Facebook Developer Account
 
