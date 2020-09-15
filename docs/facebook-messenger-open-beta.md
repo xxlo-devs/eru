@@ -8,28 +8,56 @@ We are open for everybody who:
 
 ## Create a Facebook Developer Account
 
-![get-started](images/facebook-messenger/developer/get-started.png = 1280x720)
+Head to [Facebook for Developers](https://developers.facebook.com/) website and click Get Started.
 
-![create-account](images/facebook-messenger/developer/welcome-to-facebook-developers.png = 1280x720)
+![get-started](images/facebook-messenger/developer/get-started.png)
+
+Then, accept terms and conditions. 
+
+![create-account](images/facebook-messenger/developer/welcome-to-facebook-developers.png)
+
+You may be also asked for registration purpose (you can choose 'Other'). After this, you'll get the ability to join app as a tester :)
 
 ## Accept invitation to join testing team at eru
 
-![invitation-from-eru-developer](images/facebook-messenger/developer/request-from-eru.png = 1280x720)
+If you are a registered developer at Facebook and our maintainer invited you to join our team, you need to accept this invitation. Go straight to https://developers.facebook.com/requests/.
 
-![accepted-invitation](images/facebook-messenger/developer/accepted-request.png = 1280x720)
+![invitation-from-eru-developer](images/facebook-messenger/developer/request-from-eru.png)
+
+Accept the request by clicking accept. 
+
+![accepted-invitation](images/facebook-messenger/developer/accepted-request.png)
+
+Voila! Now you can use the bot as a tester. 
 
 ## Create a subscription
 
-![start-conversation](images/facebook-messenger/conversation/start-conversation.png = 540x960)
+To create a subscription, you need to write to our page called Eru. Grab a [direct link](https://m.me/105566531290178) and start now!
 
-![conversation](images/facebook-messenger/conversation/conversation.png = 540x960)
+![start-conversation](images/facebook-messenger/conversation/start-conversation.png)
 
-![select-language](images/facebook-messenger/conversation/select-language.png = 540x960)
+Here just click 'Message'.
 
-![select-year](images/facebook-messenger/conversation/select-year.png = 540x960)
+![conversation](images/facebook-messenger/conversation/conversation.png)
 
-![select-class](images/facebook-messenger/conversation/select-class.png = 540x960)
+Write 'hello' (or anything else) to start the conversation.
 
-![confirm-subscription](images/facebook-messenger/conversation/confirm-subscription.png = 540x960)
+![select-language](images/facebook-messenger/conversation/select-language.png)
 
-![cancel-subscription](images/facebook-messenger/conversation/cancel-subscription.png = 540x960)
+Select your preferred language. If you will make a mistake and will need to change your data - click 'Cancel' and start registration again. 
+
+![select-year](images/facebook-messenger/conversation/select-year.png)
+
+Select your grade (1st, 2nd or 3rd).
+
+![select-class](images/facebook-messenger/conversation/select-class.png)
+
+Select your section from the list. Remember that you can scroll the list using your fingers (swipe right or left to scroll).
+
+![confirm-subscription](images/facebook-messenger/conversation/confirm-subscription.png)
+
+Confirm subscription & you're free to go!
+
+![cancel-subscription](images/facebook-messenger/conversation/cancel-subscription.png)
+
+If you'll ever want to cancel the subscription (or registration), just click Cancel at any time.
