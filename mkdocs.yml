@@ -10,4 +10,6 @@ nav:
       - 'Docker': docker.md
    - 'Communication': 
       - 'Facebook Messenger':
-         - 'Open Beta': facebook-messenger-open-beta.md
+         - '[EN/PL] What about release': messenger/what-about-release.md
+         - '[EN] Open Beta': messenger/facebook-messenger-open-beta-en.md
+         - '[PL] Open Beta': messenger/facebook-messenger-open-beta-pl.md

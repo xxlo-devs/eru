@@ -5,7 +5,9 @@
 ### Our prerequisites 
 
 We are open for everybody who: 
+
 1. Attends XX LO (Gdansk, Poland)
+
 2. Is willing to report every bug to the project maintainers
 
 ### Facebook prerequisites

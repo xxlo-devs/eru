@@ -66,4 +66,8 @@
         <value>Strona internetowa z najnowszymi zastępstwami.</value>
         <comment>online-page</comment>
     </data>
+    <data name="instruction-url" xml:space="preserve">
+        <value>https://xxlo-devs.github.io/eru/messenger/facebook-messenger-open-beta-pl/</value>
+        <comment>instruction-url</comment>
+    </data>
 </root>
