@@ -53,11 +53,6 @@ namespace eru.PlatformClients.FacebookMessenger.Tests
             }).Build();
         }
         
-        public static Language GetMockLanguage()
-        {
-            return new Language("English", string.Empty, new CultureInfo("en"));
-        }
-        
         public static Mock<IMediator> BuildMediatorMock()
         {
             var mediatorMock = new Mock<IMediator>();
