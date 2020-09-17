@@ -47,7 +47,7 @@ Voila! Od teraz możesz używać bota jako tester.
 
 ## Zasubskrybuj powiadomienia o zastępstwach
 
-Aby założyć subskrypcję, musisz napisać do strony Eru. [Link do Messengera](https://m.me/105566531290178) and start now!
+Aby założyć subskrypcję, musisz napisać do strony Eru. [Link do Messengera](https://m.me/105566531290178)
 
 ![start-conversation](images/facebook-messenger/conversation/start-conversation.png)
 
