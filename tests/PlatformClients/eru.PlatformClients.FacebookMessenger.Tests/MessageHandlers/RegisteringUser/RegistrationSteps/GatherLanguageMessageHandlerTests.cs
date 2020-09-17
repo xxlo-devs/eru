@@ -49,8 +49,8 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             
             var expectedMessage = new SendRequest("sample-registering-user", new Message("greeting-text", new[] 
             {
-                new QuickReply(new CultureInfo("en").DisplayName, new Payload(PayloadType.Lang, "en").ToJson()), 
-                new QuickReply(new CultureInfo("pl").DisplayName, new Payload(PayloadType.Lang, "pl").ToJson()), 
+                new QuickReply("English", new Payload(PayloadType.Lang, "en").ToJson()), 
+                new QuickReply("Polish", new Payload(PayloadType.Lang, "pl").ToJson()), 
                 new QuickReply("cancel-button-text", new Payload(PayloadType.Cancel).ToJson())
             }));
             
@@ -74,8 +74,8 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
 
             var expectedMessage = new SendRequest("sample-registering-user", new Message("greeting-text", new[] 
             {
-                new QuickReply(new CultureInfo("en").DisplayName, new Payload(PayloadType.Lang, "en").ToJson()),
-                new QuickReply(new CultureInfo("pl").DisplayName, new Payload(PayloadType.Lang, "pl").ToJson()),
+                new QuickReply("English", new Payload(PayloadType.Lang, "en").ToJson()),
+                new QuickReply("Polish", new Payload(PayloadType.Lang, "pl").ToJson()),
                 new QuickReply("cancel-button-text", new Payload(PayloadType.Cancel).ToJson())
             }));
             
@@ -100,8 +100,8 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             var expectedMessage = new SendRequest("sample-registering-user", new Message(
                 "unsupported-command-text", new[]
                 {
-                    new QuickReply(new CultureInfo("en").DisplayName, new Payload(PayloadType.Lang, "en").ToJson()),
-                    new QuickReply(new CultureInfo("pl").DisplayName, new Payload(PayloadType.Lang, "pl").ToJson()),
+                    new QuickReply("English", new Payload(PayloadType.Lang, "en").ToJson()),
+                    new QuickReply("Polish", new Payload(PayloadType.Lang, "pl").ToJson()),
                     new QuickReply("cancel-button-text", new Payload(PayloadType.Cancel).ToJson())
                 }));
             
