@@ -21,7 +21,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             var client = new Mock<ISendApiClient>();
 
             var handler = new ConfirmSubscriptionMessageHandler(context, mediator.Object, client.Object,
-                MockBuilder.BuildFakeTranslator(), new Mock<ILogger<ConfirmSubscriptionMessageHandler>>().Object);
+                MockBuilder.BuildFakeTranslator(), new Mock<ILogger<ConfirmSubscriptionMessageHandler>>().Object, MockBuilder.BuildFakeCultures());
             await handler.Handle(await context.IncompleteUsers.FindAsync(
                     "sample-registering-user-with-class"), 
                 new Payload(PayloadType.Subscribe));
@@ -54,7 +54,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             var client = new Mock<ISendApiClient>();
 
             var handler = new ConfirmSubscriptionMessageHandler(context, mediator.Object, client.Object,
-                MockBuilder.BuildFakeTranslator(), new Mock<ILogger<ConfirmSubscriptionMessageHandler>>().Object);
+                MockBuilder.BuildFakeTranslator(), new Mock<ILogger<ConfirmSubscriptionMessageHandler>>().Object, MockBuilder.BuildFakeCultures());
             await handler.ShowInstruction(await context.IncompleteUsers.FindAsync("sample-registering-user-with-class"));
 
             var expectedMessage = new SendRequest("sample-registering-user-with-class", new Message("confirmation-text", new[]
@@ -78,7 +78,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             var client = new Mock<ISendApiClient>();
 
             var handler = new ConfirmSubscriptionMessageHandler(context, mediator.Object, client.Object,
-                MockBuilder.BuildFakeTranslator(), new Mock<ILogger<ConfirmSubscriptionMessageHandler>>().Object);
+                MockBuilder.BuildFakeTranslator(), new Mock<ILogger<ConfirmSubscriptionMessageHandler>>().Object, MockBuilder.BuildFakeCultures());
             await handler.Handle(await context.IncompleteUsers.FindAsync("sample-registering-user-with-class"), new Payload());
             
             var expectedMessage = new SendRequest("sample-registering-user-with-class", new Message("unsupported-command-text", new[]

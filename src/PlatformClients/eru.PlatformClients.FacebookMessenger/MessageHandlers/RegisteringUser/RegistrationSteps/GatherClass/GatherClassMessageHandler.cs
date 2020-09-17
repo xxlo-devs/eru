@@ -21,16 +21,18 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
         private readonly ISendApiClient _apiClient;
         private readonly ITranslator<FacebookMessengerPlatformClient> _translator;
         private readonly IConfirmSubscriptionMessageHandler _confirmHandler;
+        private readonly IApplicationCultures _cultures;
         
         public GatherClassMessageHandler(IMediator mediator, ISendApiClient apiClient,
             ITranslator<FacebookMessengerPlatformClient> translator, IConfirmSubscriptionMessageHandler confirmHandler,
-            IRegistrationDbContext dbContext, ILogger<GatherClassMessageHandler> logger) : base(dbContext, translator,
-            logger)
+            IRegistrationDbContext dbContext, ILogger<GatherClassMessageHandler> logger, IApplicationCultures cultures) 
+            : base(dbContext, translator, logger)
         {
             _mediator = mediator;
             _apiClient = apiClient;
             _translator = translator;
             _confirmHandler = confirmHandler;
+            _cultures = cultures;
         }
 
         protected override async Task<IncompleteUser> UpdateUserBase(IncompleteUser user, string data)
@@ -46,14 +48,14 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
         protected override async Task ShowInstructionBase(IncompleteUser user, int page)
         {
             await _apiClient.Send(new SendRequest(user.Id,
-                new Message(await _translator.TranslateString("class-selection", user.PreferredLanguage),
+                new Message(await _translator.TranslateString("class-selection", _cultures.FindCulture(user.PreferredLanguage)),
                     await GetClassSelector(user.Year, page, user.PreferredLanguage))));
         }
 
         protected override async Task UnsupportedCommandBase(IncompleteUser user)
         {
             await _apiClient.Send(new SendRequest(user.Id,
-                new Message(await _translator.TranslateString("unsupported-command", user.PreferredLanguage),
+                new Message(await _translator.TranslateString("unsupported-command", _cultures.FindCulture(user.PreferredLanguage)),
                     await GetClassSelector(user.Year, user.LastPage, user.PreferredLanguage))));
         }
 
@@ -66,7 +68,7 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
                 .ToDictionary(x => x.ToString(), x 
                     => new Payload(PayloadType.Class, x.Id).ToJson());
 
-            return await GetSelector(classes, page, PayloadType.Class, lang);
+            return await GetSelector(classes, page, PayloadType.Class, _cultures.FindCulture(lang));
         }
     }
 }

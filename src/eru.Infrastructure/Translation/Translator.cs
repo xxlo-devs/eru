@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.Threading.Tasks;
 using eru.Application.Common.Interfaces;
+using eru.Domain.Entity;
 using Microsoft.Extensions.Localization;
 
 namespace eru.Infrastructure.Translation
@@ -14,10 +15,10 @@ namespace eru.Infrastructure.Translation
             _localizer = localizer;
         }
 
-        public Task<string> TranslateString(string key, string culture)
+        public Task<string> TranslateString(string key, Language lang)
         {
 #pragma warning disable 618
-            var localizedString = _localizer.WithCulture(CultureInfo.GetCultureInfo(culture)).GetString(key);
+            var localizedString = _localizer.WithCulture(lang.Culture).GetString(key);
 #pragma warning restore 618
             return Task.FromResult(localizedString.ResourceNotFound ? null : localizedString.Value);
         }

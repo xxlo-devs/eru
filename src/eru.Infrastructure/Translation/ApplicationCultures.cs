@@ -24,5 +24,8 @@ namespace eru.Infrastructure.Translation
 
         public Language DefaultCulture
             => AvailableCultures.First(x => x.Culture.Name == _configuration["DefaultCulture"]);
+
+        public Language FindCulture(string name)
+            => AvailableCultures.FirstOrDefault(x => x.Culture.Name == name);
     }
 }

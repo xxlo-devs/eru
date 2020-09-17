@@ -17,14 +17,17 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser.Cancel
         private readonly IMediator _mediator;
         private readonly ISendApiClient _apiClient;
         private readonly ITranslator<FacebookMessengerPlatformClient> _translator;
+        private readonly IApplicationCultures _cultures;
         
         public CancelSubscriptionMessageHandler(IMediator mediator, ISendApiClient apiClient,
             ITranslator<FacebookMessengerPlatformClient> translator,
-            ILogger<CancelSubscriptionMessageHandler> logger) : base(logger)
+            ILogger<CancelSubscriptionMessageHandler> logger, IApplicationCultures cultures)
+            : base(logger)
         {
             _mediator = mediator;
             _apiClient = apiClient;
             _translator = translator;
+            _cultures = cultures;
         }
 
         protected override async Task Base(Messaging message)
@@ -35,7 +38,7 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.KnownUser.Cancel
             await _mediator.Send(new CancelSubscriptionCommand(uid, FacebookMessengerPlatformClient.PId));
             
             await _apiClient.Send(new SendRequest(uid, 
-                new Message(await _translator.TranslateString("subscription-cancelled", user.PreferredLanguage))));
+                new Message(await _translator.TranslateString("subscription-cancelled", _cultures.FindCulture(user.PreferredLanguage)))));
         }
     }
 }

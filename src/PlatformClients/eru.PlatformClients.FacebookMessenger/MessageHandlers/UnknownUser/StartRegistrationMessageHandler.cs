@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using eru.Application.Common.Interfaces;
 using eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.RegistrationSteps.GatherLanguage;
 using eru.PlatformClients.FacebookMessenger.Middleware.Webhook.Messages;
 using eru.PlatformClients.FacebookMessenger.RegistrationDb.DbContext;
@@ -15,23 +16,23 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.UnknownUser
         IUnknownUserMessageHandler
     {
         private readonly IRegistrationDbContext _dbContext;
-        private readonly IConfiguration _configuration;
         private readonly IGatherLanguageMessageHandler _langHandler;
         private readonly IBackgroundJobClient _backgroundJobClient;
+        private readonly IApplicationCultures _cultures;
         
-        public StartRegistrationMessageHandler(IRegistrationDbContext dbContext, IConfiguration configuration,
+        public StartRegistrationMessageHandler(IRegistrationDbContext dbContext,
             IGatherLanguageMessageHandler langHandler, IBackgroundJobClient backgroundJobClient,
-            ILogger<StartRegistrationMessageHandler> logger) : base(logger)
+            ILogger<StartRegistrationMessageHandler> logger, IApplicationCultures cultures) : base(logger)
         {
             _dbContext = dbContext;
             _langHandler = langHandler;
-            _configuration = configuration;
             _backgroundJobClient = backgroundJobClient;
+            _cultures = cultures;
         }
 
         protected override async Task Base(Messaging message)
         {
-            var incompleteUser = new IncompleteUser(message.Sender.Id, _configuration["CultureSettings:DefaultCulture"]);
+            var incompleteUser = new IncompleteUser(message.Sender.Id, _cultures.DefaultCulture.Culture.Name);
 
             await _dbContext.IncompleteUsers.AddAsync(incompleteUser);
             await _dbContext.SaveChangesAsync(CancellationToken.None);

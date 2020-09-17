@@ -15,14 +15,17 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
         private readonly IRegistrationDbContext _dbContext;
         private readonly ISendApiClient _apiClient;
         private readonly ITranslator<FacebookMessengerPlatformClient> _translator;
+        private readonly IApplicationCultures _cultures;
 
         public CancelRegistrationMessageHandler(IRegistrationDbContext dbContext, ISendApiClient apiClient,
             ITranslator<FacebookMessengerPlatformClient> translator,
-            ILogger<CancelRegistrationMessageHandler> logger) : base(logger)
+            ILogger<CancelRegistrationMessageHandler> logger,
+            IApplicationCultures cultures) : base(logger)
         {
             _dbContext = dbContext;
             _apiClient = apiClient;
             _translator = translator;
+            _cultures = cultures;
         }
 
         protected override async Task Base(Messaging message)
@@ -34,7 +37,7 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
             await _dbContext.SaveChangesAsync(CancellationToken.None);
             
             await _apiClient.Send(new SendRequest(uid,
-                new Message(await _translator.TranslateString("subscription-cancelled", user.PreferredLanguage))));
+                new Message(await _translator.TranslateString("subscription-cancelled", _cultures.FindCulture(user.PreferredLanguage)))));
         }
     }
 }

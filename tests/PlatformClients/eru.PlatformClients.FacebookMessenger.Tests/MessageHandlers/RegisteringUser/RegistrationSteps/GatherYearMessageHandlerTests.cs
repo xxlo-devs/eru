@@ -23,7 +23,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
 
             var handler = new GatherYearMessageHandler(mediator.Object, client.Object,
                 MockBuilder.BuildFakeTranslator(), confirmHandler.Object, context,
-                MockBuilder.BuildFakeLogger<GatherYearMessageHandler>());
+                MockBuilder.BuildFakeLogger<GatherYearMessageHandler>(), MockBuilder.BuildFakeCultures());
             await handler.Handle(
                 await context.IncompleteUsers.FindAsync("sample-registering-user-with-lang"), 
                 new Payload(PayloadType.Year, "1")
@@ -48,7 +48,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
 
             var handler = new GatherYearMessageHandler(mediator.Object, client.Object,
                 MockBuilder.BuildFakeTranslator(), confirmHandler.Object, context,
-                MockBuilder.BuildFakeLogger<GatherYearMessageHandler>());
+                MockBuilder.BuildFakeLogger<GatherYearMessageHandler>(), MockBuilder.BuildFakeCultures());
             await handler.Handle(
                 await context.IncompleteUsers.FindAsync("sample-registering-user-with-lang"),
                 new Payload(PayloadType.Year, 1)
@@ -78,7 +78,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
 
             var handler = new GatherYearMessageHandler(mediator.Object, client.Object,
                 MockBuilder.BuildFakeTranslator(), confirmHandler.Object, context,
-                MockBuilder.BuildFakeLogger<GatherYearMessageHandler>());
+                MockBuilder.BuildFakeLogger<GatherYearMessageHandler>(), MockBuilder.BuildFakeCultures());
             await handler.ShowInstruction(await context.IncompleteUsers.FindAsync("sample-registering-user-with-lang"));
             
             context.IncompleteUsers.Should().ContainSingle(x =>
@@ -118,7 +118,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
 
             var handler = new GatherYearMessageHandler(mediator.Object, client.Object,
                 MockBuilder.BuildFakeTranslator(), confirmHandler.Object, context,
-                MockBuilder.BuildFakeLogger<GatherYearMessageHandler>());
+                MockBuilder.BuildFakeLogger<GatherYearMessageHandler>(), MockBuilder.BuildFakeCultures());
             await handler.Handle(await context.IncompleteUsers.FindAsync("sample-registering-user-with-lang"), new Payload());
             
             context.IncompleteUsers.Should().ContainSingle(x =>

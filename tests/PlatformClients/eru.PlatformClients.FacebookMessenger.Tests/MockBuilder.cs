@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,6 +9,8 @@ using eru.Application.Common.Interfaces;
 using eru.Application.Subscriptions.Queries.GetSubscriber;
 using eru.Domain.Entity;
 using MediatR;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -15,16 +19,43 @@ namespace eru.PlatformClients.FacebookMessenger.Tests
 {
     public static class MockBuilder
     {
+        public static IApplicationCultures BuildFakeCultures()
+        {
+            var mock = new Mock<IApplicationCultures>();
+            mock
+                .Setup(x => x.AvailableCultures)
+                .Returns(new[]
+                {
+                    new Language("English", string.Empty, new CultureInfo("en")),
+                    new Language("Polish", string.Empty, new CultureInfo("pl"))
+                });
+
+            mock
+                .Setup(x => x.DefaultCulture)
+                .Returns(new Language("English", string.Empty, new CultureInfo("en")));
+
+            mock.Setup(x => x.FindCulture(It.IsAny<string>())).Returns((string name) => name switch
+            {
+                "en" => new Language("English", string.Empty, new CultureInfo("en")),
+                "pl" => new Language("Polish", string.Empty, new CultureInfo("pl")),
+                _ => null
+            });
+
+            return mock.Object;
+        }
+
         public static IConfiguration BuildFakeConfiguration()
         {
             return new ConfigurationBuilder().AddInMemoryCollection(new[]
             {
-                new KeyValuePair<string, string>("CultureSettings:DefaultCulture", "en"),
-                new KeyValuePair<string, string>("CultureSettings:AvailableCultures:0", "en"),
-                new KeyValuePair<string, string>("CultureSettings:AvailableCultures:1", "pl"),
                 new KeyValuePair<string, string>("PlatformClients:FacebookMessenger:VerifyToken", "sample-verify-token"),
                 new KeyValuePair<string, string>("PlatformClients:FacebookMessenger:AccessToken", "sample-access-token")
             }).Build();
+        }
+        
+        public static Language GetMockLanguage()
+        {
+            return new Language("English", string.Empty, new CultureInfo("en"));
         }
         
         public static Mock<IMediator> BuildMediatorMock()
@@ -80,53 +111,53 @@ namespace eru.PlatformClients.FacebookMessenger.Tests
             var translatorMock = new Mock<ITranslator<FacebookMessengerPlatformClient>>();
             
             translatorMock
-                .Setup(x => x.TranslateString("cancel-button", "en"))
+                .Setup(x => x.TranslateString("cancel-button", It.Is<Language>(y => y.Culture.Name == "en")))
                 .Returns(Task.FromResult("cancel-button-text"));
             translatorMock
-                .Setup(x => x.TranslateString("next-page", "en"))
+                .Setup(x => x.TranslateString("next-page", It.Is<Language>(y => y.Culture.Name == "en")))
                 .Returns(Task.FromResult("->"));
             translatorMock
-                .Setup(x => x.TranslateString("previous-page", "en"))
+                .Setup(x => x.TranslateString("previous-page", It.Is<Language>(y => y.Culture.Name == "en")))
                 .Returns(Task.FromResult("<-"));
             translatorMock
-                .Setup(x => x.TranslateString("subscribe-button", "en"))
+                .Setup(x => x.TranslateString("subscribe-button", It.Is<Language>(y => y.Culture.Name == "en")))
                 .Returns(Task.FromResult("subscribe-button-text"));
             
             translatorMock
-                .Setup(x => x.TranslateString("greeting", "en"))
+                .Setup(x => x.TranslateString("greeting", It.Is<Language>(y => y.Culture.Name == "en")))
                 .Returns(Task.FromResult("greeting-text"));
             translatorMock
-                .Setup(x => x.TranslateString("year-selection", "en"))
+                .Setup(x => x.TranslateString("year-selection", It.Is<Language>(y => y.Culture.Name == "en")))
                 .Returns(Task.FromResult("year-selection-text"));
             translatorMock
-                .Setup(x => x.TranslateString("class-selection", "en"))
+                .Setup(x => x.TranslateString("class-selection", It.Is<Language>(y => y.Culture.Name == "en")))
                 .Returns(Task.FromResult("class-selection-text"));
             
             translatorMock
-                .Setup(x => x.TranslateString("confirmation", "en"))
+                .Setup(x => x.TranslateString("confirmation", It.Is<Language>(y => y.Culture.Name == "en")))
                 .Returns(Task.FromResult("confirmation-text"));
             translatorMock
-                .Setup(x => x.TranslateString("congratulations", "en"))
+                .Setup(x => x.TranslateString("congratulations", It.Is<Language>(y => y.Culture.Name == "en")))
                 .Returns(Task.FromResult("congratulations-text"));
             
             translatorMock
-                .Setup(x => x.TranslateString("subscription-cancelled", "en"))
+                .Setup(x => x.TranslateString("subscription-cancelled", It.Is<Language>(y => y.Culture.Name == "en")))
                 .Returns(Task.FromResult("subscription-cancelled-text"));
             translatorMock
-                .Setup(x => x.TranslateString("unsupported-command", "en"))
+                .Setup(x => x.TranslateString("unsupported-command", It.Is<Language>(y => y.Culture.Name == "en")))
                 .Returns(Task.FromResult("unsupported-command-text"));
 
             translatorMock
-                .Setup(x => x.TranslateString("new-substitutions", "en"))
+                .Setup(x => x.TranslateString("new-substitutions", It.Is<Language>(y => y.Culture.Name == "en")))
                 .Returns(Task.FromResult("new-substitutions-text"));
             translatorMock
-                .Setup(x => x.TranslateString("substitution", "en"))
+                .Setup(x => x.TranslateString("substitution", It.Is<Language>(y => y.Culture.Name == "en")))
                 .Returns(Task.FromResult("SUBSTITUTION | {0} | {1} | {2} | {3} | {4} | {5}"));
             translatorMock.
-                Setup(x => x.TranslateString("cancellation", "en"))
+                Setup(x => x.TranslateString("cancellation", It.Is<Language>(y => y.Culture.Name == "en")))
                 .Returns(Task.FromResult("CANCELLATION | {0} | {1} | {2} | {3} | {4}"));
             translatorMock
-                .Setup(x => x.TranslateString("closing-substitutions", "en"))
+                .Setup(x => x.TranslateString("closing-substitutions", It.Is<Language>(y => y.Culture.Name == "en")))
                 .Returns(Task.FromResult("closing-substitutions-text"));
             
             return translatorMock.Object;

@@ -11,7 +11,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.PlatformClient
 
             PlatformClient = new FacebookMessengerPlatformClient(ApiClientMock.Object,
                 MockBuilder.BuildMediatorMock().Object, MockBuilder.BuildFakeTranslator(),
-                MockBuilder.BuildFakeLogger<FacebookMessengerPlatformClient>());
+                MockBuilder.BuildFakeLogger<FacebookMessengerPlatformClient>(), MockBuilder.BuildFakeCultures());
         }
         
         public FacebookMessengerPlatformClient PlatformClient { get; set; }

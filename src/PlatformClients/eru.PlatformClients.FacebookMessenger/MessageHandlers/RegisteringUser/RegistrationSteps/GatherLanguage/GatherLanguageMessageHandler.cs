@@ -16,20 +16,20 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
 {
     public class GatherLanguageMessageHandler : RegistrationStepsMessageHandler<GatherLanguageMessageHandler>, IGatherLanguageMessageHandler
     {
-        private readonly IConfiguration _configuration;
         private readonly ISendApiClient _apiClient;
         private readonly ITranslator<FacebookMessengerPlatformClient> _translator;
         private readonly IGatherYearMessageHandler _yearHandler;
+        private readonly IApplicationCultures _cultures;
         
-        public GatherLanguageMessageHandler(IConfiguration configuration, ISendApiClient apiClient,
+        public GatherLanguageMessageHandler(ISendApiClient apiClient,
             ITranslator<FacebookMessengerPlatformClient> translator, IGatherYearMessageHandler yearHandler,
-            IRegistrationDbContext dbContext, ILogger<GatherLanguageMessageHandler> logger) : base(dbContext,
-            translator, logger)
+            IRegistrationDbContext dbContext, ILogger<GatherLanguageMessageHandler> logger, IApplicationCultures cultures) 
+            : base(dbContext, translator, logger)
         {
-            _configuration = configuration;
             _apiClient = apiClient;
             _translator = translator;
             _yearHandler = yearHandler;
+            _cultures = cultures;
         }
         protected override async Task<IncompleteUser> UpdateUserBase(IncompleteUser user, string data)
         {
@@ -44,29 +44,25 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
         protected override async Task ShowInstructionBase(IncompleteUser user, int page)
         {
             await _apiClient.Send(new SendRequest(user.Id,
-                new Message(await _translator.TranslateString("greeting", user.PreferredLanguage),
+                new Message(await _translator.TranslateString("greeting", _cultures.FindCulture(user.PreferredLanguage)),
                     await GetLangSelector(page, user.PreferredLanguage))));
         }
 
         protected override async Task UnsupportedCommandBase(IncompleteUser user)
         {
             await _apiClient.Send(new SendRequest(user.Id,
-                new Message(await _translator.TranslateString("unsupported-command", user.PreferredLanguage),
+                new Message(await _translator.TranslateString("unsupported-command", _cultures.FindCulture(user.PreferredLanguage)),
                     await GetLangSelector(user.LastPage, user.PreferredLanguage))));
         }
 
         private async Task<IEnumerable<QuickReply>> GetLangSelector(int page, string displayCulture)
         {
-            var supportedCultures = _configuration.GetSection("CultureSettings:AvailableCultures").AsEnumerable()
-                .Select(x => x.Value)
-                .Skip(1);
-            
-            var cultures = supportedCultures.ToDictionary(
-                x => new CultureInfo(x).DisplayName,
-                x => new Payload(PayloadType.Lang, x).ToJson()
+            var cultures = _cultures.AvailableCultures.ToDictionary(
+                x => x.Name,
+                x => new Payload(PayloadType.Lang, x.Culture.Name).ToJson()
                 );
 
-            return await GetSelector(cultures, page, PayloadType.Lang, displayCulture);
+            return await GetSelector(cultures, page, PayloadType.Lang, _cultures.FindCulture(displayCulture));
         }
     }
 }

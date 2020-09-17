@@ -21,9 +21,9 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             var client = new Mock<ISendApiClient>();
             var yearHandler = new Mock<IGatherYearMessageHandler>();
 
-            var handler = new GatherLanguageMessageHandler(MockBuilder.BuildFakeConfiguration(), client.Object,
+            var handler = new GatherLanguageMessageHandler(client.Object,
                 MockBuilder.BuildFakeTranslator(), yearHandler.Object, context,
-                MockBuilder.BuildFakeLogger<GatherLanguageMessageHandler>());
+                MockBuilder.BuildFakeLogger<GatherLanguageMessageHandler>(), MockBuilder.BuildFakeCultures());
             await handler.Handle(await context.IncompleteUsers.FindAsync("sample-registering-user"), new Payload(PayloadType.Lang, "pl"));
 
             context.IncompleteUsers.Should().ContainSingle(x =>
@@ -42,9 +42,9 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             var client = new Mock<ISendApiClient>();
             var yearHandler = new Mock<IGatherYearMessageHandler>();
 
-            var handler = new GatherLanguageMessageHandler(MockBuilder.BuildFakeConfiguration(), client.Object,
+            var handler = new GatherLanguageMessageHandler(client.Object,
                 MockBuilder.BuildFakeTranslator(), yearHandler.Object, context,
-                MockBuilder.BuildFakeLogger<GatherLanguageMessageHandler>());
+                MockBuilder.BuildFakeLogger<GatherLanguageMessageHandler>(), MockBuilder.BuildFakeCultures());
             await handler.Handle(await context.IncompleteUsers.FindAsync("sample-registering-user"), new Payload(PayloadType.Lang, 0));
             
             var expectedMessage = new SendRequest("sample-registering-user", new Message("greeting-text", new[] 
@@ -67,9 +67,9 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             var client = new Mock<ISendApiClient>();
             var yearHandler = new Mock<IGatherYearMessageHandler>();
 
-            var handler = new GatherLanguageMessageHandler(MockBuilder.BuildFakeConfiguration(), client.Object,
+            var handler = new GatherLanguageMessageHandler( client.Object,
                 MockBuilder.BuildFakeTranslator(), yearHandler.Object, context,
-                MockBuilder.BuildFakeLogger<GatherLanguageMessageHandler>());
+                MockBuilder.BuildFakeLogger<GatherLanguageMessageHandler>(), MockBuilder.BuildFakeCultures());
             await handler.ShowInstruction(await context.IncompleteUsers.FindAsync("sample-registering-user"));
 
             var expectedMessage = new SendRequest("sample-registering-user", new Message("greeting-text", new[] 
@@ -92,9 +92,9 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             var client = new Mock<ISendApiClient>();
             var yearHandler = new Mock<IGatherYearMessageHandler>();
 
-            var handler = new GatherLanguageMessageHandler(MockBuilder.BuildFakeConfiguration(), client.Object,
+            var handler = new GatherLanguageMessageHandler(client.Object,
                 MockBuilder.BuildFakeTranslator(), yearHandler.Object, context,
-                MockBuilder.BuildFakeLogger<GatherLanguageMessageHandler>());
+                MockBuilder.BuildFakeLogger<GatherLanguageMessageHandler>(), MockBuilder.BuildFakeCultures());
             await handler.Handle(await context.IncompleteUsers.FindAsync("sample-registering-user"), new Payload());
             
             var expectedMessage = new SendRequest("sample-registering-user", new Message(

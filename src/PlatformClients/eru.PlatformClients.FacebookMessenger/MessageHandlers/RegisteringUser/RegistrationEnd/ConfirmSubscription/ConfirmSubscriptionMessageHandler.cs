@@ -19,15 +19,18 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
         private readonly IMediator _mediator;
         private readonly ISendApiClient _apiClient;
         private readonly ITranslator<FacebookMessengerPlatformClient> _translator;
+        private readonly IApplicationCultures _cultures;
         
         public ConfirmSubscriptionMessageHandler(IRegistrationDbContext dbContext, IMediator mediator,
             ISendApiClient apiClient, ITranslator<FacebookMessengerPlatformClient> translator,
-            ILogger<ConfirmSubscriptionMessageHandler> logger) : base(logger)
+            ILogger<ConfirmSubscriptionMessageHandler> logger,
+            IApplicationCultures cultures) : base(logger)
         {
             _dbContext = dbContext;
             _mediator = mediator;
             _apiClient = apiClient;
             _translator = translator;
+            _cultures = cultures;
         }
         protected override async Task EndRegistration(IncompleteUser user)
         {
@@ -37,9 +40,9 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
             await _dbContext.SaveChangesAsync(CancellationToken.None);
             
             await _apiClient.Send(new SendRequest(user.Id, new Message(
-                await _translator.TranslateString("congratulations", user.PreferredLanguage), new[]
+                await _translator.TranslateString("congratulations", _cultures.FindCulture(user.PreferredLanguage)), new[]
             {
-                new QuickReply(await _translator.TranslateString("cancel-button", user.PreferredLanguage),
+                new QuickReply(await _translator.TranslateString("cancel-button", _cultures.FindCulture(user.PreferredLanguage)),
                     new Payload(PayloadType.Cancel).ToJson())
             })));
         }
@@ -47,23 +50,23 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
         public async Task ShowInstruction(IncompleteUser user)
         {
             await _apiClient.Send(new SendRequest(user.Id,
-                new Message(await _translator.TranslateString("confirmation", user.PreferredLanguage),
+                new Message(await _translator.TranslateString("confirmation", _cultures.FindCulture(user.PreferredLanguage)),
                     await GetConfirmationButtons(user.PreferredLanguage))));
         }
 
         protected override async Task UnsupportedCommand(IncompleteUser user)
         {
             await _apiClient.Send(new SendRequest(user.Id,
-                new Message(await _translator.TranslateString("unsupported-command", user.PreferredLanguage),
+                new Message(await _translator.TranslateString("unsupported-command", _cultures.FindCulture(user.PreferredLanguage)),
                     await GetConfirmationButtons(user.PreferredLanguage))));
         }
 
         private async Task<IEnumerable<QuickReply>> GetConfirmationButtons(string lang)
             => new[]
             {
-                new QuickReply(await _translator.TranslateString("subscribe-button", lang),
+                new QuickReply(await _translator.TranslateString("subscribe-button", _cultures.FindCulture(lang)),
                     new Payload(PayloadType.Subscribe).ToJson()),
-                new QuickReply(await _translator.TranslateString("cancel-button", lang),
+                new QuickReply(await _translator.TranslateString("cancel-button", _cultures.FindCulture(lang)),
                     new Payload(PayloadType.Cancel).ToJson())
             };
     }

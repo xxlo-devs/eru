@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using eru.Application.Common.Interfaces;
+using eru.Domain.Entity;
 using eru.PlatformClients.FacebookMessenger.RegistrationDb.DbContext;
 using eru.PlatformClients.FacebookMessenger.RegistrationDb.Entities;
 using eru.PlatformClients.FacebookMessenger.ReplyPayload;
@@ -83,7 +84,7 @@ namespace eru.PlatformClients.FacebookMessenger.MessageHandlers.RegisteringUser.
                 typeof(T), user);
         }
         
-        protected async Task<IEnumerable<QuickReply>> GetSelector(Dictionary<string, string> items, int page, PayloadType payloadType, string displayCulture)
+        protected async Task<IEnumerable<QuickReply>> GetSelector(Dictionary<string, string> items, int page, PayloadType payloadType, Language displayCulture)
         {
             var offset = page * 10;
 

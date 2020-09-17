@@ -35,7 +35,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.Registerin
             };
             
             var handler = new CancelRegistrationMessageHandler(context, apiClient.Object,
-                MockBuilder.BuildFakeTranslator(), new Mock<ILogger<CancelRegistrationMessageHandler>>().Object);
+                MockBuilder.BuildFakeTranslator(), new Mock<ILogger<CancelRegistrationMessageHandler>>().Object, MockBuilder.BuildFakeCultures());
             await handler.Handle(message);
             
             context.IncompleteUsers.Should().NotContain(x => x.Id == "sample-registering-user");

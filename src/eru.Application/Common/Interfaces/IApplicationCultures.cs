@@ -7,5 +7,6 @@ namespace eru.Application.Common.Interfaces
     {
         public IEnumerable<Language> AvailableCultures { get; }
         public Language DefaultCulture { get; }
+        public Language FindCulture(string name);
     }
 }

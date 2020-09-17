@@ -36,7 +36,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.KnownUser
             };
             
             var handler = new CancelSubscriptionMessageHandler(mediator.Object, apiClient.Object,
-                MockBuilder.BuildFakeTranslator(), MockBuilder.BuildFakeLogger<CancelSubscriptionMessageHandler>());
+                MockBuilder.BuildFakeTranslator(), MockBuilder.BuildFakeLogger<CancelSubscriptionMessageHandler>(), MockBuilder.BuildFakeCultures());
             await handler.Handle(message);
 
             mediator.Verify(

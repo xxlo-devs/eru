@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
+using eru.Domain.Entity;
 using eru.Infrastructure.Translation;
 using FluentAssertions;
 using Microsoft.Extensions.Localization;
@@ -21,8 +23,10 @@ namespace eru.Infrastructure.Tests.Translation
 
             var translator = new Translator<TranslationTests>(localizer);
 
-            var en = await translator.TranslateString("test-value", "en");
-            var pl = await translator.TranslateString("test-value", "pl");
+            var en = await translator.TranslateString("test-value",
+                new Language("English", string.Empty, new CultureInfo("en")));
+            var pl = await translator.TranslateString("test-value",
+                new Language("Polish", string.Empty, new CultureInfo("pl")));
 
             en.Should().Be("A test value!");
             pl.Should().Be("Testowa wartosc!");

@@ -21,7 +21,7 @@ namespace eru.PlatformClients.FacebookMessenger.Tests.MessageHandlers.KnownUser
             var apiClient = new Mock<ISendApiClient>();
             
             var handler = new UnsupportedCommandMessageHandler(mediator.Object, apiClient.Object,
-                MockBuilder.BuildFakeTranslator(), MockBuilder.BuildFakeLogger<UnsupportedCommandMessageHandler>());
+                MockBuilder.BuildFakeTranslator(), MockBuilder.BuildFakeLogger<UnsupportedCommandMessageHandler>(), MockBuilder.BuildFakeCultures());
             var message = new Messaging
             {
                 Sender = new Sender {Id = "sample-subscriber"},

@@ -21,14 +21,17 @@ namespace eru.PlatformClients.FacebookMessenger
         private readonly IMediator _mediator;
         private readonly ITranslator<FacebookMessengerPlatformClient> _translator;
         private readonly ILogger<FacebookMessengerPlatformClient> _logger;
-
+        private readonly IApplicationCultures _cultures;
+        
         public FacebookMessengerPlatformClient(ISendApiClient apiClient, IMediator mediator,
-            ITranslator<FacebookMessengerPlatformClient> translator, ILogger<FacebookMessengerPlatformClient> logger)
+            ITranslator<FacebookMessengerPlatformClient> translator, ILogger<FacebookMessengerPlatformClient> logger,
+            IApplicationCultures cultures)
         {
             _apiClient = apiClient;
             _mediator = mediator;
             _translator = translator;
             _logger = logger;
+            _cultures = cultures;
         }
         
         public async Task SendMessage(string id, string content)
@@ -48,22 +51,22 @@ namespace eru.PlatformClients.FacebookMessenger
             var user = await _mediator.Send(new GetSubscriberQuery(id, PlatformId));
             
             await _apiClient.Send(new SendRequest(id,
-                new Message(await _translator.TranslateString("new-substitutions", user.PreferredLanguage)),
+                new Message(await _translator.TranslateString("new-substitutions", _cultures.FindCulture(user.PreferredLanguage))),
                 MessageTags.ConfirmedEventUpdate));
 
             foreach (var x in substitutions)
             {
                 var substitution = x.Cancelled
-                    ? string.Format(await _translator.TranslateString("cancellation", user.PreferredLanguage), 
+                    ? string.Format(await _translator.TranslateString("cancellation", _cultures.FindCulture(user.PreferredLanguage)), 
                         x.Lesson, x.Subject, x.Teacher, x.Room, x.Note)
-                    : string.Format(await _translator.TranslateString("substitution", user.PreferredLanguage), 
+                    : string.Format(await _translator.TranslateString("substitution", _cultures.FindCulture(user.PreferredLanguage)), 
                         x.Teacher, x.Lesson, x.Subject, x.Substituting, x.Room, x.Note);
 
                 await _apiClient.Send(new SendRequest(id, new Message(substitution), MessageTags.ConfirmedEventUpdate));
             }
             
             await _apiClient.Send(new SendRequest(id,
-                new Message(await _translator.TranslateString("closing-substitutions", user.PreferredLanguage),
+                new Message(await _translator.TranslateString("closing-substitutions", _cultures.FindCulture(user.PreferredLanguage)),
                     await GetCancelButton(user.PreferredLanguage)), MessageTags.ConfirmedEventUpdate));
             
             _logger.LogInformation("Facebook Messenger Platform Client: sent substitutions to user {user.Id}", user);
@@ -72,7 +75,7 @@ namespace eru.PlatformClients.FacebookMessenger
         private async Task<IEnumerable<QuickReply>> GetCancelButton(string lang)
             => new[]
             {
-                new QuickReply(await _translator.TranslateString("cancel-button", lang),
+                new QuickReply(await _translator.TranslateString("cancel-button", _cultures.FindCulture(lang)),
                     new Payload(PayloadType.Cancel).ToJson())
             };
     }
