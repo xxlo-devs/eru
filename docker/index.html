@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Docker - eru</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Docker";
+    var mkdocs_page_input_path = "docker.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> eru</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../contribution/">Contribution</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../config/">Config</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Deployment</span></p>
+                <ul class="current">
+                    <li class="toctree-l1"><a class="reference internal" href="../build-from-source/">Build from source</a>
+                    </li>
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Docker</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#docker-images">Docker images</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#sample-docker-run">Sample docker run</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#recommended-setup-with-docker-compose">Recommended setup with docker-compose</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#sample-nginx-defaultconf-with-docker-compose">Sample nginx default.conf with docker-compose</a>
+    </li>
+    </ul>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Communication</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="#">Facebook Messenger</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../messenger/what-about-release/">[EN/PL] What about release</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../messenger/facebook-messenger-open-beta-en/">[EN] Open Beta</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../messenger/facebook-messenger-open-beta-pl/">[PL] Open Beta</a>
+                </li>
+    </ul>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">eru</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Deployment &raquo;</li>
+        
+      
+    
+    <li>Docker</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="docker-setup-and-configuration">Docker - setup and configuration</h1>
+<p>All settings can be viewed in <a href="/config">config</a> page.</p>
+<h2 id="docker-images">Docker images</h2>
+<p>Latest image is automatically built from <a href="https://github.com/xxlo-devs/eru/tree/master">master</a> and can be run from image: <code>ghcr.io/xxlo-devs/eru</code>.</p>
+<h2 id="sample-docker-run">Sample docker run</h2>
+<pre><code class="sh">docker run ghcr.io/xxlo-devs/eru
+</code></pre>
+
+<h2 id="recommended-setup-with-docker-compose">Recommended setup with docker-compose</h2>
+<p>We recommend setting up our app with docker-compose in order to quickly setup all required and useful services.</p>
+<p>REMEMBER to setup correct volumes binding NOT to lose data!</p>
+<p>sample docker-compose.yml</p>
+<pre><code class="yml">version: '3.8'
+services: 
+    database:
+        image: postgres
+        restart: unless-stopped
+        environment: 
+            POSTGRES_PASSWORD: s@mpl3P@ssword
+            POSTGRES_USER: eru
+            POSTGRES_DB: eru
+        volumes: 
+            - database:/var/lib/postgresql/data
+    nginx:
+        image: nginx
+        restart: unless-stopped
+        ports:
+            - 80:80
+            - 443:443
+        volumes: 
+            - nginx:/etc/nginx
+            - letsencrypt:/etc/letsencrypt/
+    seq:
+        image: datalust/seq
+        restart: unless-stopped
+        environment: 
+            ACCEPT_EULA: Y
+        expose:
+          - 80
+        volumes: 
+            - seq:/data
+    eru:
+        image: ghcr.io/xxlo-devs/eru
+        restart: unless-stopped
+        expose: 
+            - 80
+        environment: 
+            Serilog__WriteTo__1__Args__path: /logs/log.txt
+            Serilog__WriteTo__2__Name: Seq
+            Serilog__WriteTo__2__Args__serverUrl: http://seq
+            Database__Type: postgresql
+            Database__ConnectionString: Host=database;Username=eru;Password=s@mpl3P@ssword;Database=eru
+            UploadKey: V3ryS3cureUpl0adK3y
+            CultureSettings__DefaultCulture: pl
+            Admins__0__Username: admin
+            Admins__0__Password: s@mpl3P@ssword
+            Paths__WebAppPathBase: /
+            Paths__SeqUiPath: /seq
+            PlatformClients__FacebookMessenger__VerifyToken: &quot;sample-verify-token&quot;
+            PlatformClients__FacebookMessenger__AccessToken: &quot;sample-access-token&quot;
+        volumes: 
+            - logs:/logs
+        depends_on:
+            - database
+            - nginx 
+            - seq
+volumes: 
+    database: 
+    seq: 
+    logs: 
+    nginx: 
+    letsencrypt: 
+</code></pre>
+
+<h2 id="sample-nginx-defaultconf-with-docker-compose">Sample nginx default.conf with docker-compose</h2>
+<pre><code>server {
+    listen       80;
+    listen  [::]:80;
+    server_name  localhost;
+
+    error_page   500 502 503 504  /50x.html;
+    location = /50x.html {
+        root   /usr/share/nginx/html;
+    }
+
+    location / {
+        proxy_pass      http://eru/;
+        proxy_http_version      1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection keep-alive;
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location /seq/ {
+        proxy_pass      http://seq/;
+        proxy_http_version      1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection keep-alive;
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+</code></pre>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../messenger/what-about-release/" class="btn btn-neutral float-right" title="[EN/PL] What about release">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../build-from-source/" class="btn btn-neutral" title="Build from source"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../build-from-source/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../messenger/what-about-release/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Config - eru</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Config";
+    var mkdocs_page_input_path = "config.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> eru</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../contribution/">Contribution</a>
+                    </li>
+                </ul>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Config</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#sample-appsettingsjson">Sample appsettings.json</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#serilog">Serilog</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#allowedhosts">AllowedHosts</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#database">Database</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#upload-key">Upload Key</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#culture-settings">Culture Settings</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#admins">Admins</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#paths">Paths</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#platformclients">PlatformClients</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#facebook-messenger">Facebook Messenger</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Deployment</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../build-from-source/">Build from source</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../docker/">Docker</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Communication</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="#">Facebook Messenger</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../messenger/what-about-release/">[EN/PL] What about release</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../messenger/facebook-messenger-open-beta-en/">[EN] Open Beta</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../messenger/facebook-messenger-open-beta-pl/">[PL] Open Beta</a>
+                </li>
+    </ul>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">eru</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Config</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="config">Config</h1>
+<p>Application configuration can be handled via many ways described <a href="https://docs.microsoft.com/pl-pl/aspnet/core/fundamentals/configuration/?view=aspnetcore-3.1#environment-variables">here</a>.
+Most common way to do it is via appsettings.json file available in src/eru.WebApp and it is our most recommended way of doing it.</p>
+<h2 id="sample-appsettingsjson">Sample appsettings.json</h2>
+<pre><code class="json">{
+  &quot;Serilog&quot; : {
+    &quot;Using&quot; : [&quot;Serilog.Sinks.Console&quot;, &quot;Serilog.Sinks.File&quot;, &quot;Serilog.Sinks.Seq&quot;],
+    &quot;MinimumLevel&quot; : {
+      &quot;Default&quot;: &quot;Information&quot;
+    },
+    &quot;WriteTo&quot;: [
+      {&quot;Name&quot; :  &quot;Console&quot;},
+      {&quot;Name&quot; :  &quot;File&quot;, &quot;Args&quot; :  {&quot;path&quot; :  &quot;../Logs/log.txt&quot;, &quot;rollingInterval&quot; :  &quot;Day&quot;}},
+      {&quot;Name&quot; :  &quot;Seq&quot;, &quot;Args&quot; :  {&quot;serverUrl&quot; :  &quot;http://localhost:5341/&quot;}}
+    ],
+    &quot;Enrich&quot; : [&quot;FromLogContext&quot;]
+  },
+  &quot;AllowedHosts&quot;: &quot;*&quot;,
+  &quot;Database&quot;: {
+    &quot;AutomaticallyMigrate&quot;: true,
+    &quot;ConnectionString&quot;: &quot;Host=myserver;Username=mylogin;Password=mypass;Database=mydatabase;&quot;
+  },
+  &quot;UploadKey&quot;: &quot;V3ryS3cureUpl0adK3y&quot;,
+  &quot;CultureSettings&quot;: {
+    &quot;AvailableCultures&quot;: [&quot;pl&quot;, &quot;en&quot;],
+    &quot;DefaultCulture&quot;: &quot;pl&quot;
+  },
+  &quot;Admins&quot; : [
+    {
+      &quot;Username&quot; : &quot;admin&quot;,
+      &quot;Password&quot; : &quot;s@mpl3P@ssword&quot;
+    }
+  ],
+  &quot;Paths&quot;: {
+    &quot;WebAppPathBase&quot;: &quot;/&quot;,
+    &quot;SeqUiPath&quot;: &quot;http://localhost:5341/&quot;
+  },
+  &quot;PlatformClients&quot;: {
+    &quot;FacebookMessenger&quot;: {
+      &quot;VerifyToken&quot;: &quot;sample-verify-token&quot;,
+      &quot;AccessToken&quot;: &quot;sample-access-token&quot;
+    }
+  }
+}
+</code></pre>
+
+<h2 id="serilog">Serilog</h2>
+<p>Seq is recommended way of accessing logs! <a href="https://docs.datalust.co/v2/docs/getting-started">More details.</a></p>
+<p>Logging configuration.
+See more here: <a href="https://github.com/serilog/serilog/wiki/Configuration-Basics">serilog configuration</a>.</p>
+<h2 id="allowedhosts">AllowedHosts</h2>
+<p>The host headers that are allowed to access the web pages. See <a href="https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.hostfiltering.hostfilteringoptions.allowedhosts?view=aspnetcore-3.1">here</a> for more details.</p>
+<h2 id="database">Database</h2>
+<p>When AutomaticallyMigrate is set to true the database will be set up during the boot of application. Otherwise database setup with <code>dotnet ef database update -p src/eru.Infrastrcuture -s src/eru.WebApp</code> from root folder is required.</p>
+<p>Application uses Postgre DB. Use valid connection string!</p>
+<pre><code class="sh">Host=myserver;Username=mylogin;Password=mypass;Database=mydatabase
+</code></pre>
+
+<h2 id="upload-key">Upload Key</h2>
+<p>Key that will have to be provided in order to upload new substitutions.</p>
+<h2 id="culture-settings">Culture Settings</h2>
+<p>All input in this section must be a valid ISO language code.</p>
+<p>Available cultures shouldn't be changed unless you create a new translation for application.</p>
+<p>DefaultCulture can be set to on of AvailableCultures.</p>
+<h2 id="admins">Admins</h2>
+<p>All provided here accounts will be able to access hangfire and admin dashboard.</p>
+<h2 id="paths">Paths</h2>
+<p>WebAppBasePath sets the base path for the application. Read more <a href="https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.builder.usepathbaseextensions.usepathbase?view=aspnetcore-3.1">here</a>. NOTE: WebAppBasePath SHOULD MATCH reverse proxy path on proxy server (for instance, http://myproxyserver/eru should be a proxy to http://myeruserver/eru). If you're not using reverse proxy, you probably can leave it as in sample config. </p>
+<p>SeqUiPath is used by admin dashboard to provide easy access to logs. You should set it to address accessible outside the local network. </p>
+<h2 id="platformclients">PlatformClients</h2>
+<p>Store for data used by Platform Clients. </p>
+<h3 id="facebook-messenger">Facebook Messenger</h3>
+<p>VerifyToken sets the verify token used by the Facebook Messenger Platform to verify a webhook. See more <a href="https://developers.facebook.com/docs/messenger-platform/webhook">here</a>.</p>
+<p>AccessToken is the authorization token used by the Facebook API and can be obtained in application panel. See how <a href="https://developers.facebook.com/docs/messenger-platform/getting-started/quick-start">here</a>. </p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../build-from-source/" class="btn btn-neutral float-right" title="Build from source">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../contribution/" class="btn btn-neutral" title="Contribution"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../contribution/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../build-from-source/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
