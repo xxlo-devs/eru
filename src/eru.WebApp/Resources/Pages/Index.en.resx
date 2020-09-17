@@ -66,4 +66,8 @@
         <value>Online page with most recent substitutions.</value>
         <comment>online-page</comment>
     </data>
+    <data name="instruction-url" xml:space="preserve">
+        <value>https://xxlo-devs.github.io/eru/messenger/facebook-messenger-open-beta-en/</value>
+        <comment>instruction-url</comment>
+    </data>
 </root>

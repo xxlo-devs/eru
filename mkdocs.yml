@@ -8,3 +8,8 @@ nav:
    - 'Deployment': 
       - 'Build from source': build-from-source.md
       - 'Docker': docker.md
+   - 'Communication': 
+      - 'Facebook Messenger':
+         - '[EN/PL] What about release': messenger/what-about-release.md
+         - '[EN] Open Beta': messenger/facebook-messenger-open-beta-en.md
+         - '[PL] Open Beta': messenger/facebook-messenger-open-beta-pl.md
