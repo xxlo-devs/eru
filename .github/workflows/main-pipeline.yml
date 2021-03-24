@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Setup .NET Core
-        uses: actions/setup-dotnet@v1.5.0
+        uses: actions/setup-dotnet@v1.7.2
         with:
           dotnet-version: 3.1
       - name: Install dependencies
@@ -31,7 +31,7 @@ jobs:
     needs: test
     steps:
       - name: Checkout master
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
       - name: Push docker image to GHCR.io
         uses: elgohr/Publish-Docker-Github-Action@master
         with:
